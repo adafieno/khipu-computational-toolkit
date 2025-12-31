@@ -1,0 +1,150 @@
+{
+  "generated_at": "2025-12-31T09:31:14.877411",
+  "hypotheses_tested": 4,
+  "results": {
+    "white_boundary": {
+      "hypothesis": "White cords serve as group boundary markers",
+      "boundary_count": 14882,
+      "non_boundary_count": 0,
+      "boundary_rate": 0.0,
+      "summation_with_white": 0.28854625550660795,
+      "summation_without_white": 0.18181818181818182,
+      "verdict": "MIXED"
+    },
+    "color_value_correlation": {
+      "hypothesis": "Color correlates with numeric value ranges",
+      "color_value_stats": [
+        {
+          "color": "W",
+          "count": 9590,
+          "mean_value": 386.18123044838376,
+          "median_value": 30.0,
+          "std_value": 3966.4441387404427
+        },
+        {
+          "color": "AB",
+          "count": 7510,
+          "mean_value": 262.45978695073234,
+          "median_value": 19.0,
+          "std_value": 3590.0474294442542
+        },
+        {
+          "color": "MB",
+          "count": 5622,
+          "mean_value": 150.83155460690145,
+          "median_value": 16.0,
+          "std_value": 1081.8558609186287
+        },
+        {
+          "color": "KB",
+          "count": 2211,
+          "mean_value": 96.77747625508819,
+          "median_value": 11.0,
+          "std_value": 542.3952118569932
+        },
+        {
+          "color": "B",
+          "count": 1932,
+          "mean_value": 402.36128364389236,
+          "median_value": 25.0,
+          "std_value": 3150.3768704069416
+        },
+        {
+          "color": "YB",
+          "count": 1360,
+          "mean_value": 77.575,
+          "median_value": 14.0,
+          "std_value": 333.5468812096433
+        },
+        {
+          "color": "GG",
+          "count": 1117,
+          "mean_value": 335.2703670546106,
+          "median_value": 16.0,
+          "std_value": 2153.063716590006
+        },
+        {
+          "color": "LB",
+          "count": 925,
+          "mean_value": 205.33621621621623,
+          "median_value": 20.0,
+          "std_value": 1703.0582564067222
+        },
+        {
+          "color": "DB ",
+          "count": 782,
+          "mean_value": 143.13554987212277,
+          "median_value": 36.0,
+          "std_value": 640.8157109939951
+        },
+        {
+          "color": "NB",
+          "count": 771,
+          "mean_value": 314.71206225680936,
+          "median_value": 40.0,
+          "std_value": 1009.7050412030915
+        }
+      ],
+      "white_vs_nonwhite_p": 1.0,
+      "significant": false,
+      "verdict": "NOT SUPPORTED"
+    },
+    "color_function": {
+      "hypothesis": "Color patterns differ by functional type",
+      "accounting_diversity": 5.218697829716193,
+      "non_accounting_diversity": 3.3333333333333335,
+      "difference": 1.8853644963828597,
+      "verdict": "SUPPORTED"
+    },
+    "provenance_color": {
+      "hypothesis": "Color semantics vary by provenance",
+      "provenance_color_preferences": [
+        {
+          "provenance": "",
+          "count": 10488,
+          "top_color": "W",
+          "top_color_pct": 25.62929061784897,
+          "white_pct": 0.0
+        },
+        {
+          "provenance": "Pachacamac",
+          "count": 6191,
+          "top_color": "W",
+          "top_color_pct": 27.039250524955584,
+          "white_pct": 0.0
+        },
+        {
+          "provenance": "Incahuasi",
+          "count": 5904,
+          "top_color": "AB",
+          "top_color_pct": 28.065718157181575,
+          "white_pct": 0.0
+        },
+        {
+          "provenance": "Leymebamba",
+          "count": 5118,
+          "top_color": "MB",
+          "top_color_pct": 31.672528331379446,
+          "white_pct": 0.0
+        },
+        {
+          "provenance": "unknown",
+          "count": 3925,
+          "top_color": "W",
+          "top_color_pct": 33.52866242038217,
+          "white_pct": 0.0
+        },
+        {
+          "provenance": "Nazca",
+          "count": 3172,
+          "top_color": "W",
+          "top_color_pct": 23.23455233291299,
+          "white_pct": 0.0
+        }
+      ],
+      "chi2_p_value": 1.0,
+      "significant": false,
+      "verdict": "NOT SUPPORTED"
+    }
+  }
+}

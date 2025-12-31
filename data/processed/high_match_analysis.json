@@ -1,0 +1,76 @@
+{
+  "generated_at": "2025-12-31T08:34:28.339692",
+  "analysis_threshold": 0.8,
+  "statistics": {
+    "total_high_match": 9,
+    "avg_match_rate": 0.9914529914529915,
+    "avg_numeric_coverage": 0.7348982554683713,
+    "avg_white_cord_count": 8.555555555555555,
+    "avg_hierarchy_depth": 2.2222222222222223,
+    "avg_total_cords": 51.888888888888886,
+    "pct_with_white_cords": 55.55555555555556
+  },
+  "high_vs_low_comparison": {
+    "high_match": {
+      "count": 9,
+      "avg_match_rate": 0.9914529914529915,
+      "avg_white_cord_count": 8.555555555555555,
+      "pct_with_white": 55.55555555555556,
+      "avg_depth": 2.2222222222222223,
+      "avg_numeric_coverage": 0.7348982554683712
+    },
+    "low_match": {
+      "count": 610,
+      "avg_match_rate": 0.05077683613552098,
+      "avg_white_cord_count": 24.668852459016392,
+      "pct_with_white": 75.24590163934425,
+      "avg_depth": 1.939344262295082,
+      "avg_numeric_coverage": 0.7489806822358978
+    },
+    "differences": {
+      "match_rate_diff": 0.9406761553174705,
+      "white_cord_diff": -16.113296903460835,
+      "white_pct_diff": -19.690346083788697,
+      "depth_diff": 0.28287795992714027,
+      "coverage_diff": -0.014082426767526579
+    }
+  },
+  "template_khipus": [
+    {
+      "KHIPU_ID": 1000137,
+      "OKR_NUM": "N/A",
+      "PROVENANCE": "Unknown",
+      "total_cords": 27.0,
+      "numeric_coverage": 0.8518518518518519,
+      "white_cord_count": 0.0,
+      "max_depth": 2.0
+    },
+    {
+      "KHIPU_ID": 1000606,
+      "OKR_NUM": "N/A",
+      "PROVENANCE": "Unknown",
+      "total_cords": 25.0,
+      "numeric_coverage": 0.92,
+      "white_cord_count": 0.0,
+      "max_depth": 3.0
+    },
+    {
+      "KHIPU_ID": 1000093,
+      "OKR_NUM": "N/A",
+      "PROVENANCE": "Unknown",
+      "total_cords": 23.0,
+      "numeric_coverage": 0.9130434782608695,
+      "white_cord_count": 10.0,
+      "max_depth": 2.0
+    },
+    {
+      "KHIPU_ID": 1000644,
+      "OKR_NUM": "N/A",
+      "PROVENANCE": "Unknown",
+      "total_cords": 4.0,
+      "numeric_coverage": 1.0,
+      "white_cord_count": 0.0,
+      "max_depth": 2.0
+    }
+  ]
+}

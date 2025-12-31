@@ -1,0 +1,842 @@
+{
+  "generated_at": "2025-12-31T09:13:44.491578",
+  "perfect_summation_khipus": [
+    1000093,
+    1000137,
+    1000352,
+    1000390,
+    1000456,
+    1000606,
+    1000644,
+    1000659
+  ],
+  "perfect_summation_templates": {
+    "1000093": {
+      "num_nodes": 24,
+      "num_edges": 23,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9583333333333334,
+        "max": 1,
+        "histogram": {
+          "1": 23,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9583333333333334,
+        "max": 22,
+        "histogram": {
+          "0": 22,
+          "1": 1,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        22,
+        1
+      ],
+      "pct_numeric": 0.875,
+      "provenance": "Ica"
+    },
+    "1000137": {
+      "num_nodes": 28,
+      "num_edges": 27,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9642857142857143,
+        "max": 1,
+        "histogram": {
+          "1": 27,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9642857142857143,
+        "max": 26,
+        "histogram": {
+          "0": 26,
+          "1": 1,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        26,
+        1
+      ],
+      "pct_numeric": 0.8214285714285714,
+      "provenance": "Pachacamac"
+    },
+    "1000352": {
+      "num_nodes": 56,
+      "num_edges": 55,
+      "depth": 3,
+      "in_degree_dist": {
+        "mean": 0.9821428571428571,
+        "max": 1,
+        "histogram": {
+          "1": 55,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9821428571428571,
+        "max": 10,
+        "histogram": {
+          "4": 1,
+          "1": 13,
+          "9": 1,
+          "6": 1,
+          "5": 1,
+          "10": 1,
+          "0": 37,
+          "8": 1
+        }
+      },
+      "level_structure": [
+        1,
+        8,
+        37,
+        10
+      ],
+      "pct_numeric": 0.6071428571428571,
+      "provenance": ""
+    },
+    "1000390": {
+      "num_nodes": 137,
+      "num_edges": 136,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9927007299270073,
+        "max": 1,
+        "histogram": {
+          "1": 136,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9927007299270073,
+        "max": 133,
+        "histogram": {
+          "0": 133,
+          "1": 3,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        133,
+        3
+      ],
+      "pct_numeric": 0.7226277372262774,
+      "provenance": ""
+    },
+    "1000456": {
+      "num_nodes": 63,
+      "num_edges": 62,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9841269841269841,
+        "max": 1,
+        "histogram": {
+          "1": 62,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9841269841269841,
+        "max": 60,
+        "histogram": {
+          "0": 60,
+          "1": 2,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        60,
+        2
+      ],
+      "pct_numeric": 0.1111111111111111,
+      "provenance": ""
+    },
+    "1000606": {
+      "num_nodes": 26,
+      "num_edges": 25,
+      "depth": 3,
+      "in_degree_dist": {
+        "mean": 0.9615384615384616,
+        "max": 1,
+        "histogram": {
+          "1": 25,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9615384615384616,
+        "max": 14,
+        "histogram": {
+          "2": 1,
+          "1": 2,
+          "7": 1,
+          "0": 21,
+          "14": 1
+        }
+      },
+      "level_structure": [
+        1,
+        14,
+        10,
+        1
+      ],
+      "pct_numeric": 0.8846153846153846,
+      "provenance": "Incahuasi"
+    },
+    "1000644": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 3,
+        "histogram": {
+          "1": 1,
+          "0": 3,
+          "3": 1
+        }
+      },
+      "level_structure": [
+        1,
+        3,
+        1
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "Incahuasi"
+    },
+    "1000659": {
+      "num_nodes": 57,
+      "num_edges": 56,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9824561403508771,
+        "max": 1,
+        "histogram": {
+          "1": 56,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9824561403508771,
+        "max": 53,
+        "histogram": {
+          "0": 53,
+          "1": 3,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        53,
+        3
+      ],
+      "pct_numeric": 0.5614035087719298,
+      "provenance": "Armatambo, Huaca San Pedro"
+    }
+  },
+  "perfect_structural_pairs": 20,
+  "structural_match_templates": {
+    "1000072.0": {
+      "num_nodes": 14,
+      "num_edges": 13,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9285714285714286,
+        "max": 1,
+        "histogram": {
+          "1": 13,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9285714285714286,
+        "max": 13,
+        "histogram": {
+          "0": 13,
+          "13": 1
+        }
+      },
+      "level_structure": [
+        1,
+        13
+      ],
+      "pct_numeric": 0.8571428571428571,
+      "provenance": "Ica",
+      "num_matches": 1
+    },
+    "1000205.0": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 4,
+        "histogram": {
+          "0": 4,
+          "4": 1
+        }
+      },
+      "level_structure": [
+        1,
+        4
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "",
+      "num_matches": 1
+    },
+    "1000078.0": {
+      "num_nodes": 10,
+      "num_edges": 9,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9,
+        "max": 1,
+        "histogram": {
+          "1": 9,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9,
+        "max": 8,
+        "histogram": {
+          "0": 8,
+          "1": 1,
+          "8": 1
+        }
+      },
+      "level_structure": [
+        1,
+        8,
+        1
+      ],
+      "pct_numeric": 0.9,
+      "provenance": "Lima",
+      "num_matches": 2
+    },
+    "1000084.0": {
+      "num_nodes": 7,
+      "num_edges": 6,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 1,
+        "histogram": {
+          "1": 6,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 6,
+        "histogram": {
+          "0": 6,
+          "6": 1
+        }
+      },
+      "level_structure": [
+        1,
+        6
+      ],
+      "pct_numeric": 0.7142857142857143,
+      "provenance": "Nazca",
+      "num_matches": 1
+    },
+    "1000086.0": {
+      "num_nodes": 15,
+      "num_edges": 14,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 1,
+        "histogram": {
+          "1": 14,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 14,
+        "histogram": {
+          "0": 14,
+          "14": 1
+        }
+      },
+      "level_structure": [
+        1,
+        14
+      ],
+      "pct_numeric": 0.9333333333333333,
+      "provenance": "Ica",
+      "num_matches": 2
+    },
+    "1000348.0": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 4,
+        "histogram": {
+          "0": 4,
+          "4": 1
+        }
+      },
+      "level_structure": [
+        1,
+        4
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "",
+      "num_matches": 1
+    },
+    "1000480.0": {
+      "num_nodes": 10,
+      "num_edges": 9,
+      "depth": 2,
+      "in_degree_dist": {
+        "mean": 0.9,
+        "max": 1,
+        "histogram": {
+          "1": 9,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9,
+        "max": 8,
+        "histogram": {
+          "0": 8,
+          "1": 1,
+          "8": 1
+        }
+      },
+      "level_structure": [
+        1,
+        8,
+        1
+      ],
+      "pct_numeric": 0.9,
+      "provenance": "",
+      "num_matches": 1
+    },
+    "1000226.0": {
+      "num_nodes": 7,
+      "num_edges": 6,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 1,
+        "histogram": {
+          "1": 6,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 6,
+        "histogram": {
+          "0": 6,
+          "6": 1
+        }
+      },
+      "level_structure": [
+        1,
+        6
+      ],
+      "pct_numeric": 0.7142857142857143,
+      "provenance": "",
+      "num_matches": 1
+    },
+    "1000354.0": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 4,
+        "histogram": {
+          "0": 4,
+          "4": 1
+        }
+      },
+      "level_structure": [
+        1,
+        4
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "",
+      "num_matches": 1
+    },
+    "1000485.0": {
+      "num_nodes": 15,
+      "num_edges": 14,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 1,
+        "histogram": {
+          "1": 14,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 14,
+        "histogram": {
+          "0": 14,
+          "14": 1
+        }
+      },
+      "level_structure": [
+        1,
+        14
+      ],
+      "pct_numeric": 0.9333333333333333,
+      "provenance": "Cajamarquilla",
+      "num_matches": 1
+    },
+    "1000106.0": {
+      "num_nodes": 19,
+      "num_edges": 18,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9473684210526315,
+        "max": 1,
+        "histogram": {
+          "1": 18,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9473684210526315,
+        "max": 18,
+        "histogram": {
+          "0": 18,
+          "18": 1
+        }
+      },
+      "level_structure": [
+        1,
+        18
+      ],
+      "pct_numeric": 0.9473684210526315,
+      "provenance": "",
+      "num_matches": 2
+    },
+    "1000112.0": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 4,
+        "histogram": {
+          "0": 4,
+          "4": 1
+        }
+      },
+      "level_structure": [
+        1,
+        4
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "Chuquitanta",
+      "num_matches": 5
+    },
+    "1000626.0": {
+      "num_nodes": 5,
+      "num_edges": 4,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8,
+        "max": 1,
+        "histogram": {
+          "1": 4,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8,
+        "max": 4,
+        "histogram": {
+          "0": 4,
+          "4": 1
+        }
+      },
+      "level_structure": [
+        1,
+        4
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "Incahuasi",
+      "num_matches": 1
+    },
+    "1000116.0": {
+      "num_nodes": 21,
+      "num_edges": 20,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9523809523809523,
+        "max": 1,
+        "histogram": {
+          "1": 20,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9523809523809523,
+        "max": 20,
+        "histogram": {
+          "0": 20,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        20
+      ],
+      "pct_numeric": 0.9523809523809523,
+      "provenance": "Ica",
+      "num_matches": 2
+    },
+    "1000632.0": {
+      "num_nodes": 7,
+      "num_edges": 6,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 1,
+        "histogram": {
+          "1": 6,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 6,
+        "histogram": {
+          "0": 6,
+          "6": 1
+        }
+      },
+      "level_structure": [
+        1,
+        6
+      ],
+      "pct_numeric": 0.8571428571428571,
+      "provenance": "Incahuasi",
+      "num_matches": 1
+    },
+    "1000122.0": {
+      "num_nodes": 19,
+      "num_edges": 18,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9473684210526315,
+        "max": 1,
+        "histogram": {
+          "1": 18,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9473684210526315,
+        "max": 18,
+        "histogram": {
+          "0": 18,
+          "18": 1
+        }
+      },
+      "level_structure": [
+        1,
+        18
+      ],
+      "pct_numeric": 0.9473684210526315,
+      "provenance": "Ocucaje",
+      "num_matches": 2
+    },
+    "1000123.0": {
+      "num_nodes": 21,
+      "num_edges": 20,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9523809523809523,
+        "max": 1,
+        "histogram": {
+          "1": 20,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9523809523809523,
+        "max": 20,
+        "histogram": {
+          "0": 20,
+          "20": 1
+        }
+      },
+      "level_structure": [
+        1,
+        20
+      ],
+      "pct_numeric": 0.9523809523809523,
+      "provenance": "Ocucaje",
+      "num_matches": 2
+    },
+    "1000252.0": {
+      "num_nodes": 14,
+      "num_edges": 13,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9285714285714286,
+        "max": 1,
+        "histogram": {
+          "1": 13,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9285714285714286,
+        "max": 13,
+        "histogram": {
+          "0": 13,
+          "13": 1
+        }
+      },
+      "level_structure": [
+        1,
+        13
+      ],
+      "pct_numeric": 0.8571428571428571,
+      "provenance": "Huaquerones",
+      "num_matches": 1
+    },
+    "1000001.0": {
+      "num_nodes": 7,
+      "num_edges": 6,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 1,
+        "histogram": {
+          "1": 6,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.8571428571428571,
+        "max": 6,
+        "histogram": {
+          "0": 6,
+          "6": 1
+        }
+      },
+      "level_structure": [
+        1,
+        6
+      ],
+      "pct_numeric": 0.8571428571428571,
+      "provenance": "Leymebamba",
+      "num_matches": 2
+    },
+    "1000652.0": {
+      "num_nodes": 15,
+      "num_edges": 14,
+      "depth": 1,
+      "in_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 1,
+        "histogram": {
+          "1": 14,
+          "0": 1
+        }
+      },
+      "out_degree_dist": {
+        "mean": 0.9333333333333333,
+        "max": 14,
+        "histogram": {
+          "0": 14,
+          "14": 1
+        }
+      },
+      "level_structure": [
+        1,
+        14
+      ],
+      "pct_numeric": 0.8,
+      "provenance": "Armatambo, Huaca San Pedro",
+      "num_matches": 1
+    }
+  },
+  "template_comparison": {
+    "num_templates": 28,
+    "size_stats": {
+      "min": 5,
+      "max": 137,
+      "mean": 22.214285714285715,
+      "range": 132
+    },
+    "depth_stats": {
+      "min": 1,
+      "max": 3,
+      "mean": 1.4285714285714286
+    },
+    "branching_stats": {
+      "min": 0.8,
+      "max": 0.9927007299270073,
+      "mean": 0.903957044760239
+    }
+  }
+}

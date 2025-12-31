@@ -1,0 +1,91 @@
+{
+  "generated_at": "2025-12-31T08:47:35.566664",
+  "method": "kmeans",
+  "n_clusters": 7,
+  "cluster_statistics": [
+    {
+      "cluster_id": 0,
+      "size": 80,
+      "avg_num_nodes": 269.025,
+      "avg_depth": 3.025,
+      "avg_branching": 6.327391245025902,
+      "avg_numeric_coverage": 0.7322189642587247,
+      "avg_color_coverage": 0.9861370991173184,
+      "std_num_nodes": 117.57507431962702,
+      "min_num_nodes": 127,
+      "max_num_nodes": 771
+    },
+    {
+      "cluster_id": 1,
+      "size": 76,
+      "avg_num_nodes": 7.592105263157895,
+      "avg_depth": 1.3026315789473684,
+      "avg_branching": 5.487938596491228,
+      "avg_numeric_coverage": 0.7067417597022858,
+      "avg_color_coverage": 0.8361296233006759,
+      "std_num_nodes": 2.240104947416213,
+      "min_num_nodes": 2,
+      "max_num_nodes": 12
+    },
+    {
+      "cluster_id": 2,
+      "size": 48,
+      "avg_num_nodes": 124.375,
+      "avg_depth": 1.1458333333333333,
+      "avg_branching": 107.15625,
+      "avg_numeric_coverage": 0.7696512303073648,
+      "avg_color_coverage": 0.9690514939268419,
+      "std_num_nodes": 65.82039553273063,
+      "min_num_nodes": 62,
+      "max_num_nodes": 320
+    },
+    {
+      "cluster_id": 3,
+      "size": 387,
+      "avg_num_nodes": 48.50645994832041,
+      "avg_depth": 1.9819121447028423,
+      "avg_branching": 11.992305605795897,
+      "avg_numeric_coverage": 0.745092223535175,
+      "avg_color_coverage": 0.9573878769602854,
+      "std_num_nodes": 33.85823591843064,
+      "min_num_nodes": 11,
+      "max_num_nodes": 184
+    },
+    {
+      "cluster_id": 4,
+      "size": 6,
+      "avg_num_nodes": 1057.8333333333333,
+      "avg_depth": 3.0,
+      "avg_branching": 10.969356892352819,
+      "avg_numeric_coverage": 0.4177040202790252,
+      "avg_color_coverage": 0.9872849283018392,
+      "std_num_nodes": 430.7154126179683,
+      "min_num_nodes": 590,
+      "max_num_nodes": 1832
+    },
+    {
+      "cluster_id": 5,
+      "size": 3,
+      "avg_num_nodes": 296.6666666666667,
+      "avg_depth": 3.6666666666666665,
+      "avg_branching": 2.5265925925925927,
+      "avg_numeric_coverage": 0.6676906604720347,
+      "avg_color_coverage": 0.8963395198813736,
+      "std_num_nodes": 282.5178460439859,
+      "min_num_nodes": 29,
+      "max_num_nodes": 592
+    },
+    {
+      "cluster_id": 6,
+      "size": 12,
+      "avg_num_nodes": 79.16666666666667,
+      "avg_depth": 1.3333333333333333,
+      "avg_branching": 64.15017921146953,
+      "avg_numeric_coverage": 0.09338859013816615,
+      "avg_color_coverage": 0.025086663017697502,
+      "std_num_nodes": 55.70185786575677,
+      "min_num_nodes": 19,
+      "max_num_nodes": 196
+    }
+  ]
+}

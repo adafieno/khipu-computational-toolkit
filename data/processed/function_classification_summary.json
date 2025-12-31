@@ -1,0 +1,53 @@
+{
+  "total_khipus": 612,
+  "accounting_count": 600,
+  "non_accounting_count": 12,
+  "feature_importance": {
+    "Numeric Coverage": 0.39888043819999797,
+    "Has Summation": 0.007293529152686463,
+    "Summation Accuracy": 0.03991944658693789,
+    "Color Diversity": 0.26772537008596986,
+    "Khipu Size": 0.06417362964812849,
+    "Hierarchy Depth": 0.04257733602708501,
+    "Branching Factor": 0.17943025029919432
+  },
+  "provenance_validation": {
+    "provenance_stats": [
+      {
+        "provenance": "",
+        "count": 165,
+        "accounting_rate": 95.15151515151516,
+        "avg_numeric_coverage": 70.15792939961906,
+        "avg_summation_rate": 20.0
+      },
+      {
+        "provenance": "Pachacamac",
+        "count": 90,
+        "accounting_rate": 100.0,
+        "avg_numeric_coverage": 72.9759336844664,
+        "avg_summation_rate": 17.77777777777778
+      },
+      {
+        "provenance": "Incahuasi",
+        "count": 52,
+        "accounting_rate": 100.0,
+        "avg_numeric_coverage": 73.89627226400832,
+        "avg_summation_rate": 48.07692307692308
+      },
+      {
+        "provenance": "Ica",
+        "count": 49,
+        "accounting_rate": 100.0,
+        "avg_numeric_coverage": 80.48148098112794,
+        "avg_summation_rate": 18.367346938775512
+      },
+      {
+        "provenance": "unknown",
+        "count": 46,
+        "accounting_rate": 100.0,
+        "avg_numeric_coverage": 68.2312212517404,
+        "avg_summation_rate": 45.65217391304348
+      }
+    ]
+  }
+}

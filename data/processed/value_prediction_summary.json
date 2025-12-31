@@ -1,0 +1,17 @@
+{
+  "total_predictions": 17321,
+  "by_method": {
+    "random_forest": 15253,
+    "constraint_summation": 1295,
+    "sibling_median": 773
+  },
+  "by_confidence": {
+    "medium": 16026,
+    "high": 1295
+  },
+  "method_counts": {
+    "constraint": 1295,
+    "sibling": 884,
+    "ml": 17321
+  }
+}
