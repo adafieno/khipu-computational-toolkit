@@ -265,7 +265,7 @@ Contributions welcome! Please:
 
 ## Contact
 
-- **Author:** A. Fieno
+- **Author:** A. Da Fieno
 - **GitHub:** [@adafieno](https://github.com/adafieno)
 - **Issues:** [Report bugs or request features](https://github.com/adafieno/khipu-computational-toolkit/issues)
 
