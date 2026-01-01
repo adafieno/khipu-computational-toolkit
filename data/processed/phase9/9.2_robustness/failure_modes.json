@@ -1,0 +1,66 @@
+{
+  "no_error_detection": {
+    "count": 458,
+    "description": "No summation hierarchy - errors undetectable",
+    "khipus": [
+      1000000,
+      1000001,
+      1000002,
+      1000003,
+      1000004,
+      1000005,
+      1000006,
+      1000008,
+      1000010,
+      1000011
+    ]
+  },
+  "no_error_localization": {
+    "count": 165,
+    "description": "No boundary cords - errors affect entire khipu",
+    "khipus": [
+      1000006,
+      1000013,
+      1000014,
+      1000015,
+      1000019,
+      1000022,
+      1000024,
+      1000025,
+      1000026,
+      1000027
+    ]
+  },
+  "high_propagation_risk": {
+    "count": 432,
+    "description": "Single error impacts >10% of total value",
+    "khipus": [
+      1000000,
+      1000001,
+      1000002,
+      1000003,
+      1000004,
+      1000005,
+      1000006,
+      1000008,
+      1000010,
+      1000011
+    ]
+  },
+  "low_redundancy": {
+    "count": 591,
+    "description": "Minimal structural redundancy - brittle design",
+    "khipus": [
+      1000000,
+      1000001,
+      1000002,
+      1000003,
+      1000004,
+      1000005,
+      1000006,
+      1000007,
+      1000008,
+      1000009
+    ]
+  }
+}

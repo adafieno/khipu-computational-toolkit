@@ -1,0 +1,21 @@
+{
+  "numeric": {
+    "mean_cv": 1.3689540505998892,
+    "standardization": "medium",
+    "interpretation": "Values show moderate consistency"
+  },
+  "color": {
+    "within_khipu_standardization": 0.2543214845781564,
+    "within_khipu_interpretation": "Colors evenly distributed within khipus",
+    "empire_wide_standardization": 0.6526124733959349,
+    "empire_wide_interpretation": "High empire-wide standardization",
+    "mean_unique_colors": 5.208955223880597,
+    "standardization": "high",
+    "note": "Empire-wide conventions are STRONG despite diverse within-khipu usage"
+  },
+  "structural": {
+    "mean_cv": 0.5995245291413583,
+    "standardization": "medium",
+    "interpretation": "Branching is irregular"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "source": "Phase 2 extraction analysis (W: 26.8%, AB: 17.4%, MB: 14.5%, KB: 6.7%)",
+  "validation": "Phase 5 provenance uniformity test (p=1.00)",
+  "standard_colors": [
+    "W",
+    "AB",
+    "MB",
+    "KB"
+  ],
+  "standard_colors_method": "K-means clustering validates 4-color cluster (Phase 9.5)",
+  "top5_concentration": 0.7028203033424502,
+  "top_colors": {
+    "W": 15125,
+    "AB": 9815,
+    "MB": 8167,
+    "KB": 3795,
+    "B": 2671
+  },
+  "standard_color_prevalence": {
+    "W": {
+      "khipu_count": 464,
+      "prevalence": 0.7694859038142621,
+      "usage_count": 15125
+    },
+    "AB": {
+      "khipu_count": 358,
+      "prevalence": 0.593698175787728,
+      "usage_count": 9815
+    },
+    "MB": {
+      "khipu_count": 358,
+      "prevalence": 0.593698175787728,
+      "usage_count": 8167
+    },
+    "KB": {
+      "khipu_count": 273,
+      "prevalence": 0.4527363184079602,
+      "usage_count": 3795
+    }
+  },
+  "cross_khipu_prevalence": {
+    "W": {
+      "khipu_count": 464,
+      "prevalence": 0.7694859038142621,
+      "usage_count": 15125
+    },
+    "AB": {
+      "khipu_count": 358,
+      "prevalence": 0.593698175787728,
+      "usage_count": 9815
+    },
+    "MB": {
+      "khipu_count": 358,
+      "prevalence": 0.593698175787728,
+      "usage_count": 8167
+    },
+    "KB": {
+      "khipu_count": 273,
+      "prevalence": 0.4527363184079602,
+      "usage_count": 3795
+    },
+    "B": {
+      "khipu_count": 102,
+      "prevalence": 0.1691542288557214,
+      "usage_count": 2671
+    },
+    "YB": {
+      "khipu_count": 122,
+      "prevalence": 0.2023217247097844,
+      "usage_count": 2087
+    },
+    "LB": {
+      "khipu_count": 67,
+      "prevalence": 0.1111111111111111,
+      "usage_count": 1503
+    },
+    "GG": {
+      "khipu_count": 170,
+      "prevalence": 0.28192371475953565,
+      "usage_count": 1477
+    },
+    "DB ": {
+      "khipu_count": 59,
+      "prevalence": 0.0978441127694859,
+      "usage_count": 1194
+    },
+    "NB": {
+      "khipu_count": 39,
+      "prevalence": 0.06467661691542288,
+      "usage_count": 1105
+    }
+  },
+  "strong_conventions_count": 4,
+  "mean_standard_prevalence": 0.6024046434494196,
+  "empire_standardization_score": 0.6526124733959349,
+  "interpretation": "High empire-wide standardization"
+}
