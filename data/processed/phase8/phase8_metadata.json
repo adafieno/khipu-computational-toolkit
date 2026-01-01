@@ -1,0 +1,37 @@
+{
+  "generated": "2026-01-01T14:21:58.490201",
+  "phase": "Phase 8: Administrative Function & Encoding Strategies",
+  "total_khipus": 619,
+  "n_clusters": 7,
+  "cluster_quality": {
+    "silhouette_score": 0.3034143640186474,
+    "calinski_harabasz": 175.888978711537
+  },
+  "model_performance": {
+    "structure_only": {
+      "cv_mean": 0.9790060319958037,
+      "cv_std": 0.008208948030838109,
+      "n_features": 11
+    },
+    "structure_numeric": {
+      "cv_mean": 0.9790060319958037,
+      "cv_std": 0.008208948030838109,
+      "n_features": 11
+    },
+    "structure_numeric_color": {
+      "cv_mean": 0.993535274062418,
+      "cv_std": 0.0032324627114282134,
+      "n_features": 18
+    }
+  },
+  "administrative_types": {
+    "Standard Administrative Record": 282,
+    "Compact Operational Record": 109,
+    "Aggregated Summary": 108,
+    "Multi-Level Aggregation": 54,
+    "Local Operational Record": 32,
+    "Lateral Category Tracking": 22,
+    "Exceptional/Anomalous": 7,
+    "Multi-Category Record": 5
+  }
+}
