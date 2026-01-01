@@ -54,3 +54,4 @@ models/*.pkl
 *.tmp
 *.log
 *.bak
+query_colors.py
