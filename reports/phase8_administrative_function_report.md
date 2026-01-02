@@ -10,9 +10,11 @@ Phase 8 classifies khipus by administrative function using structural, chromatic
 **Key Results:**
 - **7 structural clusters** identified from color-agnostic features
 - **8 administrative types** defined combining structure, color, and numeric patterns
-- **99.4% classification accuracy** using integrated feature set
+- **99.4% cross-validated model performance** using integrated feature set
 - **99.4% high-confidence assignments** (confidence > 0.8)
 - Color usage confirmed as **procedural affordance**, not semantic encoding
+
+**Important Note:** These classifications represent computational typologies based on unsupervised clustering and supervised classification. **No external ground truth labels for "administrative function" exist**. All results should be understood as exploratory computational signals requiring expert validation and archaeological contextualization.
 
 ## Framing Principles (Explicit Guardrails)
 
@@ -77,9 +79,11 @@ Derived from Phases 1-4:
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
-| **Silhouette Score** | 0.303 | Moderate cluster separation |
-| **Calinski-Harabasz** | 175.9 | High cluster definition |
-| **Explained Variance** | 99.1% | 10 PCA components |
+| **Silhouette Score** | 0.303 | Moderate cluster separation; clusters are distinguishable but not perfectly separated |
+| **Calinski-Harabasz** | 175.9 | Moderately high cluster definition |
+| **Explained Variance** | 99.1% | 10 PCA components capture most variance |
+
+**Interpretation:** The silhouette score of 0.303 indicates that clusters are **moderately separated** — not random, but with some overlap between groups. This is expected for cultural artifacts that likely represent a continuum of administrative practices rather than discrete categories. The typology should be understood as a **useful computational organization for exploration**, not a definitive taxonomy.
 
 #### Structural Cluster Definitions
 
@@ -313,16 +317,18 @@ Empire-wide chromatic consistency enables **function-specific visual parsing**, 
 
 #### Model Performance Comparison
 
-| Feature Set | CV Accuracy | Std Dev | Features |
-|-------------|-------------|---------|----------|
+| Feature Set | Cross-Validated Performance | Std Dev | Features |
+|-------------|----------------------------|---------|----------|
 | Structure Only | 0.979 | ±0.008 | 11 |
 | Structure + Numeric | 0.979 | ±0.008 | 11 |
 | **Structure + Numeric + Color** | **0.994** | **±0.003** | **18** |
 
-**Best Model:** Structure + Numeric + Color achieves 99.4% accuracy
+**Best Model:** Structure + Numeric + Color achieves 99.4% cross-validated consistency
+
+**Important Clarification:** This metric reflects **internal model consistency** in predicting cluster assignments from structural features, NOT accuracy against external ground truth (which does not exist). The model successfully learns to distinguish the 7 structural clusters based on their features.
 
 **Performance Gain:**
-- Color features add +1.5% accuracy over structure alone
+- Color features add +1.5% consistency over structure alone
 - Color features reduce variance by 62% (±0.008 → ±0.003)
 
 #### Feature Importance (Top 10)

@@ -5,11 +5,12 @@ Extract knot data and export to processed datasets.
 from pathlib import Path
 import sys
 
-# Add src to path
+# Add src to path for runtime
 src_path = Path(__file__).parent.parent / 'src'
 sys.path.insert(0, str(src_path))
 
-from extraction.knot_extractor import KnotExtractor  # noqa: E402 # type: ignore
+from extraction.knot_extractor import KnotExtractor  # noqa: E402
+from config import get_config  # noqa: E402
 
 
 def main():
@@ -17,16 +18,30 @@ def main():
     print("KNOT DATA EXTRACTION")
     print("=" * 80)
     print()
-    
+
+    # Get configuration
+    config = get_config()
+
+    # Validate setup
+    validation = config.validate_setup()
+    if not validation['valid']:
+        print("\nConfiguration errors:")
+        for error in validation['errors']:
+            print(f"  • {error}")
+        sys.exit(1)
+
+    print(f"Database: {config.get_database_path()}")
+    print()
+
     # Initialize extractor
-    db_path = Path(__file__).parent.parent / "khipu.db"
+    db_path = config.get_database_path()
     extractor = KnotExtractor(db_path)
-    
+
     # Get summary stats first
     print("Analyzing knot structure...")
     print("-" * 80)
     stats = extractor.get_summary_stats()
-    
+
     print(f"Total knots: {stats['total_knots']:,}")
     print(f"Unique cords: {stats['unique_cords']:,}")
     print(f"Unique khipus: {stats['unique_khipus']}")
@@ -35,12 +50,12 @@ def main():
     print(f"Missing knot_value_type: {stats['missing_value_type_count']:,} ({stats['missing_value_type_pct']:.1f}%)")
     print(f"Average confidence: {stats['average_confidence']:.3f}")
     print()
-    
+
     print("Knot types:")
     for knot_type, count in sorted(stats['knot_types'].items(), key=lambda x: -x[1]):
         print(f"  {knot_type}: {count:,}")
     print()
-    
+
     print("Value types (place values):")
     for value_type, count in sorted(stats['value_types'].items(), key=lambda x: -x[1] if x[0] else 0):
         if value_type:
@@ -48,21 +63,24 @@ def main():
         else:
             print(f"  NULL: {count:,}")
     print()
-    
+
     # Export full knot dataset
     print("Exporting knot data...")
     print("-" * 80)
-    
-    output_dir = Path(__file__).parent.parent / "data" / "processed"
-    output_path = output_dir / "knot_data.csv"
-    
+
+    # Ensure directories exist
+    config.ensure_directories()
+
+    # Save to phase2 directory
+    output_path = config.get_processed_file('knot_data.csv', phase=2)
+
     df = extractor.export_knot_data(output_path)
-    
+
     print(f"✓ Exported {len(df):,} knots to:")
     print(f"  {output_path}")
     print(f"  {output_path.with_suffix('.json')} (metadata)")
     print()
-    
+
     print("=" * 80)
     print("EXTRACTION COMPLETE")
     print("=" * 80)

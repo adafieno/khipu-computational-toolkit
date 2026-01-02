@@ -2,6 +2,15 @@
 
 This guide explains how to use the advanced visualization tools created for the Khipu Analysis project.
 
+## Configuration Note
+
+All scripts use the centralized configuration system. See [DATA_PATHS.md](../DATA_PATHS.md) for complete setup instructions.
+
+**Quick setup validation:**
+```bash
+python src/config.py
+```
+
 ## 🌐 Interactive Web Dashboard
 
 **File:** `scripts/dashboard_app.py`
@@ -21,9 +30,15 @@ A comprehensive Streamlit web application for exploring khipu data with real-tim
 - **Data Export:** Download filtered data and summary statistics as CSV
 - **Geographic Map:** Plotly scatter_geo showing complete distribution with fuzzy provenance matching
 
-### Requirements:
-- Database file must be present at `data/khipu.db` (contains provenance data)
-- If database is missing, provenance data will show as "Unknown"
+### Database Access:
+
+The dashboard requires access to the Open Khipu Repository database for provenance data:
+
+- **Default:** Uses `../open-khipu-repository/data/khipu.db` (sibling directory)
+- **Custom location:** Set `KHIPU_DB_PATH` environment variable
+- **Fallback:** If database not found, provenance shows as "Unknown" but other features work
+
+See [DATA_PATHS.md](../DATA_PATHS.md) for configuration details.
 
 ### Usage:
 ```bash

@@ -32,14 +32,25 @@ For each khipu:
 ### Validation Criteria
 
 **Match Definition:**
-- Exact match: Child sum equals parent value
-- Tolerance: ±1 allowed for potential transcription errors
-- Missing data: Excluded from match calculation
+- **Exact match:** Child sum equals parent value (within tolerance)
+- **Tolerance threshold:** ±1 unit allowed for potential transcription errors or minor measurement variance
+- **Rationale:** Archaeological records may have minor inconsistencies due to:
+  - Transcription errors during cataloging
+  - Degradation affecting knot counts
+  - Interpretation ambiguity for damaged knots
+- **Missing data handling:** 
+  - Summation tests require complete child sets
+  - If any child value is missing, the parent is excluded from testing
+  - This is a conservative approach that may underestimate true summation rates
 
 **Confidence Scoring:**
 - Based on data completeness
 - Adjusted for missing knots or damaged sections
 - Range: 0.0 (no confidence) to 1.0 (complete data)
+- Factors:
+  - Percentage of knots with complete type information
+  - Presence of all required positional values (S, L, E)
+  - Data quality flags in original database
 
 ### White Cord Hypothesis
 
@@ -136,14 +147,35 @@ Khipus with white cords show slightly higher summation match rates:
 
 74.2% of khipus (459 out of 619) exhibit pendant-to-parent summation relationships, consistent with Medrano & Khosla (2024). This validates that arithmetic summation is a widespread encoding pattern.
 
-### 2. White Cord Boundary Markers Confirmed
+### 2. White Cord Boundary Markers: Initial Evidence with Caveats
 
-White cords are:
+White cords show consistent patterns:
 - **Most common color** (26.8% of dataset)
 - **Present in 73.3% of khipus**
-- **Associated with higher summation match rates** (+9.1%)
+- **Associated with modestly higher summation match rates** (+9.1%)
 
-This strongly supports the hypothesis that white cords mark structural boundaries and summation groups.
+This provides **initial support** for the boundary marker hypothesis, but requires nuanced interpretation:
+
+**Supporting Evidence:**
+- Consistent presence across provenances
+- Positional distribution aligns with hierarchical boundaries
+- Modest correlation with summation consistency
+
+**Complicating Factors (from Phase 4):**
+- High-match khipus actually have *fewer* white cords than low-match khipus (counterintuitive)
+- White cords may serve multiple functions:
+  - Boundary markers in some contexts
+  - Record type indicators in others
+  - Hierarchical level markers (varying by administrative tradition)
+- Effect size is modest (+9.1%), suggesting white cords are *one of several* boundary strategies
+
+**Refined Interpretation:**
+White cords are better understood as **one administrative affordance among many**, not a universal summation marker. Their function likely varies by:
+- Geographic origin (different administrative traditions)
+- Khipu purpose (accounting vs. other record types)
+- Hierarchical level (different meaning at Level 1 vs. Level 2)
+
+See [Phase 4 Pattern Discovery Report](phase4_pattern_discovery_report.md) for detailed white cord analysis by match rate.
 
 ### 3. Hierarchical Summation Patterns
 
@@ -154,14 +186,26 @@ Analysis reveals that summation operates at multiple hierarchy levels:
 
 This suggests sophisticated multi-level accounting systems.
 
-### 4. Mixed Encoding Schemes
+### 4. Mixed Encoding Schemes and Data Quality Considerations
 
-42.6% of khipus show low summation match rates (<50%), suggesting:
-- Alternative encoding schemes (narrative, categorical, etc.)
+42.6% of khipus show low summation match rates (<50%), which may reflect:
+
+**Alternative Encoding:**
+- Narrative or symbolic records (not numeric accounting)
+- Categorical encoding schemes
 - Mixed-purpose records (some sections numeric, others symbolic)
-- Damaged or incomplete data preventing match detection
 
-This highlights the diversity of khipu information encoding.
+**Data Quality Issues:**
+- Damaged or incomplete archaeological records
+- Missing values preventing complete summation tests (conservative exclusion approach)
+- Transcription ambiguities in the OKR database
+
+**Duplicate Records:**
+- Phase 4 analysis identifies potential duplicate khipu records or identical sections
+- Perfect structural matches may artificially inflate summation rates if duplicates exist
+- See [Phase 4 Pattern Discovery Report](phase4_pattern_discovery_report.md) for duplicate analysis
+
+**Important Note:** Our conservative approach (excluding incomplete cord sets) likely **underestimates** true summation rates. Future analysis with imputation or partial summation testing may reveal higher consistency.
 
 ## Output Files
 

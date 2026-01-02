@@ -5,11 +5,12 @@ Build NetworkX graph representations of all khipus for pattern discovery.
 from pathlib import Path
 import sys
 
-# Add src to path
+# Add src to path for runtime
 src_path = Path(__file__).parent.parent / 'src'
 sys.path.insert(0, str(src_path))
 
 from graph.graph_builder import KhipuGraphBuilder  # noqa: E402 # type: ignore
+from config import get_config  # noqa: E402 # type: ignore
 
 
 def main():
@@ -20,23 +21,39 @@ def main():
     print("Converting khipus to NetworkX directed graphs...")
     print("Each graph represents:")
     print("  - Nodes: Cords with numeric values, colors, and hierarchy")
-    print("  - Edges: Pendant relationships (parent → child)")
+    print("  - Edges: Pendant relationships (parent -> child)")
     print()
-    
+
+    # Get configuration
+    config = get_config()
+
+    # Validate setup
+    validation = config.validate_setup()
+    if not validation['valid']:
+        print("\nConfiguration errors:")
+        for error in validation['errors']:
+            print(f"  • {error}")
+        sys.exit(1)
+
+    print(f"Database: {config.get_database_path()}")
+    print()
+
     # Initialize builder
-    db_path = Path(__file__).parent.parent / "khipu.db"
+    db_path = config.get_database_path()
     builder = KhipuGraphBuilder(db_path)
-    
+
     # Analyze a sample khipu first
     print("Analyzing sample khipu structure...")
     print("-" * 80)
-    
+
     sample_stats = builder.analyze_graph_structure(1000000)
-    
+
     print(f"Sample khipu {sample_stats['khipu_id']}:")
     print(f"  Nodes (cords): {sample_stats['num_nodes']}")
     print(f"  Edges (pendant relationships): {sample_stats['num_edges']}")
-    print(f"  Depth range: {sample_stats['min_depth']} to {sample_stats['max_depth']} (span: {sample_stats['depth_range']})")
+    depth_info = (f"  Depth range: {sample_stats['min_depth']} to {sample_stats['max_depth']} "
+                  f"(span: {sample_stats['depth_range']})")
+    print(depth_info)
     print(f"  Avg branching factor: {sample_stats['avg_branching_factor']:.2f}")
     print(f"  Max branching factor: {sample_stats['max_branching_factor']}")
     print(f"  Root nodes: {sample_stats['num_roots']}")
@@ -44,15 +61,18 @@ def main():
     print(f"  Connected components: {sample_stats['weakly_connected_components']}")
     print(f"  Graph density: {sample_stats['density']:.4f}")
     print()
-    
+
     # Build all graphs
     print("Building all khipu graphs...")
     print("-" * 80)
-    
-    output_dir = Path(__file__).parent.parent / "data" / "graphs"
-    
+
+    # Ensure directories exist
+    config.ensure_directories()
+
+    output_dir = config.graphs_dir
+
     graphs = builder.build_all_graphs(output_dir)
-    
+
     print()
     print("=" * 80)
     print("GRAPH CONSTRUCTION COMPLETE")

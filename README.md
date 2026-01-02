@@ -2,46 +2,63 @@
 
 **A comprehensive computational framework for analyzing Inka khipus**
 
-[![Status](https://img.shields.io/badge/Status-Complete-brightgreen)]()
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow)]()
+[![Status](https://img.shields.io/badge/Status-Research%20Tool-blue)]()
 
 ## Overview
 
-This standalone toolkit provides a complete computational analysis pipeline for studying khipu structure, numeric encoding, color semantics, and hierarchical patterns. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
+This standalone toolkit provides computational infrastructure for exploring Inka khipu structure, numeric patterns, color distributions, and hierarchical relationships. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
-**This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work.
+**This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work. All computational results require expert validation and should be understood as exploratory findings, not definitive conclusions.
 
-### Research Goals
+### Scope: What This Toolkit Does
 
-1. **Arithmetic validation framework** - Test summation consistency and internal numeric logic
-2. **Graph-based structural analysis** - Convert khipus into hierarchical graphs to identify recurring patterns
-3. **Hypothesis parameterization** - Represent multiple interpretations explicitly (e.g., color semantics as configurable assumptions)
-4. **Pattern discovery with constraints** - Use unsupervised learning while requiring patterns across multiple provenances
-5. **Multi-modal feature extraction** - Integrate numeric, color, spatial, and structural data with uncertainty tracking
-6. **Expert-in-the-loop validation** - Build checkpoints for domain expert review at each analytical stage
+1. **Arithmetic pattern analysis** - Tests summation consistency and internal numeric relationships
+2. **Graph-based structural analysis** - Converts khipus into hierarchical graphs to identify recurring structural patterns
+3. **Hypothesis exploration** - Represents multiple interpretations explicitly (e.g., color semantics as configurable assumptions)
+4. **Pattern discovery** - Uses unsupervised learning to surface computational signals across multiple provenances
+5. **Multi-modal feature extraction** - Integrates numeric, color, spatial, and structural data with uncertainty tracking
+6. **Expert-in-the-loop design** - Provides checkpoints for domain expert review at each analytical stage
+
+### Non-Claims: What This Toolkit Does NOT Do
+
+- ❌ **Semantic decoding** - We do not claim to decode the meaning of numeric values, colors, or structures
+- ❌ **Ground truth validation** - Computational results are exploratory; we lack external ground truth for most analyses
+- ❌ **Cultural interpretation** - Administrative function classifications are operational typologies requiring expert validation
+- ❌ **Definitive conclusions** - All findings are probabilistic signals that require archaeological and anthropological contextualization
+
+### Validation Status
+
+- ✅ **Computationally validated** - Numeric decoding, summation testing, clustering algorithms
+- ⚠️ **Requires expert review** - Administrative function classifications, color semantics, structural typologies
+- 🔄 **Ongoing research** - Pattern interpretations, geographic correlations, functional hypotheses
 
 ### Key Statistics
 
-- **619 khipus** analyzed across 9 comprehensive phases
-- **54,403 cords** decoded with 68.2% numeric coverage
-- **110,151 knots** processed with 95.2% success rate
-- **7 structural clusters** identified via k-means analysis
-- **73.8%** show pendant summation relationships
-- **27 anomalies** detected across structural and chromatic dimensions
-- **100+ datasets** generated for reproducible analysis
+- **619 khipus** analyzed from the Open Khipu Repository
+- **54,403 cords** with hierarchical relationships extracted
+- **110,151 knots** decoded (95.2% of knot records with sufficient data)
+- **7 structural clusters** identified via k-means (moderate separation; see [Phase 8](reports/phase8_administrative_function_report.md))
+- **73.8%** exhibit numeric patterns consistent with summation relationships
+- **27 structural anomalies** detected using computational outlier methods
+- **100+ datasets** generated for reproducible exploration
 
-### Project Phases (Complete)
+**Note:** All counts and percentages reflect computational processing results. See [DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) for detailed explanations of how these numbers are derived and why they may differ across phases.
+
+### Research Phases
 
 - **Phase 0:** Reconnaissance - Database exploration and viability assessment
 - **Phase 1:** Baseline Validation - Numeric decoding pipeline establishment
 - **Phase 2:** Extraction Infrastructure - Hierarchical structure and color data extraction
-- **Phase 3:** Summation Testing - Hypothesis validation for arithmetic relationships
+- **Phase 3:** Summation Testing - Arithmetic relationship pattern exploration
 - **Phase 4:** Pattern Discovery - Clustering, motif mining, geographic analysis
-- **Phase 5:** Multi-Model Framework - Simultaneous hypothesis testing
-- **Phase 7:** ML Extensions - Machine learning for prediction and classification
-- **Phase 8:** Comparative Analysis - Chromatic features and administrative typology
+- **Phase 5:** Multi-Model Framework - Simultaneous hypothesis testing framework
+- **Phase 7:** ML Extensions - Predictive modeling and pattern classification
+- **Phase 8:** Comparative Analysis - Chromatic features and operational typology
 - **Phase 9:** Meta-Analysis - Stability testing and robustness validation
+
+See [reports/](reports/) for detailed phase documentation.
 
 ## Quick Start
 
@@ -56,7 +73,7 @@ This toolkit requires access to the Open Khipu Repository database:
 git clone https://github.com/khipulab/open-khipu-repository.git
 ```
 
-**2. Clone or download this toolkit**
+**2. Clone this toolkit**
 
 ```bash
 # In the SAME parent directory
@@ -66,23 +83,26 @@ git clone [your-repository-url]
 **Expected directory structure:**
 ```
 your-projects-directory/
- open-khipu-repository/
-    data/
-       khipu.db           Database file
-    ...
- khipu-computational-toolkit/
-     scripts/
-     data/processed/
-     ...
+ ├── open-khipu-repository/
+ │   └── data/
+ │       └── khipu.db           ← Database file
+ └── khipu-computational-toolkit/
+     ├── src/
+     ├── scripts/
+     ├── data/
+     └── DATA_PATHS.md         ← Path configuration guide
 ```
 
-**3. Verify database location**
+**3. Verify configuration**
 
 ```bash
 # From the toolkit directory
-ls ../open-khipu-repository/data/khipu.db
-# Should show: ../open-khipu-repository/data/khipu.db
+python src/config.py
 ```
+
+This validates that the database is accessible and directories are properly configured.
+
+See [DATA_PATHS.md](DATA_PATHS.md) for detailed configuration options and troubleshooting.
 
 ### Installation
 
@@ -180,13 +200,13 @@ khipu-computational-toolkit/
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
--  Summation hypothesis testing (75% numeric cord rate)
--  K-means clustering (7 archetypes)
--  Anomaly detection (Isolation Forest)
--  Missing value prediction (3 ML models)
--  Function classification (98% accuracy)
--  Motif mining (color/structure patterns)
--  Geographic correlation analysis
+- ✓ Summation hypothesis testing (73.8% exhibit consistent numeric patterns)
+- ✓ K-means clustering (7 structural groups with moderate separation)
+- ✓ Anomaly detection (Isolation Forest and LOF methods)
+- ✓ Missing value prediction (constraint-based, statistical, and ML approaches)
+- ✓ Operational classification (unsupervised typology requiring expert validation)
+- ✓ Motif mining (color and structure pattern discovery)
+- ✓ Geographic correlation analysis
 
 ### Data Outputs
 - **100+ processed data files** - Analysis results (CSV, JSON, pickled graphs)
@@ -237,27 +257,31 @@ python scripts/visualize_geographic_heatmap.py
 
 Generates comprehensive analysis plots organized by research phase.
 
-## Database Configuration
+## Configuration
 
-### Option 1: Environment Variable (Recommended)
+### Database Path
+
+The toolkit uses a centralized configuration system (see [DATA_PATHS.md](DATA_PATHS.md)).
+
+**Default:** Looks for `../open-khipu-repository/data/khipu.db` (sibling directory)
+
+**Custom location:** Set environment variable:
 
 ```bash
 # Windows PowerShell
-$env:KHIPU_DB_PATH = "..\open-khipu-repository\data\khipu.db"
+$env:KHIPU_DB_PATH = "C:\path\to\khipu.db"
 
 # Linux/Mac
-export KHIPU_DB_PATH="../open-khipu-repository/data/khipu.db"
+export KHIPU_DB_PATH="/path/to/khipu.db"
 ```
 
-### Option 2: Command-Line Parameter
+**Validate setup:**
 
 ```bash
-python scripts/dashboard_app.py --db ../open-khipu-repository/data/khipu.db
+python src/config.py
 ```
 
-### Option 3: Update Scripts (Advanced)
-
-Edit individual scripts to set `DB_PATH` constant if needed.
+See [DATA_PATHS.md](DATA_PATHS.md) for complete configuration documentation.
 
 ## Development
 
@@ -273,6 +297,52 @@ pytest tests/
 black src/ scripts/
 flake8 src/ scripts/
 ```
+
+## Reproducibility
+
+### Dataset Version
+
+- **Source:** Open Khipu Repository (OKR)
+- **Database:** khipu.db from OKR GitHub repository
+- **Extraction date:** December 2025
+- **Khipus analyzed:** 619 (612 with complete cord data)
+
+### Environment
+
+- **Python version:** 3.11+
+- **Key dependencies:** See [requirements.txt](requirements.txt)
+- **Platform tested:** Windows 11, Ubuntu 22.04, macOS Sonoma
+
+### Regenerating Phase Outputs
+
+All phase outputs can be regenerated from raw data:
+
+```bash
+# Validate configuration first
+python src/config.py
+
+# Generate all processed data
+python scripts/generate_processed_data.py
+
+# Or run individual phase extractions
+python scripts/extract_cord_hierarchy.py      # Phase 2
+python scripts/extract_knot_data.py           # Phase 2
+python scripts/extract_color_data.py          # Phase 2
+python scripts/test_summation_hypotheses.py   # Phase 3
+python scripts/cluster_khipus.py              # Phase 4
+```
+
+See individual phase reports in [reports/](reports/) for detailed methodology.
+
+### Data Provenance
+
+All processed datasets include:
+- Generation timestamp
+- Source data version
+- Processing parameters
+- Validation checksums (where applicable)
+
+See [docs/DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) for explanations of count differences across phases.
 
 ## Citation
 
@@ -321,4 +391,4 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-**Status:**  Production Ready |  Research Complete |  Documentation Complete
+**Note:** This is a research toolkit under active development. Computational findings should be interpreted with appropriate caution and expert validation.

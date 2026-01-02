@@ -50,12 +50,14 @@ python scripts/extract_cord_hierarchy.py
 
 ### extract_knot_data.py
 **Purpose:** Extract comprehensive knot-level data (23 features per knot)  
-**Output:** `data/processed/phase2/knot_data.csv` (215,504 knots)  
+**Output:** `data/processed/phase2/knot_data.csv` (110,151 knots)*  
 **Phase:** 2 - Extraction Infrastructure  
 **Usage:**
 ```bash
 python scripts/extract_knot_data.py
 ```
+
+*Note: 110,151 decoded knots from 110,677 raw database records (526 filtered for data quality). See [DATA_RECONCILIATION.md](../docs/DATA_RECONCILIATION.md) for count explanations.
 
 ### extract_color_data.py
 **Purpose:** Extract and analyze color patterns across khipus  

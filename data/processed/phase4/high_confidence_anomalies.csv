@@ -1,0 +1,14 @@
+khipu_id,PROVENANCE,cluster,anomaly_score,is_anomaly_isolation,is_anomaly_statistical,num_outlier_flags,is_anomaly_topology,num_topology_flags,num_methods_flagged,high_confidence_anomaly
+1000020,Leymebamba,0,-0.6424630990655833,True,True,2,True,1,3,True
+1000048,Pachacamac,3,-0.5170880880101824,True,False,1,True,1,2,True
+1000053,Ica,2,-0.5533798136236123,True,False,1,True,2,2,True
+1000088,near Lima,6,-0.6044544181251691,True,False,1,True,2,2,True
+1000118,Ica,3,-0.5511757851321278,True,False,1,True,1,2,True
+1000155,,1,-0.6157784174498768,True,False,1,True,2,2,True
+1000279,Mollepampa,5,-0.6457848912918444,True,True,2,True,1,3,True
+1000344,,2,-0.6010972279566659,True,False,1,True,2,2,True
+1000413,Hacienda Ullujalla y Callengo,5,-0.5173481944092092,True,False,0,True,1,2,True
+1000459,,6,-0.5257254464977789,True,False,0,True,1,2,True
+1000461,,6,-0.5757856464693698,True,False,1,True,1,2,True
+1000463,,6,-0.5532925107851479,True,False,1,True,1,2,True
+1000501,"""Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)""",0,-0.5835198210278316,True,False,0,True,1,2,True

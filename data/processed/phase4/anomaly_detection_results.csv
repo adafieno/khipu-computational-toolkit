@@ -1,0 +1,613 @@
+khipu_id,PROVENANCE,cluster,anomaly_score,is_anomaly_isolation,is_anomaly_statistical,num_outlier_flags,is_anomaly_topology,num_topology_flags,num_methods_flagged,high_confidence_anomaly
+1000000,Leymebamba,3,-0.3642151294707316,False,False,0,False,0,0,False
+1000001,Leymebamba,1,-0.4186502970874611,False,False,0,False,0,0,False
+1000002,Leymebamba,3,-0.37748775266271545,False,False,0,False,0,0,False
+1000003,Leymebamba,3,-0.38011482434077876,False,False,0,False,0,0,False
+1000004,Leymebamba,0,-0.3950537134563524,False,False,0,False,0,0,False
+1000005,Leymebamba,3,-0.35812527626182655,False,False,0,False,0,0,False
+1000006,Leymebamba,3,-0.37788703717063055,False,False,0,False,0,0,False
+1000007,Leymebamba,0,-0.4745342246979549,False,False,0,False,0,0,False
+1000008,Leymebamba,3,-0.3592500099377053,False,False,0,False,0,0,False
+1000009,Leymebamba,3,-0.37255635234423,False,False,0,False,0,0,False
+1000010,Leymebamba,3,-0.37775970480870386,False,False,0,False,0,0,False
+1000011,Leymebamba,3,-0.35662995406484177,False,False,0,False,0,0,False
+1000012,Leymebamba,3,-0.3946984992594285,False,False,0,False,0,0,False
+1000013,,3,-0.4010592678650795,False,False,0,True,1,1,False
+1000014,,3,-0.3898233701913226,False,False,0,True,1,1,False
+1000015,,3,-0.34515222914261995,False,False,0,False,0,0,False
+1000017,,3,-0.34218768746549466,False,False,0,False,0,0,False
+1000018,Leymebamba,0,-0.47186977425853227,False,False,0,False,0,0,False
+1000019,Leymebamba,0,-0.3972989141925299,False,False,0,False,0,0,False
+1000020,Leymebamba,0,-0.6424630990655833,True,True,2,True,1,3,True
+1000021,Leymebamba,3,-0.3874260422883889,False,False,0,False,0,0,False
+1000022,Leymebamba,0,-0.38389600804968554,False,False,0,False,0,0,False
+1000023,Leymebamba,0,-0.5923098788326576,True,False,1,False,0,1,False
+1000024,Leymebamba,0,-0.5837895438983314,True,False,1,False,0,1,False
+1000025,Leymebamba,4,-0.6329041045104989,True,False,1,False,0,1,False
+1000026,Ica,3,-0.35592995552538154,False,False,0,False,0,0,False
+1000027,Ica,3,-0.3745279010345206,False,False,0,False,0,0,False
+1000028,,3,-0.36630812292980547,False,False,0,False,0,0,False
+1000029,,0,-0.4246503517188828,False,False,0,False,0,0,False
+1000030,,3,-0.3455460257823115,False,False,0,False,0,0,False
+1000031,,3,-0.36575027433957275,False,False,0,False,0,0,False
+1000032,,3,-0.3854462735580098,False,False,0,False,0,0,False
+1000033,,3,-0.3483499887228318,False,False,0,False,0,0,False
+1000034,,3,-0.36540347488417907,False,False,0,False,0,0,False
+1000035,,3,-0.3478526123380748,False,False,0,False,0,0,False
+1000036,,3,-0.35850055938641967,False,False,0,False,0,0,False
+1000037,Nazca,3,-0.34579299982102857,False,False,0,False,0,0,False
+1000038,Nazca,1,-0.44312936199850606,False,False,0,True,2,1,False
+1000039,Pachacamac,2,-0.38366553164135203,False,False,0,True,1,1,False
+1000040,Between Ica and Pisco,3,-0.364436804442918,False,False,0,False,0,0,False
+1000041,Pachacamac,3,-0.3901782302623849,False,False,0,True,1,1,False
+1000042,Ica,3,-0.36124085417074453,False,False,0,False,0,0,False
+1000043,Pachacamac,3,-0.3548159433437904,False,False,0,False,0,0,False
+1000044,Pachacamac,3,-0.3506770962940282,False,False,0,False,0,0,False
+1000045,Leymebamba,0,-0.45334280388561615,False,False,0,False,0,0,False
+1000046,Pachacamac,3,-0.3504774020182323,False,False,0,False,0,0,False
+1000047,Ica,3,-0.36495404935735765,False,False,0,False,0,0,False
+1000048,Pachacamac,3,-0.5170880880101824,True,False,1,True,1,2,True
+1000049,Ica,3,-0.34930804686987543,False,False,0,False,0,0,False
+1000050,Marquez,3,-0.35344847161665977,False,False,0,False,0,0,False
+1000051,Marquez,3,-0.3584491600458046,False,False,0,True,1,1,False
+1000052,Between Ica and Pisco,3,-0.3580539515520881,False,False,0,False,0,0,False
+1000053,Ica,2,-0.5533798136236123,True,False,1,True,2,2,True
+1000054,Pachacamac,3,-0.35626819825326905,False,False,0,False,0,0,False
+1000055,Pachacamac,3,-0.374125373442516,False,False,0,False,0,0,False
+1000056,Pachacamac,3,-0.4139311171706003,False,False,0,True,1,1,False
+1000057,Between Ica and Pisco,2,-0.4569832039786458,False,False,1,True,1,1,False
+1000058,Between Ica and Pisco,3,-0.3525013653416332,False,False,0,False,0,0,False
+1000059,Between Ica and Pisco,3,-0.36041911098445367,False,False,0,False,0,0,False
+1000060,Between Ica and Pisco,3,-0.3656100267155566,False,False,0,False,0,0,False
+1000061,Ica,1,-0.4345928441016446,False,False,0,True,1,1,False
+1000062,Ica,1,-0.4310128941231121,False,False,0,True,1,1,False
+1000063,Between Ica and Pisco,0,-0.504757507887867,False,False,0,False,0,0,False
+1000064,Between Ica and Pisco,3,-0.35773350734338694,False,False,0,True,1,1,False
+1000065,Ica,2,-0.45788358226638004,False,False,0,True,1,1,False
+1000066,Ica,1,-0.39753106437180946,False,False,0,False,0,0,False
+1000067,Ica,3,-0.36239975565847105,False,False,0,False,0,0,False
+1000068,Ica,1,-0.3867079267699808,False,False,0,False,0,0,False
+1000069,Ica,1,-0.41944671069150347,False,False,0,False,0,0,False
+1000070,Ica,3,-0.39364430310295506,False,False,0,False,0,0,False
+1000071,Ica,3,-0.37851768290407867,False,False,0,True,1,1,False
+1000072,Ica,3,-0.36550022051361347,False,False,0,False,0,0,False
+1000073,Ica,3,-0.386477487688702,False,False,0,False,0,0,False
+1000074,Pachacamac,3,-0.4216126263823626,False,False,0,False,0,0,False
+1000075,Pachacamac,3,-0.539874746604303,True,False,1,False,0,1,False
+1000076,Ica,3,-0.48308790600488943,False,False,1,False,0,0,False
+1000077,Pachacamac,2,-0.5371819684751737,True,False,1,False,0,1,False
+1000078,Lima,1,-0.37937691953133235,False,False,0,False,0,0,False
+1000079,Ica,3,-0.3594146417674749,False,False,0,False,0,0,False
+1000080,Marquez,3,-0.3655027256341112,False,False,0,True,1,1,False
+1000081,Marquez,3,-0.36971967115368787,False,False,0,False,0,0,False
+1000082,Pachacamac,3,-0.40755570783342593,False,False,0,False,0,0,False
+1000083,Ica,0,-0.37466434335253257,False,False,0,False,0,0,False
+1000084,Nazca,1,-0.4143913581043118,False,False,0,False,0,0,False
+1000085,Nazca,0,-0.4751224784081201,False,False,0,False,0,0,False
+1000086,Ica,3,-0.3931845804418042,False,False,0,False,0,0,False
+1000087,near Lima,3,-0.3461184510588022,False,False,0,False,0,0,False
+1000088,near Lima,6,-0.6044544181251691,True,False,1,True,2,2,True
+1000089,Pachacamac,0,-0.42477545438733577,False,False,0,False,0,0,False
+1000090,Marquez,3,-0.3624908995517517,False,False,0,False,0,0,False
+1000091,Marquez,3,-0.3481328922476836,False,False,0,False,0,0,False
+1000092,Pachacamac,3,-0.37167627723558827,False,False,0,False,0,0,False
+1000093,Ica,3,-0.3465220462351994,False,False,0,False,0,0,False
+1000094,Nazca,0,-0.4229627441788895,False,False,0,False,0,0,False
+1000096,Lluta Valley,4,-0.7479590740522242,True,False,1,False,0,1,False
+1000097,,3,-0.3622034253242187,False,False,0,False,0,0,False
+1000098,Nazca,3,-0.35867306905588014,False,False,0,False,0,0,False
+1000099,,3,-0.37187727803310416,False,False,0,True,1,1,False
+1000100,,3,-0.3601803503461978,False,False,0,True,1,1,False
+1000101,"""La puntilla, between Paracas and Pisco""",3,-0.3417474458448109,False,False,0,False,0,0,False
+1000103,Nazca,0,-0.5722540900117087,True,False,1,False,0,1,False
+1000105,,3,-0.3974715438758183,False,False,0,False,0,0,False
+1000106,,3,-0.3614853844015722,False,False,0,False,0,0,False
+1000107,,3,-0.36569783418817137,False,False,0,False,0,0,False
+1000108,,3,-0.36076177209263505,False,False,0,True,1,1,False
+1000109,,3,-0.40343131449954933,False,False,0,True,1,1,False
+1000110,,3,-0.35534756191869976,False,False,0,True,1,1,False
+1000111,,3,-0.38916747970676024,False,False,0,False,0,0,False
+1000112,Chuquitanta,1,-0.4617927574575554,False,False,1,False,0,0,False
+1000113,Ica,3,-0.3771986950189831,False,False,0,True,1,1,False
+1000114,Pachacamac,3,-0.3711244925393958,False,False,0,False,0,0,False
+1000115,Nazca,0,-0.4093611166958123,False,False,0,False,0,0,False
+1000116,Ica,3,-0.35862185818875353,False,False,0,False,0,0,False
+1000117,Ica,3,-0.35267104332844496,False,False,0,False,0,0,False
+1000118,Ica,3,-0.5511757851321278,True,False,1,True,1,2,True
+1000119,Pachacamac,2,-0.3860806666800879,False,False,0,True,1,1,False
+1000120,Pachacamac,3,-0.369389006847342,False,False,0,False,0,0,False
+1000121,Ica,3,-0.36901591185784577,False,False,0,False,0,0,False
+1000122,Ocucaje,3,-0.36234845820983347,False,False,0,False,0,0,False
+1000123,Ocucaje,3,-0.37791679373786075,False,False,0,False,0,0,False
+1000124,Ocucaje,2,-0.48383582925288715,False,False,0,True,1,1,False
+1000125,Ica,3,-0.35630670682269633,False,False,0,False,0,0,False
+1000126,Pachacamac,3,-0.3549685837796128,False,False,0,False,0,0,False
+1000127,Ica,3,-0.3672303081534767,False,False,0,False,0,0,False
+1000128,,3,-0.349922481705748,False,False,0,False,0,0,False
+1000129,near Lima,1,-0.48868207142683623,False,False,1,False,0,0,False
+1000130,near Lima,1,-0.3834657625246847,False,False,0,False,0,0,False
+1000131,Pachacamac,2,-0.3887832907265515,False,False,0,True,1,1,False
+1000132,,3,-0.34636562975705876,False,False,0,False,0,0,False
+1000133,Pachacamac,3,-0.36271319779865996,False,False,0,False,0,0,False
+1000134,Ica,1,-0.3891080560056767,False,False,0,False,0,0,False
+1000135,Ica,3,-0.3683718149731348,False,False,0,False,0,0,False
+1000136,Ica,1,-0.4407137097974813,False,False,0,False,0,0,False
+1000137,Pachacamac,3,-0.34403072573729604,False,False,0,False,0,0,False
+1000138,Ica,3,-0.3480362553410063,False,False,0,False,0,0,False
+1000139,Pachacamac,3,-0.34971238532055815,False,False,0,False,0,0,False
+1000140,Ica,0,-0.4510400007986433,False,False,0,False,0,0,False
+1000141,Pachacamac,1,-0.38425555392994676,False,False,0,False,0,0,False
+1000142,,3,-0.35740833032061553,False,False,0,False,0,0,False
+1000143,,3,-0.35847596121709036,False,False,0,True,1,1,False
+1000144,Pachacamac,3,-0.3999767821611621,False,False,0,False,0,0,False
+1000145,Ica,3,-0.3501712012029695,False,False,0,False,0,0,False
+1000146,Pachacamac,3,-0.4433570291363938,False,False,0,False,0,0,False
+1000147,Pachacamac,0,-0.4606822451113785,False,False,0,False,0,0,False
+1000148,Nazca,0,-0.441726633475059,False,False,0,False,0,0,False
+1000149,near Lima,3,-0.3675761757073548,False,False,0,False,0,0,False
+1000150,near Lima,3,-0.3446523028963346,False,False,0,False,0,0,False
+1000151,Ica,3,-0.3696615219935744,False,False,0,False,0,0,False
+1000152,Ica,3,-0.3655594898469277,False,False,0,False,0,0,False
+1000154,,1,-0.43715015527916024,False,False,0,False,0,0,False
+1000155,,1,-0.6157784174498768,True,False,1,True,2,2,True
+1000156,,1,-0.4115037116057069,False,False,0,True,1,1,False
+1000157,,1,-0.3821028649782195,False,False,0,False,0,0,False
+1000158,,3,-0.3551018752073567,False,False,0,False,0,0,False
+1000159,,3,-0.3466977324283138,False,False,0,False,0,0,False
+1000160,Pachacamac,1,-0.5541293612897322,True,False,1,False,0,1,False
+1000161,Pachacamac,3,-0.3709782236608932,False,False,0,False,0,0,False
+1000162,Pachacamac,3,-0.35158597107521866,False,False,0,False,0,0,False
+1000163,,3,-0.3619421714240679,False,False,0,False,0,0,False
+1000164,,3,-0.3774586733233306,False,False,0,False,0,0,False
+1000165,probably Central Coast Late Period,3,-0.35694532665748796,False,False,0,False,0,0,False
+1000166,,3,-0.34427824377666777,False,False,0,False,0,0,False
+1000167,,3,-0.3506213410685258,False,False,0,False,0,0,False
+1000168,,1,-0.4893781235183427,False,False,1,False,0,0,False
+1000169,Hacienda Ullujalla y Callengo,3,-0.3637667432723745,False,False,0,False,0,0,False
+1000170,Hacienda Ullujalla y Callengo,3,-0.35060682378397406,False,False,0,False,0,0,False
+1000171,,3,-0.3675761757073548,False,False,0,False,0,0,False
+1000172,"""Hacienda Copara, Nazca""",3,-0.35635321429997224,False,False,0,True,1,1,False
+1000173,,1,-0.3881784636789691,False,False,0,False,0,0,False
+1000174,"Rancho San Juan, Ica Valley",6,-0.47572784905960147,False,False,0,True,1,1,False
+1000176,,3,-0.38371960999713106,False,False,0,True,1,1,False
+1000177,,5,-0.5159844615220669,False,False,0,True,2,1,False
+1000178,,3,-0.3470942087378698,False,False,0,False,0,0,False
+1000179,Hacienda Ullujalla y Callengo,3,-0.34530629475270463,False,False,0,False,0,0,False
+1000180,,3,-0.38641597807218214,False,False,0,False,0,0,False
+1000182,Hacienda Ullujalla y Callengo,1,-0.5255943021678268,True,False,1,False,0,1,False
+1000183,,4,-0.6102578187005456,True,False,1,False,0,1,False
+1000184,,2,-0.4126553910069789,False,False,0,True,1,1,False
+1000185,,3,-0.37319068702279545,False,False,0,False,0,0,False
+1000186,,3,-0.375390149899349,False,False,0,False,0,0,False
+1000187,,3,-0.38007925294374967,False,False,0,False,0,0,False
+1000188,,3,-0.3498767709136439,False,False,0,False,0,0,False
+1000189,,3,-0.3732323436118154,False,False,0,False,0,0,False
+1000190,,1,-0.45150870076960464,False,False,0,False,0,0,False
+1000191,,1,-0.3791453624912635,False,False,0,False,0,0,False
+1000192,,3,-0.3593984658172152,False,False,0,False,0,0,False
+1000194,,1,-0.39426208178654615,False,False,0,False,0,0,False
+1000195,,1,-0.5008778918543958,False,False,1,False,0,0,False
+1000196,,1,-0.5911645975387225,True,False,1,False,0,1,False
+1000197,,3,-0.3603537932913335,False,False,0,False,0,0,False
+1000198,,0,-0.4160183735381223,False,False,0,False,0,0,False
+1000199,,3,-0.34317855164487165,False,False,0,False,0,0,False
+1000200,,3,-0.36950997154993737,False,False,0,False,0,0,False
+1000201,Aankoop,0,-0.40856773052768003,False,False,0,False,0,0,False
+1000204,,3,-0.40233614579061483,False,False,0,False,0,0,False
+1000205,,1,-0.4601030055151058,False,False,1,False,0,0,False
+1000206,,3,-0.3674905148578367,False,False,0,False,0,0,False
+1000207,,3,-0.34907131563062477,False,False,0,False,0,0,False
+1000208,,3,-0.38485802021814103,False,False,0,False,0,0,False
+1000209,,3,-0.35625223745847495,False,False,0,False,0,0,False
+1000210,,3,-0.4127832824819208,False,False,0,False,0,0,False
+1000211,,3,-0.34357415656749724,False,False,0,False,0,0,False
+1000212,,3,-0.34398982569580344,False,False,0,False,0,0,False
+1000213,,3,-0.36352034089828633,False,False,0,True,1,1,False
+1000214,Hacienda Ullujalla y Callengo,3,-0.34528336813626215,False,False,0,False,0,0,False
+1000216,,3,-0.378093632588657,False,False,0,False,0,0,False
+1000217,,1,-0.4106485616749687,False,False,0,False,0,0,False
+1000218,,1,-0.4433593579762801,False,False,0,False,0,0,False
+1000220,,3,-0.3592458104956917,False,False,0,False,0,0,False
+1000221,,3,-0.3587356150056375,False,False,0,True,1,1,False
+1000222,,3,-0.35098119393317156,False,False,0,False,0,0,False
+1000223,,3,-0.3391507349039254,False,False,0,False,0,0,False
+1000224,,1,-0.46449882835706763,False,False,0,False,0,0,False
+1000225,,1,-0.4311822253845474,False,False,0,False,0,0,False
+1000226,,1,-0.4187971834927102,False,False,0,False,0,0,False
+1000227,Peru,3,-0.36202731958667755,False,False,0,False,0,0,False
+1000228,Huacho,3,-0.3665227576115964,False,False,0,True,1,1,False
+1000229,,3,-0.3536673173927008,False,False,0,False,0,0,False
+1000230,,3,-0.35587377549622673,False,False,0,False,0,0,False
+1000231,,3,-0.39604777159851745,False,False,0,False,0,0,False
+1000232,Peru,3,-0.36441344537402914,False,False,0,False,0,0,False
+1000233,Peru,3,-0.3895625463992042,False,False,0,False,0,0,False
+1000234,Peru,3,-0.3794795622276707,False,False,0,True,1,1,False
+1000235,"""Maranga, Huaca 1""",3,-0.3936054194430944,False,False,0,False,0,0,False
+1000236,,3,-0.36843710298286264,False,False,0,False,0,0,False
+1000238,,0,-0.4671509099138279,False,False,0,False,0,0,False
+1000239,"""Pueblo Libre, Lima, Peru""",3,-0.3551279403408008,False,False,0,False,0,0,False
+1000240,"""Pueblo Libre, Lima, Peru""",3,-0.3951121156565144,False,False,0,True,1,1,False
+1000241,"""Pueblo Libre, Lima, Peru""",6,-0.500540351056879,False,False,0,False,0,0,False
+1000242,Huaquerones,1,-0.4184870302629917,False,False,0,False,0,0,False
+1000243,Huaquerones,3,-0.3478835712097259,False,False,0,False,0,0,False
+1000244,,3,-0.36634096670836475,False,False,0,False,0,0,False
+1000245,Huaquerones,3,-0.34392816676192856,False,False,0,False,0,0,False
+1000246,Huaquerones,3,-0.3690381535186994,False,False,0,True,1,1,False
+1000247,Huaquerones,3,-0.4129779803420431,False,False,0,True,1,1,False
+1000248,Huaquerones,3,-0.4129779803420431,False,False,0,True,1,1,False
+1000249,Huaquerones,3,-0.36399548506461654,False,False,0,False,0,0,False
+1000250,,2,-0.4131507884825605,False,False,0,True,1,1,False
+1000251,Huaquerones,3,-0.3561369398888546,False,False,0,False,0,0,False
+1000252,Huaquerones,3,-0.36426857004494356,False,False,0,False,0,0,False
+1000253,Huaquerones,3,-0.3628618484631851,False,False,0,True,1,1,False
+1000254,Huaquerones,1,-0.3802171098889926,False,False,0,False,0,0,False
+1000255,Huaquerones,3,-0.3427717318227966,False,False,0,False,0,0,False
+1000256,Huaquerones,3,-0.38093677723917857,False,False,0,False,0,0,False
+1000257,Huaquerones,1,-0.42478429055562544,False,False,0,False,0,0,False
+1000258,Huaquerones,3,-0.41784950049058034,False,False,0,True,1,1,False
+1000259,,2,-0.4217342837269738,False,False,0,True,1,1,False
+1000260,Huaquerones,3,-0.35151086385516134,False,False,0,False,0,0,False
+1000261,Huaquerones,3,-0.35151086385516134,False,False,0,False,0,0,False
+1000262,,2,-0.39236842492822993,False,False,0,True,1,1,False
+1000263,Huaquerones,3,-0.3574230816652341,False,False,0,False,0,0,False
+1000264,Huaquerones,3,-0.37121342057189766,False,False,0,False,0,0,False
+1000265,,3,-0.37366757517466187,False,False,0,False,0,0,False
+1000266,,3,-0.3572047321674102,False,False,0,False,0,0,False
+1000267,,2,-0.39130103263095584,False,False,0,True,1,1,False
+1000268,,2,-0.40090605433308185,False,False,0,True,1,1,False
+1000269,,3,-0.36969889957744706,False,False,0,False,0,0,False
+1000270,Santa,3,-0.35699708923660034,False,False,0,False,0,0,False
+1000271,Santa,3,-0.36705246401766545,False,False,0,False,0,0,False
+1000272,Santa,3,-0.356547229545141,False,False,0,False,0,0,False
+1000273,Santa,0,-0.48440750930358184,False,False,0,False,0,0,False
+1000274,Santa,3,-0.3777231192082242,False,False,0,False,0,0,False
+1000275,Santa,0,-0.4297868929540664,False,False,0,False,0,0,False
+1000276,,1,-0.43821231249371395,False,False,0,False,0,0,False
+1000277,,3,-0.40688164048333125,False,False,0,True,1,1,False
+1000279,Mollepampa,5,-0.6457848912918444,True,True,2,True,1,3,True
+1000280,,0,-0.447536431932753,False,False,0,False,0,0,False
+1000283,,3,-0.34462842083952816,False,False,0,False,0,0,False
+1000285,,0,-0.3739019429518674,False,False,0,False,0,0,False
+1000287,Nazca,0,-0.44411226898570066,False,False,0,False,0,0,False
+1000288,Paracas,3,-0.36118835517049475,False,False,0,False,0,0,False
+1000289,Paracas,3,-0.3679581114022122,False,False,0,False,0,0,False
+1000290,Paracas,3,-0.3775602058270575,False,False,0,False,0,0,False
+1000291,Paracas,3,-0.35772875333205334,False,False,0,True,1,1,False
+1000292,Nazca,4,-0.6224734124752361,True,False,1,False,0,1,False
+1000293,Paracas,0,-0.4299362053653318,False,False,0,False,0,0,False
+1000295,,3,-0.3530969604086041,False,False,0,False,0,0,False
+1000296,,3,-0.3679408789774968,False,False,0,True,1,1,False
+1000297,,3,-0.3587968746727503,False,False,0,True,1,1,False
+1000298,"""Playa Miller #6, Arica, Chile""",0,-0.4337556987059355,False,False,0,False,0,0,False
+1000299,,0,-0.4656108535998351,False,False,0,False,0,0,False
+1000300,Lluta Valley,3,-0.36658591828405035,False,False,0,False,0,0,False
+1000301,Lluta Valley,3,-0.36761715009509194,False,False,0,False,0,0,False
+1000302,Lluta Valley,3,-0.36655003467913266,False,False,0,False,0,0,False
+1000303,Atarco,3,-0.358754023553535,False,False,0,False,0,0,False
+1000304,Atarco,3,-0.3568936874959522,False,False,0,False,0,0,False
+1000305,Atarco,3,-0.360091756835596,False,False,0,False,0,0,False
+1000306,Atarco,3,-0.3545690573303698,False,False,0,False,0,0,False
+1000307,Atarco,3,-0.3528671242938263,False,False,0,False,0,0,False
+1000309,Atarco,3,-0.3561847462806825,False,False,0,False,0,0,False
+1000310,Peru,3,-0.390651244429383,False,False,0,False,0,0,False
+1000312,,2,-0.3983100866710877,False,False,0,True,1,1,False
+1000313,Huacho,3,-0.3644548522538887,False,False,0,False,0,0,False
+1000314,Pachacamac,0,-0.43973688023404195,False,False,0,False,0,0,False
+1000315,Pachacamac,3,-0.35688091766401475,False,False,0,False,0,0,False
+1000316,"""Playa Miller #6, Arica, Chile""",3,-0.3760035976801116,False,False,0,False,0,0,False
+1000317,"""Playa Miller #6, Arica, Chile""",3,-0.3544842013990436,False,False,0,False,0,0,False
+1000318,"""Playa Miller #6, Arica, Chile""",3,-0.37527561293367523,False,False,0,False,0,0,False
+1000319,"""Playa Miller #6, Arica, Chile""",3,-0.3715660594912143,False,False,0,False,0,0,False
+1000320,Huacho,3,-0.4003284772352697,False,False,0,False,0,0,False
+1000321, ,4,-0.6680332468526305,True,False,1,False,0,1,False
+1000322,Nazca,3,-0.3429260149789042,False,False,0,False,0,0,False
+1000323,Nazca,0,-0.4304331156263251,False,False,0,False,0,0,False
+1000324,Pachacamac,3,-0.3562491895687628,False,False,0,False,0,0,False
+1000325,Pachacamac,3,-0.38220423633917494,False,False,0,False,0,0,False
+1000326,Paracas,1,-0.3881784636789691,False,False,0,False,0,0,False
+1000327,Pachacamac,3,-0.38075681722086524,False,False,0,False,0,0,False
+1000328,Unknown,3,-0.3603330742480353,False,False,0,True,1,1,False
+1000329,Paracas,0,-0.42310216359448294,False,False,0,False,0,0,False
+1000330,,3,-0.3677839108866228,False,False,0,True,1,1,False
+1000331,,2,-0.4230014065544912,False,False,0,False,0,0,False
+1000332,,0,-0.37886161539891994,False,False,0,False,0,0,False
+1000333,Pachacamac,0,-0.382861982432501,False,False,0,False,0,0,False
+1000335,unknown,3,-0.3794671378201672,False,False,0,True,1,1,False
+1000336,,2,-0.41427439927459714,False,False,0,True,1,1,False
+1000337,unknown,3,-0.40648062100873583,False,False,0,False,0,0,False
+1000338,unknown,3,-0.36037259762205237,False,False,0,True,1,1,False
+1000339,unknown,3,-0.38530908944495385,False,False,0,False,0,0,False
+1000340,unknown,0,-0.417025717695334,False,False,0,False,0,0,False
+1000342,Pachacamac,2,-0.4912716061921452,False,False,1,True,2,1,False
+1000344,,2,-0.6010972279566659,True,False,1,True,2,2,True
+1000345,,0,-0.380058221464485,False,False,0,False,0,0,False
+1000346,,2,-0.3979729192922362,False,False,0,True,1,1,False
+1000347,,1,-0.3953553750137116,False,False,0,False,0,0,False
+1000348,,1,-0.46057019163939256,False,False,1,False,0,0,False
+1000349,,1,-0.43829843994788187,False,False,0,True,1,1,False
+1000350,,1,-0.4910804363001544,False,False,1,False,0,0,False
+1000351,,3,-0.35787118027457937,False,False,0,False,0,0,False
+1000352,,3,-0.36818823399137446,False,False,0,False,0,0,False
+1000353,,3,-0.3632309464589122,False,False,0,False,0,0,False
+1000354,,1,-0.496057966546234,False,False,1,False,0,0,False
+1000355,,1,-0.4008326961186102,False,False,0,False,0,0,False
+1000356,,3,-0.3418536497182937,False,False,0,False,0,0,False
+1000357,,1,-0.4062186225189554,False,False,0,False,0,0,False
+1000358,,3,-0.3840766756356725,False,False,0,False,0,0,False
+1000359,,2,-0.4645348837973143,False,False,1,True,1,1,False
+1000361,,0,-0.5139112843740863,False,False,0,False,0,0,False
+1000363,,2,-0.46665931889135925,False,False,1,True,2,1,False
+1000365,,2,-0.3890095150049738,False,False,0,True,1,1,False
+1000366,,3,-0.37802257834745084,False,False,0,False,0,0,False
+1000367,"Rancho San Juan, Ica Valley",6,-0.47058449786186324,False,False,0,False,0,0,False
+1000368,,0,-0.5115807829473562,False,False,0,False,0,0,False
+1000369,,2,-0.4272791857774021,False,False,0,False,0,0,False
+1000371,,0,-0.40922398341536,False,False,0,False,0,0,False
+1000374,Huari,2,-0.4128195358622066,False,False,0,True,1,1,False
+1000375,,3,-0.380322871726906,False,False,0,False,0,0,False
+1000376,,2,-0.49585916395703467,False,False,1,True,2,1,False
+1000377,unknown,3,-0.36288360265048875,False,False,0,False,0,0,False
+1000378,unknown,3,-0.38524298384893974,False,False,0,False,0,0,False
+1000380,,0,-0.408337029474372,False,False,0,False,0,0,False
+1000381,,2,-0.4041761447132639,False,False,0,True,1,1,False
+1000382,,2,-0.4203084951837404,False,False,0,True,1,1,False
+1000383,,2,-0.42935617771936824,False,False,0,True,1,1,False
+1000385,,2,-0.4168128550768984,False,False,0,True,1,1,False
+1000386,Cuzco,3,-0.35229006552853737,False,False,0,False,0,0,False
+1000387,"""Chancay, Central Coast""",3,-0.3564636086046831,False,False,0,False,0,0,False
+1000388,"""Chancay, Central Coast""",1,-0.48191180768760744,False,False,0,True,2,1,False
+1000389,"""Chancay, Central Coast""",1,-0.39578055543713575,False,False,0,False,0,0,False
+1000390,,3,-0.38791901488003855,False,False,0,False,0,0,False
+1000392,,3,-0.39194100635769247,False,False,0,False,0,0,False
+1000393,Valle de Ica Hacienda Callango Ocucaje,3,-0.40204036959416944,False,False,0,False,0,0,False
+1000395,,3,-0.48724526422543446,False,False,1,False,0,0,False
+1000396,"""Huaura Valley, near Lima, on Santa Rosalia Hacienda""",0,-0.4024715914610256,False,False,0,False,0,0,False
+1000397,,3,-0.34694138871800284,False,False,0,False,0,0,False
+1000398,Valle de Ica Hacienda Callango Ocucaje,3,-0.3412908062018683,False,False,0,False,0,0,False
+1000399,Valle de Ica Hacienda Callango Ocucaje,3,-0.3594814063610063,False,False,0,False,0,0,False
+1000400,unknown,3,-0.3830552966987137,False,False,0,False,0,0,False
+1000401,Valle de Ica Hacienda Callango Ocucaje,3,-0.38044619198268764,False,False,0,False,0,0,False
+1000402,Hacienda Ullujalla y Callengo,3,-0.35801618534122676,False,False,0,False,0,0,False
+1000403,unknown,3,-0.37621503994372313,False,False,0,False,0,0,False
+1000404,Valle de Ica Hacienda Callango Ocucaje,3,-0.3538742031833537,False,False,0,False,0,0,False
+1000405,unknown,3,-0.35336104709267463,False,False,0,False,0,0,False
+1000406,Valle de Ica Hacienda Callango Ocucaje,3,-0.3850451007751815,False,False,0,False,0,0,False
+1000407,Valle de Ica Hacienda Callango Ocucaje,3,-0.3954344476749003,False,False,0,False,0,0,False
+1000408,Valle de Ica Hacienda Callango Ocucaje,3,-0.35691732987867597,False,False,0,False,0,0,False
+1000409,,3,-0.3411770169778033,False,False,0,False,0,0,False
+1000410,Tambo Colorado,3,-0.36474760923607086,False,False,0,False,0,0,False
+1000411,Tambo Colorado,1,-0.44575047083460945,False,False,0,False,0,0,False
+1000412,,1,-0.4321432636782665,False,False,0,False,0,0,False
+1000413,Hacienda Ullujalla y Callengo,5,-0.5173481944092092,True,False,0,True,1,2,True
+1000414,,3,-0.37128358006841083,False,False,0,False,0,0,False
+1000415,Acari,3,-0.35666848610068214,False,False,0,False,0,0,False
+1000416,Tambo Colorado,1,-0.3797552259228235,False,False,0,False,0,0,False
+1000417,Tambo Colorado,3,-0.4286436338341093,False,False,0,False,0,0,False
+1000418,Donation from the collection Belli,3,-0.39986953624968136,False,False,0,False,0,0,False
+1000419,Valle de Pisco,2,-0.46183128828100334,False,False,0,True,1,1,False
+1000420,Pachacamac,3,-0.3924014373929641,False,False,0,False,0,0,False
+1000421,Pachacamac,3,-0.37759556470734706,False,False,0,False,0,0,False
+1000422,Pachacamac,3,-0.35857328815537787,False,False,0,False,0,0,False
+1000423,Pachacamac,3,-0.3925977875968862,False,False,0,False,0,0,False
+1000424,Pachacamac,3,-0.34160137275511615,False,False,0,False,0,0,False
+1000425,Pachacamac,3,-0.36628041458807936,False,False,0,False,0,0,False
+1000426,Pachacamac,3,-0.35520221513954786,False,False,0,False,0,0,False
+1000427,Pachacamac,3,-0.3804824680704335,False,False,0,False,0,0,False
+1000428,Pachacamac,3,-0.35057477453384384,False,False,0,False,0,0,False
+1000429,Pachacamac,3,-0.4191304491585516,False,False,0,True,1,1,False
+1000430,Pachacamac,3,-0.3541451670810127,False,False,0,False,0,0,False
+1000431,Pachacamac,3,-0.3552104246547498,False,False,0,False,0,0,False
+1000432,Pachacamac,3,-0.3900685117733389,False,False,0,False,0,0,False
+1000433,Pachacamac,3,-0.35432733773982816,False,False,0,False,0,0,False
+1000434,"""Cieneguilla, Valle de Lurin""",1,-0.4105804064796231,False,False,0,False,0,0,False
+1000435,"""Cieneguilla, Valle de Lurin""",3,-0.3715454526993858,False,False,0,False,0,0,False
+1000436,Pachacamac,3,-0.3710254435065525,False,False,0,False,0,0,False
+1000437,Pachacamac,3,-0.35604067668868317,False,False,0,False,0,0,False
+1000438,Pachacamac,3,-0.38374431040064816,False,False,0,True,1,1,False
+1000439,Pachacamac,3,-0.33991656811013365,False,False,0,False,0,0,False
+1000440,Pachacamac,1,-0.39095084899080623,False,False,0,False,0,0,False
+1000441,Pachacamac,3,-0.3614853844015722,False,False,0,False,0,0,False
+1000442,Pachacamac,3,-0.3447006762410825,False,False,0,False,0,0,False
+1000443,Pachacamac,1,-0.4135410380877607,False,False,0,True,1,1,False
+1000444,Pachacamac,3,-0.4256825418005234,False,False,0,True,1,1,False
+1000445,Pachacamac,3,-0.4202215971729604,False,False,0,False,0,0,False
+1000446,Pachacamac,3,-0.43413247255917825,False,False,0,False,0,0,False
+1000447,Pachacamac,1,-0.4413594561660038,False,False,0,False,0,0,False
+1000448,Pachacamac,3,-0.38184733089472306,False,False,0,False,0,0,False
+1000449,Pachacamac,3,-0.3878959267249872,False,False,0,False,0,0,False
+1000450,Pachacamac,3,-0.3479164812071781,False,False,0,False,0,0,False
+1000451,Pachacamac,3,-0.3701515325581439,False,False,0,False,0,0,False
+1000452,"""Chancay, Central Coast""",3,-0.3722528135019418,False,False,0,False,0,0,False
+1000453,,3,-0.4139561929517902,False,False,0,True,1,1,False
+1000454,,3,-0.37080261695148764,False,False,0,True,1,1,False
+1000455,,3,-0.36260297842964256,False,False,0,False,0,0,False
+1000456,,6,-0.487709089175174,False,False,0,False,0,0,False
+1000457,,6,-0.5115946788402785,False,False,0,True,1,1,False
+1000458,,6,-0.49462071812923225,False,False,0,False,0,0,False
+1000459,,6,-0.5257254464977789,True,False,0,True,1,2,True
+1000460,,6,-0.4926271883835947,False,False,0,True,1,1,False
+1000461,,6,-0.5757856464693698,True,False,1,True,1,2,True
+1000462,,6,-0.4977123044293347,False,False,0,True,1,1,False
+1000463,,6,-0.5532925107851479,True,False,1,True,1,2,True
+1000472,La Molina,0,-0.5451159792008856,True,False,1,False,0,1,False
+1000474,Ica,3,-0.349426157141999,False,False,0,False,0,0,False
+1000475,Ica,3,-0.3499576581414399,False,False,0,False,0,0,False
+1000477,"""Ica Valley, near Callango""",3,-0.37705252345714585,False,False,0,False,0,0,False
+1000478,unknown,3,-0.3961547648217912,False,False,0,True,1,1,False
+1000479,,3,-0.35860244768374566,False,False,0,True,1,1,False
+1000480,,1,-0.37817956880449527,False,False,0,False,0,0,False
+1000481,,1,-0.39813525763455065,False,False,0,False,0,0,False
+1000482,Chuquitanta,3,-0.35752108582954856,False,False,0,True,1,1,False
+1000483,,3,-0.37436063984826495,False,False,0,True,1,1,False
+1000485,Cajamarquilla,3,-0.3688152089476438,False,False,0,False,0,0,False
+1000486,Cajamarquilla,3,-0.3722528135019418,False,False,0,False,0,0,False
+1000487,"""Chancay, Central Coast""",3,-0.39007857236652865,False,False,0,True,1,1,False
+1000488,unknown,3,-0.35666903708574355,False,False,0,False,0,0,False
+1000489,Cajamarquilla,3,-0.35829418484896514,False,False,0,False,0,0,False
+1000490,,3,-0.38570115641906594,False,False,0,False,0,0,False
+1000491,Cajamarquilla,1,-0.38856666352642605,False,False,0,False,0,0,False
+1000492,,2,-0.39086553151177644,False,False,0,True,1,1,False
+1000493,Chuquitanta,0,-0.41660689592199873,False,False,0,False,0,0,False
+1000494,Chuquitanta,3,-0.36317443993004667,False,False,0,False,0,0,False
+1000495,"""Ica Valley, near Callango""",3,-0.3882126629263994,False,False,0,False,0,0,False
+1000496,"""Huando, Chancay, Peru (Gaffron Collection)""",3,-0.3644475628093684,False,False,0,True,1,1,False
+1000497,"""Hda. Huando, Chancay""",3,-0.3516162584051226,False,False,0,False,0,0,False
+1000499,,3,-0.5854461851891914,True,False,1,False,0,1,False
+1000500,,3,-0.35741705753578795,False,False,0,False,0,0,False
+1000501,"""Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)""",0,-0.5835198210278316,True,False,0,True,1,2,True
+1000502,"""Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)""",3,-0.3460441136011932,False,False,0,False,0,0,False
+1000503,"""Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)""",3,-0.36444082553654006,False,False,0,False,0,0,False
+1000504,"""Peru, Fundort: Pachacmac""",0,-0.4916924438234523,False,False,0,True,1,1,False
+1000505,Ica,3,-0.37763555225930867,False,False,0,False,0,0,False
+1000506,Huacho,0,-0.38484344478585214,False,False,0,False,0,0,False
+1000507,Pachacamac,3,-0.3737238226716679,False,False,0,False,0,0,False
+1000508,Pachacamac,0,-0.442167675387508,False,False,0,False,0,0,False
+1000509,"""Santa Clara, Nazca""",0,-0.4610736653506991,False,False,0,False,0,0,False
+1000510,Pachacamac,2,-0.4361862112975754,False,False,1,True,1,1,False
+1000511,Pachacamac,2,-0.43684596939357445,False,False,0,True,1,1,False
+1000512,Pachacamac,0,-0.4056734419055865,False,False,0,False,0,0,False
+1000513,Pachacamac,3,-0.3662674094418797,False,False,0,False,0,0,False
+1000514,unknown,0,-0.3815273721010452,False,False,0,False,0,0,False
+1000515,unknown,3,-0.36194915807338196,False,False,0,False,0,0,False
+1000516,unknown,3,-0.3579015568925143,False,False,0,False,0,0,False
+1000517,unknown,3,-0.3653541928422376,False,False,0,False,0,0,False
+1000518,unknown,0,-0.38111540046658987,False,False,0,False,0,0,False
+1000519,Pachacamac,0,-0.3982222077043609,False,False,0,False,0,0,False
+1000520,Pisco,3,-0.3580735957185155,False,False,0,False,0,0,False
+1000521,Ica/Pisco,3,-0.37252659088431184,False,False,0,False,0,0,False
+1000522,Ica/Pisco,2,-0.4061762114827744,False,False,0,True,1,1,False
+1000523,Pachacamac,2,-0.44171218872264056,False,False,0,False,0,0,False
+1000524,Pachacamac,0,-0.37869395824025065,False,False,0,False,0,0,False
+1000525,Pachacamac,3,-0.3633027151838793,False,False,0,False,0,0,False
+1000526,unknown,0,-0.4355814003814953,False,False,0,False,0,0,False
+1000527,Pachacamac,0,-0.42819553056990184,False,False,0,False,0,0,False
+1000528,Ocucaje,3,-0.37252395243941605,False,False,0,False,0,0,False
+1000529,Pachacamac,2,-0.39536053002730975,False,False,0,True,1,1,False
+1000530,Ica,2,-0.3859142219913355,False,False,0,True,1,1,False
+1000531,Ica,1,-0.3813329816884126,False,False,0,False,0,0,False
+1000532,Ica,1,-0.37939757753499725,False,False,0,False,0,0,False
+1000533,Ica,3,-0.34636199963696407,False,False,0,False,0,0,False
+1000534,Ica,2,-0.39322629178925317,False,False,0,True,1,1,False
+1000535,unknown,3,-0.35576946052239866,False,False,0,True,1,1,False
+1000536,Pachacamac,3,-0.35169013854999,False,False,0,False,0,0,False
+1000537,Pisco,3,-0.36947666587582756,False,False,0,True,1,1,False
+1000538,Pisco,2,-0.4003555966021013,False,False,0,True,1,1,False
+1000539,Ica,0,-0.4222583805860004,False,False,0,False,0,0,False
+1000540,Pachacamac,3,-0.3543762662286092,False,False,0,False,0,0,False
+1000541,Ica/Pisco,4,-0.6886102631886069,True,False,1,False,0,1,False
+1000542,Huacho,3,-0.38312606553146716,False,False,0,False,0,0,False
+1000543,Huacho,3,-0.377115647216073,False,False,0,False,0,0,False
+1000544,unknown,2,-0.4390728620985535,False,False,0,True,1,1,False
+1000545,unknown,0,-0.3899456357399133,False,False,0,False,0,0,False
+1000546,unknown,0,-0.4308324900550588,False,False,1,False,0,0,False
+1000547,Ica,0,-0.42748635868561224,False,False,0,False,0,0,False
+1000548,Pachacamac,3,-0.3451441734970012,False,False,0,False,0,0,False
+1000549,Unknown,3,-0.37567360442989517,False,False,0,False,0,0,False
+1000550,Pachacamac,1,-0.398079395679955,False,False,0,False,0,0,False
+1000551,unknown,3,-0.3719471597149216,False,False,0,True,1,1,False
+1000552,Ica,3,-0.3653866755394987,False,False,0,False,0,0,False
+1000553,unknown,3,-0.3662882245366709,False,False,0,False,0,0,False
+1000554,unknown,3,-0.36858420284468324,False,False,0,False,0,0,False
+1000555,Pachacamac,2,-0.3905674588743151,False,False,0,True,1,1,False
+1000556,Pachacamac,3,-0.36944611658876975,False,False,0,True,1,1,False
+1000558,Pachacamac,3,-0.4594292481765021,False,False,1,False,0,0,False
+1000559,Pachacamac,3,-0.4059207596331183,False,False,0,False,0,0,False
+1000560,Pachacamac,3,-0.41042934257950037,False,False,0,False,0,0,False
+1000561,Ica,3,-0.35950468726855883,False,False,0,False,0,0,False
+1000562,"Ullujaya, Ocucaje, Ica",3,-0.3449648151855477,False,False,0,False,0,0,False
+1000563,"Ullujaya, Ocucaje, Ica",2,-0.41123087031220495,False,False,0,True,1,1,False
+1000564,unknown,3,-0.39420111795445395,False,False,0,False,0,0,False
+1000565,Costa Sur,0,-0.5105652207580568,False,False,0,False,0,0,False
+1000566,"Costa Central, Huacho",3,-0.3521306250918767,False,False,0,False,0,0,False
+1000567,unknown,0,-0.4602875430836335,False,False,0,False,0,0,False
+1000569,unknown,3,-0.34499812174030164,False,False,0,False,0,0,False
+1000570,unknown,3,-0.3722173238558361,False,False,0,False,0,0,False
+1000571,unknown,3,-0.4067417183885714,False,False,0,False,0,0,False
+1000572,unknown,3,-0.37335678686918333,False,False,0,False,0,0,False
+1000573,unknown,3,-0.36218001441887715,False,False,0,False,0,0,False
+1000574,"Región Sur, Quillagua, Valle de Loa",3,-0.4532985174871075,False,False,1,False,0,0,False
+1000575,unknown,3,-0.37137990836009804,False,False,0,False,0,0,False
+1000576,unknown,3,-0.40867722277680685,False,False,0,False,0,0,False
+1000577,"Armatambo, Lima, Central Coast",3,-0.3900278335427075,False,False,0,False,0,0,False
+1000578,unknown,1,-0.45100822862319323,False,False,0,False,0,0,False
+1000579,unknown,1,-0.44618973570284776,False,False,0,False,0,0,False
+1000580,foothills of Cerro Solar,3,-0.34167801303091067,False,False,0,False,0,0,False
+1000581,unknown,3,-0.355304071197117,False,False,0,True,1,1,False
+1000582,unknown,3,-0.3692681760100752,False,False,0,True,1,1,False
+1000583,unknown,3,-0.34391862613341856,False,False,0,False,0,0,False
+1000584,unknown,3,-0.35645107196191994,False,False,0,False,0,0,False
+1000585,unknown,3,-0.3637688000320948,False,False,0,False,0,0,False
+1000586,unknown,0,-0.407619412786461,False,False,0,False,0,0,False
+1000587,unknown,3,-0.34487876997870737,False,False,0,False,0,0,False
+1000588,unknown,2,-0.49227480291791775,False,False,1,True,2,1,False
+1000589,unknown,3,-0.3605570318524792,False,False,0,False,0,0,False
+1000590,unknown,3,-0.36717112804596597,False,False,0,False,0,0,False
+1000591,Pachacamac,3,-0.3615574156695395,False,False,0,False,0,0,False
+1000592,Pachacamac,3,-0.3725015910894482,False,False,0,False,0,0,False
+1000593,Costa Sur,2,-0.435371910287606,False,False,0,True,1,1,False
+1000595,Incahuasi,3,-0.6155438375244514,True,False,1,False,0,1,False
+1000597,Incahuasi,3,-0.3712622354839443,False,False,0,False,0,0,False
+1000598,Incahuasi,0,-0.41092705081463243,False,False,0,False,0,0,False
+1000599,Incahuasi,3,-0.36014846904254116,False,False,0,False,0,0,False
+1000600,Incahuasi,3,-0.35887200280538756,False,False,0,False,0,0,False
+1000601,Incahuasi,3,-0.35587191583086747,False,False,0,False,0,0,False
+1000602,Incahuasi,3,-0.36631736438475176,False,False,0,False,0,0,False
+1000603,Incahuasi,0,-0.5511762630982412,True,False,1,False,0,1,False
+1000604,Incahuasi,2,-0.4834399438454062,False,False,0,False,0,0,False
+1000605,Incahuasi,2,-0.44386929278655124,False,False,0,False,0,0,False
+1000606,Incahuasi,3,-0.3659896541055102,False,False,0,False,0,0,False
+1000607,Incahuasi,0,-0.41373233334878906,False,False,0,False,0,0,False
+1000608,Incahuasi,3,-0.3627258123898012,False,False,0,False,0,0,False
+1000609,Incahuasi,0,-0.404804605787281,False,False,0,False,0,0,False
+1000610,Incahuasi,0,-0.4870893822468544,False,False,0,False,0,0,False
+1000611,Incahuasi,0,-0.516366589517875,False,False,0,False,0,0,False
+1000612,Incahuasi,0,-0.4491649302439545,False,False,0,False,0,0,False
+1000613,Incahuasi,3,-0.40922875116430113,False,False,0,False,0,0,False
+1000614,Incahuasi,0,-0.44259937493619267,False,False,0,False,0,0,False
+1000615,Incahuasi,3,-0.408141590098353,False,False,0,False,0,0,False
+1000616,Incahuasi,3,-0.4323604194742356,False,False,0,False,0,0,False
+1000617,Incahuasi,3,-0.40619580368932373,False,False,0,False,0,0,False
+1000618,Incahuasi,3,-0.39663188157280427,False,False,0,False,0,0,False
+1000619,Incahuasi,3,-0.40034575315943466,False,False,0,False,0,0,False
+1000620,Incahuasi,3,-0.36777153600588647,False,False,0,False,0,0,False
+1000621,Incahuasi,3,-0.3714761227133877,False,False,0,False,0,0,False
+1000622,Incahuasi,0,-0.43437067663119355,False,False,0,False,0,0,False
+1000623,Incahuasi,0,-0.4844640063755994,False,False,0,False,0,0,False
+1000624,Incahuasi,0,-0.46587278854972813,False,False,1,False,0,0,False
+1000625,Incahuasi,3,-0.37327489198166725,False,False,0,True,1,1,False
+1000626,Incahuasi,1,-0.46286128793882597,False,False,1,False,0,0,False
+1000627,Incahuasi,1,-0.38856666352642605,False,False,0,False,0,0,False
+1000628,Incahuasi,3,-0.3587698243730138,False,False,0,False,0,0,False
+1000629,Incahuasi,0,-0.3930568719709309,False,False,0,False,0,0,False
+1000630,Incahuasi,3,-0.35652134358869886,False,False,0,False,0,0,False
+1000631,Incahuasi,1,-0.4947803853154175,False,False,1,True,2,1,False
+1000632,Incahuasi,1,-0.41612234995894887,False,False,0,False,0,0,False
+1000633,Incahuasi,3,-0.3673964209187373,False,False,0,False,0,0,False
+1000634,Incahuasi,0,-0.47317328395033853,False,False,0,False,0,0,False
+1000635,Incahuasi,0,-0.3969572754602486,False,False,0,False,0,0,False
+1000636,Incahuasi,3,-0.3562416535791281,False,False,0,True,1,1,False
+1000637,Incahuasi,3,-0.36458865866273493,False,False,0,False,0,0,False
+1000638,Incahuasi,3,-0.3656177265314819,False,False,0,False,0,0,False
+1000639,Incahuasi,1,-0.38280270890514384,False,False,0,False,0,0,False
+1000640,Incahuasi,1,-0.38290336362069266,False,False,0,False,0,0,False
+1000641,Incahuasi,1,-0.4370431639713672,False,False,0,False,0,0,False
+1000642,Incahuasi,3,-0.39829646485944414,False,False,0,False,0,0,False
+1000643,Incahuasi,1,-0.42742885609407877,False,False,0,True,2,1,False
+1000644,Incahuasi,1,-0.48167515126059396,False,False,1,True,1,1,False
+1000645,Incahuasi,3,-0.3897467679041144,False,False,0,False,0,0,False
+1000646,Incahuasi,3,-0.3739835303783324,False,False,0,False,0,0,False
+1000647,Incahuasi,3,-0.4060098068897496,False,False,0,False,0,0,False
+1000648,"Monte de Cacatilla, Valle de Nazca",2,-0.48694150495045907,False,False,0,False,0,0,False
+1000649,"Huaca San Pedro, Armatambo",3,-0.3561232107111139,False,False,0,True,1,1,False
+1000650,"Huaca San Pedro, Armatambo",0,-0.45345638237321656,False,False,0,False,0,0,False
+1000651,"Armatambo, Huaca San Pedro",3,-0.3573589763887907,False,False,0,True,1,1,False
+1000652,"Armatambo, Huaca San Pedro",3,-0.3677725583848386,False,False,0,False,0,0,False
+1000653,"Armatambo, Huaca San Pedro",1,-0.4151847187260025,False,False,0,False,0,0,False
+1000654,"Armatambo, Huaca San Pedro",3,-0.3951038201091121,False,False,0,False,0,0,False
+1000655,"Armatambo, Huaca San Pedro",3,-0.35866185071826145,False,False,0,True,1,1,False
+1000656,"Armatambo, Huaca San Pedro",3,-0.3650236462239142,False,False,0,True,1,1,False
+1000657,"Armatambo, Huaca San Pedro",1,-0.3900281000095548,False,False,0,False,0,0,False
+1000658,"Armatambo, Huaca San Pedro",0,-0.4186264278596758,False,False,0,False,0,0,False
+1000659,"Armatambo, Huaca San Pedro",3,-0.3557011330988216,False,False,0,False,0,0,False
+1000660,"Armatambo, Huaca San Pedro",1,-0.46589487571193994,False,False,1,False,0,0,False
+1000661,"Armatambo, Huaca San Pedro",1,-0.43631041001906634,False,False,0,False,0,0,False
