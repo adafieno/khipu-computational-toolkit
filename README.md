@@ -280,13 +280,14 @@ If you use this toolkit in your research, please cite:
 
 ```
 Da Fieno Delucchi, A. (2026). Khipu Computational Analysis Toolkit.
+https://github.com/adafieno/khipu-computational-toolkit
 ```
 
 And the Open Khipu Repository:
 
 ```
-Urton, G., & Brezine, C. (2007-present). The Khipu Database Project.
-https://khipukamayuq.fas.harvard.edu/
+OKR Team. (2021). The Open Khipu Repository (v1.0) [Data set]. Zenodo.
+https://doi.org/10.5281/zenodo.5037551
 ```
 
 ## License
@@ -314,7 +315,7 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed guidelines.
 
 ## Acknowledgments
 
-- Gary Urton and Carrie Brezine for the Open Khipu Repository
+- OKR Team and Advisory Board for the Open Khipu Repository
 - The khipu research community for foundational work on numeric interpretation
 - Contributors to NetworkX, scikit-learn, pandas, and matplotlib
 

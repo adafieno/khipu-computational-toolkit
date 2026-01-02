@@ -326,9 +326,9 @@ Analysis & Visualization
 
 ## References
 
-- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*.
-- Ascher, M., & Ascher, R. (1997). *Mathematics of the Inkas: Code of the Quipu*. Dover Publications.
-- Open Khipu Repository (2022). Database structure and documentation.
+- Medrano, M., & Khosla, R. (2024). How can data science contribute to understanding the khipu code? *Latin American Antiquity*. Cambridge University Press.
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Inkas: Code of the Quipu*. Dover Publications. ISBN 0-486-29554-0.
+- OKR Team. (2022). *The Open Khipu Repository* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.5037551
 
 ---
 

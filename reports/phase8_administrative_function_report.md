@@ -592,10 +592,10 @@ Phase 8 builds on infrastructure from Phases 0-7:
 
 ## References
 
-1. Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
-2. Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
-3. Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
-4. Brokaw, G. (2010). *A History of the Khipu*. Cambridge University Press.
+1. Medrano, M., & Khosla, R. (2024). How can data science contribute to understanding the khipu code? *Latin American Antiquity*. Cambridge University Press.
+2. Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press. ISBN 978-0-292-78540-4.
+3. Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications. ISBN 0-486-29554-0.
+4. Brokaw, G. (2010). *A History of the Khipu*. Cambridge University Press. ISBN 978-0-521-19158-6.
 
 ---
 

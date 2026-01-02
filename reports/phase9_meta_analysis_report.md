@@ -674,13 +674,13 @@ Phase 9 establishes that:
 ## References
 
 **Prior Computational Work:**
-- Medrano & Khosla (2024): Algorithmic analysis, arithmetic consistency
-- Clindaniel (2024): Transformer-based clustering, latent structure
-- Ascher & Ascher: Foundational comparative datasets
+- Medrano, M., & Khosla, R. (2024). How can data science contribute to understanding the khipu code? *Latin American Antiquity*. Cambridge University Press.
+- Boone, A. P., et al. (2022). Machine learning in human history: A framework for pattern discovery in archaeological data. *Journal of Archaeological Science: Reports*.
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications. ISBN 0-486-29554-0.
 
 **Open Khipu Repository:**
-- Database: https://github.com/khipulab/open-khipu-repository
-- DOI: https://doi.org/10.5281/zenodo.5037551
+- OKR Team. (2021). *The Open Khipu Repository* (v1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.5037551
+- GitHub: https://github.com/khipulab/open-khipu-repository
 
 **Phase Reports:**
 - See [reports/](.) for Phases 0-8 detailed reports
@@ -690,7 +690,7 @@ Phase 9 establishes that:
 ## Acknowledgments
 
 - **Open Khipu Repository Team** for curating the foundational dataset
-- **Prior researchers** (Medrano, Khosla, Clindaniel, Aschers) for computational groundwork
+- **Prior researchers** (Medrano, Khosla, Boone, Aschers) for computational groundwork
 - **Andean communities** whose cultural heritage this represents
 
 ---

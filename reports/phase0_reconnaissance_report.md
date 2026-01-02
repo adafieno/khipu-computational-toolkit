@@ -235,9 +235,9 @@ Phase 0 reconnaissance enables:
 
 ## References
 
-- Urton, G., & Brezine, C. (2021). *Open Khipu Repository (OKR)*. https://github.com/khipulab/open-khipu-repository
-- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
+- OKR Team. (2021). *The Open Khipu Repository* (v1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.5037551
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications. ISBN 0-486-29554-0.
 - Locke, L. L. (1912). *The Ancient Quipu, a Peruvian Knot Record*. American Anthropologist, 14(2), 325-332.
-- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press. ISBN 978-0-292-78540-4.
 
 ---

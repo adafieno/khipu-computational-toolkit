@@ -989,19 +989,19 @@ ls visualizations/ml_results/
 ## References
 
 **Machine Learning Methods:**
-- Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." *Proceedings of ICDM*.
-- Breiman, L. (2001). "Random Forests." *Machine Learning*, 45(1), 5-32.
-- Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." *ACM Computing Surveys*, 41(3).
+- Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." *Proceedings of the 2008 Eighth IEEE International Conference on Data Mining*, 413-422. https://doi.org/10.1109/ICDM.2008.17
+- Breiman, L. (2001). "Random Forests." *Machine Learning*, 45(1), 5-32. https://doi.org/10.1023/A:1010933404324
+- Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." *ACM Computing Surveys*, 41(3), Article 15. https://doi.org/10.1145/1541880.1541882
 
 **Khipu Research:**
-- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
-- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
-   - Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu.*
+- Medrano, M., & Khosla, R. (2024). How can data science contribute to understanding the khipu code? *Latin American Antiquity*. Cambridge University Press.
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press. ISBN 978-0-292-78540-4.
+   - Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu.* Dover Publications. ISBN 0-486-29554-0.
 
 ### Statistical Methods
 
 7. **Z-score Outlier Detection:**
-   - Iglewicz, B., & Hoaglin, D. (1993). "Volume 16: How to Detect and Handle Outliers." ASQC Quality Press.
+   - Iglewicz, B., & Hoaglin, D. C. (1993). *How to Detect and Handle Outliers* (Vol. 16). ASQ Quality Press.
 
 ## Conclusion
 
