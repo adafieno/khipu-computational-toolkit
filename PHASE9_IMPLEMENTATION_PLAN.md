@@ -40,12 +40,12 @@ Phase 9 characterizes **khipus as engineered information systems** by analyzing 
 - ✅ 9.8 Randomness & Intentional Design Testing
 - ✅ 9.2 Error Detection & Robustness
 
-### **Tier 2: Core Analysis (Weeks 3-4)** 🔄 IN PROGRESS
-- 9.4 Structural Minimalism vs. Expressiveness
-- 9.6 Boundary Phenomena Analysis
+### **Tier 2: Core Analysis (Weeks 3-4)** ✅ COMPLETE
+- ✅ 9.4 Structural Minimalism vs. Expressiveness
+- ✅ 9.6 Boundary Phenomena Analysis
 
-### **Tier 3: Advanced (Weeks 5-6)**
-- 9.3 Cognitive Load & Usability
+### **Tier 3: Advanced (Weeks 5-6)** 🔄 IN PROGRESS
+- ✅ 9.3 Cognitive Load & Usability
 - 9.7 Anomaly Taxonomy
 - 9.9 Stability & Stress Testing
 

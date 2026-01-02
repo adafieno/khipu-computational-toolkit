@@ -1,0 +1,49 @@
+{
+  "analysis": "Phase 9.3: Cognitive Load & Usability Modeling",
+  "date": "2026-01-01",
+  "working_memory_capacity": 7,
+  "working_memory": {
+    "mean_load": 17.42422588766691,
+    "exceeds_capacity_rate": 0.45234248788368336,
+    "n_khipus": 619
+  },
+  "traversal": {
+    "mean_normalized_cost": 1.3051222602511448,
+    "mean_context_switches": 6.0473856209150325,
+    "n_khipus": 612
+  },
+  "visual_parsing": {
+    "mean_visual_load": 2.150365181169622,
+    "mean_transition_rate": 0.48951922669887477,
+    "n_khipus": 603
+  },
+  "parallelization": {
+    "mean_ratio": 22.123902894491128,
+    "mean_parallel_fraction": 0.991738675370229,
+    "n_khipus": 612
+  },
+  "specialist_indicators": {
+    "specialist_threshold": 0.3522966890815905,
+    "n_specialist": 61,
+    "specialist_rate": 0.10132890365448505,
+    "mean_complexity": 0.2206606342506749,
+    "std_complexity": 0.10663606096392701
+  },
+  "correlations": {
+    "complexity_vs_size": {
+      "correlation": 0.4759664021146634,
+      "p_value": 2.308655620279971e-35,
+      "significant": true
+    },
+    "complexity_vs_depth": {
+      "correlation": 0.6694022332502005,
+      "p_value": 1.7554318160500224e-79,
+      "significant": true
+    },
+    "wm_load_vs_chunks": {
+      "correlation": 0.9956425758713054,
+      "p_value": 0.0,
+      "significant": true
+    }
+  }
+}

@@ -1,0 +1,436 @@
+{
+  "specialist_threshold": 0.3522966890815905,
+  "n_specialist": 61,
+  "specialist_rate": 0.10132890365448505,
+  "mean_complexity": 0.2206606342506749,
+  "std_complexity": 0.10663606096392701,
+  "specialist_khipus": [
+    {
+      "khipu_id": 1000279,
+      "cognitive_complexity": 0.6193506138281527,
+      "wm_load": 92.22498816104431,
+      "normalized_traversal": 2.704081632653061,
+      "visual_load": 3.4711221479777947
+    },
+    {
+      "khipu_id": 1000321,
+      "cognitive_complexity": 0.5960581429708234,
+      "wm_load": 182.60370816650152,
+      "normalized_traversal": 1.8916055419722901,
+      "visual_load": 2.847311805930848
+    },
+    {
+      "khipu_id": 1000292,
+      "cognitive_complexity": 0.5549365849395202,
+      "wm_load": 131.77011156190682,
+      "normalized_traversal": 1.6859122401847575,
+      "visual_load": 3.7438985535995633
+    },
+    {
+      "khipu_id": 1000339,
+      "cognitive_complexity": 0.5430685010314757,
+      "wm_load": 15.934240811905378,
+      "normalized_traversal": 2.5789473684210527,
+      "visual_load": 4.246709480861521
+    },
+    {
+      "khipu_id": 1000546,
+      "cognitive_complexity": 0.5284345049258096,
+      "wm_load": 29.144463999482255,
+      "normalized_traversal": 2.577181208053691,
+      "visual_load": 3.764719790836352
+    },
+    {
+      "khipu_id": 1000299,
+      "cognitive_complexity": 0.5191038910409473,
+      "wm_load": 43.81671858530468,
+      "normalized_traversal": 2.42578125,
+      "visual_load": 3.6235425422463594
+    },
+    {
+      "khipu_id": 1000020,
+      "cognitive_complexity": 0.5109083624222315,
+      "wm_load": 118.68969187544052,
+      "normalized_traversal": 1.811443433029909,
+      "visual_load": 3.147471392398473
+    },
+    {
+      "khipu_id": 1000061,
+      "cognitive_complexity": 0.48308283341794045,
+      "wm_load": 5.610896782498619,
+      "normalized_traversal": 3.0,
+      "visual_load": 2.7806390622295662
+    },
+    {
+      "khipu_id": 1000096,
+      "cognitive_complexity": 0.47924765403122865,
+      "wm_load": 269.88325280957537,
+      "normalized_traversal": 1.1108683779355544,
+      "visual_load": 0.9020871762384013
+    },
+    {
+      "khipu_id": 1000298,
+      "cognitive_complexity": 0.47431997251099045,
+      "wm_load": 46.928796050999374,
+      "normalized_traversal": 2.1745454545454543,
+      "visual_load": 3.421922904118807
+    },
+    {
+      "khipu_id": 1000541,
+      "cognitive_complexity": 0.46838594778485854,
+      "wm_load": 143.02869945925337,
+      "normalized_traversal": 1.0964360587002095,
+      "visual_load": 3.449721362947779
+    },
+    {
+      "khipu_id": 1000624,
+      "cognitive_complexity": 0.46009325101586274,
+      "wm_load": 43.17500682942072,
+      "normalized_traversal": 2.572,
+      "visual_load": 2.5119504101592742
+    },
+    {
+      "khipu_id": 1000062,
+      "cognitive_complexity": 0.4502859617140199,
+      "wm_load": 5.735408032282272,
+      "normalized_traversal": 3.142857142857143,
+      "visual_load": 2.0306390622295662
+    },
+    {
+      "khipu_id": 1000443,
+      "cognitive_complexity": 0.4414344758717537,
+      "wm_load": 4.739850002884625,
+      "normalized_traversal": 2.2857142857142856,
+      "visual_load": 3.625
+    },
+    {
+      "khipu_id": 1000406,
+      "cognitive_complexity": 0.4287921332514723,
+      "wm_load": 22.09668181599989,
+      "normalized_traversal": 2.256,
+      "visual_load": 3.1392232913496687
+    },
+    {
+      "khipu_id": 1000317,
+      "cognitive_complexity": 0.4271234997150025,
+      "wm_load": 12.40494048162286,
+      "normalized_traversal": 2.0526315789473686,
+      "visual_load": 3.7228397742575425
+    },
+    {
+      "khipu_id": 1000527,
+      "cognitive_complexity": 0.4270277156979275,
+      "wm_load": 29.95803021587579,
+      "normalized_traversal": 2.1183431952662723,
+      "visual_load": 3.221418429466035
+    },
+    {
+      "khipu_id": 1000603,
+      "cognitive_complexity": 0.4238303537652217,
+      "wm_load": 77.94669913860108,
+      "normalized_traversal": 2.0408163265306123,
+      "visual_load": 2.318693292633132
+    },
+    {
+      "khipu_id": 1000109,
+      "cognitive_complexity": 0.41937243121721135,
+      "wm_load": 6.00842971812696,
+      "normalized_traversal": 2.8,
+      "visual_load": 2.2667574842042293
+    },
+    {
+      "khipu_id": 1000352,
+      "cognitive_complexity": 0.41837670314161673,
+      "wm_load": 13.04514198523274,
+      "normalized_traversal": 2.381818181818182,
+      "visual_load": 2.9331526365657066
+    },
+    {
+      "khipu_id": 1000025,
+      "cognitive_complexity": 0.41512303621985835,
+      "wm_load": 132.90220622612196,
+      "normalized_traversal": 1.4233409610983982,
+      "visual_load": 2.2612504219940766
+    },
+    {
+      "khipu_id": 1000401,
+      "cognitive_complexity": 0.414897279268209,
+      "wm_load": 24.113553818410193,
+      "normalized_traversal": 2.2706766917293235,
+      "visual_load": 2.870950809625711
+    },
+    {
+      "khipu_id": 1000340,
+      "cognitive_complexity": 0.4135754568392037,
+      "wm_load": 40.08844390410702,
+      "normalized_traversal": 1.9086956521739131,
+      "visual_load": 3.2330265733406027
+    },
+    {
+      "khipu_id": 1000515,
+      "cognitive_complexity": 0.4100801566740425,
+      "wm_load": 15.983397692130831,
+      "normalized_traversal": 1.8227848101265822,
+      "visual_load": 3.8616921466021883
+    },
+    {
+      "khipu_id": 1000023,
+      "cognitive_complexity": 0.40850395328955824,
+      "wm_load": 88.61464993010838,
+      "normalized_traversal": 1.4073426573426573,
+      "visual_load": 3.132383574538516
+    },
+    {
+      "khipu_id": 1000526,
+      "cognitive_complexity": 0.408023566217859,
+      "wm_load": 44.44860101896489,
+      "normalized_traversal": 1.6455223880597014,
+      "visual_load": 3.5841246705885124
+    },
+    {
+      "khipu_id": 1000504,
+      "cognitive_complexity": 0.4076747728840373,
+      "wm_load": 37.20186196755739,
+      "normalized_traversal": 1.9469026548672566,
+      "visual_load": 3.134599132627543
+    },
+    {
+      "khipu_id": 1000347,
+      "cognitive_complexity": 0.40664170877452965,
+      "wm_load": 5.507999094522671,
+      "normalized_traversal": 2.3333333333333335,
+      "visual_load": 3.021928094887362
+    },
+    {
+      "khipu_id": 1000007,
+      "cognitive_complexity": 0.4033848829199297,
+      "wm_load": 53.26354058729928,
+      "normalized_traversal": 1.620991253644315,
+      "visual_load": 3.3813484911933056
+    },
+    {
+      "khipu_id": 1000140,
+      "cognitive_complexity": 0.4016920242746834,
+      "wm_load": 56.848285812109566,
+      "normalized_traversal": 1.5165745856353592,
+      "visual_load": 3.4887881098234166
+    },
+    {
+      "khipu_id": 1000638,
+      "cognitive_complexity": 0.39859913567465083,
+      "wm_load": 13.952059573163341,
+      "normalized_traversal": 2.0,
+      "visual_load": 3.3907652947831135
+    },
+    {
+      "khipu_id": 1000318,
+      "cognitive_complexity": 0.39590488360762144,
+      "wm_load": 8.863528929682698,
+      "normalized_traversal": 2.227272727272727,
+      "visual_load": 3.009431504340598
+    },
+    {
+      "khipu_id": 1000552,
+      "cognitive_complexity": 0.3947172270493068,
+      "wm_load": 16.952187646593373,
+      "normalized_traversal": 1.930232558139535,
+      "visual_load": 3.410867331254319
+    },
+    {
+      "khipu_id": 1000358,
+      "cognitive_complexity": 0.3943775747120225,
+      "wm_load": 10.18508921711264,
+      "normalized_traversal": 2.090909090909091,
+      "visual_load": 3.230211651460934
+    },
+    {
+      "khipu_id": 1000337,
+      "cognitive_complexity": 0.3923400875710704,
+      "wm_load": 16.225695250721433,
+      "normalized_traversal": 2.1449275362318843,
+      "visual_load": 2.967042212149688
+    },
+    {
+      "khipu_id": 1000275,
+      "cognitive_complexity": 0.39002327433511785,
+      "wm_load": 44.626884557783875,
+      "normalized_traversal": 1.2986111111111112,
+      "visual_load": 4.013069580181953
+    },
+    {
+      "khipu_id": 1000413,
+      "cognitive_complexity": 0.383130583955458,
+      "wm_load": 43.33579471770251,
+      "normalized_traversal": 1.7518796992481203,
+      "visual_load": 3.044414937890556
+    },
+    {
+      "khipu_id": 1000353,
+      "cognitive_complexity": 0.38304513225483444,
+      "wm_load": 9.497613672172402,
+      "normalized_traversal": 1.7741935483870968,
+      "visual_load": 3.711944070350401
+    },
+    {
+      "khipu_id": 1000293,
+      "cognitive_complexity": 0.38270360634831707,
+      "wm_load": 51.10395763462251,
+      "normalized_traversal": 1.691588785046729,
+      "visual_load": 2.994182314058199
+    },
+    {
+      "khipu_id": 1000319,
+      "cognitive_complexity": 0.37881850035524706,
+      "wm_load": 8.451724788408702,
+      "normalized_traversal": 2.130434782608696,
+      "visual_load": 2.9681516294997374
+    },
+    {
+      "khipu_id": 1000628,
+      "cognitive_complexity": 0.3764874346600904,
+      "wm_load": 11.237212856090657,
+      "normalized_traversal": 1.78125,
+      "visual_load": 3.5684779902853183
+    },
+    {
+      "khipu_id": 1000564,
+      "cognitive_complexity": 0.374799822575126,
+      "wm_load": 28.810598646470396,
+      "normalized_traversal": 1.6010928961748634,
+      "visual_load": 3.5313576541483522
+    },
+    {
+      "khipu_id": 1000280,
+      "cognitive_complexity": 0.3742377064344189,
+      "wm_load": 41.65871722683253,
+      "normalized_traversal": 1.4725274725274726,
+      "visual_load": 3.507485181807202
+    },
+    {
+      "khipu_id": 1000009,
+      "cognitive_complexity": 0.37259573582183203,
+      "wm_load": 21.825881138475914,
+      "normalized_traversal": 1.9841269841269842,
+      "visual_load": 2.8882270675733923
+    },
+    {
+      "khipu_id": 1000524,
+      "cognitive_complexity": 0.3723802681366094,
+      "wm_load": 29.368360551815222,
+      "normalized_traversal": 1.6768292682926829,
+      "visual_load": 3.33526112353997
+    },
+    {
+      "khipu_id": 1000613,
+      "cognitive_complexity": 0.36686337900676175,
+      "wm_load": 18.492641122084716,
+      "normalized_traversal": 2.0760869565217392,
+      "visual_load": 2.695065851641419
+    },
+    {
+      "khipu_id": 1000519,
+      "cognitive_complexity": 0.3661349633093131,
+      "wm_load": 30.576493446144227,
+      "normalized_traversal": 1.231578947368421,
+      "visual_load": 4.103795563728001
+    },
+    {
+      "khipu_id": 1000380,
+      "cognitive_complexity": 0.36489339070455556,
+      "wm_load": 32.62571646966836,
+      "normalized_traversal": 1.7180851063829787,
+      "visual_load": 3.0788869087337134
+    },
+    {
+      "khipu_id": 1000591,
+      "cognitive_complexity": 0.3643127241619982,
+      "wm_load": 19.867326366603276,
+      "normalized_traversal": 1.6521739130434783,
+      "visual_load": 3.4701052656704308
+    },
+    {
+      "khipu_id": 1000545,
+      "cognitive_complexity": 0.36332905806047927,
+      "wm_load": 33.469094019787754,
+      "normalized_traversal": 1.3969072164948453,
+      "visual_load": 3.675482598526591
+    },
+    {
+      "khipu_id": 1000518,
+      "cognitive_complexity": 0.3617521386065937,
+      "wm_load": 28.776660486399887,
+      "normalized_traversal": 1.329268292682927,
+      "visual_load": 3.8860750332962692
+    },
+    {
+      "khipu_id": 1000425,
+      "cognitive_complexity": 0.36160542290070574,
+      "wm_load": 5.335490111177327,
+      "normalized_traversal": 1.8461538461538463,
+      "visual_load": 3.353533948577482
+    },
+    {
+      "khipu_id": 1000147,
+      "cognitive_complexity": 0.36110961223372995,
+      "wm_load": 54.51742548468202,
+      "normalized_traversal": 1.4644970414201184,
+      "visual_load": 3.0666334163232074
+    },
+    {
+      "khipu_id": 1000618,
+      "cognitive_complexity": 0.3609898927016698,
+      "wm_load": 25.201121778171682,
+      "normalized_traversal": 1.3157894736842106,
+      "visual_load": 3.977332728697357
+    },
+    {
+      "khipu_id": 1000565,
+      "cognitive_complexity": 0.36077149699002453,
+      "wm_load": 55.43497902048378,
+      "normalized_traversal": 1.7547683923705721,
+      "visual_load": 2.4672554694772195
+    },
+    {
+      "khipu_id": 1000516,
+      "cognitive_complexity": 0.35721648239919834,
+      "wm_load": 12.515983460395343,
+      "normalized_traversal": 1.84,
+      "visual_load": 3.1523102744288423
+    },
+    {
+      "khipu_id": 1000645,
+      "cognitive_complexity": 0.356119100027156,
+      "wm_load": 4.927572381653847,
+      "normalized_traversal": 2.0,
+      "visual_load": 2.979573958513622
+    },
+    {
+      "khipu_id": 1000285,
+      "cognitive_complexity": 0.35531446584275783,
+      "wm_load": 27.701407735462684,
+      "normalized_traversal": 1.5605095541401275,
+      "visual_load": 3.3593271187007465
+    },
+    {
+      "khipu_id": 1000495,
+      "cognitive_complexity": 0.3548668404707647,
+      "wm_load": 23.606383209588657,
+      "normalized_traversal": 1.781954887218045,
+      "visual_load": 3.0004117395444165
+    },
+    {
+      "khipu_id": 1000494,
+      "cognitive_complexity": 0.35340553534052865,
+      "wm_load": 17.00322840136977,
+      "normalized_traversal": 1.8666666666666667,
+      "visual_load": 2.950970816258403
+    },
+    {
+      "khipu_id": 1000543,
+      "cognitive_complexity": 0.3524050162838644,
+      "wm_load": 26.07645142453735,
+      "normalized_traversal": 1.1388888888888888,
+      "visual_load": 4.187946058358506
+    }
+  ]
+}

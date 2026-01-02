@@ -1,0 +1,17 @@
+{
+  "complexity_vs_size": {
+    "correlation": 0.4759664021146634,
+    "p_value": 2.308655620279971e-35,
+    "significant": true
+  },
+  "complexity_vs_depth": {
+    "correlation": 0.6694022332502005,
+    "p_value": 1.7554318160500224e-79,
+    "significant": true
+  },
+  "wm_load_vs_chunks": {
+    "correlation": 0.9956425758713054,
+    "p_value": 0.0,
+    "significant": true
+  }
+}
