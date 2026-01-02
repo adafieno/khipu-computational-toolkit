@@ -42,6 +42,9 @@ Thumbs.db
 *.pkl
 models/*.pkl
 
+# Exception: Allow graph data file (documented, not too large)
+!data/graphs/khipu_graphs.pkl
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
