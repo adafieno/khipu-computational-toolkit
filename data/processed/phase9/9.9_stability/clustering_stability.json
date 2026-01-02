@@ -1,0 +1,20 @@
+{
+  "seed_consensus_nmi": 0.9517250804463621,
+  "k_value_tests": {
+    "6": {
+      "adjusted_rand_index": 0.5516345129496589,
+      "n_clusters": 6
+    },
+    "7": {
+      "adjusted_rand_index": 0.3177166700755347,
+      "n_clusters": 7
+    },
+    "8": {
+      "adjusted_rand_index": 0.35018318758504335,
+      "n_clusters": 8
+    }
+  },
+  "algorithm_agreement": {
+    "kmeans_vs_hierarchical": 0.6943735827295437
+  }
+}

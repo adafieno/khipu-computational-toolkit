@@ -1,0 +1,5 @@
+feature,test,observed,expected_if_present,result,confidence,evidence,interpretation
+Alphabetic color encoding (26 symbols),Count unique color codes,65,26,ABSENT,high,"Only 65 unique colors, not 26 (alphabet size)",Khipus do NOT use color as alphabetic cipher
+Linguistic n-gram patterns (Zipf's law),Color bigram frequency distribution,"slope=-1.07, R²=0.98","slope≈-1, R²>0.9",PRESENT,moderate,Color sequences do not follow Zipf's law,Khipus do NOT encode natural language text
+Semantic color encoding (fixed meaning),Color-numeric entropy correlation,"r=0.267, p=0.0000",r≈0 (independence),UNCERTAIN,moderate,Color usage shows some independence from numeric content,Colors do NOT have fixed semantic meanings
+Free-form narrative structure,Structural template diversity,6.6% use top 5 templates,Low repetition (<30%),ABSENT,high,6.6% of khipus follow just 5 templates,Khipus do NOT encode free-form narratives - highly templated

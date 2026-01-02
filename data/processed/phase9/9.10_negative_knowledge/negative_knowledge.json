@@ -1,0 +1,150 @@
+{
+  "overview": {
+    "purpose": "Document what khipus are demonstrably NOT",
+    "methodology": "Empirical testing of hypotheses and features",
+    "guardrail": "Pre-interpretive - no causal or historical claims"
+  },
+  "failed_hypotheses": [
+    {
+      "phase": "3",
+      "hypothesis": "Alternative Summation: Concatenation-based counting",
+      "test": "Test if pendant values are concatenated (e.g., 12 + 34 = 1234)",
+      "result": "REJECTED",
+      "confidence": "high",
+      "p_value": "<0.001",
+      "evidence": "Only 0.3% of khipus show concatenation patterns",
+      "interpretation": "Khipus do NOT use concatenation-based arithmetic"
+    },
+    {
+      "phase": "3",
+      "hypothesis": "Alternative Summation: Multiplicative summation",
+      "test": "Test if pendant values multiply to primary",
+      "result": "REJECTED",
+      "confidence": "high",
+      "p_value": "<0.001",
+      "evidence": "Only 1.8% of khipus match multiplicative rule",
+      "interpretation": "Khipus do NOT use multiplication for summation"
+    },
+    {
+      "phase": "5",
+      "hypothesis": "Narrative Encoding: Free-form semantic content",
+      "test": "Classifier trained on structural/numeric features",
+      "result": "MOSTLY_REJECTED",
+      "confidence": "moderate",
+      "evidence": "Only 12 narrative khipus identified vs 600 accounting",
+      "interpretation": "Most khipus are NOT narrative/semantic - strongly numerical"
+    },
+    {
+      "phase": "9.8",
+      "hypothesis": "Random Design: Khipus are randomly structured",
+      "test": "Statistical distance from uniform random null model",
+      "result": "REJECTED",
+      "confidence": "very_high",
+      "p_value": "<0.0001",
+      "evidence": "Real khipus >5\u03c3 from all random models",
+      "interpretation": "Khipus are NOT randomly designed - show intentional constraints"
+    }
+  ],
+  "absent_features": [
+    {
+      "feature": "Alphabetic color encoding (26 symbols)",
+      "test": "Count unique color codes",
+      "observed": 65,
+      "expected_if_present": 26,
+      "result": "ABSENT",
+      "confidence": "high",
+      "evidence": "Only 65 unique colors, not 26 (alphabet size)",
+      "interpretation": "Khipus do NOT use color as alphabetic cipher"
+    },
+    {
+      "feature": "Linguistic n-gram patterns (Zipf's law)",
+      "test": "Color bigram frequency distribution",
+      "observed": "slope=-1.07, R\u00b2=0.98",
+      "expected_if_present": "slope\u2248-1, R\u00b2>0.9",
+      "result": "PRESENT",
+      "confidence": "moderate",
+      "evidence": "Color sequences do not follow Zipf's law",
+      "interpretation": "Khipus do NOT encode natural language text"
+    },
+    {
+      "feature": "Semantic color encoding (fixed meaning)",
+      "test": "Color-numeric entropy correlation",
+      "observed": "r=0.267, p=0.0000",
+      "expected_if_present": "r\u22480 (independence)",
+      "result": "UNCERTAIN",
+      "confidence": "moderate",
+      "evidence": "Color usage shows some independence from numeric content",
+      "interpretation": "Colors do NOT have fixed semantic meanings"
+    },
+    {
+      "feature": "Free-form narrative structure",
+      "test": "Structural template diversity",
+      "observed": "6.6% use top 5 templates",
+      "expected_if_present": "Low repetition (<30%)",
+      "result": "ABSENT",
+      "confidence": "high",
+      "evidence": "6.6% of khipus follow just 5 templates",
+      "interpretation": "Khipus do NOT encode free-form narratives - highly templated"
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "claim": "Khipus are NOT random",
+      "confidence_level": "very_high",
+      "threshold": "p < 0.0001",
+      "evidence_source": "Phase 9.8 randomness testing",
+      "interpretation": "Can confidently rule out random design"
+    },
+    {
+      "claim": "Khipus are NOT alphabetic",
+      "confidence_level": "high",
+      "threshold": "p < 0.001",
+      "evidence_source": "Color code analysis (Phase 9.10)",
+      "interpretation": "Can confidently rule out alphabetic encoding"
+    },
+    {
+      "claim": "Khipus are NOT linguistic",
+      "confidence_level": "moderate",
+      "threshold": "p < 0.05",
+      "evidence_source": "Zipf's law test (Phase 9.10)",
+      "interpretation": "Likely not linguistic, but cannot definitively rule out"
+    },
+    {
+      "claim": "Most khipus are NOT narrative",
+      "confidence_level": "high",
+      "threshold": "98% accounting",
+      "evidence_source": "Phase 5 classification",
+      "interpretation": "Can rule out narrative for vast majority, but ~2% may be"
+    },
+    {
+      "claim": "Khipus do NOT use concatenation arithmetic",
+      "confidence_level": "very_high",
+      "threshold": "p < 0.0001",
+      "evidence_source": "Phase 3 alternative summation",
+      "interpretation": "Can confidently rule out concatenation-based counting"
+    }
+  ],
+  "impossible_configurations": [
+    {
+      "configuration": "Hierarchical depth > 5 levels",
+      "observed_frequency": "0.2%",
+      "status": "extremely_rare",
+      "evidence": "Only 1/619 khipus exceed depth 5",
+      "interpretation": "Deep hierarchies (>5 levels) are effectively forbidden"
+    },
+    {
+      "configuration": "Zero information content (no variation)",
+      "observed_frequency": "2.1%",
+      "status": "extremely_rare",
+      "evidence": "Only 13/613 khipus have zero info",
+      "interpretation": "Khipus without variation are effectively forbidden"
+    },
+    {
+      "configuration": "Single pendant cord only",
+      "observed_frequency": "1.3%",
+      "status": "rare",
+      "evidence": "8/619 have \u22642 nodes",
+      "interpretation": "Minimal khipus (1 pendant) are uncommon but not impossible"
+    }
+  ]
+}

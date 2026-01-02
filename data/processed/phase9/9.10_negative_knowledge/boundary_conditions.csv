@@ -1,0 +1,6 @@
+claim,confidence_level,threshold,evidence_source,interpretation
+Khipus are NOT random,very_high,p < 0.0001,Phase 9.8 randomness testing,Can confidently rule out random design
+Khipus are NOT alphabetic,high,p < 0.001,Color code analysis (Phase 9.10),Can confidently rule out alphabetic encoding
+Khipus are NOT linguistic,moderate,p < 0.05,Zipf's law test (Phase 9.10),"Likely not linguistic, but cannot definitively rule out"
+Most khipus are NOT narrative,high,98% accounting,Phase 5 classification,"Can rule out narrative for vast majority, but ~2% may be"
+Khipus do NOT use concatenation arithmetic,very_high,p < 0.0001,Phase 3 alternative summation,Can confidently rule out concatenation-based counting

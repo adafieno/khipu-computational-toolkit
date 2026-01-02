@@ -1,0 +1,5 @@
+phase,hypothesis,test,result,confidence,p_value,evidence,interpretation
+3,Alternative Summation: Concatenation-based counting,"Test if pendant values are concatenated (e.g., 12 + 34 = 1234)",REJECTED,high,<0.001,Only 0.3% of khipus show concatenation patterns,Khipus do NOT use concatenation-based arithmetic
+3,Alternative Summation: Multiplicative summation,Test if pendant values multiply to primary,REJECTED,high,<0.001,Only 1.8% of khipus match multiplicative rule,Khipus do NOT use multiplication for summation
+5,Narrative Encoding: Free-form semantic content,Classifier trained on structural/numeric features,MOSTLY_REJECTED,moderate,,Only 12 narrative khipus identified vs 600 accounting,Most khipus are NOT narrative/semantic - strongly numerical
+9.8,Random Design: Khipus are randomly structured,Statistical distance from uniform random null model,REJECTED,very_high,<0.0001,Real khipus >5σ from all random models,Khipus are NOT randomly designed - show intentional constraints
