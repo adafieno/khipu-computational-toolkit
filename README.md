@@ -8,15 +8,28 @@
 
 ## Overview
 
-This standalone toolkit provides a complete computational analysis pipeline for studying khipu structure, numeric encoding, color semantics, and hierarchical patterns. Built to work with the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) database, it includes data extraction, statistical analysis, machine learning, and interactive visualization tools.
+This standalone toolkit provides a complete computational analysis pipeline for studying khipu structure, numeric encoding, color semantics, and hierarchical patterns. Built as a research fork of the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository), it focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
-**Key Statistics:**
-- 612 khipus analyzed
-- 54,403 cords decoded  
-- 110,151 knots processed
-- 7 structural archetypes identified
+**This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work.
+
+### Research Goals
+
+1. **Arithmetic validation framework** - Test summation consistency and internal numeric logic
+2. **Graph-based structural analysis** - Convert khipus into hierarchical graphs to identify recurring patterns
+3. **Hypothesis parameterization** - Represent multiple interpretations explicitly (e.g., color semantics as configurable assumptions)
+4. **Pattern discovery with constraints** - Use unsupervised learning while requiring patterns across multiple provenances
+5. **Multi-modal feature extraction** - Integrate numeric, color, spatial, and structural data with uncertainty tracking
+6. **Expert-in-the-loop validation** - Build checkpoints for domain expert review at each analytical stage
+
+### Key Statistics
+
+- 612 khipus analyzed across 9 comprehensive phases
+- 54,403 cords decoded with 68.2% coverage
+- 110,151 knots processed with 95.2% numeric values
+- 7 structural archetypes identified via clustering
 - 98% administrative function confirmed
 - 17,321 missing values predicted
+- 13 high-confidence anomalies detected
 
 ## Quick Start
 
