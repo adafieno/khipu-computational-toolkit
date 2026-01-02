@@ -185,7 +185,8 @@ python scripts/visualize_geographic_heatmap.py
 *Cluster distribution map showing dominant khipu archetypes by region*
 
 - `outputs/visualizations/geographic_heatmap_statistics.csv` - Aggregated statistics
-- `outputs/visualizations/cluster_geographic_map.html` - Cluster distribution map
+- `outputs/visualizations/cluster_geographic_map.html`
+*Cluster distribution map*
 
 ### Viewing:
 Open the `.html` files in any web browser. The maps are fully interactive:
