@@ -8,37 +8,48 @@ This script analyzes perfect-match khipus to extract structural templates:
 4. Template validation on similar khipus
 """
 
-import pandas as pd
-import sqlite3
-import json
-import pickle
-import networkx as nx
+import sys
 from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Tuple
-from collections import defaultdict
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import sqlite3  # noqa: E402
+import json  # noqa: E402
+import pickle  # noqa: E402
+import networkx as nx  # noqa: E402
+from datetime import datetime  # noqa: E402
+from typing import Dict, List, Tuple  # noqa: E402
+from collections import defaultdict  # noqa: E402
 
 
 class TemplateExtractor:
     """Extract and analyze structural templates from exemplar khipus."""
     
-    def __init__(self, db_path: str = "khipu.db"):
-        self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+    def __init__(self, db_path: str = None):
+        config = get_config()
+        self.config = config
+        self.db_path = db_path if db_path else config.get_database_path()
+        self.conn = sqlite3.connect(self.db_path)
         
     def load_data(self) -> Dict:
         """Load all necessary data files."""
         print("Loading data files...")
         
         data = {
-            'summation': pd.read_csv("data/processed/summation_test_results.csv"),
-            'high_match': pd.read_csv("data/processed/high_match_khipus.csv"),
-            'similarity': pd.read_csv("data/processed/most_similar_khipu_pairs.csv"),
-            'features': pd.read_csv("data/processed/graph_structural_features.csv")
+            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv")),
+            'high_match': pd.read_csv(self.config.get_processed_file("high_match_khipus.csv")),
+            'similarity': pd.read_csv(self.config.get_processed_file("most_similar_khipu_pairs.csv")),
+            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv"))
         }
         
         # Load graphs
-        with open("data/graphs/khipu_graphs.pkl", "rb") as f:
+        graphs_path = self.config.root_dir / "data" / "graphs" / "khipu_graphs.pkl"
+        with open(graphs_path, "rb") as f:
             graphs_list = pickle.load(f)
             data['graphs'] = {g.graph['khipu_id']: g for g in graphs_list}
         
@@ -348,8 +359,10 @@ class TemplateExtractor:
         
         return candidates
     
-    def export_results(self, results: Dict, output_dir: str = "data/processed"):
+    def export_results(self, results: Dict, output_dir: str = None):
         """Export template analysis results."""
+        if output_dir is None:
+            output_dir = self.config.processed_dir
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         output_json = Path(output_dir) / "template_analysis.json"

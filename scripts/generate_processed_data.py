@@ -11,6 +11,7 @@ import sqlite3
 src_path = Path(__file__).parent.parent / 'src'
 sys.path.insert(0, str(src_path))
 
+from config import get_config  # noqa: E402 # type: ignore
 from utils.arithmetic_validator import ArithmeticValidator  # noqa: E402 # type: ignore
 
 def main():
@@ -19,11 +20,13 @@ def main():
     print("=" * 80)
     print()
     
+    config = get_config()
+    
     # Initialize validator
-    db_path = Path(__file__).parent.parent / "khipu.db"
+    db_path = config.get_database_path()
     validator = ArithmeticValidator(db_path)
     
-    output_dir = Path(__file__).parent.parent / "data" / "processed"
+    output_dir = config.processed_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     
     print("Step 1: Exporting decoded cord numeric values...")

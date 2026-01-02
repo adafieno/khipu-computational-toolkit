@@ -12,22 +12,34 @@ For large-scale comparison, uses efficient feature-based methods rather than
 expensive graph isomorphism algorithms.
 """
 
-import pickle
-import json
-import pandas as pd
-import numpy as np
-import networkx as nx
+import sys
 from pathlib import Path
-from datetime import datetime
-from scipy.spatial.distance import cosine, euclidean
-from collections import defaultdict
-from typing import Dict, List, Tuple
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pickle  # noqa: E402
+import json  # noqa: E402
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+import networkx as nx  # noqa: E402
+from datetime import datetime  # noqa: E402
+from scipy.spatial.distance import cosine, euclidean  # noqa: E402
+from collections import defaultdict  # noqa: E402
+from typing import Dict, List, Tuple  # noqa: E402
 
 
 class GraphSimilarityComputer:
     """Compute pairwise similarity metrics between khipu graphs."""
     
-    def __init__(self, graphs_path: str = "data/graphs/khipu_graphs.pkl"):
+    def __init__(self, graphs_path: str = None):
+        config = get_config()
+        self.config = config
+        if graphs_path is None:
+            graphs_path = config.root_dir / "data" / "graphs" / "khipu_graphs.pkl"
         print(f"Loading graphs from {graphs_path}...")
         with open(graphs_path, 'rb') as f:
             graphs_list = pickle.load(f)
@@ -251,8 +263,10 @@ class GraphSimilarityComputer:
         }
     
     def export_results(self, features_df: pd.DataFrame, similarity_df: pd.DataFrame,
-                      top_pairs: List[Tuple], stats: Dict, output_dir: str = "data/processed"):
+                      top_pairs: List[Tuple], stats: Dict, output_dir: str = None):
         """Export similarity analysis results."""
+        if output_dir is None:
+            output_dir = self.config.processed_dir
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         # Export structural features

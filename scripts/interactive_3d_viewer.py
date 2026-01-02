@@ -7,14 +7,26 @@ Allows easy browsing through all khipus with interactive controls.
 Usage: streamlit run scripts/interactive_3d_viewer.py
 """
 
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import networkx as nx
-from matplotlib.colors import Normalize
-import matplotlib.cm as cm
-import sqlite3
+import sys
+from pathlib import Path
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import streamlit as st  # noqa: E402
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import networkx as nx  # noqa: E402
+from matplotlib.colors import Normalize  # noqa: E402
+import matplotlib.cm as cm  # noqa: E402
+import sqlite3  # noqa: E402
+
+# Initialize config
+config = get_config()
 
 st.set_page_config(
     page_title="3D Khipu Viewer",
@@ -27,7 +39,7 @@ st.title("🧶 Interactive 3D Khipu Structure Viewer")
 @st.cache_data
 def get_khipu_list():
     """Get list of all available khipus with metadata."""
-    conn = sqlite3.connect("data/khipu.db")
+    conn = sqlite3.connect(config.get_database_path())
     # Get khipu metadata
     khipu_df = pd.read_sql_query("""
         SELECT KHIPU_ID, PROVENANCE 
@@ -37,7 +49,7 @@ def get_khipu_list():
     conn.close()
     
     # Get cord counts from hierarchy
-    hierarchy = pd.read_csv("data/processed/phase2/cord_hierarchy.csv")
+    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv", "phase2"))
     cord_counts = hierarchy.groupby('KHIPU_ID').size().reset_index(name='cord_count')
     
     # Merge
@@ -50,8 +62,8 @@ def get_khipu_list():
 @st.cache_data
 def load_khipu_data(khipu_id):
     """Load hierarchical structure and values for a khipu."""
-    hierarchy = pd.read_csv("data/processed/phase2/cord_hierarchy.csv")
-    numeric_values = pd.read_csv("data/processed/phase1/cord_numeric_values.csv")
+    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv", "phase2"))
+    numeric_values = pd.read_csv(config.get_processed_file("cord_numeric_values.csv", "phase1"))
     
     # Filter for specific khipu
     khipu_cords = hierarchy[hierarchy['KHIPU_ID'] == khipu_id].copy()

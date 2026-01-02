@@ -8,35 +8,46 @@ This script mines recurring structural motifs (subgraph patterns) in khipu graph
 4. Correlate motifs with summation patterns
 """
 
-import pandas as pd
-import sqlite3
-import json
-import pickle
-import networkx as nx
+import sys
 from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Tuple
-from collections import defaultdict, Counter
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import sqlite3  # noqa: E402
+import json  # noqa: E402
+import pickle  # noqa: E402
+import networkx as nx  # noqa: E402
+from datetime import datetime  # noqa: E402
+from typing import Dict, List, Tuple  # noqa: E402
+from collections import defaultdict, Counter  # noqa: E402
 
 
 class MotifMiner:
     """Mine recurring structural motifs in khipu graphs."""
     
-    def __init__(self, db_path: str = "khipu.db"):
-        self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+    def __init__(self, db_path: str = None):
+        config = get_config()
+        self.config = config
+        self.db_path = db_path if db_path else config.get_database_path()
+        self.conn = sqlite3.connect(self.db_path)
         
     def load_data(self) -> Dict:
         """Load necessary data files."""
         print("Loading data files...")
         
         data = {
-            'clusters': pd.read_csv("data/processed/cluster_assignments_kmeans.csv"),
-            'features': pd.read_csv("data/processed/graph_structural_features.csv")
+            'clusters': pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv")),
+            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv"))
         }
         
         # Load graphs
-        with open("data/graphs/khipu_graphs.pkl", "rb") as f:
+        graphs_path = self.config.root_dir / "data" / "graphs" / "khipu_graphs.pkl"
+        with open(graphs_path, "rb") as f:
             graphs_list = pickle.load(f)
             data['graphs'] = {g.graph['khipu_id']: g for g in graphs_list}
         
@@ -295,8 +306,10 @@ class MotifMiner:
             'cluster_distribution': {int(k): int(v) for k, v in cluster_dist.items()}
         }
     
-    def export_results(self, results: Dict, output_dir: str = "data/processed"):
+    def export_results(self, results: Dict, output_dir: str = None):
         """Export motif mining results."""
+        if output_dir is None:
+            output_dir = self.config.processed_dir
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         output_json = Path(output_dir) / "motif_mining_results.json"

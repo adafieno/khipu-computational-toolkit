@@ -8,32 +8,42 @@ Test configurable hypotheses about color meanings in khipus:
 4. Provenance-specific color semantics
 """
 
-import pandas as pd
-import numpy as np
-import sqlite3
-import json
+import sys
 from pathlib import Path
-from datetime import datetime
 from typing import Dict
-from scipy.stats import chi2_contingency
+from datetime import datetime
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+import sqlite3  # noqa: E402
+import json  # noqa: E402
+from scipy.stats import chi2_contingency  # noqa: E402
 
 
 class ColorHypothesisTester:
     """Test multiple hypotheses about color semantics."""
     
-    def __init__(self, db_path: str = "khipu.db"):
-        self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+    def __init__(self, db_path: str = None):
+        config = get_config()
+        self.config = config
+        self.db_path = db_path if db_path else config.get_database_path()
+        self.conn = sqlite3.connect(self.db_path)
         
     def load_data(self) -> Dict:
         """Load color and structural data."""
         print("Loading data...")
         
         data = {
-            'colors': pd.read_csv("data/processed/color_data.csv"),
-            'white_cords': pd.read_csv("data/processed/white_cords.csv"),
-            'summation': pd.read_csv("data/processed/summation_test_results.csv"),
-            'hierarchy': pd.read_csv("data/processed/cord_hierarchy.csv")
+            'colors': pd.read_csv(self.config.get_processed_file("color_data.csv")),
+            'white_cords': pd.read_csv(self.config.get_processed_file("white_cords.csv")),
+            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv")),
+            'hierarchy': pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv"))
         }
         
         # Load numeric values
@@ -180,7 +190,7 @@ class ColorHypothesisTester:
         print("="*80)
         
         # Load clusters (proxy for function)
-        clusters = pd.read_csv("data/processed/cluster_assignments_kmeans.csv")
+        clusters = pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv"))
         
         # Cluster 6 = low numeric (9.3%), likely non-accounting
         # Other clusters = higher numeric, likely accounting
@@ -296,8 +306,10 @@ class ColorHypothesisTester:
             'verdict': verdict
         }
     
-    def export_results(self, all_results: Dict, output_dir: str = "data/processed"):
+    def export_results(self, all_results: Dict, output_dir: str = None):
         """Export hypothesis testing results."""
+        if output_dir is None:
+            output_dir = self.config.processed_dir
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         output_json = Path(output_dir) / "color_hypothesis_tests.json"

@@ -11,20 +11,30 @@ hierarchical accounting structures follow consistent summation rules
 at multiple levels of the cord tree.
 """
 
-import pandas as pd
-import sqlite3
-import json
+import sys
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import sqlite3  # noqa: E402
+import json  # noqa: E402
 
 
 class HierarchicalSummationTester:
     """Test multi-level recursive summation patterns in khipus."""
     
-    def __init__(self, db_path: str = "khipu.db"):
-        self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+    def __init__(self, db_path: str = None):
+        config = get_config()
+        self.config = config
+        self.db_path = db_path if db_path else config.get_database_path()
+        self.conn = sqlite3.connect(self.db_path)
         
     def get_khipu_hierarchy(self, khipu_id: int) -> pd.DataFrame:
         """Get complete cord hierarchy with numeric values for a khipu."""
@@ -232,8 +242,10 @@ class HierarchicalSummationTester:
         
         return level_match_rates
     
-    def export_results(self, results: list, analysis: dict, output_dir: str = "data/processed"):
+    def export_results(self, results: list, analysis: dict, output_dir: str = None):
         """Export hierarchical summation test results."""
+        if output_dir is None:
+            output_dir = self.config.processed_dir
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         # Export detailed results CSV
@@ -305,12 +317,14 @@ if __name__ == "__main__":
     # Need to create a view or load cord_numeric_values into database
     # For now, load from CSV
     
+    config = get_config()
+    
     # Load cord numeric values
     print("Loading cord numeric values...")
-    cord_values = pd.read_csv("data/processed/cord_numeric_values.csv")
+    cord_values = pd.read_csv(config.get_processed_file("cord_numeric_values.csv"))
     
     # Connect to database and create temporary table
-    conn = sqlite3.connect("khipu.db")
+    conn = sqlite3.connect(config.get_database_path())
     cord_values.to_sql('cord_numeric_values', conn, if_exists='replace', index=False)
     conn.close()
     print("✓ Loaded numeric values into temporary table\n")

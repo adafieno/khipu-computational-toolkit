@@ -11,9 +11,17 @@ Test multiple arithmetic encoding schemes beyond standard pendant-to-parent summ
 These alternative models may explain the 74% of khipus without detected summation patterns.
 """
 
-import pandas as pd
+import sys
 from pathlib import Path
 from typing import Dict, List
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
 
 
 class AlternativeSummationTester:
@@ -25,8 +33,9 @@ class AlternativeSummationTester:
     def load_khipu_values(self, khipu_id: str) -> pd.DataFrame:
         """Load all cord values and hierarchy for a khipu."""
         # Load from CSV files
-        hierarchy = pd.read_csv('data/processed/cord_hierarchy.csv')
-        values = pd.read_csv('data/processed/cord_numeric_values.csv')
+        config = get_config()
+        hierarchy = pd.read_csv(config.get_processed_file('cord_hierarchy.csv'))
+        values = pd.read_csv(config.get_processed_file('cord_numeric_values.csv'))
         
         # Convert khipu_id to int for filtering
         khipu_id_int = int(khipu_id)
@@ -319,8 +328,11 @@ class AlternativeSummationTester:
         
         return df
     
-    def export_results(self, results_df: pd.DataFrame, output_path: str = "data/processed/alternative_summation_results.csv"):
+    def export_results(self, results_df: pd.DataFrame, output_path: str = None):
         """Export results to CSV."""
+        if output_path is None:
+            config = get_config()
+            output_path = config.get_processed_file("alternative_summation_results.csv")
         output_path = Path(output_path)
         results_df.to_csv(output_path, index=False)
         print(f"✓ Exported to {output_path}")
@@ -352,7 +364,8 @@ def main():
     tester = AlternativeSummationTester()
     
     # Get all khipu IDs from cord_hierarchy.csv
-    hierarchy = pd.read_csv("data/processed/cord_hierarchy.csv")
+    config = get_config()
+    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv"))
     khipu_ids = hierarchy['KHIPU_ID'].unique().tolist()
     
     print(f"Testing {len(khipu_ids)} khipus")
@@ -370,7 +383,7 @@ def main():
     print("="*80)
     
     # Compare to standard model
-    standard_results = pd.read_csv("data/processed/summation_test_results.csv")
+    standard_results = pd.read_csv(config.get_processed_file("summation_test_results.csv"))
     standard_rate = standard_results['has_pendant_summation'].mean() * 100
     
     print(f"\nStandard summation (±1): {standard_rate:.1f}% detection rate")
