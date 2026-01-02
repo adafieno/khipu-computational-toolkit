@@ -182,6 +182,7 @@ python scripts/visualize_geographic_heatmap.py
 **Outputs:**
 - `outputs/visualizations/geographic_heatmap.html` - Summation rate heatmap
 ![Cluster Geographic Distribution](images/cluster_geographic_map.png)
+
 *Cluster distribution map showing dominant khipu archetypes by region*
 
 - `outputs/visualizations/geographic_heatmap_statistics.csv` - Aggregated statistics
