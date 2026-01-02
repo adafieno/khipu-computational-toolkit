@@ -1,0 +1,111 @@
+{
+  "n_pareto_optimal": 17,
+  "pareto_rate": 0.027777777777777776,
+  "optimal_mean_efficiency": 0.8089962797890108,
+  "non_optimal_mean_efficiency": 0.44527884122490474,
+  "efficiency_improvement": 81.68307246838098,
+  "pareto_khipus": [
+    {
+      "khipu_id": 1000002,
+      "complexity": 7.904196887142691,
+      "capacity": 8.156208182606358,
+      "efficiency_ratio": 0.9159959383179859
+    },
+    {
+      "khipu_id": 1000012,
+      "complexity": 17.843803431191105,
+      "capacity": 9.717628437260922,
+      "efficiency_ratio": 0.5156935792047093
+    },
+    {
+      "khipu_id": 1000112,
+      "complexity": 2.821928094887362,
+      "capacity": 4.0,
+      "efficiency_ratio": 1.046592165182502
+    },
+    {
+      "khipu_id": 1000129,
+      "complexity": 2.4,
+      "capacity": 3.084962500721156,
+      "efficiency_ratio": 0.9073419119768107
+    },
+    {
+      "khipu_id": 1000138,
+      "complexity": 7.4,
+      "capacity": 6.836786504040137,
+      "efficiency_ratio": 0.8139031552428734
+    },
+    {
+      "khipu_id": 1000155,
+      "complexity": 1.2,
+      "capacity": 0.0,
+      "efficiency_ratio": 0.0
+    },
+    {
+      "khipu_id": 1000338,
+      "complexity": 7.454887502163468,
+      "capacity": 7.05937031858375,
+      "efficiency_ratio": 0.8349455053987851
+    },
+    {
+      "khipu_id": 1000350,
+      "complexity": 2.4,
+      "capacity": 3.084962500721156,
+      "efficiency_ratio": 0.9073419119768107
+    },
+    {
+      "khipu_id": 1000425,
+      "complexity": 5.5749256825006785,
+      "capacity": 6.5905448020338735,
+      "efficiency_ratio": 1.0023755583389735
+    },
+    {
+      "khipu_id": 1000428,
+      "complexity": 6.330954434839871,
+      "capacity": 6.734821263802411,
+      "efficiency_ratio": 0.9186827341056197
+    },
+    {
+      "khipu_id": 1000430,
+      "complexity": 8.165286098723683,
+      "capacity": 8.492350286193826,
+      "efficiency_ratio": 0.9265777625181207
+    },
+    {
+      "khipu_id": 1000446,
+      "complexity": 11.911589328045194,
+      "capacity": 9.154136052572206,
+      "efficiency_ratio": 0.7089859985469454
+    },
+    {
+      "khipu_id": 1000483,
+      "complexity": 4.181145182771963,
+      "capacity": 5.982045319128822,
+      "efficiency_ratio": 1.1545797517930911
+    },
+    {
+      "khipu_id": 1000495,
+      "complexity": 19.28076146362173,
+      "capacity": 9.862547106713944,
+      "efficiency_ratio": 0.48630063148293123
+    },
+    {
+      "khipu_id": 1000504,
+      "complexity": 29.700560635077668,
+      "capacity": 10.68068441802712,
+      "efficiency_ratio": 0.3478986766718405
+    },
+    {
+      "khipu_id": 1000517,
+      "complexity": 4.831069492725954,
+      "capacity": 6.395597065604933,
+      "efficiency_ratio": 1.0968137274959948
+    },
+    {
+      "khipu_id": 1000631,
+      "complexity": 3.3438561897747245,
+      "capacity": 5.077567157116929,
+      "efficiency_ratio": 1.1689077481591894
+    }
+  ]
+}

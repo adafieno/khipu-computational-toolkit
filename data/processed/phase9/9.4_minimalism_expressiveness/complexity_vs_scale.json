@@ -1,0 +1,44 @@
+{
+  "models": {
+    "linear": {
+      "r_squared": 0.5647298764929389,
+      "slope": 0.0003989647995427453,
+      "intercept": 0.12718292258650105
+    },
+    "logarithmic": {
+      "r_squared": 0.5994073947478686,
+      "slope": 0.052164124001114066,
+      "intercept": -0.03816805224246912
+    },
+    "power": {
+      "r_squared": 0.6543103269409428,
+      "exponent": 0.3107324111197758,
+      "coefficient": 0.04462518387164517
+    }
+  },
+  "best_fit": "power",
+  "best_r_squared": 0.6543103269409428,
+  "n_khipus": 612,
+  "outliers": [
+    {
+      "khipu_id": 1000279,
+      "num_nodes": 592,
+      "structural_complexity": 0.5307322500718676
+    },
+    {
+      "khipu_id": 1000546,
+      "num_nodes": 150,
+      "structural_complexity": 0.3677829146345663
+    },
+    {
+      "khipu_id": 1000574,
+      "num_nodes": 83,
+      "structural_complexity": 0.35416142819712354
+    },
+    {
+      "khipu_id": 1000624,
+      "num_nodes": 251,
+      "structural_complexity": 0.38985924229863395
+    }
+  ]
+}
