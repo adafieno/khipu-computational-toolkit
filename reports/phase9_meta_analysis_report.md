@@ -640,40 +640,34 @@ Phase 9 establishes that:
 
 ## Next Steps & Future Work
 
-### Immediate Priorities
+### Research Dissemination
 
-1. **Expert Validation:**
-   - Share Phase 9 findings with khipu domain experts
-   - Request validation of structural archetypes
-   - Discuss cognitive load and design principles
+**Expert Collaboration:**
+- Share computational findings with khipu domain experts for validation
+- Facilitate interdisciplinary dialogue on structural patterns and design principles
+- Establish collaborative frameworks for ongoing analysis
 
-2. **Publication Preparation:**
-   - Synthesize Phases 1-9 into academic paper
-   - Prepare visualizations for publication
-   - Document methodology transparently
+**Publication & Community:**
+- Synthesize computational methodology and findings for academic publication
+- Release toolkit and documentation to research community
+- Support reproduction, extension, and validation studies
 
-3. **Community Engagement:**
-   - Share toolkit with research community
-   - Encourage reproduction and extension
-   - Build collaborative analysis infrastructure
+### Future Research Directions
 
-### Future Extensions
+**Temporal & Geographic Analysis:**
+- Investigate chronological patterns as dating methodologies improve
+- Conduct detailed regional analysis with expanded provenance data
+- Test for local traditions vs empire-wide standardization
 
-1. **Temporal Analysis:**
-   - Investigate chronological patterns if dating improves
-   - Test for evolution of structural designs over time
+**Relational Studies:**
+- Analyze paired or related khipus for cross-references
+- Investigate administrative record linkages
+- Map potential archival networks
 
-2. **Geographic Deep-Dive:**
-   - Detailed regional analysis with more provenances
-   - Test for local vs empire-wide patterns
-
-3. **Multi-Khipu Relationships:**
-   - Test for paired/related khipus
-   - Investigate cross-references between khipus
-
-4. **Semantic Exploration (Cautiously):**
-   - Test linguistic hypotheses with domain expert input
-   - Explore symbolic/categorical encoding (NOT decoding)
+**Methodological Extensions:**
+- Explore symbolic and categorical encoding patterns with domain expert guidance
+- Test additional computational approaches as technology advances
+- Refine boundary conditions through interdisciplinary collaboration
 
 ---
 

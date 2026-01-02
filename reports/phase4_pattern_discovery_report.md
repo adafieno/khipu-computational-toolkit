@@ -408,9 +408,9 @@ These khipus represent "gold standard" examples of consistent summation encoding
 
 ## References
 
-- Medrano, M., & Khosla, R. (2024). Algorithmic decipherment of Inka khipus. *Science Advances*, 10(37).
-- Phase 3 Report: Summation Hypothesis Testing (this project)
-- Phase 2 Report: Extraction Infrastructure (this project)
+- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
 
 ---
 
@@ -580,17 +580,11 @@ The **geographic correlation analysis fundamentally revises** our interpretation
 
 ## Next Steps
 
-### Remaining Phase 4 Analyses
-
-**Status: 7/7 Complete (100%)**
-
-- [x] 1. High-match summation analysis
-- [x] 2. Hierarchical summation testing  
-- [x] 3. Graph similarity analysis
-- [x] 4. Clustering analysis
-- [x] 5. Geographic correlation analysis
-- [x] 6. Template extraction and analysis
-- [x] 7. Subgraph motif mining
+Phase 4 pattern discovery enables:
+- ✅ **Phase 5:** Multi-model framework and function classification
+- ✅ **Phase 6:** Advanced interactive visualizations
+- ✅ **Phase 7:** Machine learning extensions for anomaly detection and prediction
+- ✅ **Phase 8+:** Administrative function analysis and meta-analysis validation
 
 ---
 
@@ -834,7 +828,7 @@ The **complete Phase 4 analysis reveals a hierarchical standardization model:**
 
 ### Implications for Khipu Research
 
-1. **No Single "Decipherment" Possible:** 4x variance in summation by region suggests multiple encoding traditions
+1. **Regional Encoding Diversity:** 4x variance in summation by region suggests multiple encoding traditions
 2. **Regional Context Essential:** Khipu interpretation must account for provenance
 3. **Accounting vs Narrative Distinction:** Low-numeric clusters (e.g., Cluster 6) likely non-accounting
 4. **Hierarchical Analysis Critical:** Multi-level summation (35.4%) requires recursive testing

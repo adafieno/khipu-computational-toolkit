@@ -204,79 +204,15 @@ LL = double long
    - ~16% missing region/provenance
    - Date information sparse (most "0000-00-00")
 
-## Recommendations for Phase 1
+## Next Steps
 
-### Immediate Actions
+Phase 0 reconnaissance enables:
+- ✅ **Phase 1:** Numeric data extraction and validation pipeline
+- ✅ **Phase 2:** Comprehensive extraction infrastructure for hierarchical, knot, and color data
+- ✅ **Phase 3:** Statistical hypothesis testing framework
+- ✅ **Phase 4+:** Advanced pattern discovery and structural analysis
 
-1. **Build Core Data Extraction Pipeline**
-   ```
-   src/extraction/
-   ├── khipu_loader.py       # Load khipu metadata
-   ├── cord_extractor.py     # Extract cord hierarchy
-   ├── knot_extractor.py     # Extract knot data
-   ├── color_extractor.py    # Extract color information
-   └── cluster_extractor.py  # Extract clustering patterns
-   ```
-
-2. **Create Graph Conversion Module**
-   ```
-   src/graph/
-   ├── graph_builder.py      # NetworkX graph construction
-   ├── node_features.py      # Feature engineering
-   ├── edge_attributes.py    # Relationship encoding
-   └── graph_validator.py    # Validate hierarchy integrity
-   ```
-
-3. **Implement Numeric Constraint Solver**
-   ```
-   src/numeric/
-   ├── conventions.py        # Encode positional decimal rules
-   ├── validator.py          # Check numeric consistency
-   ├── classifier.py         # Numeric vs non-numeric cords
-   └── uncertainty.py        # Confidence scoring
-   ```
-
-### Critical Questions to Resolve
-
-1. **Knot Value Interpretation**
-   - Is `knot_value_type` already the interpreted decimal value?
-   - How to handle missing `NUM_TURNS` for long knots?
-   - What do knot_value_type values like 10, 8, 1 represent?
-
-2. **Color Semantics**
-   - Which color codes are most reliable?
-   - How to handle multi-color (operator) cords?
-   - Should we treat color ranges separately?
-
-3. **Hierarchy Validation**
-   - How to handle cords with missing `ATTACHED_TO`?
-   - Are `PENDANT_FROM` and `ATTACHED_TO` redundant or complementary?
-   - What does `CORD_LEVEL` represent precisely?
-
-4. **Clustering Ground Truth**
-   - Are `cord_cluster` groupings scholar-identified or algorithmic?
-   - Should we trust existing clusters or re-discover?
-   - What is the GROUPING_CLASS taxonomy?
-
-### Data Quality Priorities
-
-1. **Validate hierarchical integrity** (check for cycles, orphans)
-2. **Cross-reference ID systems** (INVESTIGATOR_NUM ↔ OKR_NUM)
-3. **Assess color code consistency** across contributors
-4. **Check numeric encoding completeness** per khipu
-5. **Identify high-quality "gold standard" khipus** for testing
-
-## Next Steps (Phase 1 - Week 1)
-
-1. ✅ Set up Python environment with pandas, networkx, sqlite3
-2. ⬜ Create `src/extraction/khipu_loader.py` - load all khipus with metadata
-3. ⬜ Create `src/extraction/cord_extractor.py` - build cord hierarchy
-4. ⬜ Create initial Jupyter notebook: `notebooks/01_data_exploration.ipynb`
-5. ⬜ Generate sample visualizations of 3-5 khipus
-6. ⬜ Document data model ambiguities in `docs/methodology/`
-7. ⬜ Identify "test set" khipus (complete, well-documented, diverse)
-
-## Assessment: Viability for AI Decipherment
+## Assessment: Research Viability
 
 **Rating: 8.5/10 - Highly Viable**
 
@@ -289,10 +225,19 @@ LL = double long
 - ✅ Domain expert curation (high quality)
 
 **Challenges:**
-- ⚠️ Limited external ground truth (no confirmed decipherments)
+- ⚠️ Limited external validation sources
 - ⚠️ Missing data in ~15-20% of records
 - ⚠️ Sparse temporal information
 - ⚠️ Need domain expert validation for numeric conventions
 - ⚠️ Small dataset by modern ML standards (but adequate for symbolic methods)
 
-**Recommendation:** The proposed approach is well-aligned with the data structure. Proceed with Phase 1 infrastructure development.
+---
+
+## References
+
+- Urton, G., & Brezine, C. (2021). *Open Khipu Repository (OKR)*. https://github.com/khipulab/open-khipu-repository
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
+- Locke, L. L. (1912). *The Ancient Quipu, a Peruvian Knot Record*. American Anthropologist, 14(2), 325-332.
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
+
+---

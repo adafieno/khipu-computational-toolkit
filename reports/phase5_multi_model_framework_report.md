@@ -316,24 +316,18 @@ Phase 5 developed a multi-hypothesis testing framework to evaluate competing int
 
 ## Next Steps
 
-### Recommended Follow-Up
+Phase 5 multi-model framework enables:
+- ✅ **Phase 6:** Interactive visualization tools for exploration and hypothesis testing
+- ✅ **Phase 7:** Machine learning approaches for anomaly detection and value prediction
+- ✅ **Phase 8:** Administrative function classification and typology
+- ✅ **Phase 9:** Meta-analysis validation of robustness and stability
 
-1. **Hierarchical summation analysis** - Test multi-level summation patterns
-   - May explain medium-consistency khipus (50-80% match)
+### Future Research Directions
 
-2. **Color sequence patterns** - Analyze color ordering and repetition
-   - May reveal categorical encoding schemes
-
-3. **Temporal analysis** - Correlate structural features with chronology
-   - Requires better dating of museum collections
-
-4. **Narrative khipu deep-dive** - Detailed analysis of 12 non-accounting khipus
-   - What makes them structurally distinct?
-   - Connection to ethnohistorical references?
-
-5. **Interactive hypothesis dashboard** - Build tool for scholars to test custom hypotheses
-   - Parameterize assumptions
-   - Real-time statistical testing
+- **Temporal analysis** - Correlate structural features with chronology as dating improves
+- **Color sequence patterns** - Deeper analysis of color ordering and categorical encoding
+- **Regional variation studies** - Expanded geographic analysis with additional provenance data
+- **Comparative khipu studies** - Cross-khipu relationship detection and paired artifact analysis
 
 ## Validation & Quality Control
 
@@ -360,19 +354,10 @@ Phase 5 included three expert review opportunities:
 
 ## References
 
-### Key Literature Cited
-
-1. **Medrano & Khosla (2024)** - Algorithmic analysis of summation patterns
-2. **Ascher & Ascher (1981, 1997)** - Foundational numeric encoding
-3. **Urton (2003)** - Signs of the Inka Khipu
-4. **Clindaniel (2024)** - Transformer-based khipu clustering
-
-### Computational Methods
-
-- **Scikit-learn** - Random Forest classification, statistical tests
-- **SciPy** - Chi-square tests, t-tests
-- **Pandas/NumPy** - Data manipulation and analysis
-- **Matplotlib/Seaborn** - Visualization
+- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
+- Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
+- Brokaw, G. (2010). *A History of the Khipu*. Cambridge University Press.
 
 ## Conclusion
 

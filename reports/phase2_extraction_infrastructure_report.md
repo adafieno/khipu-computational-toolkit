@@ -326,7 +326,7 @@ Analysis & Visualization
 
 ## References
 
-- Medrano, M., & Khosla, R. (2024). Algorithmic decipherment of Inka khipus. *Science Advances*.
+- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*.
 - Ascher, M., & Ascher, R. (1997). *Mathematics of the Inkas: Code of the Quipu*. Dover Publications.
 - Open Khipu Repository (2022). Database structure and documentation.
 

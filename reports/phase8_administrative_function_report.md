@@ -5,7 +5,7 @@
 
 ## Executive Summary
 
-Phase 8 classifies khipus by administrative function using structural, chromatic, and numeric affordances while explicitly avoiding semantic or linguistic decoding claims. The analysis implements a three-stage framework: (1) structural typology based on color-agnostic features, (2) chromatic encoding analysis as administrative affordances, and (3) integrated multi-modal classification. Results identify 8 distinct administrative artifact types with probabilistic role assignments requiring expert validation.
+Phase 8 classifies khipus by administrative function using structural, chromatic, and numeric affordances while maintaining operational analysis boundaries. The analysis implements a three-stage framework: (1) structural typology based on color-agnostic features, (2) chromatic encoding analysis as administrative affordances, and (3) integrated multi-modal classification. Results identify 8 distinct administrative artifact types with probabilistic role assignments requiring expert validation.
 
 **Key Results:**
 - **7 structural clusters** identified from color-agnostic features
@@ -18,7 +18,7 @@ Phase 8 classifies khipus by administrative function using structural, chromatic
 
 Before presenting technical results, Phase 8 establishes three non-negotiable principles:
 
-### 1. No Semantic Decoding
+### 1. Operational Analysis Boundaries
 
 Colors, knots, and structures are treated as **operational features**, not symbolic meanings. This analysis identifies *how* khipus functioned as administrative tools, not *what* information they encoded.
 
@@ -577,34 +577,12 @@ Phase 5 binary classification (Accounting vs Narrative) is refined to 8 administ
 3. **Interpretable administrative typology:** Provides actionable categories for archaeological interpretation
 4. **Expert-ready outputs:** Confidence scores and feature attributions enable informed validation
 
-### Recommendations for Expert Validation
-
-**Priority 1: Medium-Confidence Assignments** (4 khipus)
-- Review khipus with confidence 0.6-0.8
-- Assess whether assigned type matches archaeological context
-
-**Priority 2: Exceptional/Anomalous Type** (7 khipus)
-- Detailed examination of outliers
-- Determine if truly exceptional or misclassified
-
-**Priority 3: Large Operational Records** (32 khipus)
-- Unusually large cord counts (514 mean)
-- Validate whether these represent provincial summaries or data quality issues
-
-### Future Directions
-
-1. **Geographic submodels:** Develop region-specific classifiers
-2. **Temporal analysis:** Incorporate chronological data if available
-3. **Archaeological integration:** Validate types against provenance context
-4. **Expanded features:** Incorporate spinning/plying direction, cord materials
-5. **Expert feedback loop:** Refine typology based on validation results
-
 ---
 
 ## Acknowledgments
 
 Phase 8 builds on infrastructure from Phases 0-7:
-- Phase 1-2: Numeric decoding and color extraction
+- Phase 1-2: Numeric value extraction and color pattern analysis
 - Phase 3: Summation hypothesis testing
 - Phase 4: Structural clustering and pattern discovery
 - Phase 5: Function classification framework
@@ -614,7 +592,7 @@ Phase 8 builds on infrastructure from Phases 0-7:
 
 ## References
 
-1. Medrano, M., & Khosla, R. (2024). Algorithmic decipherment of Inka khipus. *Science Advances*, 10(37).
+1. Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
 2. Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
 3. Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu*. Dover Publications.
 4. Brokaw, G. (2010). *A History of the Khipu*. Cambridge University Press.

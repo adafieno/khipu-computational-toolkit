@@ -896,43 +896,26 @@ scripts/
 
 ## Next Steps
 
-### Immediate Actions
+Phase 7 machine learning extensions enable:
+- ✅ **Phase 8:** Administrative function analysis using validated anomaly and prediction frameworks
+- ✅ **Phase 9:** Meta-analysis validation through robustness and stability testing
 
-1. **Expert Review of High-Priority Anomalies**
-   - Archaeologist examination of Khipu 1000020 and 1000279
-   - Verify transcription, check for damage, assess legitimacy
-   - Document findings in supplementary report
+### Future Research Directions
 
-2. **Cluster 5 Investigation**
-   - Deep dive into all 3 Cluster 5 khipus
-   - Identify common characteristics
-   - Determine if cluster represents data issue or unique type
+**Anomaly Detection Refinement:**
+- Incorporate domain expertise to distinguish data quality issues from genuine outliers
+- Develop multi-method consensus scoring for anomaly confidence
+- Test additional ML architectures (autoencoders, one-class SVM)
 
-3. **High-Confidence Prediction Validation**
-   - Cross-check 1,295 constraint-based predictions with archaeological evidence
-   - Identify any contradictions
-   - Publish validated predictions for community use
+**Prediction Enhancement:**
+- Explore deep learning approaches for sequential pattern modeling
+- Integrate knot type and color information into prediction models
+- Develop explainable AI frameworks for interpretability
 
-### Future Research
-
-1. **Improved Anomaly Detection**
-   - Incorporate domain knowledge (e.g., known khipu types)
-   - Test additional ML methods (autoencoders, one-class SVM)
-   - Develop anomaly severity scoring
-
-2. **Enhanced Prediction Models**
-   - Test deep learning (LSTMs for sequential patterns)
-   - Incorporate knot types (not just counts)
-   - Use color information in predictions
-
-3. **External Validation**
-   - Test models on newly discovered khipus
-   - Compare with independent expert classifications
-   - Benchmark against non-ML restoration methods
-
-4. **Explainable AI**
-   - Develop interpretable models (SHAP values, LIME)
-   - Visualize decision boundaries
+**Validation & Benchmarking:**
+- Cross-validate models on newly discovered khipus as they become available
+- Collaborate with domain experts for independent classification comparison
+- Establish standardized benchmarks for computational khipu analysis
    - Bridge ML insights with archaeological knowledge
 
 5. **Web Integration**
@@ -1005,26 +988,14 @@ ls visualizations/ml_results/
 
 ## References
 
-### Machine Learning Methods
+**Machine Learning Methods:**
+- Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." *Proceedings of ICDM*.
+- Breiman, L. (2001). "Random Forests." *Machine Learning*, 45(1), 5-32.
+- Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." *ACM Computing Surveys*, 41(3).
 
-1. **Isolation Forest:**
-   - Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." ICDM.
-
-2. **Random Forest:**
-   - Breiman, L. (2001). "Random Forests." Machine Learning, 45(1), 5-32.
-
-3. **Anomaly Detection Review:**
-   - Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." ACM Computing Surveys, 41(3).
-
-### Khipu Domain
-
-4. **Summation Convention:**
-   - Urton, G., & Brezine, C. (2005). "Khipu Accounting in Ancient Peru." Science, 309(5737). [Note: Khipus were used across the Andes region]
-
-5. **Functional Classification:**
-   - Medrano, C. C., & Khosla, R. (2020). "Khipu Function Detection." Science Advances.
-
-6. **Archaeological Context:**
+**Khipu Research:**
+- Medrano, M., & Khosla, R. (2024). Algorithmic analysis of Inka khipus. *Science Advances*, 10(37).
+- Urton, G. (2003). *Signs of the Inka Khipu: Binary Coding in the Andean Knotted-String Records*. University of Texas Press.
    - Ascher, M., & Ascher, R. (1997). *Mathematics of the Incas: Code of the Quipu.*
 
 ### Statistical Methods
