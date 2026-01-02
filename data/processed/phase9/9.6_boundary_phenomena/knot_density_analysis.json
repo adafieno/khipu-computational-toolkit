@@ -1,0 +1,12 @@
+{
+  "boundary_mean_knots": 2.296695495030334,
+  "boundary_std_knots": 3.336784522570233,
+  "interior_mean_knots": 1.9164203654681435,
+  "interior_std_knots": 2.773908189743211,
+  "density_ratio": 1.198429914654605,
+  "t_statistic": 13.591906282821233,
+  "p_value": 5.239279072377982e-42,
+  "significant": true,
+  "n_boundary": 15494,
+  "n_interior": 38909
+}

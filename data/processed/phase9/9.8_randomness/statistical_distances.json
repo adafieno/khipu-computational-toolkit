@@ -1,0 +1,89 @@
+{
+  "uniform_random": {
+    "num_nodes": {
+      "ks_statistic": 0.7912229402261712,
+      "ks_pvalue": 1.7587177836623234e-239,
+      "wasserstein_distance": 834.0676252019385,
+      "cohens_d": 2.1218680833667114,
+      "significant": true,
+      "real_mean": 88.89822294022618,
+      "synth_mean": 922.948
+    },
+    "depth": {
+      "ks_statistic": 0.2559951534733441,
+      "ks_pvalue": 1.6022490317380524e-22,
+      "wasserstein_distance": 0.8136413570274634,
+      "cohens_d": 0.33650679773493236,
+      "significant": true,
+      "real_mean": 1.951534733441034,
+      "synth_mean": 2.412
+    },
+    "avg_branching": {
+      "ks_statistic": 0.7651453957996769,
+      "ks_pvalue": 2.5958488964031308e-221,
+      "wasserstein_distance": 137.6926685701904,
+      "cohens_d": 1.9778458513450623,
+      "significant": true,
+      "real_mean": 18.660735011386024,
+      "synth_mean": 156.35274095587366
+    }
+  },
+  "empirical_random": {
+    "num_nodes": {
+      "ks_statistic": 0.0432875605815832,
+      "ks_pvalue": 0.4544025113689503,
+      "wasserstein_distance": 5.977458804523464,
+      "cohens_d": 0.012152519543332211,
+      "significant": false,
+      "real_mean": 88.89822294022618,
+      "synth_mean": 90.711
+    },
+    "depth": {
+      "ks_statistic": 0.006281098546042003,
+      "ks_pvalue": 1.0,
+      "wasserstein_distance": 0.012258481421647543,
+      "cohens_d": 0.0016510666513512868,
+      "significant": false,
+      "real_mean": 1.951534733441034,
+      "synth_mean": 1.95
+    },
+    "avg_branching": {
+      "ks_statistic": 0.01940064620355412,
+      "ks_pvalue": 0.998085084544882,
+      "wasserstein_distance": 0.60072644880139,
+      "cohens_d": 0.0029887671645014388,
+      "significant": false,
+      "real_mean": 18.660735011386024,
+      "synth_mean": 18.76100873673698
+    }
+  },
+  "constrained_random": {
+    "num_nodes": {
+      "ks_statistic": 0.39952019386106624,
+      "ks_pvalue": 4.271117117447683e-55,
+      "wasserstein_distance": 52.35584006462033,
+      "cohens_d": 0.4596551501756705,
+      "significant": true,
+      "real_mean": 88.89822294022618,
+      "synth_mean": 36.565
+    },
+    "depth": {
+      "ks_statistic": 0.0056930533117932145,
+      "ks_pvalue": 1.0,
+      "wasserstein_distance": 0.016589660743134123,
+      "cohens_d": 0.004967470651992771,
+      "significant": false,
+      "real_mean": 1.951534733441034,
+      "synth_mean": 1.947
+    },
+    "avg_branching": {
+      "ks_statistic": 0.01912762520193861,
+      "ks_pvalue": 0.9984502740147922,
+      "wasserstein_distance": 0.6855655159287738,
+      "cohens_d": 0.015390925273836904,
+      "significant": false,
+      "real_mean": 18.660735011386024,
+      "synth_mean": 18.16312380624006
+    }
+  }
+}

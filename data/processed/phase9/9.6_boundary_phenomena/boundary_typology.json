@@ -1,0 +1,17 @@
+{
+  "total_boundaries": 15494,
+  "type_distribution": {
+    "summarizing": 7728,
+    "separating": 6124,
+    "structural": 1642,
+    "marking": 0,
+    "other": 0
+  },
+  "type_proportions": {
+    "summarizing": 0.49877371885891314,
+    "separating": 0.39524977410610557,
+    "structural": 0.10597650703498128,
+    "marking": 0.0,
+    "other": 0.0
+  }
+}

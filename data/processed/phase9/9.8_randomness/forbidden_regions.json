@@ -1,0 +1,20 @@
+{
+  "uniform_random": {
+    "n_forbidden_bins": 26,
+    "total_bins": 200,
+    "forbidden_fraction": 0.13,
+    "interpretation": "Regions possible but avoided by real khipus"
+  },
+  "empirical_random": {
+    "n_forbidden_bins": 1,
+    "total_bins": 200,
+    "forbidden_fraction": 0.005,
+    "interpretation": "Regions possible but avoided by real khipus"
+  },
+  "constrained_random": {
+    "n_forbidden_bins": 0,
+    "total_bins": 200,
+    "forbidden_fraction": 0.0,
+    "interpretation": "Regions possible but avoided by real khipus"
+  }
+}

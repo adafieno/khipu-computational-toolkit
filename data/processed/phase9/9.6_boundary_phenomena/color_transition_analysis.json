@@ -1,0 +1,10 @@
+{
+  "total_transitions": 24490,
+  "boundary_transitions": 10883,
+  "alignment_ratio": 0.4443854634544712,
+  "boundary_transition_rate": 0.5315522125622741,
+  "interior_transition_rate": 0.4349507735583685,
+  "chi2_statistic": 462.87552521527925,
+  "p_value": 1.1379718238679227e-102,
+  "significant": true
+}

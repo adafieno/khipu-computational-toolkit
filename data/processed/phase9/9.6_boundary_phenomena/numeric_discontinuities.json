@@ -1,0 +1,12 @@
+{
+  "boundary_mean_disc": 352.10091519219037,
+  "boundary_median_disc": 22.0,
+  "interior_mean_disc": 276.8623774454434,
+  "interior_median_disc": 17.0,
+  "discontinuity_ratio": 1.271754286158194,
+  "u_statistic": 97595070.5,
+  "p_value": 1.5367155352911622e-24,
+  "significant": true,
+  "n_boundary": 8195,
+  "n_interior": 22133
+}

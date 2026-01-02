@@ -1,0 +1,7 @@
+{
+  "n_features_tested": 3,
+  "n_significant_in_all_models": 0,
+  "universal_significant_features": [],
+  "verdict": "INCONCLUSIVE",
+  "confidence": "0/3 features reject all null models"
+}

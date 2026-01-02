@@ -1,0 +1,63 @@
+{
+  "analysis": "Phase 9.6: Boundary Phenomena Analysis",
+  "date": "2026-01-01",
+  "source_references": {
+    "phase2": "White cord identification (26.8% prevalence)",
+    "phase3": "White cords improve summation +10.7pp (p<0.001, d=0.43)",
+    "phase5": "White boundaries uniform across provenances (p=1.00)"
+  },
+  "total_cords": 54403,
+  "total_boundaries": 15494,
+  "boundary_prevalence": 0.2848004705622852,
+  "knot_density_analysis": {
+    "boundary_mean_knots": 2.296695495030334,
+    "boundary_std_knots": 3.336784522570233,
+    "interior_mean_knots": 1.9164203654681435,
+    "interior_std_knots": 2.773908189743211,
+    "density_ratio": 1.198429914654605,
+    "t_statistic": 13.591906282821233,
+    "p_value": 5.239279072377982e-42,
+    "significant": true,
+    "n_boundary": 15494,
+    "n_interior": 38909
+  },
+  "color_transition_analysis": {
+    "total_transitions": 24490,
+    "boundary_transitions": 10883,
+    "alignment_ratio": 0.4443854634544712,
+    "boundary_transition_rate": 0.5315522125622741,
+    "interior_transition_rate": 0.4349507735583685,
+    "chi2_statistic": 462.87552521527925,
+    "p_value": 1.1379718238679227e-102,
+    "significant": true
+  },
+  "numeric_discontinuity_analysis": {
+    "boundary_mean_disc": 352.10091519219037,
+    "boundary_median_disc": 22.0,
+    "interior_mean_disc": 276.8623774454434,
+    "interior_median_disc": 17.0,
+    "discontinuity_ratio": 1.271754286158194,
+    "u_statistic": 97595070.5,
+    "p_value": 1.5367155352911622e-24,
+    "significant": true,
+    "n_boundary": 8195,
+    "n_interior": 22133
+  },
+  "boundary_typology": {
+    "total_boundaries": 15494,
+    "type_distribution": {
+      "summarizing": 7728,
+      "separating": 6124,
+      "structural": 1642,
+      "marking": 0,
+      "other": 0
+    },
+    "type_proportions": {
+      "summarizing": 0.49877371885891314,
+      "separating": 0.39524977410610557,
+      "structural": 0.10597650703498128,
+      "marking": 0.0,
+      "other": 0.0
+    }
+  }
+}

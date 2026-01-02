@@ -1,0 +1,35 @@
+{
+  "uniform_random": {
+    "pca_variance_explained": [
+      0.9780347090688983,
+      0.021959374055522073
+    ],
+    "centroid_distance": 845.3391492624198,
+    "real_radius_95pct": 233.60030233322368,
+    "synth_radius_95pct": 871.3550890030538,
+    "separation_ratio": 0.7650436894471452,
+    "interpretation": "High separation (>0.5) indicates distinct design spaces"
+  },
+  "empirical_random": {
+    "pca_variance_explained": [
+      0.9526225031568888,
+      0.047343316737862205
+    ],
+    "centroid_distance": 1.8155465020908,
+    "real_radius_95pct": 233.60121264220976,
+    "synth_radius_95pct": 248.48771933017127,
+    "separation_ratio": 0.0037659991376753138,
+    "interpretation": "High separation (>0.5) indicates distinct design spaces"
+  },
+  "constrained_random": {
+    "pca_variance_explained": [
+      0.9354390038250119,
+      0.06450849397723764
+    ],
+    "centroid_distance": 52.33525288860344,
+    "real_radius_95pct": 233.6023779963022,
+    "synth_radius_95pct": 157.63759459307022,
+    "separation_ratio": 0.13376765298859716,
+    "interpretation": "High separation (>0.5) indicates distinct design spaces"
+  }
+}
