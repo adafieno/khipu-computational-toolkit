@@ -10,8 +10,15 @@ Generates comprehensive results and visualizations.
 """
 
 import sys
-import importlib.util
 from pathlib import Path
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import importlib.util  # noqa: E402
 
 
 def main():
@@ -27,27 +34,32 @@ def main():
     print()
     print("=" * 80)
     print()
-    
+
     try:
         # Dynamically load the module
-        module_path = Path(__file__).parent.parent / "src" / "analysis" / "administrative_function_classifier.py"
+        module_path = Path(__file__).parent.parent / "src" / \
+            "analysis" / "administrative_function_classifier.py"
         if not module_path.exists():
             print(f"Error: Module not found at {module_path}")
             return 1
-        
-        spec = importlib.util.spec_from_file_location("administrative_function_classifier", module_path)
+
+        spec = importlib.util.spec_from_file_location(
+            "administrative_function_classifier", module_path)
         module = importlib.util.module_from_spec(spec)
         sys.modules["administrative_function_classifier"] = module
         spec.loader.exec_module(module)
-        
+
         # Run complete analysis
         classifier, typology = module.run_phase8_analysis()
-        
+
+        config = get_config()
+        output_dir = config.processed_dir / "phase8"
+
         print("\n" + "=" * 80)
         print("PHASE 8 ANALYSIS COMPLETE")
         print("=" * 80)
         print()
-        print("Results saved to: data/processed/phase8/")
+        print(f"Results saved to: {output_dir}")
         print()
         print("Output files:")
         print("  - structural_features.csv")
@@ -60,14 +72,14 @@ def main():
         print()
         print("Next steps:")
         print("  1. Run: python scripts/visualize_phase8_results.py")
-        print("  2. Review: data/processed/phase8/administrative_typology.csv")
+        print(f"  2. Review: {output_dir / 'administrative_typology.csv'}")
         print("  3. Expert validation of probabilistic assignments")
         print()
-        
+
         return 0
-        
+
     except Exception as e:
-        print(f"\n❌ Error during Phase 8 analysis: {e}")
+        print(f"\nX Error during Phase 8 analysis: {e}")
         import traceback
         traceback.print_exc()
         return 1

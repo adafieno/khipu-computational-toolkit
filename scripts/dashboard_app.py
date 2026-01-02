@@ -14,6 +14,17 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import sys
+from pathlib import Path
+
+# Add src to path for runtime
+src_path = Path(__file__).parent.parent / 'src'
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+# Initialize config
+config = get_config()
 
 # Page configuration
 st.set_page_config(
@@ -69,23 +80,24 @@ PROVENANCE_COORDS = {
     'Cuzco': (-13.5319, -71.9675),  # Alternative spelling
 }
 
+
 def get_coords(provenance):
     """Get coordinates for a provenance, with fuzzy matching."""
     if not provenance or pd.isna(provenance) or str(provenance).strip() == '':
         return None, None
-    
+
     # Direct match
     if provenance in PROVENANCE_COORDS:
         coords = PROVENANCE_COORDS[provenance]
         return coords if coords else (None, None)
-    
+
     # Fuzzy matching for common patterns
     prov_lower = str(provenance).lower().strip()
-    
+
     # Return None for generic/unknown values
     if prov_lower in ['unknown', 'peru', 'coast', '']:
         return None, None
-    
+
     # Specific pattern matching (order matters - most specific first)
     if 'pachacamac' in prov_lower:
         return (-12.2667, -76.9167)
@@ -123,44 +135,60 @@ def get_coords(provenance):
         return (-12.0167, -76.9833)
     elif 'cajamarquilla' in prov_lower:
         return (-11.9833, -76.9167)
-    
+
     return None, None
+
 
 @st.cache_data
 def load_data():
     """Load all processed data files."""
     try:
         import sqlite3
-        
+
         # Load CSV files (cluster_assignments already has structural features)
-        clusters = pd.read_csv("data/processed/phase4/cluster_assignments_kmeans.csv")
-        summation = pd.read_csv("data/processed/phase3/summation_test_results.csv")
-        pca = pd.read_csv("data/processed/phase4/cluster_pca_coordinates.csv")
-        
+        clusters = pd.read_csv(
+            config.get_processed_file(
+                'cluster_assignments_kmeans.csv',
+                phase=4))
+        summation = pd.read_csv(
+            config.get_processed_file(
+                'summation_test_results.csv',
+                phase=3))
+        pca = pd.read_csv(
+            config.get_processed_file(
+                'cluster_pca_coordinates.csv',
+                phase=4))
+
         # Merge data
         data = clusters.merge(
             summation, on='khipu_id', how='left'
         ).merge(
             pca, on='khipu_id', how='left'
         )
-        
+
         # Try to load provenance from database if available
         try:
             import os
-            if os.path.exists("data/khipu.db"):
-                conn = sqlite3.connect("data/khipu.db")
-                provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
+            db_path = config.get_database_path()
+            if os.path.exists(db_path):
+                conn = sqlite3.connect(db_path)
+                provenance = pd.read_sql_query(
+                    "SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
                 conn.close()
-                data = data.merge(provenance, left_on='khipu_id', right_on='KHIPU_ID', how='left')
-        except:
+                data = data.merge(
+                    provenance,
+                    left_on='khipu_id',
+                    right_on='KHIPU_ID',
+                    how='left')
+        except BaseException:
             pass
-        
+
         # Add PROVENANCE column if it doesn't exist
         if 'PROVENANCE' not in data.columns:
             data['PROVENANCE'] = 'Unknown'
         else:
             data['PROVENANCE'] = data['PROVENANCE'].fillna('Unknown')
-        
+
         return data
     except FileNotFoundError as e:
         st.error(f"Data file not found: {e}")
@@ -169,6 +197,7 @@ def load_data():
         st.error(f"Error loading data: {e}")
         return None
 
+
 # Load data
 data = load_data()
 
@@ -176,8 +205,11 @@ if data is None:
     st.stop()
 
 # ==================== HEADER ====================
-st.markdown('<p class="main-header">🧶 Khipu Analysis Dashboard</p>', unsafe_allow_html=True)
-st.markdown("**612 Inka Khipus** from Harvard Database • **7 Archetypes** • **26.3% Summation Detection**")
+st.markdown(
+    '<p class="main-header">🧶 Khipu Analysis Dashboard</p>',
+    unsafe_allow_html=True)
+st.markdown(
+    "**612 Inka Khipus** from Harvard Database • **7 Archetypes** • **26.3% Summation Detection**")
 st.markdown("---")
 
 # ==================== SIDEBAR FILTERS ====================
@@ -226,7 +258,8 @@ if summation_filter == "With Summation":
 elif summation_filter == "Without Summation":
     filtered_data = filtered_data[~filtered_data['has_pendant_summation']]
 
-st.sidebar.markdown(f"**Filtered:** {len(filtered_data)}/{len(data)} khipus ({len(filtered_data)/len(data)*100:.1f}%)")
+st.sidebar.markdown(
+    f"**Filtered:** {len(filtered_data)}/{len(data)} khipus ({len(filtered_data)/len(data)*100:.1f}%)")
 
 # ==================== KEY METRICS ====================
 col1, col2, col3, col4 = st.columns(4)
@@ -248,12 +281,13 @@ st.markdown("---")
 # ==================== MAIN VISUALIZATIONS ====================
 
 # Tab layout
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "🗺️ Geographic", "🔬 Clusters", "📈 Features"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["📊 Overview", "🗺️ Geographic", "🔬 Clusters", "📈 Features"])
 
 # TAB 1: Overview
 with tab1:
     col1, col2 = st.columns(2)
-    
+
     with col1:
         # PCA scatter plot
         fig_pca = px.scatter(
@@ -261,14 +295,19 @@ with tab1:
             x='pc1',
             y='pc2',
             color='cluster',
-            hover_data=['khipu_id', 'PROVENANCE', 'num_nodes'],
+            hover_data=[
+                'khipu_id',
+                'PROVENANCE',
+                'num_nodes'],
             title='Cluster Distribution (PCA)',
-            labels={'pc1': 'PC1 (45.7% variance)', 'pc2': 'PC2 (16.1% variance)', 'cluster': 'Cluster'},
-            color_continuous_scale='viridis'
-        )
+            labels={
+                'pc1': 'PC1 (45.7% variance)',
+                'pc2': 'PC2 (16.1% variance)',
+                'cluster': 'Cluster'},
+            color_continuous_scale='viridis')
         fig_pca.update_layout(height=500)
         st.plotly_chart(fig_pca, width="stretch")
-    
+
     with col2:
         # Size vs Depth scatter
         fig_size = px.scatter(
@@ -277,14 +316,18 @@ with tab1:
             y='depth',
             color='cluster',
             size='avg_branching',
-            hover_data=['khipu_id', 'PROVENANCE'],
+            hover_data=[
+                'khipu_id',
+                'PROVENANCE'],
             title='Size vs Hierarchy Depth',
-            labels={'num_nodes': 'Size (nodes)', 'depth': 'Depth (levels)', 'cluster': 'Cluster'},
-            color_continuous_scale='plasma'
-        )
+            labels={
+                'num_nodes': 'Size (nodes)',
+                'depth': 'Depth (levels)',
+                'cluster': 'Cluster'},
+            color_continuous_scale='plasma')
         fig_size.update_layout(height=500)
         st.plotly_chart(fig_size, width="stretch")
-    
+
     # Cluster distribution bar chart
     cluster_dist = filtered_data['cluster'].value_counts().sort_index()
     fig_bar = px.bar(
@@ -301,25 +344,33 @@ with tab1:
 # TAB 2: Geographic Analysis
 with tab2:
     st.markdown("### Geographic Distribution Map")
-    st.caption("📍 Showing all khipus in the database (filters applied to charts below)")
-    
-    # Use full dataset for map (not filtered) to show complete geographic distribution
+    st.caption(
+        "📍 Showing all khipus in the database (filters applied to charts below)")
+
+    # Use full dataset for map (not filtered) to show complete geographic
+    # distribution
     prov_stats = data.groupby('PROVENANCE').agg({
         'khipu_id': 'count',
         'has_pendant_summation': 'mean',
         'num_nodes': 'mean',
         'depth': 'mean'
     }).reset_index()
-    prov_stats.columns = ['Provenance', 'Count', 'Summation_Rate', 'Avg_Size', 'Avg_Depth']
-    
+    prov_stats.columns = [
+        'Provenance',
+        'Count',
+        'Summation_Rate',
+        'Avg_Size',
+        'Avg_Depth']
+
     # Add coordinates using fuzzy matching
     coords_list = prov_stats['Provenance'].apply(get_coords)
     prov_stats['Lat'] = coords_list.apply(lambda x: x[0])
     prov_stats['Lon'] = coords_list.apply(lambda x: x[1])
     prov_stats = prov_stats.dropna(subset=['Lat', 'Lon'])
-    
-    st.info(f"📍 Mapped {len(prov_stats)} locations with coordinates (Total khipus: {prov_stats['Count'].sum()})")
-    
+
+    st.info(
+        f"📍 Mapped {len(prov_stats)} locations with coordinates (Total khipus: {prov_stats['Count'].sum()})")
+
     # Create geographic scatter map
     if len(prov_stats) > 0:
         fig_map = px.scatter_geo(
@@ -355,9 +406,9 @@ with tab2:
         st.plotly_chart(fig_map, width="stretch")
     else:
         st.info("No geographic data available for selected filters")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         # Summation rate by provenance
         prov_sum = filtered_data.groupby('PROVENANCE').agg({
@@ -366,7 +417,7 @@ with tab2:
         }).reset_index()
         prov_sum.columns = ['Provenance', 'Summation Rate', 'Count']
         prov_sum = prov_sum.sort_values('Summation Rate', ascending=False)
-        
+
         fig_prov_sum = px.bar(
             prov_sum,
             x='Provenance',
@@ -377,10 +428,12 @@ with tab2:
             color='Summation Rate',
             color_continuous_scale='RdYlGn'
         )
-        fig_prov_sum.update_traces(texttemplate='n=%{text}', textposition='outside')
+        fig_prov_sum.update_traces(
+            texttemplate='n=%{text}',
+            textposition='outside')
         fig_prov_sum.update_layout(height=500, xaxis_tickangle=-45)
         st.plotly_chart(fig_prov_sum, width="stretch")
-    
+
     with col2:
         # Average features by provenance
         prov_features = filtered_data.groupby('PROVENANCE').agg({
@@ -388,12 +441,25 @@ with tab2:
             'depth': 'mean',
             'avg_branching': 'mean'
         }).reset_index()
-        
+
         fig_prov_feat = go.Figure()
-        fig_prov_feat.add_trace(go.Bar(name='Size', x=prov_features['PROVENANCE'], y=prov_features['num_nodes']))
-        fig_prov_feat.add_trace(go.Bar(name='Depth', x=prov_features['PROVENANCE'], y=prov_features['depth']*10))
-        fig_prov_feat.add_trace(go.Bar(name='Branching', x=prov_features['PROVENANCE'], y=prov_features['avg_branching']*10))
-        
+        fig_prov_feat.add_trace(
+            go.Bar(
+                name='Size',
+                x=prov_features['PROVENANCE'],
+                y=prov_features['num_nodes']))
+        fig_prov_feat.add_trace(
+            go.Bar(
+                name='Depth',
+                x=prov_features['PROVENANCE'],
+                y=prov_features['depth'] * 10))
+        fig_prov_feat.add_trace(
+            go.Bar(
+                name='Branching',
+                x=prov_features['PROVENANCE'],
+                y=prov_features['avg_branching'] *
+                10))
+
         fig_prov_feat.update_layout(
             title='Structural Features by Provenance (normalized)',
             xaxis_tickangle=-45,
@@ -401,9 +467,11 @@ with tab2:
             barmode='group'
         )
         st.plotly_chart(fig_prov_feat, width="stretch")
-    
+
     # Heatmap: Cluster × Provenance
-    contingency = pd.crosstab(filtered_data['cluster'], filtered_data['PROVENANCE'])
+    contingency = pd.crosstab(
+        filtered_data['cluster'],
+        filtered_data['PROVENANCE'])
     fig_heatmap = px.imshow(
         contingency,
         labels=dict(x="Provenance", y="Cluster", color="Count"),
@@ -416,23 +484,27 @@ with tab2:
 
 # TAB 3: Cluster Analysis
 with tab3:
-    selected_cluster = st.selectbox("Select Cluster for Detailed View", sorted(filtered_data['cluster'].unique()))
-    
+    selected_cluster = st.selectbox(
+        "Select Cluster for Detailed View", sorted(
+            filtered_data['cluster'].unique()))
+
     cluster_data = filtered_data[filtered_data['cluster'] == selected_cluster]
-    
+
     st.markdown(f"### Cluster {selected_cluster} - {len(cluster_data)} khipus")
-    
+
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Avg Size", f"{cluster_data['num_nodes'].mean():.0f}")
     with col2:
         st.metric("Avg Depth", f"{cluster_data['depth'].mean():.1f}")
     with col3:
-        st.metric("Summation Rate", f"{cluster_data['has_pendant_summation'].mean()*100:.1f}%")
-    
+        st.metric(
+            "Summation Rate",
+            f"{cluster_data['has_pendant_summation'].mean()*100:.1f}%")
+
     # Feature distributions
     col1, col2 = st.columns(2)
-    
+
     with col1:
         fig_size_dist = px.histogram(
             cluster_data,
@@ -444,7 +516,7 @@ with tab3:
         )
         fig_size_dist.update_layout(height=400)
         st.plotly_chart(fig_size_dist, width="stretch")
-    
+
     with col2:
         fig_numeric = px.histogram(
             cluster_data,
@@ -460,14 +532,14 @@ with tab3:
 # TAB 4: Feature Relationships
 with tab4:
     st.markdown("### Feature Correlation Analysis")
-    
+
     # Select features for correlation
-    numeric_features = ['num_nodes', 'depth', 'avg_branching', 'has_numeric', 
-                       'pendant_match_rate', 'num_white_boundaries']
-    
+    numeric_features = ['num_nodes', 'depth', 'avg_branching', 'has_numeric',
+                        'pendant_match_rate', 'num_white_boundaries']
+
     feature_x = st.selectbox("X-axis Feature", numeric_features, index=0)
     feature_y = st.selectbox("Y-axis Feature", numeric_features, index=1)
-    
+
     # Scatter plot with trendline
     fig_corr = px.scatter(
         filtered_data,
@@ -477,17 +549,17 @@ with tab4:
         trendline='ols',
         hover_data=['khipu_id', 'PROVENANCE'],
         title=f'{feature_x} vs {feature_y}',
-        labels={feature_x: feature_x.replace('_', ' ').title(), 
+        labels={feature_x: feature_x.replace('_', ' ').title(),
                 feature_y: feature_y.replace('_', ' ').title()},
         color_continuous_scale='viridis'
     )
     fig_corr.update_layout(height=600)
     st.plotly_chart(fig_corr, width="stretch")
-    
+
     # Correlation matrix
     st.markdown("### Feature Correlation Matrix")
     corr_matrix = filtered_data[numeric_features].corr()
-    
+
     fig_corr_matrix = px.imshow(
         corr_matrix,
         labels=dict(color="Correlation"),

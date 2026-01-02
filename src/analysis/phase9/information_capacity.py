@@ -15,12 +15,20 @@ References:
 - Phase 5: Color diversity = 26.8% of feature importance in functional classification
 """
 
-import pandas as pd
-import numpy as np
+import sys
 from pathlib import Path
-from typing import Dict
-from scipy.stats import entropy as scipy_entropy
-import json
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+from typing import Dict  # noqa: E402
+from scipy.stats import entropy as scipy_entropy  # noqa: E402
+import json  # noqa: E402
 
 
 class InformationCapacityAnalyzer:
@@ -33,11 +41,13 @@ class InformationCapacityAnalyzer:
     - Compression and redundancy properties
     """
 
-    def __init__(self, data_dir: Path = Path("data/processed")):
-        """Initialize with data directory."""
-        self.data_dir = Path(data_dir)
+    def __init__(self):
+        """Initialize with data directory from config."""
+        config = get_config()
+        self.data_dir = config.processed_dir
         self.output_dir = self.data_dir / "phase9" / "9.1_information_capacity"
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.config = config
 
         print("=" * 80)
         print("PHASE 9.1: INFORMATION CAPACITY & EFFICIENCY")
@@ -52,10 +62,12 @@ class InformationCapacityAnalyzer:
         data = {}
 
         # Load with explicit column name checking
-        data['structural'] = pd.read_csv(self.data_dir / "graph_structural_features.csv")
+        data['structural'] = pd.read_csv(
+            self.data_dir / "graph_structural_features.csv")
         print(f"  ✓ Structural features: {len(data['structural'])} khipus")
 
-        data['numeric'] = pd.read_csv(self.data_dir / "cord_numeric_values.csv")
+        data['numeric'] = pd.read_csv(
+            self.data_dir / "cord_numeric_values.csv")
         print(f"  ✓ Numeric values: {len(data['numeric'])} records")
 
         data['color'] = pd.read_csv(self.data_dir / "color_data.csv")
@@ -65,13 +77,15 @@ class InformationCapacityAnalyzer:
         data['hierarchy'] = pd.read_csv(self.data_dir / "cord_hierarchy.csv")
         print(f"  ✓ Hierarchy: {len(data['hierarchy'])} cords")
 
-        data['typology'] = pd.read_csv(self.data_dir / "phase8" / "administrative_typology.csv")
+        data['typology'] = pd.read_csv(
+            self.data_dir / "phase8" / "administrative_typology.csv")
         print(f"  ✓ Administrative typology: {len(data['typology'])} khipus")
 
         print()
         return data
 
-    def calculate_numeric_entropy(self, numeric_data: pd.DataFrame) -> pd.DataFrame:
+    def calculate_numeric_entropy(
+            self, numeric_data: pd.DataFrame) -> pd.DataFrame:
         """
         Calculate Shannon entropy of numeric value distributions per khipu.
 
@@ -119,12 +133,15 @@ class InformationCapacityAnalyzer:
 
         df_results = pd.DataFrame(results)
         print(f"  ✓ Calculated entropy for {len(df_results)} khipus")
-        print(f"  Mean entropy: {df_results['numeric_entropy_bits'].mean():.2f} bits")
-        print(f"  Mean entropy per cord: {df_results['numeric_entropy_per_cord'].mean():.3f} bits/cord")
+        print(
+            f"  Mean entropy: {df_results['numeric_entropy_bits'].mean():.2f} bits")
+        print(
+            f"  Mean entropy per cord: {df_results['numeric_entropy_per_cord'].mean():.3f} bits/cord")
 
         return df_results
 
-    def calculate_color_entropy(self, color_data: pd.DataFrame) -> pd.DataFrame:
+    def calculate_color_entropy(
+            self, color_data: pd.DataFrame) -> pd.DataFrame:
         """
         Calculate Shannon entropy of color distributions per khipu.
 
@@ -170,11 +187,13 @@ class InformationCapacityAnalyzer:
 
         df_results = pd.DataFrame(results)
         print(f"  ✓ Calculated color entropy for {len(df_results)} khipus")
-        print(f"  Mean color entropy: {df_results['color_entropy_bits'].mean():.2f} bits")
+        print(
+            f"  Mean color entropy: {df_results['color_entropy_bits'].mean():.2f} bits")
 
         return df_results
 
-    def calculate_structural_entropy(self, hierarchy_data: pd.DataFrame) -> pd.DataFrame:
+    def calculate_structural_entropy(
+            self, hierarchy_data: pd.DataFrame) -> pd.DataFrame:
         """
         Calculate entropy of structural patterns (branching, levels).
 
@@ -210,15 +229,18 @@ class InformationCapacityAnalyzer:
             })
 
         df_results = pd.DataFrame(results)
-        print(f"  ✓ Calculated structural entropy for {len(df_results)} khipus")
-        print(f"  Mean level entropy: {df_results['structural_level_entropy'].mean():.2f} bits")
+        print(
+            f"  ✓ Calculated structural entropy for {len(df_results)} khipus")
+        print(
+            f"  Mean level entropy: {df_results['structural_level_entropy'].mean():.2f} bits")
 
         return df_results
 
-    def calculate_total_information(self,
-                                   numeric_entropy: pd.DataFrame,
-                                   color_entropy: pd.DataFrame,
-                                   structural_entropy: pd.DataFrame) -> pd.DataFrame:
+    def calculate_total_information(
+            self,
+            numeric_entropy: pd.DataFrame,
+            color_entropy: pd.DataFrame,
+            structural_entropy: pd.DataFrame) -> pd.DataFrame:
         """
         Combine all entropy sources to estimate total information capacity.
 
@@ -227,7 +249,8 @@ class InformationCapacityAnalyzer:
         print("\nCalculating total information capacity...")
 
         # Merge all entropy measurements (lowercase khipu_id)
-        total = numeric_entropy.merge(color_entropy, on='khipu_id', how='outer')
+        total = numeric_entropy.merge(
+            color_entropy, on='khipu_id', how='outer')
         total = total.merge(structural_entropy, on='khipu_id', how='outer')
 
         # Fill NaN with 0 (khipus without certain data types)
@@ -247,13 +270,15 @@ class InformationCapacityAnalyzer:
         ).replace(0, 1)
 
         print(f"  ✓ Total information calculated for {len(total)} khipus")
-        print(f"  Mean total information: {total['total_information_bits'].mean():.2f} bits")
-        print(f"  Mean info per cord: {total['info_per_cord'].mean():.3f} bits/cord")
+        print(
+            f"  Mean total information: {total['total_information_bits'].mean():.2f} bits")
+        print(
+            f"  Mean info per cord: {total['info_per_cord'].mean():.3f} bits/cord")
 
         return total
 
     def calculate_redundancy(self, total_info: pd.DataFrame,
-                            structural_data: pd.DataFrame) -> pd.DataFrame:
+                             structural_data: pd.DataFrame) -> pd.DataFrame:
         """
         Calculate redundancy ratios: actual bits vs. minimum required.
 
@@ -298,8 +323,10 @@ class InformationCapacityAnalyzer:
         )
 
         print(f"  ✓ Redundancy calculated for {len(redundancy)} khipus")
-        print(f"  Mean redundancy ratio: {redundancy['redundancy_ratio'].mean():.2f}x")
-        print(f"  Mean compression efficiency: {redundancy['compression_efficiency'].mean():.2f}")
+        print(
+            f"  Mean redundancy ratio: {redundancy['redundancy_ratio'].mean():.2f}x")
+        print(
+            f"  Mean compression efficiency: {redundancy['compression_efficiency'].mean():.2f}")
 
         return redundancy
 
@@ -315,7 +342,8 @@ class InformationCapacityAnalyzer:
         # Numeric capacity
         all_numeric_values = data['numeric']['numeric_value'].dropna().unique()
         numeric_states = len(all_numeric_values)
-        numeric_capacity_bits = np.log2(numeric_states) if numeric_states > 0 else 0
+        numeric_capacity_bits = np.log2(
+            numeric_states) if numeric_states > 0 else 0
 
         # Color capacity
         all_colors = data['color']['color_cd_1'].dropna().unique()
@@ -329,7 +357,8 @@ class InformationCapacityAnalyzer:
 
         # System-wide bounds
         lower_bound = numeric_capacity_bits  # Just numeric
-        upper_bound = numeric_capacity_bits + color_capacity_bits + structural_capacity_bits
+        upper_bound = numeric_capacity_bits + \
+            color_capacity_bits + structural_capacity_bits
 
         bounds = {
             'numeric_states': int(numeric_states),
@@ -345,9 +374,12 @@ class InformationCapacityAnalyzer:
         }
 
         print("  ✓ System capacity bounds:")
-        print(f"    Numeric states: {bounds['numeric_states']} ({bounds['numeric_capacity_bits']:.1f} bits)")
-        print(f"    Color states: {bounds['color_states']} ({bounds['color_capacity_bits']:.1f} bits)")
-        print(f"    Structural capacity: {bounds['structural_capacity_bits']:.1f} bits")
+        print(
+            f"    Numeric states: {bounds['numeric_states']} ({bounds['numeric_capacity_bits']:.1f} bits)")
+        print(
+            f"    Color states: {bounds['color_states']} ({bounds['color_capacity_bits']:.1f} bits)")
+        print(
+            f"    Structural capacity: {bounds['structural_capacity_bits']:.1f} bits")
         print(f"    Total range: {bounds['capacity_range']}")
 
         return bounds
@@ -379,21 +411,25 @@ class InformationCapacityAnalyzer:
         print(f"  ✓ Analyzed {len(type_stats)} administrative types")
         print("\nTop 3 types by mean information:")
         top_types = type_stats.nlargest(3, ('total_information_bits', 'mean'))
-        print(top_types[[('total_information_bits', 'mean'), ('khipu_id', 'count')]])
+        print(
+            top_types[[('total_information_bits', 'mean'), ('khipu_id', 'count')]])
 
         return type_stats
 
     def save_results(self,
-                    capacity_data: pd.DataFrame,
-                    type_stats: pd.DataFrame,
-                    bounds: Dict):
+                     capacity_data: pd.DataFrame,
+                     type_stats: pd.DataFrame,
+                     bounds: Dict):
         """Save all Phase 9.1 results."""
         print("\n" + "=" * 80)
         print("SAVING RESULTS")
         print("=" * 80)
 
         # Per-khipu capacity metrics
-        capacity_data.to_csv(self.output_dir / "capacity_metrics.csv", index=False)
+        capacity_data.to_csv(
+            self.output_dir /
+            "capacity_metrics.csv",
+            index=False)
         print(f"  ✓ capacity_metrics.csv ({len(capacity_data)} khipus)")
 
         # By administrative type
@@ -415,7 +451,8 @@ class InformationCapacityAnalyzer:
         # Calculate entropy by modality
         numeric_entropy = self.calculate_numeric_entropy(data['numeric'])
         color_entropy = self.calculate_color_entropy(data['color'])
-        structural_entropy = self.calculate_structural_entropy(data['hierarchy'])
+        structural_entropy = self.calculate_structural_entropy(
+            data['hierarchy'])
 
         # Combine into total information
         total_info = self.calculate_total_information(
@@ -429,7 +466,8 @@ class InformationCapacityAnalyzer:
         bounds = self.calculate_capacity_bounds(data)
 
         # Analyze by administrative type
-        type_stats = self.analyze_by_administrative_type(redundancy, data['typology'])
+        type_stats = self.analyze_by_administrative_type(
+            redundancy, data['typology'])
 
         # Save all results
         self.save_results(redundancy, type_stats, bounds)
