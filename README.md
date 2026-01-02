@@ -1,6 +1,6 @@
 ﻿# Khipu Computational Analysis Toolkit
 
-**A comprehensive computational framework for analyzing Inka khipus from the Open Khipu Repository**
+**A comprehensive computational framework for analyzing Inka khipus**
 
 [![Status](https://img.shields.io/badge/Status-Complete-brightgreen)]()
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)]()
@@ -8,7 +8,7 @@
 
 ## Overview
 
-This standalone toolkit provides a complete computational analysis pipeline for studying khipu structure, numeric encoding, color semantics, and hierarchical patterns. Built as a research fork of the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository), it focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
+This standalone toolkit provides a complete computational analysis pipeline for studying khipu structure, numeric encoding, color semantics, and hierarchical patterns. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
 **This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work.
 
@@ -23,32 +23,44 @@ This standalone toolkit provides a complete computational analysis pipeline for 
 
 ### Key Statistics
 
-- 612 khipus analyzed across 9 comprehensive phases
-- 54,403 cords decoded with 68.2% coverage
-- 110,151 knots processed with 95.2% numeric values
-- 7 structural archetypes identified via clustering
-- 98% administrative function confirmed
-- 17,321 missing values predicted
-- 13 high-confidence anomalies detected
+- **619 khipus** analyzed across 9 comprehensive phases
+- **54,403 cords** decoded with 68.2% numeric coverage
+- **110,151 knots** processed with 95.2% success rate
+- **7 structural clusters** identified via k-means analysis
+- **73.8%** show pendant summation relationships
+- **27 anomalies** detected across structural and chromatic dimensions
+- **100+ datasets** generated for reproducible analysis
+
+### Project Phases (Complete)
+
+- **Phase 0:** Reconnaissance - Database exploration and viability assessment
+- **Phase 1:** Baseline Validation - Numeric decoding pipeline establishment
+- **Phase 2:** Extraction Infrastructure - Hierarchical structure and color data extraction
+- **Phase 3:** Summation Testing - Hypothesis validation for arithmetic relationships
+- **Phase 4:** Pattern Discovery - Clustering, motif mining, geographic analysis
+- **Phase 5:** Multi-Model Framework - Simultaneous hypothesis testing
+- **Phase 7:** ML Extensions - Machine learning for prediction and classification
+- **Phase 8:** Comparative Analysis - Chromatic features and administrative typology
+- **Phase 9:** Meta-Analysis - Stability testing and robustness validation
 
 ## Quick Start
 
 ### Prerequisites
 
-**1. Clone the Open Khipu Repository (OKR)**
+**1. Access the Open Khipu Repository Database**
 
-This toolkit requires access to the OKR database:
+This toolkit requires access to the Open Khipu Repository database:
 
 ```bash
 # In your projects directory (e.g., C:\code or ~/projects)
 git clone https://github.com/khipulab/open-khipu-repository.git
 ```
 
-**2. Clone this toolkit**
+**2. Clone or download this toolkit**
 
 ```bash
-# In the SAME parent directory as OKR
-git clone https://github.com/adafieno/khipu-computational-toolkit.git
+# In the SAME parent directory
+git clone [your-repository-url]
 ```
 
 **Expected directory structure:**
@@ -58,7 +70,7 @@ your-projects-directory/
     data/
        khipu.db           Database file
     ...
- khipu-computational-toolkit/   This repo
+ khipu-computational-toolkit/
      scripts/
      data/processed/
      ...
@@ -115,6 +127,7 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 ## Documentation
 
 - [**reports/**](reports/) - Phase reports documenting analysis progress (Phases 0-9)
+- [**visualizations/README.md**](visualizations/README.md) - Complete index of all 39 visualizations with descriptions
 - [**docs/API_REFERENCE.md**](docs/API_REFERENCE.md) - Complete API documentation for all modules
 - [**docs/ARCHITECTURE.md**](docs/ARCHITECTURE.md) - System architecture and design patterns
 - [**docs/CONTRIBUTING.md**](docs/CONTRIBUTING.md) - Contribution guidelines and development setup
@@ -125,20 +138,25 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ```
 khipu-computational-toolkit/
- scripts/              # Analysis scripts (26 production tools)
+ scripts/              # Analysis scripts (36 production tools)
     dashboard_app.py              # Interactive web dashboard
     interactive_3d_viewer.py      # 3D khipu visualization
     detect_anomalies.py           # Outlier detection
     predict_missing_values.py     # ML prediction
+    visualize_phase*.py           # Phase visualization generators
     ...
  data/
-    processed/        # Analysis outputs (40+ CSV files)
+    processed/        # Analysis outputs (100+ files)
     graphs/           # NetworkX graph structures
- visualizations/       # 100+ publication-quality plots
-    clusters/
-    geographic/
-    ml_results/
-    motifs/
+ visualizations/       # 39 visualization files (organized by phase)
+    phase1_baseline/
+    phase2_extraction/
+    phase3_summation/
+    phase4_patterns/
+    phase5_multimodel/
+    phase7_ml/
+    phase8_comparative/
+    phase9_stability/
  notebooks/            # 4 Jupyter notebooks
     01_cluster_explorer.ipynb
     02_geographic_patterns.ipynb
@@ -171,11 +189,10 @@ khipu-computational-toolkit/
 -  Geographic correlation analysis
 
 ### Data Outputs
-- **40+ processed CSV files** - Analysis results
-- **100+ PNG visualizations** - Publication-ready plots
-- **10 comprehensive reports** - Phase documentation (Phases 0-9)
-- **Graph structures** - NetworkX pickled graphs
-- **ML models** - Trained classifiers
+- **100+ processed data files** - Analysis results (CSV, JSON, pickled graphs)
+- **39 visualization files** - Analysis plots organized by research phase
+- **10 comprehensive reports** - Phase documentation (Phases 0-9) with detailed findings
+- **36 analysis scripts** - Reproducible pipeline for all analyses
 
 ## Usage Examples
 
@@ -203,14 +220,22 @@ python scripts/predict_missing_values.py
 
 Predicts missing numeric values using ML, sibling patterns, and structural constraints.
 
-### Visualization
+### Visualization Generation
 
 ```bash
+# Generate phase-specific visualizations
+python scripts/visualize_phase1_baseline.py
+python scripts/visualize_phase2_extraction.py
+python scripts/visualize_phase3_summation.py
+python scripts/visualize_phase5_hypotheses.py
+python scripts/visualize_phase9_meta.py
+
+# Additional visualizations
 python scripts/visualize_clusters.py
 python scripts/visualize_geographic_heatmap.py
 ```
 
-Generates publication-quality plots.
+Generates comprehensive analysis plots organized by research phase.
 
 ## Database Configuration
 
@@ -254,36 +279,38 @@ flake8 src/ scripts/
 If you use this toolkit in your research, please cite:
 
 ```
-Fieno, A. (2025). Khipu Computational Analysis Toolkit.
-https://github.com/adafieno/khipu-computational-toolkit
+Da Fieno Delucchi, A. (2026). Khipu Computational Analysis Toolkit.
 ```
 
 And the Open Khipu Repository:
 
 ```
 Urton, G., & Brezine, C. (2007-present). The Khipu Database Project.
-https://github.com/khipulab/open-khipu-repository
+https://khipukamayuq.fas.harvard.edu/
 ```
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details.
 
-This toolkit is independent of the Open Khipu Repository but designed to work with its data.
+This toolkit is designed to work with data from the Open Khipu Repository.
 
 ## Contributing
 
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new features
-4. Submit a pull request
+This is a research project and contributions are welcome. To contribute:
+
+1. Review existing documentation in [docs/](docs/)
+2. Follow the code style guidelines (Black formatting, flake8 linting)
+3. Add tests for new analytical features
+4. Document new hypotheses or analytical approaches
+5. Ensure reproducibility by including data provenance
+
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed guidelines.
 
 ## Contact
 
 - **Author:** Agustín Da Fieno Delucchi
-- **GitHub:** [@adafieno](https://github.com/adafieno)
-- **Issues:** [Report bugs or request features](https://github.com/adafieno/khipu-computational-toolkit/issues)
+- **Project:** Khipu Computational Analysis Toolkit
 
 ## Acknowledgments
 

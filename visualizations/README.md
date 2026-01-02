@@ -346,4 +346,4 @@ This folder contains all visualizations generated during the Khipu analysis proj
 ---
 
 **Contact:** Agustín Da Fieno Delucchi  
-**Repository:** Khipu Computational Analysis Toolkit (Research Fork of Open Khipu Repository)
+**Repository:** Khipu Computational Analysis Toolkit
