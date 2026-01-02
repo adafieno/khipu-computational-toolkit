@@ -114,8 +114,11 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ## Documentation
 
-- [**OVERVIEW.md**](OVERVIEW.md) - Detailed project overview and methodology
-- [**reports/**](reports/README.md) - Phase reports documenting analysis progress (Phases 0-7)
+- [**reports/**](reports/) - Phase reports documenting analysis progress (Phases 0-9)
+- [**docs/API_REFERENCE.md**](docs/API_REFERENCE.md) - Complete API documentation for all modules
+- [**docs/ARCHITECTURE.md**](docs/ARCHITECTURE.md) - System architecture and design patterns
+- [**docs/CONTRIBUTING.md**](docs/CONTRIBUTING.md) - Contribution guidelines and development setup
+- [**docs/FAQ.md**](docs/FAQ.md) - Frequently asked questions and troubleshooting
 - [**docs/VISUALIZATIONS_GUIDE.md**](docs/VISUALIZATIONS_GUIDE.md) - 78-page comprehensive visualization guide
 
 ## Repository Structure
@@ -147,7 +150,7 @@ khipu-computational-toolkit/
     graph/            # Graph algorithms
     utils/            # Utilities
  models/               # Trained ML models
- reports/              # Phase reports (0-7)
+ reports/              # Phase reports (0-9)
  docs/                 # Documentation
 ```
 
@@ -170,7 +173,7 @@ khipu-computational-toolkit/
 ### Data Outputs
 - **40+ processed CSV files** - Analysis results
 - **100+ PNG visualizations** - Publication-ready plots
-- **8 comprehensive reports** - Phase documentation
+- **10 comprehensive reports** - Phase documentation (Phases 0-9)
 - **Graph structures** - NetworkX pickled graphs
 - **ML models** - Trained classifiers
 

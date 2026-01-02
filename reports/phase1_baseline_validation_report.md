@@ -92,7 +92,7 @@ Numeric coverage is consistent across provenances, suggesting standardized encod
 ## Output Files
 
 ### 1. cord_numeric_values.csv
-**Location:** `data/processed/cord_numeric_values.csv`  
+**Location:** `data/processed/phase1/cord_numeric_values.csv`  
 **Records:** 54,403 cords  
 **Fields:**
 - `KHIPU_ID`, `CORD_ID`

@@ -105,7 +105,7 @@ Phase 2 built comprehensive extraction infrastructure for cords, knots, colors, 
 
 ### Cord Hierarchy Extraction
 
-**Output:** `data/processed/cord_hierarchy.csv`
+**Output:** `data/processed/phase2/cord_hierarchy.csv`
 
 | Metric | Value |
 |--------|-------|
@@ -124,7 +124,7 @@ Phase 2 built comprehensive extraction infrastructure for cords, knots, colors, 
 
 ### Knot Data Extraction
 
-**Output:** `data/processed/knot_data.csv`
+**Output:** `data/processed/phase2/knot_data.csv`
 
 | Metric | Value |
 |--------|-------|
@@ -147,7 +147,7 @@ Phase 2 built comprehensive extraction infrastructure for cords, knots, colors, 
 
 ### Color Data Extraction
 
-**Output:** `data/processed/color_data.csv`, `data/processed/white_cords.csv`
+**Output:** `data/processed/phase2/color_data.csv`, `data/processed/phase2/white_cords.csv`
 
 | Metric | Value |
 |--------|-------|

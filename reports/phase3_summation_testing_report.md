@@ -167,7 +167,7 @@ This highlights the diversity of khipu information encoding.
 
 ### summation_test_results.csv
 
-**Location:** `data/processed/summation_test_results.csv`  
+**Location:** `data/processed/phase3/summation_test_results.csv`  
 **Records:** 619 khipus  
 **Fields:**
 

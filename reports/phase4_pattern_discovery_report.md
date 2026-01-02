@@ -68,8 +68,8 @@ Phase 4 completes pattern discovery analysis using the extraction infrastructure
 These khipus represent "gold standard" examples of consistent summation encoding and can serve as templates for pattern mining algorithms.
 
 **Output Files:**
-- `data/processed/high_match_khipus.csv` (9 records)
-- `data/processed/high_match_analysis.json` (detailed analysis)
+- `data/processed/phase4/high_match_khipus.csv` (9 records)
+- `data/processed/phase4/high_match_analysis.json` (detailed analysis)
 
 ---
 
@@ -132,8 +132,8 @@ These khipus represent "gold standard" examples of consistent summation encoding
    - Hierarchies deeper than 3 levels are uncommon in the dataset
 
 **Output Files:**
-- `data/processed/hierarchical_summation_results.csv` (619 records)
-- `data/processed/hierarchical_summation_analysis.json` (detailed analysis)
+- `data/processed/phase4/hierarchical_summation_results.csv` (619 records)
+- `data/processed/phase4/hierarchical_summation_analysis.json` (detailed analysis)
 
 ---
 
@@ -179,10 +179,10 @@ These khipus represent "gold standard" examples of consistent summation encoding
 - Same accountant or workshop traditions
 
 **Output Files:**
-- `data/processed/graph_structural_features.csv` (619 khipus, 14 features)
-- `data/processed/graph_similarity_matrix.csv` (619×619 similarity matrix)
-- `data/processed/most_similar_khipu_pairs.csv` (top 20 pairs)
-- `data/processed/graph_similarity_analysis.json` (statistics)
+- `data/processed/phase4/graph_structural_features.csv` (619 khipus, 14 features)
+- `data/processed/phase4/graph_similarity_matrix.csv` (619×619 similarity matrix)
+- `data/processed/phase4/most_similar_khipu_pairs.csv` (top 20 pairs)
+- `data/processed/phase4/graph_similarity_analysis.json` (statistics)
 
 ---
 
@@ -252,10 +252,10 @@ These khipus represent "gold standard" examples of consistent summation encoding
 - Need for content-based rather than geography-based clustering
 
 **Output Files:**
-- `data/processed/cluster_assignments_kmeans.csv` (612 khipus)
-- `data/processed/cluster_statistics_kmeans.json` (7 clusters)
-- `data/processed/cluster_assignments_hierarchical.csv` (612 khipus, alternative clustering)
-- `data/processed/cluster_pca_coordinates.csv` (visualization coordinates)
+- `data/processed/phase4/cluster_assignments_kmeans.csv` (612 khipus)
+- `data/processed/phase4/cluster_statistics_kmeans.json` (7 clusters)
+- `data/processed/phase4/cluster_assignments_hierarchical.csv` (612 khipus, alternative clustering)
+- `data/processed/phase4/cluster_pca_coordinates.csv` (visualization coordinates)
 
 ---
 

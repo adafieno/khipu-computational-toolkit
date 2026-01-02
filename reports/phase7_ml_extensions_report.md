@@ -983,14 +983,14 @@ python scripts/visualize_ml_results.py
 **Check 1: Anomaly Detection**
 ```bash
 # Should see 13 high-confidence anomalies
-wc -l data/processed/high_confidence_anomalies.csv
+wc -l data/processed/phase7/high_confidence_anomalies.csv
 # Output: 14 (13 anomalies + 1 header)
 ```
 
 **Check 2: Sequence Prediction**
 ```bash
 # Should see 17,321 predictions
-wc -l data/processed/cord_value_predictions.csv
+wc -l data/processed/phase7/cord_value_predictions.csv
 # Output: 17,322 (17,321 predictions + 1 header)
 ```
 
