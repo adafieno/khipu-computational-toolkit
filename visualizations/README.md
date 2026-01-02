@@ -2,7 +2,7 @@
 
 **Project:** Khipu Computational Analysis Toolkit  
 **Last Updated:** January 1, 2026  
-**Total Visualizations:** 39 files
+**Total Files:** 39 visualization/data files (+ this README = 40 total)
 
 ## Directory Structure
 
@@ -112,7 +112,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 **Reports:** [reports/phase4_pattern_discovery_progress.md](../reports/phase4_pattern_discovery_progress.md)  
 **Purpose:** Discover structural patterns, motifs, and geographic correlations across the khipu corpus
 
-### Visualizations (11 files)
+### Visualizations (8 files)
 
 #### Clustering Analysis
 1. **cluster_pca_plot.png**
@@ -125,38 +125,34 @@ This folder contains all visualizations generated during the Khipu analysis proj
    - Demonstrates distribution across structural groups
    - Key insight: Clusters range from 34 to 166 khipus
 
-3. **cluster_summary_table.csv**
-   - Tabular data with cluster statistics (centroids, feature means, etc.)
-   - Provides quantitative summary of cluster characteristics
-
-4. **feature_distributions.png**
+3. **feature_distributions.png**
    - Box plots showing distribution of key features across clusters
    - Compares structural properties (depth, cord count, numeric density) by cluster
    - Key insight: Each cluster has distinct structural signature
 
-5. **provenance_pca_plot.png**
+4. **provenance_pca_plot.png**
    - PCA projection with points colored by geographic provenance
    - Shows geographic clustering vs. structural similarity
    - Key insight: Some provenances cluster together, suggesting regional styles
 
 #### Geographic Analysis
-6. **provenance_features.png**
+5. **provenance_features.png**
    - Heatmap showing feature values aggregated by geographic provenance
    - Compares structural characteristics across regions
    - Key insight: Coastal vs. highland differences in khipu construction
 
-7. **summation_by_provenance.png**
+6. **summation_by_provenance.png**
    - Bar chart showing summation match rates by provenance
    - Tests whether certain regions used summation more consistently
    - Key insight: High summation rates across most provenances (65-85%)
 
 #### Motif Mining
-8. **motif_frequencies.png**
+7. **motif_frequencies.png**
    - Bar chart showing frequency of discovered structural motifs
    - Identifies recurring patterns in cord arrangements
    - Key insight: Several motifs appear in >100 khipus
 
-9. **universal_motifs.png**
+8. **universal_motifs.png**
    - Visualization of the most common motifs across all khipus
    - Shows structural patterns that transcend geographic boundaries
    - Key insight: 3-4 "universal" motifs found in >30% of corpus
@@ -197,7 +193,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 **Report:** [reports/phase7_ml_extensions_report.md](../reports/phase7_ml_extensions_report.md)  
 **Purpose:** Apply supervised and unsupervised machine learning to predict missing values, classify functions, and detect anomalies
 
-### Visualizations (5 files)
+### Visualizations (4 files)
 
 1. **anomaly_overview.png**
    - Multi-panel visualization of anomaly detection results
@@ -219,9 +215,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
    - Tests ability to predict missing cord counts, depth, etc.
    - Key insight: R² = 0.71 for cord count prediction
 
-5. **ML_RESULTS_SUMMARY.txt**
-   - Text file with detailed performance metrics, model parameters, and results
-   - Provides quantitative summary of all ML experiments
+
 
 ---
 
@@ -298,7 +292,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 
 2. **Descriptive Naming:** File names describe the visualization content rather than generic labels
 
-3. **Consistency:** All PNG files are 300 DPI, suitable for publication
+3. **Consistency:** All PNG files are generated at 300 DPI
 
 4. **Traceability:** Each visualization can be traced to:
    - Source data file in `data/processed/`
@@ -329,10 +323,10 @@ This folder contains all visualizations generated during the Khipu analysis proj
 - Phase 4 and 5 visualizations show pattern discovery and multi-hypothesis testing
 - Phase 7-9 visualizations demonstrate advanced analytical methods
 
-### For Publications
-- All PNG files are high-resolution (300 DPI) and publication-ready
-- Each visualization includes clear axis labels, legends, and titles
-- Multi-panel figures are designed for journal submission (e.g., 2x2 or 1x4 layouts)
+### For Analysis
+- All PNG files are high-resolution (300 DPI)
+- Each visualization includes axis labels, legends, and titles
+- Multi-panel figures use standard layouts (e.g., 2x2 or 1x4 grids)
 
 ### For Reproduction
 - Each visualization is generated from processed CSV/JSON data in `data/processed/`
