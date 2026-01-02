@@ -6,14 +6,20 @@ Generates 4 visualizations from actual Phase 9 meta-analysis results.
 
 import sys
 from pathlib import Path
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import json
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
 
-OUTPUT_DIR = Path("visualizations/phase9")
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
+import json  # noqa: E402
+
+config = get_config()
+OUTPUT_DIR = config.root_dir / "visualizations" / "phase9"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 sns.set_style("whitegrid")
@@ -25,7 +31,7 @@ def plot_information_capacity():
     """Plot information capacity metrics."""
     print("Generating information capacity metrics...")
     
-    df = pd.read_csv("data/processed/phase9/9.1_information_capacity/capacity_metrics.csv")
+    df = pd.read_csv(config.processed_dir / "phase9" / "9.1_information_capacity" / "capacity_metrics.csv")
     
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
@@ -58,8 +64,8 @@ def plot_robustness_analysis():
     """Plot robustness and error sensitivity."""
     print("Generating robustness analysis...")
     
-    df_metrics = pd.read_csv("data/processed/phase9/9.2_robustness/robustness_metrics.csv")
-    df_error = pd.read_csv("data/processed/phase9/9.2_robustness/error_sensitivity.csv")
+    df_metrics = pd.read_csv(config.processed_dir / "phase9" / "9.2_robustness" / "robustness_metrics.csv")
+    df_error = pd.read_csv(config.processed_dir / "phase9" / "9.2_robustness" / "error_sensitivity.csv")
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
@@ -108,10 +114,10 @@ def plot_stability_testing():
     """Plot stability and cross-validation results."""
     print("Generating stability test results...")
     
-    with open("data/processed/phase9/9.9_stability/stability_summary.json", "r") as f:
+    with open(config.processed_dir / "phase9" / "9.9_stability" / "stability_summary.json", "r") as f:
         stability = json.load(f)
     
-    with open("data/processed/phase9/9.9_stability/cross_validation_results.json", "r") as f:
+    with open(config.processed_dir / "phase9" / "9.9_stability" / "cross_validation_results.json", "r") as f:
         cv_results = json.load(f)
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -151,7 +157,7 @@ def plot_stability_testing():
         axes[0, 1].grid(alpha=0.3)
     
     # Panel 3: Feature ablation results
-    df_ablation = pd.read_csv("data/processed/phase9/9.9_stability/feature_ablation_results.csv")
+    df_ablation = pd.read_csv(config.processed_dir / "phase9" / "9.9_stability" / "feature_ablation_results.csv")
     top_features = df_ablation.nsmallest(7, 'stability')  # Lower stability = more important
     axes[1, 0].barh(top_features['ablated_feature'], (1 - top_features['stability']) * 100,
                     color='coral', edgecolor='black', alpha=0.7)
@@ -160,7 +166,7 @@ def plot_stability_testing():
     axes[1, 0].grid(axis='x', alpha=0.3)
     
     # Panel 4: Data masking sensitivity
-    df_masking = pd.read_csv("data/processed/phase9/9.9_stability/data_masking_results.csv")
+    df_masking = pd.read_csv(config.processed_dir / "phase9" / "9.9_stability" / "data_masking_results.csv")
     axes[1, 1].plot(df_masking['masking_level'] * 100, 
                     (1 - df_masking['drift']) * 100,
                     marker='o', linewidth=2, color='mediumseagreen', markersize=8)
@@ -182,13 +188,13 @@ def plot_anomaly_taxonomy():
     print("Generating anomaly taxonomy...")
     
     # Check if anomaly data exists in phase 9
-    anomaly_path = Path("data/processed/phase9/9.7_anomaly_taxonomy")
+    anomaly_path = config.processed_dir / "phase9" / "9.7_anomaly_taxonomy"
     if not anomaly_path.exists():
         print("  [SKIP] Anomaly taxonomy data not found")
         return
     
     # Use existing anomaly data from phase 7
-    df_anomalies = pd.read_csv("data/processed/phase7/anomaly_detection_results.csv")
+    df_anomalies = pd.read_csv(config.get_processed_file("anomaly_detection_results.csv", phase=7))
     
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     

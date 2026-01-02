@@ -7,13 +7,21 @@ Generate visualizations for:
 3. Provenance comparison charts
 """
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+import sys
 from pathlib import Path
-import sqlite3
-import json
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
+import sqlite3  # noqa: E402
+import json  # noqa: E402
 
 # Set style
 sns.set_style("whitegrid")
@@ -25,12 +33,13 @@ def load_geographic_data():
     """Load geographic correlation data."""
     print("Loading geographic data...")
     
-    with open("data/processed/geographic_correlation_analysis.json", "r") as f:
+    config = get_config()
+    with open(config.get_processed_file("geographic_correlation_analysis.json"), "r") as f:
         geo_data = json.load(f)
     
-    summation_data = pd.read_csv("data/processed/summation_test_results.csv")
+    summation_data = pd.read_csv(config.get_processed_file("summation_test_results.csv"))
     
-    conn = sqlite3.connect("khipu.db")
+    conn = sqlite3.connect(config.get_database_path())
     provenance = pd.read_sql_query(
         "SELECT KHIPU_ID, PROVENANCE FROM khipu_main", 
         conn
@@ -131,8 +140,9 @@ def plot_provenance_feature_comparison(data, output_dir):
     print("\nCreating provenance feature comparison...")
     
     # Load features
-    features = pd.read_csv("data/processed/graph_structural_features.csv")
-    conn = sqlite3.connect("khipu.db")
+    config = get_config()
+    features = pd.read_csv(config.get_processed_file("graph_structural_features.csv"))
+    conn = sqlite3.connect(config.get_database_path())
     provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
     conn.close()
     
@@ -210,7 +220,8 @@ def plot_motif_frequencies(output_dir):
     """Create motif frequency charts."""
     print("\nCreating motif frequency plots...")
     
-    with open("data/processed/motif_mining_results.json", "r") as f:
+    config = get_config()
+    with open(config.get_processed_file("motif_mining_results.json"), "r") as f:
         motif_data = json.load(f)
     
     # Extract cluster motif counts
@@ -272,7 +283,8 @@ def plot_universal_motifs(output_dir):
     """Create visualization of universal motifs."""
     print("\nCreating universal motifs plot...")
     
-    with open("data/processed/motif_mining_results.json", "r") as f:
+    config = get_config()
+    with open(config.get_processed_file("motif_mining_results.json"), "r") as f:
         motif_data = json.load(f)
     
     universal = motif_data['universal_motifs']['universal_branching']

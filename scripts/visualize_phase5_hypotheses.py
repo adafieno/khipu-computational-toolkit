@@ -6,14 +6,20 @@ Generates 3 visualizations from actual Phase 5 hypothesis testing results.
 
 import sys
 from pathlib import Path
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import json
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
 
-OUTPUT_DIR = Path("visualizations/phase5")
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
+import json  # noqa: E402
+
+config = get_config()
+OUTPUT_DIR = config.root_dir / "visualizations" / "phase5"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 sns.set_style("whitegrid")
@@ -25,7 +31,7 @@ def plot_color_hypothesis_tests():
     """Plot results from color hypothesis testing."""
     print("Generating color hypothesis test results...")
     
-    with open("data/processed/phase5/color_hypothesis_tests.json", "r") as f:
+    with open(config.get_processed_file("color_hypothesis_tests.json", phase=5), "r") as f:
         data = json.load(f)
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -93,7 +99,7 @@ def plot_function_classification():
     """Plot khipu function classification distribution."""
     print("Generating function classification distribution...")
     
-    df = pd.read_csv("data/processed/phase5/khipu_function_classification.csv")
+    df = pd.read_csv(config.get_processed_file("khipu_function_classification.csv", phase=5))
     
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     
@@ -138,7 +144,7 @@ def plot_geographic_correlations():
     """Plot geographic-cluster correlations."""
     print("Generating geographic correlation analysis...")
     
-    with open("data/processed/phase5/geographic_correlation_analysis.json", "r") as f:
+    with open(config.get_processed_file("geographic_correlation_analysis.json", phase=5), "r") as f:
         data = json.load(f)
     
     fig, ax = plt.subplots(figsize=(12, 8))

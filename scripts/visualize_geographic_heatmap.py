@@ -10,9 +10,18 @@ Creates interactive geographic visualization of khipu distribution and patterns:
 Usage: python scripts/visualize_geographic_heatmap.py
 """
 
-import pandas as pd
-import folium
-from folium.plugins import HeatMap
+import sys
+from pathlib import Path
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import folium  # noqa: E402
+from folium.plugins import HeatMap  # noqa: E402
 
 # Provenance location data (approximate coordinates from archaeological sites)
 # Source: Archaeological records and literature on Inka khipus
@@ -46,8 +55,9 @@ def load_khipu_data():
     """Load and aggregate khipu data by provenance."""
     import sqlite3
     
-    summation = pd.read_csv("data/processed/phase3/summation_test_results.csv")
-    clusters = pd.read_csv("data/processed/phase4/cluster_assignments_kmeans.csv")  # Already has structural features
+    config = get_config()
+    summation = pd.read_csv(config.get_processed_file("summation_test_results.csv", phase=3))
+    clusters = pd.read_csv(config.get_processed_file("cluster_assignments_kmeans.csv", phase=4))  # Already has structural features
     
     # Get provenance from database
     conn = sqlite3.connect("data/khipu.db")

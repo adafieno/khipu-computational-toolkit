@@ -9,12 +9,20 @@ Generate comprehensive visualizations for Phase 8 results:
 5. Confidence score analysis
 """
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+import sys
 from pathlib import Path
-import json
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
+import json  # noqa: E402
 
 # Set style
 sns.set_style("whitegrid")
@@ -25,10 +33,13 @@ plt.rcParams['font.size'] = 10
 class Phase8Visualizer:
     """Generate visualizations for Phase 8 results."""
     
-    def __init__(self, data_dir: Path = Path("data/processed/phase8"),
-                 output_dir: Path = Path("visualizations/phase8")):
-        self.data_dir = Path(data_dir)
-        self.output_dir = Path(output_dir)
+    def __init__(self, data_dir: Path = None,
+                 output_dir: Path = None):
+        config = get_config()
+        self.data_dir = data_dir if data_dir else config.processed_dir / "phase8"
+        self.output_dir = output_dir if output_dir else config.root_dir / "visualizations" / "phase8"
+        self.data_dir = Path(self.data_dir)
+        self.output_dir = Path(self.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         print(f"Loading Phase 8 results from: {self.data_dir}")
