@@ -133,25 +133,33 @@ def load_data():
         import sqlite3
         
         # Load CSV files (cluster_assignments already has structural features)
-        clusters = pd.read_csv("data/processed/cluster_assignments_kmeans.csv")
-        summation = pd.read_csv("data/processed/summation_test_results.csv")
-        pca = pd.read_csv("data/processed/cluster_pca_coordinates.csv")
-        
-        # Load provenance from database
-        conn = sqlite3.connect("khipu.db")
-        provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
-        conn.close()
+        clusters = pd.read_csv("data/processed/phase4/cluster_assignments_kmeans.csv")
+        summation = pd.read_csv("data/processed/phase3/summation_test_results.csv")
+        pca = pd.read_csv("data/processed/phase4/cluster_pca_coordinates.csv")
         
         # Merge data
         data = clusters.merge(
             summation, on='khipu_id', how='left'
         ).merge(
             pca, on='khipu_id', how='left'
-        ).merge(
-            provenance, left_on='khipu_id', right_on='KHIPU_ID', how='left'
         )
         
-        data['PROVENANCE'] = data['PROVENANCE'].fillna('Unknown')
+        # Try to load provenance from database if available
+        try:
+            import os
+            if os.path.exists("data/khipu.db"):
+                conn = sqlite3.connect("data/khipu.db")
+                provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
+                conn.close()
+                data = data.merge(provenance, left_on='khipu_id', right_on='KHIPU_ID', how='left')
+        except:
+            pass
+        
+        # Add PROVENANCE column if it doesn't exist
+        if 'PROVENANCE' not in data.columns:
+            data['PROVENANCE'] = 'Unknown'
+        else:
+            data['PROVENANCE'] = data['PROVENANCE'].fillna('Unknown')
         
         return data
     except FileNotFoundError as e:

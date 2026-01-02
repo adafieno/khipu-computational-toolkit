@@ -44,22 +44,29 @@ PROVENANCE_LOCATIONS = {
 
 def load_khipu_data():
     """Load and aggregate khipu data by provenance."""
-    hierarchy = pd.read_csv("data/processed/cord_hierarchy.csv")
-    summation = pd.read_csv("data/processed/summation_test_results.csv")
-    features = pd.read_csv("data/processed/graph_structural_features.csv")
-    clusters = pd.read_csv("data/processed/cluster_assignments_kmeans.csv")
+    import sqlite3
     
-    # Get provenance for each khipu
-    provenance = hierarchy[['KHIPU_ID', 'PROVENANCE']].drop_duplicates()
+    summation = pd.read_csv("data/processed/phase3/summation_test_results.csv")
+    clusters = pd.read_csv("data/processed/phase4/cluster_assignments_kmeans.csv")  # Already has structural features
     
-    # Merge data
-    data = provenance.merge(summation, left_on='KHIPU_ID', right_on='khipu_id', how='left')
-    data = data.merge(features, on='khipu_id', how='left')
-    data = data.merge(clusters, on='khipu_id', how='left')
+    # Get provenance from database
+    conn = sqlite3.connect("data/khipu.db")
+    provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
+    conn.close()
+    
+    # Normalize KHIPU_ID to khipu_id for merging
+    provenance['khipu_id'] = provenance['KHIPU_ID']
+    
+    # Merge data (clusters already has structural features, no need for separate features file)
+    data = provenance.merge(summation, on='khipu_id', how='inner')
+    data = data.merge(clusters, on='khipu_id', how='inner')
     
     # Clean provenance names
     data['PROVENANCE'] = data['PROVENANCE'].fillna('Unknown')
     data = data[data['PROVENANCE'] != 'Unknown']
+    
+    print(f"Available columns: {list(data.columns)}")
+    print(f"Data shape: {data.shape}")
     
     return data
 

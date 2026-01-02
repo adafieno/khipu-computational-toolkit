@@ -27,7 +27,7 @@ st.title("🧶 Interactive 3D Khipu Structure Viewer")
 @st.cache_data
 def get_khipu_list():
     """Get list of all available khipus with metadata."""
-    conn = sqlite3.connect("khipu.db")
+    conn = sqlite3.connect("data/khipu.db")
     # Get khipu metadata
     khipu_df = pd.read_sql_query("""
         SELECT KHIPU_ID, PROVENANCE 
@@ -37,7 +37,7 @@ def get_khipu_list():
     conn.close()
     
     # Get cord counts from hierarchy
-    hierarchy = pd.read_csv("data/processed/cord_hierarchy.csv")
+    hierarchy = pd.read_csv("data/processed/phase2/cord_hierarchy.csv")
     cord_counts = hierarchy.groupby('KHIPU_ID').size().reset_index(name='cord_count')
     
     # Merge
@@ -50,8 +50,8 @@ def get_khipu_list():
 @st.cache_data
 def load_khipu_data(khipu_id):
     """Load hierarchical structure and values for a khipu."""
-    hierarchy = pd.read_csv("data/processed/cord_hierarchy.csv")
-    numeric_values = pd.read_csv("data/processed/cord_numeric_values.csv")
+    hierarchy = pd.read_csv("data/processed/phase2/cord_hierarchy.csv")
+    numeric_values = pd.read_csv("data/processed/phase1/cord_numeric_values.csv")
     
     # Filter for specific khipu
     khipu_cords = hierarchy[hierarchy['KHIPU_ID'] == khipu_id].copy()

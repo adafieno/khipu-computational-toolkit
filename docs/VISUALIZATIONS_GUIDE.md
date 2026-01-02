@@ -8,6 +8,9 @@ This guide explains how to use the advanced visualization tools created for the 
 
 A comprehensive Streamlit web application for exploring khipu data with real-time filtering and interactive visualizations.
 
+![Dashboard Overview](images/dashboard_overview.png)
+*The main dashboard interface showing PCA scatter plot and cluster distribution*
+
 ### Features:
 - **Real-time Filtering:** Select clusters, provenances, size ranges, and summation patterns
 - **Multi-tab Interface:**
@@ -17,6 +20,10 @@ A comprehensive Streamlit web application for exploring khipu data with real-tim
   - **Features:** Correlation analysis and feature relationships
 - **Data Export:** Download filtered data and summary statistics as CSV
 - **Geographic Map:** Plotly scatter_geo showing complete distribution with fuzzy provenance matching
+
+### Requirements:
+- Database file must be present at `data/khipu.db` (contains provenance data)
+- If database is missing, provenance data will show as "Unknown"
 
 ### Usage:
 ```bash
@@ -30,6 +37,9 @@ The dashboard will open in your default web browser at `http://localhost:8501`
 - Switch between **tabs** to explore different aspects of the data
 - **Hover** over plot elements for detailed information
 - Use **export buttons** at the bottom to download filtered data
+
+![Dashboard Geographic Tab](images/dashboard_geographic.png)
+*Geographic tab showing khipu distribution across the Andes region*
 
 ---
 
@@ -63,6 +73,9 @@ python scripts/visualize_3d_khipu.py --khipu-id 1000000
 ### 🌟 Interactive 3D Viewer (NEW)
 
 **File:** `scripts/interactive_3d_viewer.py`
+![3D Viewer Interface](images/3d_viewer_interface.png)
+*Interactive 3D viewer showing hierarchical khipu structure with color-coded cord levels*
+
 
 Streamlit-based web interface for browsing 3D khipu structures with dropdown selection.
 
@@ -73,6 +86,9 @@ Streamlit-based web interface for browsing 3D khipu structures with dropdown sel
 - **Color modes:** Switch between numeric value and hierarchy level coloring
 - **Provenance display:** See location and cord count for each khipu
 - **Auto-refresh:** Visualization updates instantly when you change selections
+
+**Requirements:**
+- Database file at `data/khipu.db` (for khipu list and provenance)
 
 **Usage:**
 ```bash
@@ -89,6 +105,9 @@ The viewer will open at `http://localhost:8502`
 **Why use this instead of command-line?**
 - No need to remember khipu IDs
 - Browse through all khipus quickly
+![3D Khipu Detail](images/3d_khipu_detail.png)
+*Example khipu showing hierarchical cord structure with summation relationships*
+
 - See metadata (provenance, cord count) before viewing
 - Instant visual feedback when adjusting parameters
 
@@ -131,6 +150,9 @@ This allows you to browse the dataset in the dashboard, then inspect interesting
 
 ---
 
+![Geographic Heatmap](images/geographic_heatmap.png)
+*Interactive map showing summation rate intensity across Andean archaeological sites*
+
 ## 🗺️ Geographic Heatmap
 
 **File:** `scripts/visualize_geographic_heatmap.py`
@@ -149,6 +171,9 @@ Creates interactive maps showing geographic distribution of khipu patterns acros
   1. Summation heatmap (pattern intensity)
   2. Cluster distribution (dominant archetype per region)
 
+### Requirements:
+- Database file at `data/khipu.db` (for provenance data)
+
 ### Usage:
 ```bash
 python scripts/visualize_geographic_heatmap.py
@@ -156,6 +181,9 @@ python scripts/visualize_geographic_heatmap.py
 
 **Outputs:**
 - `outputs/visualizations/geographic_heatmap.html` - Summation rate heatmap
+![Cluster Geographic Distribution](images/cluster_geographic_map.png)
+*Cluster distribution map showing dominant khipu archetypes by region*
+
 - `outputs/visualizations/geographic_heatmap_statistics.csv` - Aggregated statistics
 - `outputs/visualizations/cluster_geographic_map.html` - Cluster distribution map
 
@@ -203,12 +231,13 @@ Open the `.html` files in any web browser. The maps are fully interactive:
 ## 📊 Data Sources
 
 All visualizations use processed data from:
-- `data/processed/cord_hierarchy.csv` - Hierarchical structure (45,204 cords)
-- `data/processed/cord_numeric_values.csv` - Numeric values
-- `data/processed/cluster_assignments_kmeans.csv` - 7 archetypes (612 khipus)
-- `data/processed/graph_structural_features.csv` - Structural metrics
-- `data/processed/summation_test_results.csv` - Summation testing (619 total)
-- `data/processed/cluster_pca_coordinates.csv` - PCA projections
+- `data/khipu.db` - SQLite database with khipu metadata and provenance
+- `data/processed/phase1/cord_numeric_values.csv` - Numeric values
+- `data/processed/phase2/cord_hierarchy.csv` - Hierarchical structure (54,404 cords)
+- `data/processed/phase3/summation_test_results.csv` - Summation testing
+- `data/processed/phase4/cluster_assignments_kmeans.csv` - 7 archetypes (613 khipus)
+- `data/processed/phase4/cluster_pca_coordinates.csv` - PCA projections
+- `data/processed/phase4/graph_structural_features.csv` - Structural metrics
 
 ---
 
@@ -222,8 +251,13 @@ All visualizations use processed data from:
 - `pandas` - Data manipulation
 - `numpy` - Numerical computing
 - `networkx` - Graph analysis
+- `statsmodels` - Statistical analysis
+- `sqlite3` - Database access (standard library)
 
-All packages are already installed in your environment.
+Install required packages:
+```bash
+pip install streamlit plotly folium matplotlib pandas numpy networkx statsmodels
+```
 
 ### System Requirements:
 - **RAM:** 2GB minimum (4GB recommended for dashboard)
@@ -284,10 +318,17 @@ All packages are already installed in your environment.
 - Refresh dashboard if you still see old version
 - Empty provenance strings are filtered out by design
 
+**Database errors:**
+- Ensure `data/khipu.db` exists (copy from Open Khipu Repository)
+- Expected path: `C:\code\khipu-computational-toolkit\data\khipu.db`
+- Without database, visualizations will work but provenance will show "Unknown"
+- Download OKR database from: https://zenodo.org/record/5037551
+
 **Maps show no data:**
 - Check that geographic heatmap script completed successfully
 - Verify provenance names match `PROVENANCE_LOCATIONS` dictionary
 - Dashboard map uses fuzzy matching and shows ~400+ khipus across locations
+- Requires database file with provenance information
 
 **Memory issues:**
 - Close other applications
