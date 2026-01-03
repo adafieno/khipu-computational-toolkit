@@ -60,6 +60,21 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 
 See [reports/](reports/) for detailed phase documentation.
 
+## Relation to Prior Work
+
+This project is situated within a growing body of computational research on Andean khipus, most notably the work of Medrano & Khosla (2024), which demonstrates, across a large corpus, that many khipus exhibit structured internal summation relationships consistent with earlier observations by Marcia Ascher.
+
+While that work establishes the viability and prevalence of such numeric regularities, the Khipu Computational Toolkit does not attempt to reinterpret or extend those conclusions. Instead, it focuses on operationalization: transforming published data and hypotheses into an exploratory computational environment that supports systematic analysis, visualization, and experimentation.
+
+In particular, this toolkit emphasizes:
+- Reproducible data extraction and transformation pipelines
+- Exploratory pattern discovery and structural comparison
+- Visualization of cord hierarchies and numeric relationships
+- Experimental handling of missing or damaged numeric data
+- Pedagogical accessibility for students and non-specialist researchers
+
+All analyses remain strictly non-semantic. Any functional classifications, inferred values, or structural groupings produced by this toolkit are intended as exploratory signals only and require independent expert validation before interpretive use.
+
 ## Quick Start
 
 ### Prerequisites
