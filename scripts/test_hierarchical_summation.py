@@ -321,7 +321,7 @@ if __name__ == "__main__":
     
     # Load cord numeric values
     print("Loading cord numeric values...")
-    cord_values = pd.read_csv(config.get_processed_file("cord_numeric_values.csv"))
+    cord_values = pd.read_csv(config.get_processed_file("cord_numeric_values.csv", 1))
     
     # Connect to database and create temporary table
     conn = sqlite3.connect(config.get_database_path())

@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-01-02T16:47:12.037678",
+  "total_khipus": 619,
+  "total_comparisons": 191271,
+  "similarity_statistics": {
+    "mean_similarity": 0.0646598434306686,
+    "median_similarity": 0.04038439747804623,
+    "std_similarity": 0.49355807387183287,
+    "min_similarity": -0.9530048748075548,
+    "max_similarity": 1.0,
+    "q25_similarity": -0.3422432039887373,
+    "q75_similarity": 0.47328854421071265
+  },
+  "top_similar_pairs": [
+    {
+      "khipu_1": 1000001,
+      "khipu_2": 1000632,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000001,
+      "khipu_2": 1000653,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000031,
+      "khipu_2": 1000652,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000036,
+      "khipu_2": 1000116,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000036,
+      "khipu_2": 1000123,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000072,
+      "khipu_2": 1000252,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000078,
+      "khipu_2": 1000440,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000078,
+      "khipu_2": 1000480,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000084,
+      "khipu_2": 1000226,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000086,
+      "khipu_2": 1000420,
+      "similarity": 1.0
+    }
+  ]
+}

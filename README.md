@@ -158,7 +158,7 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ```
 khipu-computational-toolkit/
- scripts/              # Analysis scripts (36 production tools)
+ scripts/              # Analysis scripts (36 scripts, all operational)
     dashboard_app.py              # Interactive web dashboard
     interactive_3d_viewer.py      # 3D khipu visualization
     detect_anomalies.py           # Outlier detection

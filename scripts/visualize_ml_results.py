@@ -30,17 +30,17 @@ def load_data():
 
     config = get_config()
     data = {
-        'anomalies': pd.read_csv(config.get_processed_file("anomaly_detection_results.csv")),
-        'high_conf': pd.read_csv(config.get_processed_file("high_confidence_anomalies.csv")),
-        'functions': pd.read_csv(config.get_processed_file("khipu_function_classification.csv")),
-        'predictions': pd.read_csv(config.get_processed_file("cord_value_predictions.csv")),
-        'features': pd.read_csv(config.get_processed_file("graph_structural_features.csv"))
+        'anomalies': pd.read_csv(config.get_processed_file("anomaly_detection_results.csv", 7)),
+        'high_conf': pd.read_csv(config.get_processed_file("high_confidence_anomalies.csv", 7)),
+        'functions': pd.read_csv(config.get_processed_file("khipu_function_classification.csv", 8)),
+        'predictions': pd.read_csv(config.get_processed_file("cord_value_predictions.csv", 7)),
+        'features': pd.read_csv(config.get_processed_file("graph_structural_features.csv", 4))
     }
 
-    with open(config.get_processed_file("anomaly_detection_summary.json")) as f:
+    with open(config.get_processed_file("anomaly_detection_summary.json", 7)) as f:
         data['anom_summary'] = json.load(f)
 
-    with open(config.get_processed_file("value_prediction_summary.json")) as f:
+    with open(config.get_processed_file("value_prediction_summary.json", 7)) as f:
         data['pred_summary'] = json.load(f)
 
     return data

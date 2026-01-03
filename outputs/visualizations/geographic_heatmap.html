@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_55e1c88103ad173396965da22fdf0672 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 50px; right: 50px; 
+                width: 220px; height: auto;
+                background-color: white;
+                border: 2px solid grey;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 14px;
+                z-index: 9999;
+                box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+        <h4 style="margin: 0 0 10px 0;">Legend</h4>
+        <p style="margin: 5px 0;"><b>Heatmap:</b> Summation Rate</p>
+        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+            <span>Low</span>
+            <div style="width: 100px; height: 10px; 
+                       background: linear-gradient(to right, blue, yellow, red);"></div>
+            <span>High</span>
+        </div>
+        <hr style="margin: 10px 0;">
+        <p style="margin: 5px 0;"><b>Markers:</b></p>
+        <p style="margin: 5px 0;">🔴 Red: >40% summation</p>
+        <p style="margin: 5px 0;">🟠 Orange: 25-40% summation</p>
+        <p style="margin: 5px 0;">🔵 Blue: <25% summation</p>
+        <p style="margin: 5px 0;"><i>Size = khipu count</i></p>
+    </div>
+    
+    
+    <div style="position: fixed; 
+                top: 10px; left: 50%;
+                transform: translateX(-50%);
+                background-color: white;
+                border: 2px solid #1f77b4;
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 18px;
+                font-weight: bold;
+                z-index: 9999;
+                box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+        🧶 Geographic Distribution of Inka Khipus
+    </div>
+    
+    
+            <div class="folium-map" id="map_55e1c88103ad173396965da22fdf0672" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_55e1c88103ad173396965da22fdf0672 = L.map(
+                "map_55e1c88103ad173396965da22fdf0672",
+                {
+                    center: [-10.0, -75.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_12b9573469280bf116483e366f62cc4c = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_12b9573469280bf116483e366f62cc4c.addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+            var heat_map_f9b65f35d5bb529f3a35bc5936876910 = L.heatLayer(
+                [[-11.9833, -76.9167, 0.0], [-13.5319, -71.9675, 0.0], [-14.0678, -75.7286, 0.1836734693877551], [-12.0464, -77.0428, 0.0], [-14.8333, -74.9333, 0.38461538461538464], [-12.2667, -76.9167, 0.17777777777777778]],
+                {
+  "minOpacity": 0.3,
+  "maxZoom": 18,
+  "radius": 30,
+  "blur": 25,
+  "gradient": {
+  0.0: "blue",
+  0.5: "yellow",
+  1.0: "red",
+},
+  "maxOpacity": 0.8,
+}
+            );
+        
+    
+            heat_map_f9b65f35d5bb529f3a35bc5936876910.addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+            var circle_marker_4b4ed701a8b39f47155c9d6509f4228a = L.circleMarker(
+                [-11.9833, -76.9167],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.0, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_883992787bce0a7a75c058ace695caeb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2453a0a07704cde64767e366639a9f3f = $(`<div id="html_2453a0a07704cde64767e366639a9f3f" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Cajamarquilla</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>4</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>0.0%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>14 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>1.0 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>13.00</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>89.7%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.000</td></tr>             </table>         </div>         </div>`)[0];
+                popup_883992787bce0a7a75c058ace695caeb.setContent(html_2453a0a07704cde64767e366639a9f3f);
+            
+        
+
+        circle_marker_4b4ed701a8b39f47155c9d6509f4228a.bindPopup(popup_883992787bce0a7a75c058ace695caeb)
+        ;
+
+        
+    
+    
+            var circle_marker_a52b21869be56d4e13ccbdaec6db3026 = L.circleMarker(
+                [-13.5319, -71.9675],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.5, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_f79d00c6d783c5a4eeaac0b6ac34d3b0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c1af83ea3ea75afb66ec687212a30347 = $(`<div id="html_c1af83ea3ea75afb66ec687212a30347" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Cuzco</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>1</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>0.0%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>33 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>2.0 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>4.00</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>54.5%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.000</td></tr>             </table>         </div>         </div>`)[0];
+                popup_f79d00c6d783c5a4eeaac0b6ac34d3b0.setContent(html_c1af83ea3ea75afb66ec687212a30347);
+            
+        
+
+        circle_marker_a52b21869be56d4e13ccbdaec6db3026.bindPopup(popup_f79d00c6d783c5a4eeaac0b6ac34d3b0)
+        ;
+
+        
+    
+    
+            var circle_marker_28bcb52d0253f2d800dbb215009afd71 = L.circleMarker(
+                [-14.0678, -75.7286],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_4aacfd4a627a4a3b063e6b026b31bd86 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d9313bd665f9c04425aa163d41e05b34 = $(`<div id="html_d9313bd665f9c04425aa163d41e05b34" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Ica</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>49</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>18.4%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>60 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>1.8 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>20.21</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>80.5%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.038</td></tr>             </table>         </div>         </div>`)[0];
+                popup_4aacfd4a627a4a3b063e6b026b31bd86.setContent(html_d9313bd665f9c04425aa163d41e05b34);
+            
+        
+
+        circle_marker_28bcb52d0253f2d800dbb215009afd71.bindPopup(popup_4aacfd4a627a4a3b063e6b026b31bd86)
+        ;
+
+        
+    
+    
+            var circle_marker_e5c6f16bc7940fff015828e6f0a3a2ba = L.circleMarker(
+                [-12.0464, -77.0428],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.5, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_771b0cf1a6a83535a0f4ddb379d1fd40 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6440f727706d9fa9c29eed173580923c = $(`<div id="html_6440f727706d9fa9c29eed173580923c" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Lima</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>1</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>0.0%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>10 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>2.0 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>4.50</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>90.0%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.000</td></tr>             </table>         </div>         </div>`)[0];
+                popup_771b0cf1a6a83535a0f4ddb379d1fd40.setContent(html_6440f727706d9fa9c29eed173580923c);
+            
+        
+
+        circle_marker_e5c6f16bc7940fff015828e6f0a3a2ba.bindPopup(popup_771b0cf1a6a83535a0f4ddb379d1fd40)
+        ;
+
+        
+    
+    
+            var circle_marker_22a74000ed649ca63c8129638101919e = L.circleMarker(
+                [-14.8333, -74.9333],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.5, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_f586161853cf886c206325e216e76f71 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4a10ea39d246110238a8699a7529e679 = $(`<div id="html_4a10ea39d246110238a8699a7529e679" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Nazca</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>13</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>38.5%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>239 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>2.3 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>6.53</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>68.7%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.063</td></tr>             </table>         </div>         </div>`)[0];
+                popup_f586161853cf886c206325e216e76f71.setContent(html_4a10ea39d246110238a8699a7529e679);
+            
+        
+
+        circle_marker_22a74000ed649ca63c8129638101919e.bindPopup(popup_f586161853cf886c206325e216e76f71)
+        ;
+
+        
+    
+    
+            var circle_marker_dfa4c83b6bf6e85df0881885ea3cf63f = L.circleMarker(
+                [-12.2667, -76.9167],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25, "stroke": true, "weight": 2}
+            ).addTo(map_55e1c88103ad173396965da22fdf0672);
+        
+    
+        var popup_0e540ec934fce079ed820cce219877c1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_29b60e5caccf3bd36e3e39d423199670 = $(`<div id="html_29b60e5caccf3bd36e3e39d423199670" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; min-width: 250px;">             <h4 style="margin: 0 0 10px 0; color: #1f77b4;">Pachacamac</h4>             <hr style="margin: 5px 0;">             <table style="width: 100%; font-size: 12px;">                 <tr><td><b>Khipus:</b></td><td>90</td></tr>                 <tr><td><b>Summation Rate:</b></td><td>17.8%</td></tr>                 <tr><td><b>Avg Size:</b></td><td>67 nodes</td></tr>                 <tr><td><b>Avg Depth:</b></td><td>1.9 levels</td></tr>                 <tr><td><b>Avg Branching:</b></td><td>20.36</td></tr>                 <tr><td><b>Numeric Coverage:</b></td><td>73.0%</td></tr>                 <tr><td><b>Match Rate:</b></td><td>0.038</td></tr>             </table>         </div>         </div>`)[0];
+                popup_0e540ec934fce079ed820cce219877c1.setContent(html_29b60e5caccf3bd36e3e39d423199670);
+            
+        
+
+        circle_marker_dfa4c83b6bf6e85df0881885ea3cf63f.bindPopup(popup_0e540ec934fce079ed820cce219877c1)
+        ;
+
+        
+    
+</script>
+</html>

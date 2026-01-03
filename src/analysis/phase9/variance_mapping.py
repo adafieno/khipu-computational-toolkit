@@ -14,12 +14,19 @@ References:
 - Phase 2: Identified empire-wide color distribution (W: 26.8%, AB: 17.4%, MB: 14.5%, KB: 6.7%)
 - Phase 5: Validated empire-wide color uniformity (p=1.00, no provenance variation)
 """
-
-import pandas as pd
-import numpy as np
+import sys
 from pathlib import Path
-from typing import Dict
-import json
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+import numpy as np  # noqa: E402
+from typing import Dict  # noqa: E402
+import json  # noqa: E402
 
 # Empire-standard colors identified in Phase 2 (extraction infrastructure)
 # These 4 colors account for 65.4% of all color usage (36,902/56,306 records)
@@ -46,7 +53,8 @@ class VarianceAnalyzer:
 
     def __init__(self, data_dir: Path = Path("data/processed")):
         """Initialize with data directory."""
-        self.data_dir = Path(data_dir)
+        self.config = get_config()
+        self.data_dir = self.config.processed_dir
         self.output_dir = self.data_dir / "phase9" / "9.5_variance_mapping"
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -62,20 +70,20 @@ class VarianceAnalyzer:
 
         data = {}
 
-        data['numeric'] = pd.read_csv(self.data_dir / "cord_numeric_values.csv")
+        data['numeric'] = pd.read_csv(self.config.get_processed_file("cord_numeric_values.csv", 1))
         print(f"  ✓ Numeric values: {len(data['numeric'])} records")
 
-        data['color'] = pd.read_csv(self.data_dir / "color_data.csv")
+        data['color'] = pd.read_csv(self.config.get_processed_file("color_data.csv", 2))
         print(f"  ✓ Color data: {len(data['color'])} cords")
 
-        data['structural'] = pd.read_csv(self.data_dir / "graph_structural_features.csv")
+        data['structural'] = pd.read_csv(self.config.get_processed_file("graph_structural_features.csv", 4))
         print(f"  ✓ Structural features: {len(data['structural'])} khipus")
 
         # UPPERCASE columns!
-        data['hierarchy'] = pd.read_csv(self.data_dir / "cord_hierarchy.csv")
+        data['hierarchy'] = pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv", 2))
         print(f"  ✓ Hierarchy: {len(data['hierarchy'])} cords")
 
-        data['typology'] = pd.read_csv(self.data_dir / "phase8" / "administrative_typology.csv")
+        data['typology'] = pd.read_csv(self.config.get_processed_file("administrative_typology.csv", 8))
         print(f"  ✓ Administrative typology: {len(data['typology'])} khipus")
 
         print()

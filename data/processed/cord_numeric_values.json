@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-01-02T15:43:05.290660",
+  "source_database": "C:\\code\\open-khipu-repository\\data\\khipu.db",
+  "total_cords": 54403,
+  "cords_with_values": 37082,
+  "khipu_count": 612,
+  "decoding_method": "positional_decimal",
+  "formula": "sum(knot_value_type * digit)",
+  "notes": "digit = NUM_TURNS for long knots, 1 for single/figure-eight"
+}

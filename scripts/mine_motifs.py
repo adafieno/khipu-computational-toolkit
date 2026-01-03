@@ -41,8 +41,8 @@ class MotifMiner:
         print("Loading data files...")
         
         data = {
-            'clusters': pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv")),
-            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv"))
+            'clusters': pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv", 4)),
+            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv", 4))
         }
         
         # Load graphs

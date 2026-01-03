@@ -63,22 +63,22 @@ class InformationCapacityAnalyzer:
 
         # Load with explicit column name checking
         data['structural'] = pd.read_csv(
-            self.data_dir / "graph_structural_features.csv")
+            self.config.get_processed_file("graph_structural_features.csv", 4))
         print(f"  ✓ Structural features: {len(data['structural'])} khipus")
 
         data['numeric'] = pd.read_csv(
-            self.data_dir / "cord_numeric_values.csv")
+            self.config.get_processed_file("cord_numeric_values.csv", 1))
         print(f"  ✓ Numeric values: {len(data['numeric'])} records")
 
-        data['color'] = pd.read_csv(self.data_dir / "color_data.csv")
+        data['color'] = pd.read_csv(self.config.get_processed_file("color_data.csv", 2))
         print(f"  ✓ Color data: {len(data['color'])} records")
 
         # UPPERCASE columns!
-        data['hierarchy'] = pd.read_csv(self.data_dir / "cord_hierarchy.csv")
+        data['hierarchy'] = pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv", 2))
         print(f"  ✓ Hierarchy: {len(data['hierarchy'])} cords")
 
         data['typology'] = pd.read_csv(
-            self.data_dir / "phase8" / "administrative_typology.csv")
+            self.config.get_processed_file("administrative_typology.csv", 8))
         print(f"  ✓ Administrative typology: {len(data['typology'])} khipus")
 
         print()

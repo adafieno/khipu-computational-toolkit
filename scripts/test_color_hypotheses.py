@@ -40,10 +40,10 @@ class ColorHypothesisTester:
         print("Loading data...")
         
         data = {
-            'colors': pd.read_csv(self.config.get_processed_file("color_data.csv")),
-            'white_cords': pd.read_csv(self.config.get_processed_file("white_cords.csv")),
-            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv")),
-            'hierarchy': pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv"))
+            'colors': pd.read_csv(self.config.get_processed_file("color_data.csv", 2)),
+            'white_cords': pd.read_csv(self.config.get_processed_file("white_cords.csv", 2)),
+            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv", 3)),
+            'hierarchy': pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv", 2))
         }
         
         # Load numeric values
@@ -190,7 +190,7 @@ class ColorHypothesisTester:
         print("="*80)
         
         # Load clusters (proxy for function)
-        clusters = pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv"))
+        clusters = pd.read_csv(self.config.get_processed_file("cluster_assignments_kmeans.csv", 4))
         
         # Cluster 6 = low numeric (9.3%), likely non-accounting
         # Other clusters = higher numeric, likely accounting

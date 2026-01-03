@@ -41,13 +41,13 @@ class GeographicAnalyzer:
 
         data = {
             'features': pd.read_csv(
-                self.config.get_processed_file("graph_structural_features.csv")),
+                self.config.get_processed_file("graph_structural_features.csv", 4)),
             'clusters': pd.read_csv(
-                self.config.get_processed_file("cluster_assignments_kmeans.csv")),
+                self.config.get_processed_file("cluster_assignments_kmeans.csv", 4)),
             'summation': pd.read_csv(
-                self.config.get_processed_file("summation_test_results.csv")),
+                self.config.get_processed_file("summation_test_results.csv", 3)),
             'high_match': pd.read_csv(
-                self.config.get_processed_file("high_match_khipus.csv"))}
+                self.config.get_processed_file("high_match_khipus.csv", 4))}
 
         # Get provenance from database
         query = """

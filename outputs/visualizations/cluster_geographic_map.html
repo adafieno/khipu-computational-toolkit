@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c661ab5f16a8c964c1b1b729387a9748 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                top: 10px; left: 50%;
+                transform: translateX(-50%);
+                background-color: white;
+                border: 2px solid #1f77b4;
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 18px;
+                font-weight: bold;
+                z-index: 9999;
+                box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+        🧶 Dominant Khipu Archetype by Provenance
+    </div>
+    
+    
+            <div class="folium-map" id="map_c661ab5f16a8c964c1b1b729387a9748" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_c661ab5f16a8c964c1b1b729387a9748 = L.map(
+                "map_c661ab5f16a8c964c1b1b729387a9748",
+                {
+                    center: [-10.0, -75.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_17178b5dcb52e9eb2ceb321de62c55a0 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_17178b5dcb52e9eb2ceb321de62c55a0.addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+            var circle_marker_6c17534311a6a209235806c4bf896c11 = L.circleMarker(
+                [-11.9833, -76.9167],
+                {"bubblingMouseEvents": true, "color": "#d62728", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d62728", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.9, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_fd03a16ed9c2059e7b37268d26a47c16 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_b2d464a6a3fca2f68f6f1f4950fe0995 = $(`<div id="html_b2d464a6a3fca2f68f6f1f4950fe0995" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #d62728;">Cajamarquilla</h4>             <p><b>Dominant Cluster:</b> 3</p>             <p><b>Count:</b> 3 khipus</p>         </div>         </div>`)[0];
+                popup_fd03a16ed9c2059e7b37268d26a47c16.setContent(html_b2d464a6a3fca2f68f6f1f4950fe0995);
+            
+        
+
+        circle_marker_6c17534311a6a209235806c4bf896c11.bindPopup(popup_fd03a16ed9c2059e7b37268d26a47c16)
+        ;
+
+        
+    
+    
+            var circle_marker_2c73145f481cde369980975e9c74375a = L.circleMarker(
+                [-13.5319, -71.9675],
+                {"bubblingMouseEvents": true, "color": "#d62728", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d62728", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.3, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_30368288e3b86c93ffb14040e9003550 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_a11b808f4d5a6e3b8752ecb61b332a2d = $(`<div id="html_a11b808f4d5a6e3b8752ecb61b332a2d" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #d62728;">Cuzco</h4>             <p><b>Dominant Cluster:</b> 3</p>             <p><b>Count:</b> 1 khipus</p>         </div>         </div>`)[0];
+                popup_30368288e3b86c93ffb14040e9003550.setContent(html_a11b808f4d5a6e3b8752ecb61b332a2d);
+            
+        
+
+        circle_marker_2c73145f481cde369980975e9c74375a.bindPopup(popup_30368288e3b86c93ffb14040e9003550)
+        ;
+
+        
+    
+    
+            var circle_marker_4843f633a38647d20bb66c81e1d88817 = L.circleMarker(
+                [-14.0678, -75.7286],
+                {"bubblingMouseEvents": true, "color": "#d62728", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d62728", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.6, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_66ff2a96920acd78e6e087766a314a9a = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_3864c0d62bb037ed3591621ea3d6d2ba = $(`<div id="html_3864c0d62bb037ed3591621ea3d6d2ba" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #d62728;">Ica</h4>             <p><b>Dominant Cluster:</b> 3</p>             <p><b>Count:</b> 32 khipus</p>         </div>         </div>`)[0];
+                popup_66ff2a96920acd78e6e087766a314a9a.setContent(html_3864c0d62bb037ed3591621ea3d6d2ba);
+            
+        
+
+        circle_marker_4843f633a38647d20bb66c81e1d88817.bindPopup(popup_66ff2a96920acd78e6e087766a314a9a)
+        ;
+
+        
+    
+    
+            var circle_marker_d94d4e61788a08d6932665c5043b0086 = L.circleMarker(
+                [-12.0464, -77.0428],
+                {"bubblingMouseEvents": true, "color": "#ff7f0e", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff7f0e", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.3, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_d4e55b7520cfed9bd74573a8341219e4 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_0bebd8ac582a4aecb2d66c196999d2e7 = $(`<div id="html_0bebd8ac582a4aecb2d66c196999d2e7" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #ff7f0e;">Lima</h4>             <p><b>Dominant Cluster:</b> 1</p>             <p><b>Count:</b> 1 khipus</p>         </div>         </div>`)[0];
+                popup_d4e55b7520cfed9bd74573a8341219e4.setContent(html_0bebd8ac582a4aecb2d66c196999d2e7);
+            
+        
+
+        circle_marker_d94d4e61788a08d6932665c5043b0086.bindPopup(popup_d4e55b7520cfed9bd74573a8341219e4)
+        ;
+
+        
+    
+    
+            var circle_marker_0527f665244c01f32b70a6eb1aaf6a9f = L.circleMarker(
+                [-14.8333, -74.9333],
+                {"bubblingMouseEvents": true, "color": "#1f77b4", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1f77b4", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.1, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_1b000c6cf0fcdbe7a651f7642c36c04f = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_2aa3f6f2a92a0dcbb9866dd6fa232afa = $(`<div id="html_2aa3f6f2a92a0dcbb9866dd6fa232afa" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #1f77b4;">Nazca</h4>             <p><b>Dominant Cluster:</b> 0</p>             <p><b>Count:</b> 7 khipus</p>         </div>         </div>`)[0];
+                popup_1b000c6cf0fcdbe7a651f7642c36c04f.setContent(html_2aa3f6f2a92a0dcbb9866dd6fa232afa);
+            
+        
+
+        circle_marker_0527f665244c01f32b70a6eb1aaf6a9f.bindPopup(popup_1b000c6cf0fcdbe7a651f7642c36c04f)
+        ;
+
+        
+    
+    
+            var circle_marker_9fbb556bf7a6666d269b9f2ebfdcf95f = L.circleMarker(
+                [-12.2667, -76.9167],
+                {"bubblingMouseEvents": true, "color": "#d62728", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d62728", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 29.5, "stroke": true, "weight": 3}
+            ).addTo(map_c661ab5f16a8c964c1b1b729387a9748);
+        
+    
+        var popup_2f0a8bd44a04d8596e7ab447e0ff23a3 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e9219ff24846c36d7b36ba97c603c3cf = $(`<div id="html_e9219ff24846c36d7b36ba97c603c3cf" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial;">             <h4 style="color: #d62728;">Pachacamac</h4>             <p><b>Dominant Cluster:</b> 3</p>             <p><b>Count:</b> 65 khipus</p>         </div>         </div>`)[0];
+                popup_2f0a8bd44a04d8596e7ab447e0ff23a3.setContent(html_e9219ff24846c36d7b36ba97c603c3cf);
+            
+        
+
+        circle_marker_9fbb556bf7a6666d269b9f2ebfdcf95f.bindPopup(popup_2f0a8bd44a04d8596e7ab447e0ff23a3)
+        ;
+
+        
+    
+</script>
+</html>

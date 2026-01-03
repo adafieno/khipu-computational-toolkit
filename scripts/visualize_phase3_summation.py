@@ -89,8 +89,8 @@ def plot_white_cord_boundary_effect():
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Separate data
-    no_white_data = df[~df['has_white_cords']]['pendant_match_rate'] * 100
-    white_data = df[df['has_white_cords']]['pendant_match_rate'] * 100
+    no_white_data = df[~df['has_white_boundaries']]['pendant_match_rate'] * 100
+    white_data = df[df['has_white_boundaries']]['pendant_match_rate'] * 100
 
     box_data = [no_white_data, white_data]
     positions = [1, 2]

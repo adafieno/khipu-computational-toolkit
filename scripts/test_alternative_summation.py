@@ -34,8 +34,8 @@ class AlternativeSummationTester:
         """Load all cord values and hierarchy for a khipu."""
         # Load from CSV files
         config = get_config()
-        hierarchy = pd.read_csv(config.get_processed_file('cord_hierarchy.csv'))
-        values = pd.read_csv(config.get_processed_file('cord_numeric_values.csv'))
+        hierarchy = pd.read_csv(config.get_processed_file('cord_hierarchy.csv', 2))
+        values = pd.read_csv(config.get_processed_file('cord_numeric_values.csv', 1))
         
         # Convert khipu_id to int for filtering
         khipu_id_int = int(khipu_id)
@@ -332,7 +332,7 @@ class AlternativeSummationTester:
         """Export results to CSV."""
         if output_path is None:
             config = get_config()
-            output_path = config.get_processed_file("alternative_summation_results.csv")
+            output_path = config.get_processed_file("alternative_summation_results.csv", 3)
         output_path = Path(output_path)
         results_df.to_csv(output_path, index=False)
         print(f"✓ Exported to {output_path}")
@@ -365,7 +365,7 @@ def main():
     
     # Get all khipu IDs from cord_hierarchy.csv
     config = get_config()
-    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv"))
+    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv", 2))
     khipu_ids = hierarchy['KHIPU_ID'].unique().tolist()
     
     print(f"Testing {len(khipu_ids)} khipus")
@@ -383,7 +383,7 @@ def main():
     print("="*80)
     
     # Compare to standard model
-    standard_results = pd.read_csv(config.get_processed_file("summation_test_results.csv"))
+    standard_results = pd.read_csv(config.get_processed_file("summation_test_results.csv", 3))
     standard_rate = standard_results['has_pendant_summation'].mean() * 100
     
     print(f"\nStandard summation (±1): {standard_rate:.1f}% detection rate")

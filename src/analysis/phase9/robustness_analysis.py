@@ -16,11 +16,18 @@ References:
 - Phase 3: White boundaries improve summation detection (boundary hypothesis)
 - Phase 5: White boundaries increase summation match rate by +10.7pp (p<0.001)
 """
-
-import pandas as pd
+import sys
 from pathlib import Path
-from typing import Dict
-import json
+
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import pandas as pd  # noqa: E402
+from typing import Dict  # noqa: E402
+import json  # noqa: E402
 
 
 class RobustnessAnalyzer:
@@ -36,7 +43,8 @@ class RobustnessAnalyzer:
 
     def __init__(self, data_dir: Path = Path("data/processed")):
         """Initialize with data directory."""
-        self.data_dir = Path(data_dir)
+        self.config = get_config()
+        self.data_dir = self.config.processed_dir
         self.output_dir = self.data_dir / "phase9" / "9.2_robustness"
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -52,20 +60,20 @@ class RobustnessAnalyzer:
 
         data = {}
 
-        data['numeric'] = pd.read_csv(self.data_dir / "cord_numeric_values.csv")
+        data['numeric'] = pd.read_csv(self.config.get_processed_file("cord_numeric_values.csv", 1))
         print(f"  ✓ Numeric values: {len(data['numeric'])} records")
 
-        data['summation'] = pd.read_csv(self.data_dir / "summation_test_results.csv")
+        data['summation'] = pd.read_csv(self.config.get_processed_file("summation_test_results.csv", 3))
         print(f"  ✓ Summation results: {len(data['summation'])} khipus")
 
         # UPPERCASE columns!
-        data['hierarchy'] = pd.read_csv(self.data_dir / "cord_hierarchy.csv")
+        data['hierarchy'] = pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv", 2))
         print(f"  ✓ Hierarchy: {len(data['hierarchy'])} cords")
 
-        data['structural'] = pd.read_csv(self.data_dir / "graph_structural_features.csv")
+        data['structural'] = pd.read_csv(self.config.get_processed_file("graph_structural_features.csv", 4))
         print(f"  ✓ Structural features: {len(data['structural'])} khipus")
 
-        data['typology'] = pd.read_csv(self.data_dir / "phase8" / "administrative_typology.csv")
+        data['typology'] = pd.read_csv(self.config.get_processed_file("administrative_typology.csv", 8))
         print(f"  ✓ Administrative typology: {len(data['typology'])} khipus")
 
         print()

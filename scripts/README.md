@@ -1,6 +1,6 @@
 # Scripts Directory
 
-This directory contains 31 production-ready Python scripts for khipu analysis, organized by function. All scripts are designed to be run from the repository root directory.
+This directory contains 36 production-ready Python scripts for khipu analysis, organized by function. All scripts are designed to be run from the repository root directory.
 
 ---
 
@@ -11,11 +11,11 @@ This directory contains 31 production-ready Python scripts for khipu analysis, o
 | **Extraction** | 4 | `extract_*.py` |
 | **Analysis** | 7 | `analyze_*.py` |
 | **Testing** | 4 | `test_*.py` |
-| **Visualization** | 6 | `visualize_*.py` |
+| **Visualization** | 10 | `visualize_*.py` |
 | **Interactive Tools** | 3 | Dashboard, 3D viewer, etc. |
-| **Utilities** | 7 | Processing, graph building, etc. |
+| **Utilities** | 8 | Processing, graph building, etc. |
 
-**Total:** 31 scripts (~310 KB)
+**Total:** 36 scripts (~350 KB)
 
 ---
 
@@ -271,6 +271,16 @@ python scripts/visualize_ml_results.py
 python scripts/visualize_phase8_results.py
 ```
 
+### visualize_phase9_meta.py
+**Purpose:** Generate visualizations for Phase 9 meta-analysis results  
+**Output:** `visualizations/phase9/*.png`  
+**Phase:** 9 - Meta-Analysis  
+**Features:** Stability testing, robustness, variance patterns  
+**Usage:**
+```bash
+python scripts/visualize_phase9_meta.py
+```
+
 ---
 
 ## Interactive Tools
@@ -286,14 +296,14 @@ Web-based interactive exploration and analysis tools.
 - Real-time filtering and selection
 - Interactive Plotly visualizations
 - Data export capabilities
+- Feature correlation analysis with optional OLS trendlines
+
+**Dependencies:** streamlit, plotly, statsmodels (optional for trendlines)
 
 **Usage:**
 ```bash
 # Basic launch
 streamlit run scripts/dashboard_app.py
-
-# With custom database path
-streamlit run scripts/dashboard_app.py -- --db /path/to/khipu.db
 
 # Custom port
 streamlit run scripts/dashboard_app.py --server.port 8502
@@ -301,14 +311,18 @@ streamlit run scripts/dashboard_app.py --server.port 8502
 
 **Access:** http://localhost:8501
 
+**Note:** Dashboard includes error handling for statsmodels if not available. Trendlines can be enabled via checkbox if statsmodels is installed.
+
 ### interactive_3d_viewer.py
-**Purpose:** Interactive 3D khipu visualization with rotation  
+**Purpose:** Streamlit-based interactive 3D khipu visualization  
 **Phase:** 6 - Advanced Visualizations  
-**Features:** Real-time rotation, zoom, color modes  
+**Features:** Real-time rotation, zoom, color modes, khipu selection  
+**Dependencies:** streamlit, plotly
 **Usage:**
 ```bash
-python scripts/interactive_3d_viewer.py
+streamlit run scripts/interactive_3d_viewer.py
 ```
+**Access:** Default at http://localhost:8501 (or custom port with --server.port)
 
 ### mine_motifs.py
 **Purpose:** Interactive motif mining and pattern discovery  
@@ -467,6 +481,9 @@ python scripts/predict_missing_values.py
 - `analyze_information_capacity.py` (9.1)
 - `analyze_robustness.py` (9.2)
 - `analyze_variance.py` (9.5)
+- `visualize_phase9_meta.py`
+
+**Note:** Phase 9 includes additional analysis modules in `src/analysis/` (cognitive_load, boundary_phenomena, etc.) that are called by these scripts.
 
 ---
 
@@ -626,6 +643,16 @@ streamlit run scripts/dashboard_app.py --server.port 8502
 
 ---
 
-**Last Updated:** January 1, 2026  
-**Script Count:** 31  
-**Total Size:** ~310 KB
+## Validation Status
+
+✅ **All 36 scripts tested and operational** (January 2026)  
+- 33 automated scripts run successfully from command line  
+- 3 interactive tools (dashboard, 3D viewer) verified with Streamlit  
+- All dependencies documented and tested  
+- Configuration system integrated across all scripts
+
+---
+
+**Last Updated:** January 2, 2026  
+**Script Count:** 36  
+**Total Size:** ~350 KB

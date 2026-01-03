@@ -33,9 +33,9 @@ import argparse  # noqa: E402
 def load_khipu_data(khipu_id):
     """Load hierarchical structure and values for a khipu."""
     config = get_config()
-    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv"))
+    hierarchy = pd.read_csv(config.get_processed_file("cord_hierarchy.csv", 2))
     numeric_values = pd.read_csv(
-        config.get_processed_file("cord_numeric_values.csv"))
+        config.get_processed_file("cord_numeric_values.csv", 1))
 
     # Filter for specific khipu
     khipu_cords = hierarchy[hierarchy['KHIPU_ID'] == khipu_id].copy()

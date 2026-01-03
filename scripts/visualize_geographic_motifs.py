@@ -34,10 +34,10 @@ def load_geographic_data():
     print("Loading geographic data...")
     
     config = get_config()
-    with open(config.get_processed_file("geographic_correlation_analysis.json"), "r") as f:
+    with open(config.get_processed_file("geographic_correlation_analysis.json", 5), "r") as f:
         geo_data = json.load(f)
     
-    summation_data = pd.read_csv(config.get_processed_file("summation_test_results.csv"))
+    summation_data = pd.read_csv(config.get_processed_file("summation_test_results.csv", 3))
     
     conn = sqlite3.connect(config.get_database_path())
     provenance = pd.read_sql_query(
@@ -141,7 +141,7 @@ def plot_provenance_feature_comparison(data, output_dir):
     
     # Load features
     config = get_config()
-    features = pd.read_csv(config.get_processed_file("graph_structural_features.csv"))
+    features = pd.read_csv(config.get_processed_file("graph_structural_features.csv", 4))
     conn = sqlite3.connect(config.get_database_path())
     provenance = pd.read_sql_query("SELECT KHIPU_ID, PROVENANCE FROM khipu_main", conn)
     conn.close()
@@ -221,7 +221,7 @@ def plot_motif_frequencies(output_dir):
     print("\nCreating motif frequency plots...")
     
     config = get_config()
-    with open(config.get_processed_file("motif_mining_results.json"), "r") as f:
+    with open(config.get_processed_file("motif_mining_results.json", 4), "r") as f:
         motif_data = json.load(f)
     
     # Extract cluster motif counts
@@ -284,7 +284,7 @@ def plot_universal_motifs(output_dir):
     print("\nCreating universal motifs plot...")
     
     config = get_config()
-    with open(config.get_processed_file("motif_mining_results.json"), "r") as f:
+    with open(config.get_processed_file("motif_mining_results.json", 4), "r") as f:
         motif_data = json.load(f)
     
     universal = motif_data['universal_motifs']['universal_branching']

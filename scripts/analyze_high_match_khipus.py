@@ -34,12 +34,12 @@ class HighMatchAnalyzer:
         """Load summation test results and enrich with additional khipu data."""
         if results_path is None:
             results_path = self.config.get_processed_file(
-                "summation_test_results.csv")
+                "summation_test_results.csv", 3)
         df = pd.read_csv(results_path)
 
         # Load cord hierarchy to get additional statistics
         cord_df = pd.read_csv(
-            self.config.get_processed_file("cord_hierarchy.csv"))
+            self.config.get_processed_file("cord_hierarchy.csv", 2))
 
         # Compute per-khipu statistics
         khipu_stats = cord_df.groupby('KHIPU_ID').agg({
@@ -57,7 +57,7 @@ class HighMatchAnalyzer:
 
         # Load color data for white cord counts
         color_df = pd.read_csv(
-            self.config.get_processed_file("color_data.csv"))
+            self.config.get_processed_file("color_data.csv", 2))
         white_counts = color_df[color_df['color_cd_1'] == 'W'].groupby(
             'khipu_id').size().reset_index(name='white_cord_count')
 

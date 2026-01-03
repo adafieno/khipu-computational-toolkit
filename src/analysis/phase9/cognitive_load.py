@@ -12,21 +12,29 @@ Integrates with:
 - Phase 9.1: Information capacity
 - Phase 9.6: Boundary phenomena (color transitions)
 """
-
-import json
+import sys
 from pathlib import Path
-from typing import Dict
 
-import numpy as np
-import pandas as pd
-from scipy import stats
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import json  # noqa: E402
+from typing import Dict  # noqa: E402
+
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+from scipy import stats  # noqa: E402
 
 
 class CognitiveLoadAnalyzer:
     """Analyzes cognitive load and usability of khipu structures."""
 
     def __init__(self, data_dir: str = "data/processed"):
-        self.data_dir = Path(data_dir)
+        self.config = get_config()
+        self.data_dir = self.config.processed_dir
         self.output_dir = self.data_dir / "phase9" / "9.3_cognitive_load"
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -38,17 +46,17 @@ class CognitiveLoadAnalyzer:
         print("Loading datasets...")
 
         # Load structural features (khipu_id, num_nodes, depth, avg_branching, width)
-        struct_file = self.data_dir / "graph_structural_features.csv"
+        struct_file = self.config.get_processed_file("graph_structural_features.csv", 4)
         self.structural = pd.read_csv(struct_file)
         print(f"  ✓ Structural features: {len(self.structural)} khipus")
 
         # Load hierarchy (KHIPU_ID, CORD_ID, CORD_LEVEL, ATTACHED_TO)
-        hierarchy_file = self.data_dir / "cord_hierarchy.csv"
+        hierarchy_file = self.config.get_processed_file("cord_hierarchy.csv", 2)
         self.hierarchy = pd.read_csv(hierarchy_file)
         print(f"  ✓ Hierarchy: {len(self.hierarchy)} cords")
 
         # Load color data (khipu_id, cord_id, color_cd_1)
-        color_file = self.data_dir / "color_data.csv"
+        color_file = self.config.get_processed_file("color_data.csv", 2)
         self.colors = pd.read_csv(color_file)
         print(f"  ✓ Color data: {len(self.colors)} records")
 

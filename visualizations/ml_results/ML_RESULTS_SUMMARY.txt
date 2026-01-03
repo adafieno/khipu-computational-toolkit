@@ -1,0 +1,68 @@
+======================================================================
+ MACHINE LEARNING RESULTS SUMMARY 
+======================================================================
+
+1. ANOMALY DETECTION
+----------------------------------------------------------------------
+Total khipus: 612
+High-confidence anomalies: 13 (2.1%)
+
+Detection methods:
+  * Isolation Forest: 31 (5.1%)
+  * Statistical Outliers: 2 (0.3%)
+  * Topology Anomalies: 126 (20.6%)
+
+Top 5 most anomalous:
+  1. Khipu 1000279 (Mollepampa)
+     Nodes: 592, Depth: 6, Score: -0.646
+  2. Khipu 1000020 (Leymebamba)
+     Nodes: 771, Depth: 5, Score: -0.642
+  3. Khipu 1000155 (nan)
+     Nodes: 2, Depth: 1, Score: -0.616
+  4. Khipu 1000088 (near Lima)
+     Nodes: 196, Depth: 1, Score: -0.604
+  5. Khipu 1000344 (nan)
+     Nodes: 320, Depth: 1, Score: -0.601
+
+2. FUNCTION CLASSIFICATION
+----------------------------------------------------------------------
+Total classified: 612
+
+Distribution:
+  * Accounting: 600 (98.0%)
+  * Non-Accounting: 12 (2.0%)
+
+Mean confidence: 0.977
+Median numeric coverage: 0.790
+
+3. SEQUENCE PREDICTION
+----------------------------------------------------------------------
+Total predictions: 17,321
+
+By method:
+  * Random Forest: 15,253 (88.1%)
+  * Constraint Summation: 1,295 (7.5%)
+  * Sibling Median: 773 (4.5%)
+
+Statistics:
+  Mean: 126.38
+  Median: 32.65
+  Range: 0-25228
+
+4. KEY FINDINGS
+----------------------------------------------------------------------
+* Anomaly Detection:
+  - 13 khipus need expert review
+  - 2 khipus flagged by all 3 methods
+  - Cluster 5: 66.7% anomaly rate
+
+* Function Classification:
+  - Dominant function: Accounting
+  - 589 khipus >90% confidence
+
+* Value Prediction:
+  - Predicted 17,321 missing values
+  - 1,295 high-confidence (summation constraints)
+  - Random Forest baseline for remaining values
+
+======================================================================

@@ -539,20 +539,40 @@ with tab4:
 
     feature_x = st.selectbox("X-axis Feature", numeric_features, index=0)
     feature_y = st.selectbox("Y-axis Feature", numeric_features, index=1)
+    
+    # Option to show trendline
+    show_trendline = st.checkbox("Show OLS Trendline", value=False)
 
-    # Scatter plot with trendline
-    fig_corr = px.scatter(
-        filtered_data,
-        x=feature_x,
-        y=feature_y,
-        color='cluster',
-        trendline='ols',
-        hover_data=['khipu_id', 'PROVENANCE'],
-        title=f'{feature_x} vs {feature_y}',
-        labels={feature_x: feature_x.replace('_', ' ').title(),
-                feature_y: feature_y.replace('_', ' ').title()},
-        color_continuous_scale='viridis'
-    )
+    # Prepare data - convert cluster to string for categorical coloring
+    plot_data = filtered_data.copy()
+    plot_data['cluster'] = plot_data['cluster'].astype(str)
+
+    # Scatter plot with optional trendline
+    try:
+        fig_corr = px.scatter(
+            plot_data,
+            x=feature_x,
+            y=feature_y,
+            color='cluster',
+            trendline='ols' if show_trendline else None,
+            hover_data=['khipu_id', 'PROVENANCE'],
+            title=f'{feature_x} vs {feature_y}',
+            labels={feature_x: feature_x.replace('_', ' ').title(),
+                    feature_y: feature_y.replace('_', ' ').title()}
+        )
+    except Exception as e:
+        # Fallback without trendline if statsmodels fails
+        st.warning(f"Trendline disabled: {str(e)}")
+        fig_corr = px.scatter(
+            plot_data,
+            x=feature_x,
+            y=feature_y,
+            color='cluster',
+            hover_data=['khipu_id', 'PROVENANCE'],
+            title=f'{feature_x} vs {feature_y}',
+            labels={feature_x: feature_x.replace('_', ' ').title(),
+                    feature_y: feature_y.replace('_', ' ').title()}
+        )
     fig_corr.update_layout(height=600)
     st.plotly_chart(fig_corr, width="stretch")
 

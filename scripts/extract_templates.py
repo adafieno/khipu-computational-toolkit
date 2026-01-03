@@ -41,10 +41,10 @@ class TemplateExtractor:
         print("Loading data files...")
         
         data = {
-            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv")),
-            'high_match': pd.read_csv(self.config.get_processed_file("high_match_khipus.csv")),
-            'similarity': pd.read_csv(self.config.get_processed_file("most_similar_khipu_pairs.csv")),
-            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv"))
+            'summation': pd.read_csv(self.config.get_processed_file("summation_test_results.csv", 3)),
+            'high_match': pd.read_csv(self.config.get_processed_file("high_match_khipus.csv", 4)),
+            'similarity': pd.read_csv(self.config.get_processed_file("most_similar_khipu_pairs.csv", 4)),
+            'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv", 4))
         }
         
         # Load graphs

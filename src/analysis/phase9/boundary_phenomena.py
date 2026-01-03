@@ -12,21 +12,29 @@ Source References:
 - Phase 3: White cords improve summation +10.7pp (p<0.001, d=0.43)
 - Phase 5: White boundaries uniform across provenances (p=1.00)
 """
-
-import json
+import sys
 from pathlib import Path
-from typing import Dict
 
-import pandas as pd
-from scipy import stats
+# Add src directory to path for config import
+src_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(src_path))
+
+from config import get_config  # noqa: E402 # type: ignore
+
+import json  # noqa: E402
+from typing import Dict  # noqa: E402
+
+import pandas as pd  # noqa: E402
+from scipy import stats  # noqa: E402
 
 
 class BoundaryPhenomenaAnalyzer:
     """Analyzes boundary phenomena in khipu structures."""
 
     def __init__(self, data_dir: str = "data/processed"):
-        self.data_dir = Path(data_dir)
-        self.db_path = self.data_dir / "khipu.db"
+        self.config = get_config()
+        self.data_dir = self.config.processed_dir
+        self.db_path = self.config.get_database_path()
         self.output_dir = self.data_dir / "phase9" / "9.6_boundary_phenomena"
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -39,7 +47,7 @@ class BoundaryPhenomenaAnalyzer:
         print("Loading datasets...")
 
         # Load hierarchy with positions
-        hierarchy_file = self.data_dir / "cord_hierarchy.csv"
+        hierarchy_file = self.config.get_processed_file("cord_hierarchy.csv", 2)
         self.hierarchy = pd.read_csv(hierarchy_file)
         # Normalize column names
         self.hierarchy = self.hierarchy.rename(columns={
@@ -55,7 +63,7 @@ class BoundaryPhenomenaAnalyzer:
         print(f"  ✓ Hierarchy: {len(self.hierarchy)} cords")
 
         # Load color data
-        color_file = self.data_dir / "color_data.csv"
+        color_file = self.config.get_processed_file("color_data.csv", 2)
         self.colors = pd.read_csv(color_file)
         # Normalize column names
         self.colors = self.colors.rename(columns={
@@ -66,7 +74,7 @@ class BoundaryPhenomenaAnalyzer:
         print(f"  ✓ Colors: {len(self.colors)} records")
 
         # Load numeric values
-        numeric_file = self.data_dir / "cord_numeric_values.csv"
+        numeric_file = self.config.get_processed_file("cord_numeric_values.csv", 1)
         self.numeric = pd.read_csv(numeric_file)
         # Normalize column names
         if 'khipu_id' in self.numeric.columns:
@@ -79,7 +87,7 @@ class BoundaryPhenomenaAnalyzer:
         print(f"  ✓ Numeric: {len(self.numeric)} records")
 
         # Load summation results (Phase 3)
-        summation_file = self.data_dir / "summation_test_results.csv"
+        summation_file = self.config.get_processed_file("summation_test_results.csv", 3)
         if summation_file.exists():
             self.summation = pd.read_csv(summation_file)
             # Normalize column names

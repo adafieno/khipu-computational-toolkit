@@ -26,7 +26,8 @@ def main():
     db_path = config.get_database_path()
     validator = ArithmeticValidator(db_path)
     
-    output_dir = config.processed_dir
+    # Use phase1 directory for outputs
+    output_dir = config.phase_dirs[1]
     output_dir.mkdir(parents=True, exist_ok=True)
     
     print("Step 1: Exporting decoded cord numeric values...")

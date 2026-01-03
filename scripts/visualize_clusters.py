@@ -35,10 +35,10 @@ def load_data():
 
     config = get_config()
     clusters = pd.read_csv(config.get_processed_file(
-        "cluster_assignments_kmeans.csv"))
-    pca = pd.read_csv(config.get_processed_file("cluster_pca_coordinates.csv"))
+        "cluster_assignments_kmeans.csv", 4))
+    pca = pd.read_csv(config.get_processed_file("cluster_pca_coordinates.csv", 4))
     features = pd.read_csv(config.get_processed_file(
-        "graph_structural_features.csv"))
+        "graph_structural_features.csv", 4))
 
     # Load provenance
     conn = sqlite3.connect(config.get_database_path())
