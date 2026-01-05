@@ -5,6 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow)]()
 [![Status](https://img.shields.io/badge/Status-Research%20Tool-blue)]()
+[![Docs](https://img.shields.io/badge/docs-live-blue)](https://adafieno.github.io/khipu-computational-toolkit/?utm_source=github&utm_medium=readme)
 
 ## Overview
 
