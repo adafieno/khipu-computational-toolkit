@@ -112,26 +112,26 @@ class KnotExtractor:
     
     def _decode_knot_value(self, df: pd.DataFrame) -> pd.Series:
         """
-        Decode numeric value from knot encoding.
+        Decode numeric value from knot encoding using Ascher notation.
         
-        Formula: numeric_value = knot_value_type × digit
-        - For long knots (L): digit = NUM_TURNS
-        - For single knots (S): digit = 1
-        - For figure-eight knots (E): digit = 1
+        Formula (Ascher & Ascher):
+        - S (single) = hundreds position = 100
+        - L (long) = tens position = NUM_TURNS × 10
+        - E (figure-eight) = units position = 1
         """
         values = pd.Series(None, index=df.index, dtype='Int64')
         
-        # Long knots: multiply place value by NUM_TURNS
-        long_mask = (df['knot_type'] == 'L') & df['knot_value_type'].notna() & df['NUM_TURNS'].notna()
-        values[long_mask] = (df.loc[long_mask, 'knot_value_type'] * df.loc[long_mask, 'NUM_TURNS']).astype('Int64')
+        # Long knots: NUM_TURNS × 10 (tens position)
+        long_mask = (df['knot_type'] == 'L') & df['NUM_TURNS'].notna()
+        values[long_mask] = (df.loc[long_mask, 'NUM_TURNS'] * 10).astype('Int64')
         
-        # Single knots: place value × 1
-        single_mask = (df['knot_type'] == 'S') & df['knot_value_type'].notna()
-        values[single_mask] = df.loc[single_mask, 'knot_value_type'].astype('Int64')
+        # Single knots: 100 (hundreds position)
+        single_mask = (df['knot_type'] == 'S')
+        values[single_mask] = 100
         
-        # Figure-eight knots: place value × 1
-        eight_mask = (df['knot_type'] == 'E') & df['knot_value_type'].notna()
-        values[eight_mask] = df.loc[eight_mask, 'knot_value_type'].astype('Int64')
+        # Figure-eight knots: 1 (units position)
+        eight_mask = (df['knot_type'] == 'E')
+        values[eight_mask] = 1
         
         return values
     

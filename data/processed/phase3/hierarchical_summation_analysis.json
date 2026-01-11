@@ -1,34 +1,34 @@
 {
-  "generated_at": "2025-12-31T08:39:09.743193",
+  "generated_at": "2026-01-10T12:58:25.435427",
   "analysis": {
     "summary_statistics": {
       "total_khipus": 619,
-      "khipus_tested": 384,
-      "khipus_with_multi_level": 136,
-      "pct_multi_level": 35.41666666666667,
-      "khipus_high_match": 12,
-      "pct_high_match": 3.125,
-      "avg_overall_match_rate": 0.11902178968799033,
-      "avg_levels_tested": 1.4635416666666667,
+      "khipus_tested": 377,
+      "khipus_with_multi_level": 133,
+      "pct_multi_level": 35.278514588859416,
+      "khipus_high_match": 5,
+      "pct_high_match": 1.3262599469496021,
+      "avg_overall_match_rate": 0.0930552140221269,
+      "avg_levels_tested": 1.4588859416445623,
       "max_levels_tested": 5.0
     },
     "level_analysis": {
       "level_2.0": {
-        "total_tests": 5031,
-        "total_matches": 405,
-        "match_rate": 0.08050089445438283,
-        "khipu_count": 316
+        "total_tests": 5008,
+        "total_matches": 370,
+        "match_rate": 0.0738817891373802,
+        "khipu_count": 315
       },
       "level_3.0": {
-        "total_tests": 757,
-        "total_matches": 93,
-        "match_rate": 0.12285336856010567,
+        "total_tests": 749,
+        "total_matches": 77,
+        "match_rate": 0.102803738317757,
         "khipu_count": 97
       },
       "level_4.0": {
-        "total_tests": 109,
+        "total_tests": 108,
         "total_matches": 6,
-        "match_rate": 0.05504587155963303,
+        "match_rate": 0.05555555555555555,
         "khipu_count": 25
       },
       "level_5.0": {
@@ -56,28 +56,28 @@
         "khipu_count": 1
       },
       "level_2": {
-        "total_tests": 1120,
-        "total_matches": 236,
-        "match_rate": 0.21071428571428572,
-        "khipu_count": 66
+        "total_tests": 825,
+        "total_matches": 90,
+        "match_rate": 0.10909090909090909,
+        "khipu_count": 60
       },
       "level_3": {
-        "total_tests": 214,
-        "total_matches": 54,
-        "match_rate": 0.2523364485981308,
-        "khipu_count": 32
+        "total_tests": 165,
+        "total_matches": 30,
+        "match_rate": 0.18181818181818182,
+        "khipu_count": 29
       },
       "level_5": {
-        "total_tests": 2,
+        "total_tests": 1,
         "total_matches": 0,
         "match_rate": 0.0,
-        "khipu_count": 2
+        "khipu_count": 1
       },
       "level_4": {
-        "total_tests": 31,
-        "total_matches": 9,
-        "match_rate": 0.2903225806451613,
-        "khipu_count": 8
+        "total_tests": 21,
+        "total_matches": 6,
+        "match_rate": 0.2857142857142857,
+        "khipu_count": 7
       }
     },
     "multi_level_khipus": [
@@ -189,12 +189,10 @@
       1000573,
       1000574,
       1000576,
-      1000586,
       1000591,
       1000595,
       1000597,
       1000598,
-      1000599,
       1000601,
       1000603,
       1000607,
@@ -213,7 +211,6 @@
       1000633,
       1000634,
       1000635,
-      1000637,
       1000646,
       1000647,
       1000658
@@ -221,15 +218,8 @@
     "high_match_khipus": [
       1000093,
       1000137,
-      1000194,
       1000251,
-      1000456,
-      1000600,
-      1000606,
-      1000628,
       1000644,
-      1000646,
-      1000650,
       1000659
     ]
   },
@@ -248,7 +238,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 32.25,
+          "avg_difference": 119.75,
           "avg_confidence": 1.0
         }
       }
@@ -278,7 +268,7 @@
           "tests_performed": 6,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1662.1666666666667,
+          "avg_difference": 494.6666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -297,8 +287,8 @@
           "tests_performed": 5,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 87.2,
-          "avg_confidence": 1.0
+          "avg_difference": 284.0,
+          "avg_confidence": 0.9199999999999999
         }
       }
     },
@@ -316,7 +306,7 @@
           "tests_performed": 15,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 23.0,
+          "avg_difference": 170.46666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -335,7 +325,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 95.25,
+          "avg_difference": 360.25,
           "avg_confidence": 1.0
         }
       }
@@ -354,7 +344,7 @@
           "tests_performed": 9,
           "matches": 1,
           "match_rate": 0.1111111111111111,
-          "avg_difference": 4.333333333333333,
+          "avg_difference": 14.0,
           "avg_confidence": 1.0
         }
       }
@@ -364,23 +354,23 @@
       "total_cords": 343,
       "max_level": 3,
       "total_tests": 101,
-      "total_matches": 5,
-      "overall_match_rate": 0.04950495049504951,
+      "total_matches": 2,
+      "overall_match_rate": 0.019801980198019802,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 80,
-          "matches": 3,
-          "match_rate": 0.0375,
+          "matches": 1,
+          "match_rate": 0.0125,
           "avg_difference": NaN,
-          "avg_confidence": 0.99875
+          "avg_confidence": 0.996875
         },
         "level_3.0": {
           "tests_performed": 21,
-          "matches": 2,
-          "match_rate": 0.09523809523809523,
-          "avg_difference": 127.95238095238095,
+          "matches": 1,
+          "match_rate": 0.047619047619047616,
+          "avg_difference": 87.14285714285714,
           "avg_confidence": 1.0
         }
       }
@@ -399,14 +389,14 @@
           "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 26.22222222222222,
+          "avg_difference": 255.55555555555554,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 9.666666666666666,
+          "avg_difference": 53.0,
           "avg_confidence": 1.0
         }
       }
@@ -426,7 +416,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9983695652173913
+          "avg_confidence": 0.9910326086956521
         },
         "level_3.0": {
           "tests_performed": 14,
@@ -451,14 +441,14 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 593.0,
-          "avg_confidence": 0.9933333333333333
+          "avg_difference": NaN,
+          "avg_confidence": 0.9633333333333334
         },
         "level_3.0": {
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 313.0,
+          "avg_difference": 613.6666666666666,
           "avg_confidence": 1.0
         }
       }
@@ -468,15 +458,15 @@
       "total_cords": 44,
       "max_level": 2,
       "total_tests": 13,
-      "total_matches": 1,
-      "overall_match_rate": 0.07692307692307693,
+      "total_matches": 2,
+      "overall_match_rate": 0.15384615384615385,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 13,
-          "matches": 1,
-          "match_rate": 0.07692307692307693,
+          "matches": 2,
+          "match_rate": 0.15384615384615385,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -487,23 +477,23 @@
       "total_cords": 116,
       "max_level": 3,
       "total_tests": 32,
-      "total_matches": 1,
-      "overall_match_rate": 0.03125,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 28,
-          "matches": 1,
-          "match_rate": 0.03571428571428571,
-          "avg_difference": 451.67857142857144,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 314.17857142857144,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 81.25,
+          "avg_difference": 282.5,
           "avg_confidence": 1.0
         }
       }
@@ -555,7 +545,7 @@
           "tests_performed": 7,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 23.142857142857142,
+          "avg_difference": 73.0,
           "avg_confidence": 1.0
         }
       }
@@ -564,18 +554,18 @@
       "khipu_id": 1000018,
       "total_cords": 442,
       "max_level": 3,
-      "total_tests": 125,
-      "total_matches": 8,
-      "overall_match_rate": 0.064,
+      "total_tests": 124,
+      "total_matches": 9,
+      "overall_match_rate": 0.07258064516129033,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 123,
-          "matches": 8,
-          "match_rate": 0.06504065040650407,
+          "tests_performed": 122,
+          "matches": 9,
+          "match_rate": 0.07377049180327869,
           "avg_difference": NaN,
-          "avg_confidence": 0.9991869918699188
+          "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 2,
@@ -609,23 +599,23 @@
       "khipu_id": 1000020,
       "total_cords": 769,
       "max_level": 5,
-      "total_tests": 193,
-      "total_matches": 41,
-      "overall_match_rate": 0.21243523316062177,
+      "total_tests": 188,
+      "total_matches": 36,
+      "overall_match_rate": 0.19148936170212766,
       "has_multi_level_summation": true,
       "levels_tested": 4,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 121,
-          "matches": 15,
-          "match_rate": 0.12396694214876033,
+          "tests_performed": 118,
+          "matches": 13,
+          "match_rate": 0.11016949152542373,
           "avg_difference": NaN,
-          "avg_confidence": 1.0
+          "avg_confidence": 0.9976694915254237
         },
         "level_3.0": {
-          "tests_performed": 65,
-          "matches": 24,
-          "match_rate": 0.36923076923076925,
+          "tests_performed": 63,
+          "matches": 21,
+          "match_rate": 0.3333333333333333,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -640,7 +630,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 15.0,
+          "avg_difference": 39.0,
           "avg_confidence": 1.0
         }
       }
@@ -659,14 +649,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 81.0,
+          "avg_difference": 90.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
           "tests_performed": 22,
           "matches": 16,
           "match_rate": 0.7272727272727273,
-          "avg_difference": 12.863636363636363,
+          "avg_difference": 33.18181818181818,
           "avg_confidence": 1.0
         }
       }
@@ -676,15 +666,15 @@
       "total_cords": 162,
       "max_level": 2,
       "total_tests": 18,
-      "total_matches": 13,
-      "overall_match_rate": 0.7222222222222222,
+      "total_matches": 12,
+      "overall_match_rate": 0.6666666666666666,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 18,
-          "matches": 13,
-          "match_rate": 0.7222222222222222,
+          "matches": 12,
+          "match_rate": 0.6666666666666666,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -711,7 +701,7 @@
           "tests_performed": 15,
           "matches": 1,
           "match_rate": 0.06666666666666667,
-          "avg_difference": 158.53333333333333,
+          "avg_difference": 201.66666666666666,
           "avg_confidence": 1.0
         }
       }
@@ -730,7 +720,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 19.5,
+          "avg_difference": 349.5,
           "avg_confidence": 1.0
         },
         "level_2.0": {
@@ -796,7 +786,7 @@
           "tests_performed": 7,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 24.142857142857142,
+          "avg_difference": 52.857142857142854,
           "avg_confidence": 1.0
         }
       }
@@ -834,7 +824,7 @@
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 6.75,
+          "avg_difference": 22.0,
           "avg_confidence": 1.0
         }
       }
@@ -860,7 +850,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 30.0,
+          "avg_difference": 480.0,
           "avg_confidence": 1.0
         }
       }
@@ -879,7 +869,7 @@
           "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 56.77777777777778,
+          "avg_difference": 67.22222222222223,
           "avg_confidence": 1.0
         }
       }
@@ -909,8 +899,8 @@
           "tests_performed": 40,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 883.4,
-          "avg_confidence": 0.99875
+          "avg_difference": 634.35,
+          "avg_confidence": 0.9962500000000001
         }
       }
     },
@@ -928,7 +918,7 @@
           "tests_performed": 6,
           "matches": 1,
           "match_rate": 0.16666666666666666,
-          "avg_difference": 16.5,
+          "avg_difference": 49.833333333333336,
           "avg_confidence": 1.0
         }
       }
@@ -938,8 +928,8 @@
       "total_cords": 100,
       "max_level": 2,
       "total_tests": 30,
-      "total_matches": 3,
-      "overall_match_rate": 0.1,
+      "total_matches": 2,
+      "overall_match_rate": 0.06666666666666667,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
@@ -947,14 +937,14 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 13.5,
+          "avg_difference": 34.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
           "tests_performed": 28,
-          "matches": 3,
-          "match_rate": 0.10714285714285714,
-          "avg_difference": 26.464285714285715,
+          "matches": 2,
+          "match_rate": 0.07142857142857142,
+          "avg_difference": 53.57142857142857,
           "avg_confidence": 1.0
         }
       }
@@ -973,7 +963,7 @@
           "tests_performed": 12,
           "matches": 2,
           "match_rate": 0.16666666666666666,
-          "avg_difference": 22.166666666666668,
+          "avg_difference": 51.666666666666664,
           "avg_confidence": 1.0
         }
       }
@@ -1003,14 +993,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 67.0,
+          "avg_difference": 570.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 36.5,
+          "avg_difference": 120.0,
           "avg_confidence": 1.0
         }
       }
@@ -1059,7 +1049,7 @@
           "tests_performed": 12,
           "matches": 1,
           "match_rate": 0.08333333333333333,
-          "avg_difference": 16.75,
+          "avg_difference": 233.25,
           "avg_confidence": 1.0
         }
       }
@@ -1089,7 +1079,7 @@
           "tests_performed": 7,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 27.714285714285715,
+          "avg_difference": 251.42857142857142,
           "avg_confidence": 1.0
         }
       }
@@ -1108,7 +1098,7 @@
           "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 122.22222222222223,
+          "avg_difference": 466.6666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -1127,7 +1117,7 @@
           "tests_performed": 12,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 28.333333333333332,
+          "avg_difference": 258.3333333333333,
           "avg_confidence": 1.0
         }
       }
@@ -1137,16 +1127,16 @@
       "total_cords": 314,
       "max_level": 2,
       "total_tests": 32,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 2,
+      "overall_match_rate": 0.0625,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 32,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 39.34375,
+          "matches": 2,
+          "match_rate": 0.0625,
+          "avg_difference": 247.03125,
           "avg_confidence": 1.0
         }
       }
@@ -1165,7 +1155,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 26.0,
+          "avg_difference": 140.0,
           "avg_confidence": 1.0
         }
       }
@@ -1205,15 +1195,15 @@
       "total_cords": 22,
       "max_level": 2,
       "total_tests": 9,
-      "total_matches": 1,
-      "overall_match_rate": 0.1111111111111111,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 9,
-          "matches": 1,
-          "match_rate": 0.1111111111111111,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -1233,7 +1223,7 @@
           "tests_performed": 5,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 213.4,
+          "avg_difference": 339.8,
           "avg_confidence": 1.0
         }
       }
@@ -1263,14 +1253,14 @@
           "tests_performed": 6,
           "matches": 1,
           "match_rate": 0.16666666666666666,
-          "avg_difference": 11.5,
+          "avg_difference": 31.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 24.0,
+          "avg_difference": 49.0,
           "avg_confidence": 1.0
         }
       }
@@ -1311,7 +1301,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 30.0,
+          "avg_difference": 225.0,
           "avg_confidence": 1.0
         }
       }
@@ -1352,7 +1342,7 @@
           "tests_performed": 15,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 38.6,
+          "avg_difference": 146.46666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -1371,7 +1361,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 74.0,
+          "avg_difference": 394.5,
           "avg_confidence": 1.0
         }
       }
@@ -1380,24 +1370,24 @@
       "khipu_id": 1000060,
       "total_cords": 27,
       "max_level": 3,
-      "total_tests": 12,
+      "total_tests": 10,
       "total_matches": 1,
-      "overall_match_rate": 0.08333333333333333,
+      "overall_match_rate": 0.1,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 11,
+          "tests_performed": 9,
           "matches": 1,
-          "match_rate": 0.09090909090909091,
-          "avg_difference": 21.0,
-          "avg_confidence": 0.9636363636363636
+          "match_rate": 0.1111111111111111,
+          "avg_difference": 127.55555555555556,
+          "avg_confidence": 0.8777777777777778
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 78.0,
+          "avg_difference": 200.0,
           "avg_confidence": 1.0
         }
       }
@@ -1416,14 +1406,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 8.0,
+          "avg_difference": 400.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 32.0,
+          "avg_difference": 540.0,
           "avg_confidence": 1.0
         }
       }
@@ -1442,14 +1432,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 8.0,
+          "avg_difference": 400.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 16.0,
+          "avg_difference": 500.0,
           "avg_confidence": 1.0
         }
       }
@@ -1520,7 +1510,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 198.0,
+          "avg_difference": 1320.0,
           "avg_confidence": 1.0
         }
       }
@@ -1550,7 +1540,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 10.0,
+          "avg_difference": 100.0,
           "avg_confidence": 1.0
         }
       }
@@ -1569,7 +1559,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 2928.5,
+          "avg_difference": 780.5,
           "avg_confidence": 1.0
         }
       }
@@ -1622,7 +1612,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9800000000000001
+          "avg_confidence": 0.9710000000000001
         }
       }
     },
@@ -1640,7 +1630,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 12609.333333333334,
+          "avg_difference": 1300.0,
           "avg_confidence": 1.0
         }
       }
@@ -1659,7 +1649,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 21221.5,
+          "avg_difference": 1475.0,
           "avg_confidence": 1.0
         }
       }
@@ -1678,7 +1668,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 12.0,
+          "avg_difference": 20.0,
           "avg_confidence": 1.0
         }
       }
@@ -1697,7 +1687,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 50.0,
+          "avg_difference": 500.0,
           "avg_confidence": 1.0
         }
       }
@@ -1746,7 +1736,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1853.5,
+          "avg_difference": 610.0,
           "avg_confidence": 1.0
         }
       }
@@ -1776,14 +1766,14 @@
           "tests_performed": 26,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 27.884615384615383,
+          "avg_difference": 301.53846153846155,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 9,
           "matches": 3,
           "match_rate": 0.3333333333333333,
-          "avg_difference": 16.444444444444443,
+          "avg_difference": 146.44444444444446,
           "avg_confidence": 1.0
         }
       }
@@ -1813,7 +1803,7 @@
           "tests_performed": 10,
           "matches": 1,
           "match_rate": 0.1,
-          "avg_difference": 22.0,
+          "avg_difference": 128.9,
           "avg_confidence": 1.0
         }
       }
@@ -1843,7 +1833,7 @@
           "tests_performed": 12,
           "matches": 7,
           "match_rate": 0.5833333333333334,
-          "avg_difference": 3.6666666666666665,
+          "avg_difference": 15.583333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -1864,17 +1854,17 @@
       "total_cords": 287,
       "max_level": 2,
       "total_tests": 81,
-      "total_matches": 9,
-      "overall_match_rate": 0.1111111111111111,
+      "total_matches": 2,
+      "overall_match_rate": 0.024691358024691357,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 81,
-          "matches": 9,
-          "match_rate": 0.1111111111111111,
+          "matches": 2,
+          "match_rate": 0.024691358024691357,
           "avg_difference": NaN,
-          "avg_confidence": 1.0
+          "avg_confidence": 0.9975308641975308
         }
       }
     },
@@ -1911,7 +1901,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 153.5,
+          "avg_difference": 595.0,
           "avg_confidence": 1.0
         }
       }
@@ -1951,23 +1941,23 @@
       "total_cords": 285,
       "max_level": 3,
       "total_tests": 80,
-      "total_matches": 1,
-      "overall_match_rate": 0.0125,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 79,
-          "matches": 1,
-          "match_rate": 0.012658227848101266,
-          "avg_difference": 51.24050632911393,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 317.2911392405063,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 65.0,
+          "avg_difference": 539.0,
           "avg_confidence": 1.0
         }
       }
@@ -1977,17 +1967,17 @@
       "total_cords": 1831,
       "max_level": 3,
       "total_tests": 94,
-      "total_matches": 2,
-      "overall_match_rate": 0.02127659574468085,
+      "total_matches": 3,
+      "overall_match_rate": 0.031914893617021274,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 86,
-          "matches": 2,
-          "match_rate": 0.023255813953488372,
+          "matches": 3,
+          "match_rate": 0.03488372093023256,
           "avg_difference": NaN,
-          "avg_confidence": 0.996124031007752
+          "avg_confidence": 0.9860465116279069
         },
         "level_3.0": {
           "tests_performed": 8,
@@ -2019,7 +2009,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 419.5,
+          "avg_difference": 529.5,
           "avg_confidence": 1.0
         }
       }
@@ -2088,18 +2078,18 @@
       "khipu_id": 1000103,
       "total_cords": 541,
       "max_level": 2,
-      "total_tests": 84,
+      "total_tests": 83,
       "total_matches": 16,
-      "overall_match_rate": 0.19047619047619047,
+      "overall_match_rate": 0.1927710843373494,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 84,
+          "tests_performed": 83,
           "matches": 16,
-          "match_rate": 0.19047619047619047,
+          "match_rate": 0.1927710843373494,
           "avg_difference": NaN,
-          "avg_confidence": 0.9988095238095239
+          "avg_confidence": 1.0
         }
       }
     },
@@ -2161,7 +2151,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 37.0,
+          "avg_difference": 275.5,
           "avg_confidence": 1.0
         }
       }
@@ -2191,7 +2181,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 14.0,
+          "avg_difference": 80.0,
           "avg_confidence": 1.0
         }
       }
@@ -2232,7 +2222,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3760.0,
+          "avg_difference": 700.0,
           "avg_confidence": 1.0
         }
       }
@@ -2251,7 +2241,7 @@
           "tests_performed": 6,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 123.0,
+          "avg_difference": 950.8333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -2322,7 +2312,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1086.5,
+          "avg_difference": 485.0,
           "avg_confidence": 1.0
         }
       }
@@ -2341,7 +2331,7 @@
           "tests_performed": 11,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 40.18181818181818,
+          "avg_difference": 155.63636363636363,
           "avg_confidence": 1.0
         }
       }
@@ -2393,14 +2383,14 @@
           "tests_performed": 10,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 90.1,
+          "avg_difference": 457.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 33.0,
+          "avg_difference": 319.0,
           "avg_confidence": 1.0
         }
       }
@@ -2426,7 +2416,7 @@
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 8.0,
+          "avg_difference": 12.25,
           "avg_confidence": 1.0
         }
       }
@@ -2436,16 +2426,16 @@
       "total_cords": 118,
       "max_level": 2,
       "total_tests": 23,
-      "total_matches": 1,
-      "overall_match_rate": 0.043478260869565216,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 23,
-          "matches": 1,
-          "match_rate": 0.043478260869565216,
-          "avg_difference": 157.30434782608697,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 479.6521739130435,
           "avg_confidence": 1.0
         }
       }
@@ -2464,7 +2454,7 @@
           "tests_performed": 15,
           "matches": 1,
           "match_rate": 0.06666666666666667,
-          "avg_difference": 13.666666666666666,
+          "avg_difference": 61.86666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -2494,7 +2484,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 22.0,
+          "avg_difference": 30.0,
           "avg_confidence": 1.0
         }
       }
@@ -2606,7 +2596,7 @@
           "tests_performed": 10,
           "matches": 1,
           "match_rate": 0.1,
-          "avg_difference": 36.1,
+          "avg_difference": 167.9,
           "avg_confidence": 1.0
         }
       }
@@ -2625,7 +2615,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 102.0,
+          "avg_difference": 294.5,
           "avg_confidence": 1.0
         }
       }
@@ -2642,16 +2632,16 @@
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 82,
-          "matches": 4,
-          "match_rate": 0.04878048780487805,
+          "matches": 3,
+          "match_rate": 0.036585365853658534,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 7,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 37.0,
+          "matches": 1,
+          "match_rate": 0.14285714285714285,
+          "avg_difference": 131.0,
           "avg_confidence": 1.0
         }
       }
@@ -2710,7 +2700,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 231.0,
+          "avg_difference": 570.0,
           "avg_confidence": 1.0
         }
       }
@@ -2729,7 +2719,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 20.0,
+          "avg_difference": 200.0,
           "avg_confidence": 1.0
         }
       }
@@ -2739,15 +2729,15 @@
       "total_cords": 59,
       "max_level": 4,
       "total_tests": 24,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.041666666666666664,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 22,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.045454545454545456,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -2755,14 +2745,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 23.0,
+          "avg_difference": 48.0,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 19.0,
+          "avg_difference": 199.0,
           "avg_confidence": 1.0
         }
       }
@@ -2772,15 +2762,15 @@
       "total_cords": 338,
       "max_level": 4,
       "total_tests": 80,
-      "total_matches": 2,
-      "overall_match_rate": 0.025,
+      "total_matches": 1,
+      "overall_match_rate": 0.0125,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 66,
-          "matches": 2,
-          "match_rate": 0.030303030303030304,
+          "matches": 1,
+          "match_rate": 0.015151515151515152,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -2795,7 +2785,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 51.333333333333336,
+          "avg_difference": 153.33333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -2805,16 +2795,16 @@
       "total_cords": 303,
       "max_level": 3,
       "total_tests": 44,
-      "total_matches": 2,
-      "overall_match_rate": 0.045454545454545456,
+      "total_matches": 1,
+      "overall_match_rate": 0.022727272727272728,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 35,
-          "matches": 2,
-          "match_rate": 0.05714285714285714,
-          "avg_difference": 69.25714285714285,
+          "matches": 1,
+          "match_rate": 0.02857142857142857,
+          "avg_difference": 303.25714285714287,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -2870,7 +2860,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1010.0,
+          "avg_difference": 200.0,
           "avg_confidence": 1.0
         }
       }
@@ -2889,7 +2879,7 @@
           "tests_performed": 5,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 16.4,
+          "avg_difference": 163.6,
           "avg_confidence": 1.0
         }
       }
@@ -2930,7 +2920,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 52.0,
+          "avg_difference": 400.0,
           "avg_confidence": 1.0
         }
       }
@@ -2960,14 +2950,14 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 23.5,
+          "avg_difference": 27.25,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 16.0,
+          "avg_difference": 40.0,
           "avg_confidence": 1.0
         }
       }
@@ -2976,18 +2966,18 @@
       "khipu_id": 1000159,
       "total_cords": 64,
       "max_level": 2,
-      "total_tests": 17,
-      "total_matches": 4,
-      "overall_match_rate": 0.23529411764705882,
+      "total_tests": 15,
+      "total_matches": 2,
+      "overall_match_rate": 0.13333333333333333,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 17,
-          "matches": 4,
-          "match_rate": 0.23529411764705882,
+          "tests_performed": 15,
+          "matches": 2,
+          "match_rate": 0.13333333333333333,
           "avg_difference": NaN,
-          "avg_confidence": 0.9715686274509804
+          "avg_confidence": 0.945
         }
       }
     },
@@ -3068,7 +3058,7 @@
           "tests_performed": 27,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 74.88888888888889,
+          "avg_difference": 400.0,
           "avg_confidence": 1.0
         }
       }
@@ -3087,7 +3077,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 35.0,
+          "avg_difference": 150.0,
           "avg_confidence": 1.0
         }
       }
@@ -3106,7 +3096,7 @@
           "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 44.22222222222222,
+          "avg_difference": 393.3333333333333,
           "avg_confidence": 1.0
         }
       }
@@ -3221,7 +3211,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 74.0,
+          "avg_difference": 180.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
@@ -3238,15 +3228,15 @@
       "total_cords": 32,
       "max_level": 2,
       "total_tests": 12,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.08333333333333333,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 12,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.08333333333333333,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -3335,23 +3325,23 @@
       "total_cords": 75,
       "max_level": 3,
       "total_tests": 33,
-      "total_matches": 1,
-      "overall_match_rate": 0.030303030303030304,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 29,
-          "matches": 1,
-          "match_rate": 0.034482758620689655,
-          "avg_difference": 42.48275862068966,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 353.1034482758621,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 80.0,
+          "avg_difference": 1000.0,
           "avg_confidence": 1.0
         }
       }
@@ -3381,7 +3371,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1027.0,
+          "avg_difference": 220.0,
           "avg_confidence": 1.0
         }
       }
@@ -3391,15 +3381,15 @@
       "total_cords": 39,
       "max_level": 2,
       "total_tests": 10,
-      "total_matches": 1,
-      "overall_match_rate": 0.1,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 10,
-          "matches": 1,
-          "match_rate": 0.1,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -3419,7 +3409,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 10.0,
+          "avg_difference": 100.0,
           "avg_confidence": 1.0
         }
       }
@@ -3451,16 +3441,16 @@
       "total_cords": 75,
       "max_level": 2,
       "total_tests": 9,
-      "total_matches": 3,
-      "overall_match_rate": 0.3333333333333333,
+      "total_matches": 1,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 9,
-          "matches": 3,
-          "match_rate": 0.3333333333333333,
-          "avg_difference": 30.666666666666668,
+          "matches": 1,
+          "match_rate": 0.1111111111111111,
+          "avg_difference": 68.88888888888889,
           "avg_confidence": 1.0
         }
       }
@@ -3470,16 +3460,16 @@
       "total_cords": 8,
       "max_level": 2,
       "total_tests": 1,
-      "total_matches": 1,
-      "overall_match_rate": 1.0,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 1,
-          "matches": 1,
-          "match_rate": 1.0,
-          "avg_difference": 1.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 70.0,
           "avg_confidence": 1.0
         }
       }
@@ -3511,15 +3501,15 @@
       "total_cords": 77,
       "max_level": 2,
       "total_tests": 7,
-      "total_matches": 2,
-      "overall_match_rate": 0.2857142857142857,
+      "total_matches": 1,
+      "overall_match_rate": 0.14285714285714285,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 7,
-          "matches": 2,
-          "match_rate": 0.2857142857142857,
+          "matches": 1,
+          "match_rate": 0.14285714285714285,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -3530,23 +3520,23 @@
       "total_cords": 260,
       "max_level": 3,
       "total_tests": 99,
-      "total_matches": 24,
-      "overall_match_rate": 0.24242424242424243,
+      "total_matches": 18,
+      "overall_match_rate": 0.18181818181818182,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 84,
-          "matches": 9,
-          "match_rate": 0.10714285714285714,
+          "matches": 8,
+          "match_rate": 0.09523809523809523,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 15,
-          "matches": 15,
-          "match_rate": 1.0,
-          "avg_difference": 0.0,
+          "matches": 10,
+          "match_rate": 0.6666666666666666,
+          "avg_difference": 33.0,
           "avg_confidence": 1.0
         }
       }
@@ -3556,16 +3546,16 @@
       "total_cords": 28,
       "max_level": 2,
       "total_tests": 7,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 3,
+      "overall_match_rate": 0.42857142857142855,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 7,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 29.285714285714285,
+          "matches": 3,
+          "match_rate": 0.42857142857142855,
+          "avg_difference": 15.571428571428571,
           "avg_confidence": 1.0
         }
       }
@@ -3610,14 +3600,14 @@
           "tests_performed": 6,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 53.833333333333336,
+          "avg_difference": 306.1666666666667,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 43.0,
+          "avg_difference": 419.0,
           "avg_confidence": 1.0
         }
       }
@@ -3658,7 +3648,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 98.33333333333333,
+          "avg_difference": 229.33333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -3677,7 +3667,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 11.0,
+          "avg_difference": 70.0,
           "avg_confidence": 1.0
         }
       }
@@ -3686,24 +3676,24 @@
       "khipu_id": 1000208,
       "total_cords": 45,
       "max_level": 4,
-      "total_tests": 17,
+      "total_tests": 16,
       "total_matches": 2,
-      "overall_match_rate": 0.11764705882352941,
+      "overall_match_rate": 0.125,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 13,
+          "tests_performed": 12,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9923076923076923
+          "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 3,
           "matches": 1,
           "match_rate": 0.3333333333333333,
-          "avg_difference": 6.666666666666667,
+          "avg_difference": 16.333333333333332,
           "avg_confidence": 1.0
         },
         "level_4.0": {
@@ -3720,23 +3710,23 @@
       "total_cords": 56,
       "max_level": 3,
       "total_tests": 18,
-      "total_matches": 1,
-      "overall_match_rate": 0.05555555555555555,
+      "total_matches": 2,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 16,
-          "matches": 1,
-          "match_rate": 0.0625,
-          "avg_difference": 67.8125,
+          "matches": 2,
+          "match_rate": 0.125,
+          "avg_difference": 196.1875,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 52.5,
+          "avg_difference": 35.0,
           "avg_confidence": 1.0
         }
       }
@@ -3762,14 +3752,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 16.0,
+          "avg_difference": 40.0,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 148.0,
+          "avg_difference": 140.0,
           "avg_confidence": 1.0
         }
       }
@@ -3788,7 +3778,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 9.0,
+          "avg_difference": 330.0,
           "avg_confidence": 1.0
         }
       }
@@ -3798,15 +3788,15 @@
       "total_cords": 53,
       "max_level": 2,
       "total_tests": 10,
-      "total_matches": 2,
-      "overall_match_rate": 0.2,
+      "total_matches": 1,
+      "overall_match_rate": 0.1,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 10,
-          "matches": 2,
-          "match_rate": 0.2,
+          "matches": 1,
+          "match_rate": 0.1,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -3837,14 +3827,14 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 210.0,
+          "avg_difference": 300.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
           "tests_performed": 6,
           "matches": 1,
           "match_rate": 0.16666666666666666,
-          "avg_difference": 52.333333333333336,
+          "avg_difference": 237.0,
           "avg_confidence": 1.0
         }
       }
@@ -3896,7 +3886,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 36.0,
+          "avg_difference": 430.0,
           "avg_confidence": 1.0
         }
       }
@@ -3917,16 +3907,16 @@
       "total_cords": 40,
       "max_level": 2,
       "total_tests": 12,
-      "total_matches": 1,
-      "overall_match_rate": 0.08333333333333333,
+      "total_matches": 2,
+      "overall_match_rate": 0.16666666666666666,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 12,
-          "matches": 1,
-          "match_rate": 0.08333333333333333,
-          "avg_difference": 79.58333333333333,
+          "matches": 2,
+          "match_rate": 0.16666666666666666,
+          "avg_difference": 37.416666666666664,
           "avg_confidence": 1.0
         }
       }
@@ -3945,7 +3935,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 11.0,
+          "avg_difference": 79.0,
           "avg_confidence": 1.0
         }
       }
@@ -3988,15 +3978,15 @@
       "total_cords": 51,
       "max_level": 3,
       "total_tests": 12,
-      "total_matches": 5,
-      "overall_match_rate": 0.4166666666666667,
+      "total_matches": 4,
+      "overall_match_rate": 0.3333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 6,
-          "matches": 1,
-          "match_rate": 0.16666666666666666,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -4004,7 +3994,7 @@
           "tests_performed": 6,
           "matches": 4,
           "match_rate": 0.6666666666666666,
-          "avg_difference": 3.0,
+          "avg_difference": 9.666666666666666,
           "avg_confidence": 1.0
         }
       }
@@ -4083,7 +4073,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 11.0,
+          "avg_difference": 125.66666666666667,
           "avg_confidence": 1.0
         }
       }
@@ -4102,8 +4092,8 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 91.0,
-          "avg_confidence": 0.95
+          "avg_difference": 32.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -4146,7 +4136,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 6.0,
+          "avg_difference": 60.0,
           "avg_confidence": 1.0
         }
       }
@@ -4185,7 +4175,7 @@
           "matches": 2,
           "match_rate": 0.05555555555555555,
           "avg_difference": NaN,
-          "avg_confidence": 0.9986111111111112
+          "avg_confidence": 0.9949074074074074
         },
         "level_3.0": {
           "tests_performed": 6,
@@ -4198,7 +4188,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 266.0,
+          "avg_difference": 540.0,
           "avg_confidence": 1.0
         }
       }
@@ -4269,7 +4259,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 14.0,
+          "avg_difference": 51.0,
           "avg_confidence": 1.0
         }
       }
@@ -4342,15 +4332,15 @@
       "total_cords": 66,
       "max_level": 2,
       "total_tests": 4,
-      "total_matches": 2,
-      "overall_match_rate": 0.5,
+      "total_matches": 3,
+      "overall_match_rate": 0.75,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 4,
-          "matches": 2,
-          "match_rate": 0.5,
+          "matches": 3,
+          "match_rate": 0.75,
           "avg_difference": 5.25,
           "avg_confidence": 1.0
         }
@@ -4381,7 +4371,7 @@
           "tests_performed": 13,
           "matches": 12,
           "match_rate": 0.9230769230769231,
-          "avg_difference": 12.153846153846153,
+          "avg_difference": 20.692307692307693,
           "avg_confidence": 1.0
         }
       }
@@ -4433,7 +4423,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 25.0,
+          "avg_difference": 50.0,
           "avg_confidence": 1.0
         }
       }
@@ -4463,7 +4453,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 15.0,
+          "avg_difference": 39.0,
           "avg_confidence": 1.0
         }
       }
@@ -4504,7 +4494,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1468.5,
+          "avg_difference": 739.5,
           "avg_confidence": 1.0
         }
       }
@@ -4523,7 +4513,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1468.5,
+          "avg_difference": 739.5,
           "avg_confidence": 1.0
         }
       }
@@ -4553,7 +4543,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 46.5,
+          "avg_difference": 114.0,
           "avg_confidence": 1.0
         }
       }
@@ -4572,7 +4562,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 5.5,
+          "avg_difference": 24.0,
           "avg_confidence": 1.0
         }
       }
@@ -4591,7 +4581,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 401.3333333333333,
+          "avg_difference": 554.0,
           "avg_confidence": 1.0
         }
       }
@@ -4610,7 +4600,7 @@
           "tests_performed": 18,
           "matches": 2,
           "match_rate": 0.1111111111111111,
-          "avg_difference": 29.22222222222222,
+          "avg_difference": 81.0,
           "avg_confidence": 1.0
         }
       }
@@ -4651,7 +4641,7 @@
           "tests_performed": 35,
           "matches": 7,
           "match_rate": 0.2,
-          "avg_difference": 15.2,
+          "avg_difference": 34.74285714285714,
           "avg_confidence": 1.0
         }
       }
@@ -4660,18 +4650,18 @@
       "khipu_id": 1000270,
       "total_cords": 102,
       "max_level": 2,
-      "total_tests": 26,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_tests": 25,
+      "total_matches": 1,
+      "overall_match_rate": 0.04,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 26,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 68.65384615384616,
-          "avg_confidence": 0.9961538461538461
+          "tests_performed": 25,
+          "matches": 1,
+          "match_rate": 0.04,
+          "avg_difference": 337.8,
+          "avg_confidence": 0.9890000000000001
         }
       }
     },
@@ -4679,16 +4669,16 @@
       "khipu_id": 1000271,
       "total_cords": 125,
       "max_level": 2,
-      "total_tests": 23,
-      "total_matches": 2,
-      "overall_match_rate": 0.08695652173913043,
+      "total_tests": 22,
+      "total_matches": 1,
+      "overall_match_rate": 0.045454545454545456,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 23,
-          "matches": 2,
-          "match_rate": 0.08695652173913043,
+          "tests_performed": 22,
+          "matches": 1,
+          "match_rate": 0.045454545454545456,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -4708,7 +4698,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 35.0,
+          "avg_difference": 59.0,
           "avg_confidence": 1.0
         }
       }
@@ -4746,7 +4736,7 @@
           "tests_performed": 17,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 201.47058823529412,
+          "avg_difference": 209.0,
           "avg_confidence": 1.0
         }
       }
@@ -4755,18 +4745,18 @@
       "khipu_id": 1000275,
       "total_cords": 288,
       "max_level": 2,
-      "total_tests": 59,
-      "total_matches": 2,
-      "overall_match_rate": 0.03389830508474576,
+      "total_tests": 57,
+      "total_matches": 1,
+      "overall_match_rate": 0.017543859649122806,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 59,
-          "matches": 2,
-          "match_rate": 0.03389830508474576,
+          "tests_performed": 57,
+          "matches": 1,
+          "match_rate": 0.017543859649122806,
           "avg_difference": NaN,
-          "avg_confidence": 0.9983050847457627
+          "avg_confidence": 1.0
         }
       }
     },
@@ -4784,7 +4774,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 11080.0,
+          "avg_difference": 100.0,
           "avg_confidence": 1.0
         }
       }
@@ -4804,32 +4794,32 @@
       "khipu_id": 1000279,
       "total_cords": 588,
       "max_level": 6,
-      "total_tests": 223,
-      "total_matches": 4,
-      "overall_match_rate": 0.017937219730941704,
+      "total_tests": 219,
+      "total_matches": 2,
+      "overall_match_rate": 0.0091324200913242,
       "has_multi_level_summation": true,
       "levels_tested": 5,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 62,
+          "tests_performed": 61,
           "matches": 1,
-          "match_rate": 0.016129032258064516,
+          "match_rate": 0.01639344262295082,
           "avg_difference": NaN,
-          "avg_confidence": 0.9922043010752688
+          "avg_confidence": 0.9683879781420764
         },
         "level_3.0": {
-          "tests_performed": 85,
-          "matches": 3,
-          "match_rate": 0.03529411764705882,
+          "tests_performed": 82,
+          "matches": 1,
+          "match_rate": 0.012195121951219513,
           "avg_difference": NaN,
-          "avg_confidence": 0.9947058823529413
+          "avg_confidence": 0.988279132791328
         },
         "level_4.0": {
           "tests_performed": 62,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9951612903225806
+          "avg_confidence": 0.9794354838709678
         },
         "level_5.0": {
           "tests_performed": 12,
@@ -4861,7 +4851,7 @@
           "tests_performed": 73,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 560.054794520548,
+          "avg_difference": 623.986301369863,
           "avg_confidence": 1.0
         }
       }
@@ -4871,15 +4861,15 @@
       "total_cords": 43,
       "max_level": 2,
       "total_tests": 9,
-      "total_matches": 1,
-      "overall_match_rate": 0.1111111111111111,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 9,
-          "matches": 1,
-          "match_rate": 0.1111111111111111,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -4890,15 +4880,15 @@
       "total_cords": 157,
       "max_level": 3,
       "total_tests": 40,
-      "total_matches": 9,
-      "overall_match_rate": 0.225,
+      "total_matches": 8,
+      "overall_match_rate": 0.2,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 39,
-          "matches": 9,
-          "match_rate": 0.23076923076923078,
+          "matches": 8,
+          "match_rate": 0.20512820512820512,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -4906,7 +4896,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 2.0,
+          "avg_difference": 80.0,
           "avg_confidence": 1.0
         }
       }
@@ -4926,7 +4916,7 @@
           "matches": 2,
           "match_rate": 0.06060606060606061,
           "avg_difference": NaN,
-          "avg_confidence": 1.0
+          "avg_confidence": 0.9878787878787879
         }
       }
     },
@@ -4963,7 +4953,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 8.0,
+          "avg_difference": 29.0,
           "avg_confidence": 1.0
         }
       }
@@ -4995,31 +4985,31 @@
       "total_cords": 866,
       "max_level": 4,
       "total_tests": 152,
-      "total_matches": 12,
-      "overall_match_rate": 0.07894736842105263,
+      "total_matches": 9,
+      "overall_match_rate": 0.05921052631578947,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 132,
-          "matches": 10,
-          "match_rate": 0.07575757575757576,
+          "matches": 7,
+          "match_rate": 0.05303030303030303,
           "avg_difference": NaN,
-          "avg_confidence": 0.9988636363636365
+          "avg_confidence": 0.9945616883116882
         },
         "level_3.0": {
           "tests_performed": 19,
           "matches": 2,
           "match_rate": 0.10526315789473684,
-          "avg_difference": 19.57894736842105,
-          "avg_confidence": 1.0
+          "avg_difference": 75.78947368421052,
+          "avg_confidence": 0.9894736842105264
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 40.0,
-          "avg_confidence": 1.0
+          "avg_difference": 400.0,
+          "avg_confidence": 0.7200000000000001
         }
       }
     },
@@ -5028,23 +5018,23 @@
       "total_cords": 321,
       "max_level": 3,
       "total_tests": 68,
-      "total_matches": 3,
-      "overall_match_rate": 0.04411764705882353,
+      "total_matches": 2,
+      "overall_match_rate": 0.029411764705882353,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 61,
-          "matches": 2,
-          "match_rate": 0.03278688524590164,
-          "avg_difference": 89.59016393442623,
+          "matches": 1,
+          "match_rate": 0.01639344262295082,
+          "avg_difference": NaN,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 7,
           "matches": 1,
           "match_rate": 0.14285714285714285,
-          "avg_difference": 32.285714285714285,
+          "avg_difference": 192.42857142857142,
           "avg_confidence": 1.0
         }
       }
@@ -5054,16 +5044,16 @@
       "total_cords": 42,
       "max_level": 2,
       "total_tests": 2,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 2,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 42.5,
+          "matches": 1,
+          "match_rate": 0.5,
+          "avg_difference": 139.5,
           "avg_confidence": 1.0
         }
       }
@@ -5118,7 +5108,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 20.5,
+          "avg_difference": 123.0,
           "avg_confidence": 1.0
         }
       }
@@ -5128,15 +5118,15 @@
       "total_cords": 256,
       "max_level": 4,
       "total_tests": 54,
-      "total_matches": 5,
-      "overall_match_rate": 0.09259259259259259,
+      "total_matches": 4,
+      "overall_match_rate": 0.07407407407407407,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 23,
-          "matches": 1,
-          "match_rate": 0.043478260869565216,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -5151,7 +5141,7 @@
           "tests_performed": 5,
           "matches": 2,
           "match_rate": 0.4,
-          "avg_difference": 14.2,
+          "avg_difference": 126.4,
           "avg_confidence": 1.0
         }
       }
@@ -5161,15 +5151,15 @@
       "total_cords": 89,
       "max_level": 3,
       "total_tests": 23,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.043478260869565216,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 21,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.047619047619047616,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -5177,7 +5167,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 52.0,
+          "avg_difference": 460.0,
           "avg_confidence": 1.0
         }
       }
@@ -5203,7 +5193,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 35.0,
+          "avg_difference": 59.0,
           "avg_confidence": 1.0
         }
       }
@@ -5229,7 +5219,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 16.0,
+          "avg_difference": 77.0,
           "avg_confidence": 1.0
         }
       }
@@ -5248,7 +5238,7 @@
           "tests_performed": 3,
           "matches": 2,
           "match_rate": 0.6666666666666666,
-          "avg_difference": 1.0,
+          "avg_difference": 6.333333333333333,
           "avg_confidence": 1.0
         }
       }
@@ -5293,7 +5283,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 8.0,
+          "avg_difference": 29.0,
           "avg_confidence": 1.0
         }
       }
@@ -5312,7 +5302,7 @@
           "tests_performed": 8,
           "matches": 1,
           "match_rate": 0.125,
-          "avg_difference": 5.5,
+          "avg_difference": 10.0,
           "avg_confidence": 1.0
         }
       }
@@ -5322,15 +5312,15 @@
       "total_cords": 20,
       "max_level": 2,
       "total_tests": 9,
-      "total_matches": 2,
-      "overall_match_rate": 0.2222222222222222,
+      "total_matches": 1,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 9,
-          "matches": 2,
-          "match_rate": 0.2222222222222222,
+          "matches": 1,
+          "match_rate": 0.1111111111111111,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -5350,7 +5340,7 @@
           "tests_performed": 21,
           "matches": 7,
           "match_rate": 0.3333333333333333,
-          "avg_difference": 6.904761904761905,
+          "avg_difference": 15.0,
           "avg_confidence": 1.0
         }
       }
@@ -5360,17 +5350,17 @@
       "total_cords": 97,
       "max_level": 2,
       "total_tests": 8,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.125,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 8,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 196.0,
-          "avg_confidence": 1.0
+          "matches": 1,
+          "match_rate": 0.125,
+          "avg_difference": 96.125,
+          "avg_confidence": 0.95
         }
       }
     },
@@ -5399,7 +5389,7 @@
           "tests_performed": 8,
           "matches": 3,
           "match_rate": 0.375,
-          "avg_difference": 6.75,
+          "avg_difference": 27.25,
           "avg_confidence": 1.0
         }
       }
@@ -5418,21 +5408,21 @@
           "tests_performed": 25,
           "matches": 1,
           "match_rate": 0.04,
-          "avg_difference": 319.44,
-          "avg_confidence": 1.0
+          "avg_difference": 246.08,
+          "avg_confidence": 0.9470000000000001
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 115.0,
+          "avg_difference": 50.0,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 67.0,
+          "avg_difference": 50.0,
           "avg_confidence": 1.0
         }
       }
@@ -5496,8 +5486,8 @@
           "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 165.33333333333334,
-          "avg_confidence": 0.9866666666666666
+          "avg_difference": NaN,
+          "avg_confidence": 0.9388888888888888
         }
       }
     },
@@ -5515,14 +5505,14 @@
           "tests_performed": 6,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 407.6666666666667,
+          "avg_difference": 540.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 209.0,
+          "avg_difference": 299.0,
           "avg_confidence": 1.0
         }
       }
@@ -5558,30 +5548,30 @@
       "total_cords": 77,
       "max_level": 4,
       "total_tests": 5,
-      "total_matches": 1,
-      "overall_match_rate": 0.2,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 2,
-          "matches": 1,
-          "match_rate": 0.5,
-          "avg_difference": 17.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 82.5,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 34.5,
+          "avg_difference": 433.0,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 97.0,
+          "avg_difference": 490.0,
           "avg_confidence": 1.0
         }
       }
@@ -5591,15 +5581,15 @@
       "total_cords": 1227,
       "max_level": 3,
       "total_tests": 66,
-      "total_matches": 17,
-      "overall_match_rate": 0.25757575757575757,
+      "total_matches": 16,
+      "overall_match_rate": 0.24242424242424243,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 60,
-          "matches": 17,
-          "match_rate": 0.2833333333333333,
+          "matches": 16,
+          "match_rate": 0.26666666666666666,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -5607,7 +5597,7 @@
           "tests_performed": 6,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 34.166666666666664,
+          "avg_difference": 46.333333333333336,
           "avg_confidence": 1.0
         }
       }
@@ -5617,16 +5607,16 @@
       "total_cords": 40,
       "max_level": 2,
       "total_tests": 9,
-      "total_matches": 2,
-      "overall_match_rate": 0.2222222222222222,
+      "total_matches": 1,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 9,
-          "matches": 2,
-          "match_rate": 0.2222222222222222,
-          "avg_difference": 17.333333333333332,
+          "matches": 1,
+          "match_rate": 0.1111111111111111,
+          "avg_difference": 54.0,
           "avg_confidence": 1.0
         }
       }
@@ -5645,14 +5635,14 @@
           "tests_performed": 37,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1862.081081081081,
-          "avg_confidence": 0.9986486486486488
+          "avg_difference": 905.6486486486486,
+          "avg_confidence": 0.9969111969111969
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 45.0,
+          "avg_difference": 561.0,
           "avg_confidence": 1.0
         }
       }
@@ -5671,7 +5661,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 166.5,
+          "avg_difference": 330.5,
           "avg_confidence": 1.0
         }
       }
@@ -5740,7 +5730,7 @@
       "khipu_id": 1000329,
       "total_cords": 304,
       "max_level": 3,
-      "total_tests": 63,
+      "total_tests": 62,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
@@ -5750,15 +5740,15 @@
           "tests_performed": 61,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 106.11475409836065,
+          "avg_difference": 327.3114754098361,
           "avg_confidence": 1.0
         },
         "level_3.0": {
-          "tests_performed": 2,
+          "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 21.0,
-          "avg_confidence": 0.95
+          "avg_difference": 380.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -5796,18 +5786,18 @@
       "khipu_id": 1000332,
       "total_cords": 160,
       "max_level": 2,
-      "total_tests": 21,
+      "total_tests": 20,
       "total_matches": 7,
-      "overall_match_rate": 0.3333333333333333,
+      "overall_match_rate": 0.35,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 21,
+          "tests_performed": 20,
           "matches": 7,
-          "match_rate": 0.3333333333333333,
+          "match_rate": 0.35,
           "avg_difference": NaN,
-          "avg_confidence": 0.9952380952380951
+          "avg_confidence": 1.0
         }
       }
     },
@@ -5816,16 +5806,16 @@
       "total_cords": 179,
       "max_level": 2,
       "total_tests": 32,
-      "total_matches": 2,
-      "overall_match_rate": 0.0625,
+      "total_matches": 1,
+      "overall_match_rate": 0.03125,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 32,
-          "matches": 2,
-          "match_rate": 0.0625,
-          "avg_difference": 23.53125,
+          "matches": 1,
+          "match_rate": 0.03125,
+          "avg_difference": 128.125,
           "avg_confidence": 1.0
         }
       }
@@ -5873,14 +5863,14 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 312.6666666666667,
+          "avg_difference": 589.6666666666666,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 5.0,
+          "avg_difference": 10.0,
           "avg_confidence": 1.0
         }
       }
@@ -5900,9 +5890,9 @@
       "khipu_id": 1000339,
       "total_cords": 57,
       "max_level": 4,
-      "total_tests": 16,
+      "total_tests": 15,
       "total_matches": 2,
-      "overall_match_rate": 0.125,
+      "overall_match_rate": 0.13333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
@@ -5910,15 +5900,15 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 150.0,
+          "avg_difference": 713.25,
           "avg_confidence": 1.0
         },
         "level_3.0": {
-          "tests_performed": 11,
+          "tests_performed": 10,
           "matches": 2,
-          "match_rate": 0.18181818181818182,
+          "match_rate": 0.2,
           "avg_difference": NaN,
-          "avg_confidence": 0.990909090909091
+          "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
@@ -5989,8 +5979,8 @@
       "total_cords": 161,
       "max_level": 3,
       "total_tests": 32,
-      "total_matches": 2,
-      "overall_match_rate": 0.0625,
+      "total_matches": 3,
+      "overall_match_rate": 0.09375,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
@@ -6003,16 +5993,16 @@
         },
         "level_2.0": {
           "tests_performed": 30,
-          "matches": 1,
-          "match_rate": 0.03333333333333333,
-          "avg_difference": 27.666666666666668,
+          "matches": 2,
+          "match_rate": 0.06666666666666667,
+          "avg_difference": 111.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 27.0,
+          "avg_difference": 30.0,
           "avg_confidence": 1.0
         }
       }
@@ -6072,7 +6062,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 30.0,
+          "avg_difference": 300.0,
           "avg_confidence": 1.0
         }
       }
@@ -6147,14 +6137,14 @@
           "tests_performed": 8,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 111.875,
+          "avg_difference": 126.875,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3.0,
+          "avg_difference": 19.0,
           "avg_confidence": 1.0
         }
       }
@@ -6195,7 +6185,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 120.0,
+          "avg_difference": 300.0,
           "avg_confidence": 1.0
         }
       }
@@ -6296,7 +6286,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 27.0,
+          "avg_difference": 39.666666666666664,
           "avg_confidence": 1.0
         }
       }
@@ -6374,7 +6364,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 21.0,
+          "avg_difference": 270.0,
           "avg_confidence": 1.0
         }
       }
@@ -6393,15 +6383,15 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 206.0,
+          "avg_difference": 360.0,
           "avg_confidence": 1.0
         },
         "level_2.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 85.0,
-          "avg_confidence": 0.95
+          "avg_difference": 559.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -6430,7 +6420,7 @@
           "tests_performed": 2,
           "matches": 1,
           "match_rate": 0.5,
-          "avg_difference": 4.5,
+          "avg_difference": 15.0,
           "avg_confidence": 1.0
         }
       }
@@ -6460,7 +6450,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 25.75,
+          "avg_difference": 152.5,
           "avg_confidence": 1.0
         }
       }
@@ -6481,8 +6471,8 @@
       "total_cords": 188,
       "max_level": 4,
       "total_tests": 68,
-      "total_matches": 6,
-      "overall_match_rate": 0.08823529411764706,
+      "total_matches": 5,
+      "overall_match_rate": 0.07352941176470588,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
@@ -6490,13 +6480,13 @@
           "tests_performed": 55,
           "matches": 5,
           "match_rate": 0.09090909090909091,
-          "avg_difference": 36.81818181818182,
+          "avg_difference": 110.61818181818182,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 12,
-          "matches": 1,
-          "match_rate": 0.08333333333333333,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
@@ -6504,7 +6494,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 19.0,
+          "avg_difference": 199.0,
           "avg_confidence": 1.0
         }
       }
@@ -6577,16 +6567,16 @@
       "total_cords": 33,
       "max_level": 3,
       "total_tests": 6,
-      "total_matches": 1,
-      "overall_match_rate": 0.16666666666666666,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 5,
-          "matches": 1,
-          "match_rate": 0.2,
-          "avg_difference": 27.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 258.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -6619,7 +6609,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 119.0,
+          "avg_difference": 710.0,
           "avg_confidence": 1.0
         }
       }
@@ -6629,16 +6619,16 @@
       "total_cords": 8,
       "max_level": 2,
       "total_tests": 2,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 2,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 40.0,
+          "matches": 1,
+          "match_rate": 0.5,
+          "avg_difference": 75.0,
           "avg_confidence": 1.0
         }
       }
@@ -6676,7 +6666,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3310.5,
+          "avg_difference": 525.0,
           "avg_confidence": 1.0
         }
       }
@@ -6724,7 +6714,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 15.0,
+          "avg_difference": 39.0,
           "avg_confidence": 1.0
         }
       }
@@ -6743,7 +6733,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 29.25,
+          "avg_difference": 107.5,
           "avg_confidence": 1.0
         }
       }
@@ -6762,7 +6752,7 @@
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 23.25,
+          "avg_difference": 152.5,
           "avg_confidence": 1.0
         }
       }
@@ -6802,17 +6792,17 @@
       "total_cords": 133,
       "max_level": 3,
       "total_tests": 36,
-      "total_matches": 2,
-      "overall_match_rate": 0.05555555555555555,
+      "total_matches": 1,
+      "overall_match_rate": 0.027777777777777776,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 19,
-          "matches": 1,
-          "match_rate": 0.05263157894736842,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 1.0
+          "avg_confidence": 0.9769736842105263
         },
         "level_3.0": {
           "tests_performed": 17,
@@ -6837,7 +6827,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 84.0,
+          "avg_difference": 399.0,
           "avg_confidence": 1.0
         }
       }
@@ -6856,14 +6846,14 @@
           "tests_performed": 3,
           "matches": 1,
           "match_rate": 0.3333333333333333,
-          "avg_difference": 206.66666666666666,
+          "avg_difference": 446.6666666666667,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 28.0,
+          "avg_difference": 20.0,
           "avg_confidence": 1.0
         }
       }
@@ -6882,7 +6872,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 162.5,
+          "avg_difference": 500.0,
           "avg_confidence": 1.0
         }
       }
@@ -6901,7 +6891,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 49.0,
+          "avg_difference": 155.0,
           "avg_confidence": 1.0
         }
       }
@@ -6946,7 +6936,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 112.0,
+          "avg_difference": 151.0,
           "avg_confidence": 1.0
         }
       }
@@ -6976,7 +6966,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 15.5,
+          "avg_difference": 153.0,
           "avg_confidence": 1.0
         }
       }
@@ -7027,8 +7017,8 @@
       "total_cords": 266,
       "max_level": 3,
       "total_tests": 60,
-      "total_matches": 3,
-      "overall_match_rate": 0.05,
+      "total_matches": 2,
+      "overall_match_rate": 0.03333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
@@ -7036,13 +7026,13 @@
           "tests_performed": 35,
           "matches": 1,
           "match_rate": 0.02857142857142857,
-          "avg_difference": 77.11428571428571,
+          "avg_difference": 311.1714285714286,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 25,
-          "matches": 2,
-          "match_rate": 0.08,
+          "matches": 1,
+          "match_rate": 0.04,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -7062,7 +7052,7 @@
           "tests_performed": 2,
           "matches": 1,
           "match_rate": 0.5,
-          "avg_difference": 6.0,
+          "avg_difference": 10.0,
           "avg_confidence": 1.0
         }
       }
@@ -7081,7 +7071,7 @@
           "tests_performed": 13,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 98.6923076923077,
+          "avg_difference": 247.46153846153845,
           "avg_confidence": 1.0
         }
       }
@@ -7170,7 +7160,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 20.0,
+          "avg_difference": 200.0,
           "avg_confidence": 1.0
         }
       }
@@ -7189,7 +7179,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 41.0,
+          "avg_difference": 260.0,
           "avg_confidence": 1.0
         }
       }
@@ -7199,30 +7189,30 @@
       "total_cords": 51,
       "max_level": 4,
       "total_tests": 15,
-      "total_matches": 2,
-      "overall_match_rate": 0.13333333333333333,
+      "total_matches": 1,
+      "overall_match_rate": 0.06666666666666667,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 10,
-          "matches": 1,
-          "match_rate": 0.1,
-          "avg_difference": 27.6,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 199.8,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 63.75,
+          "avg_difference": 164.75,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 20.0,
+          "avg_difference": 200.0,
           "avg_confidence": 1.0
         }
       }
@@ -7260,7 +7250,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 136.0,
+          "avg_difference": 580.0,
           "avg_confidence": 1.0
         }
       }
@@ -7290,14 +7280,14 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 233.0,
+          "avg_difference": 246.33333333333334,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 82.0,
+          "avg_difference": 160.0,
           "avg_confidence": 1.0
         }
       }
@@ -7316,7 +7306,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 68.5,
+          "avg_difference": 376.25,
           "avg_confidence": 1.0
         }
       }
@@ -7384,7 +7374,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 45.0,
+          "avg_difference": 339.0,
           "avg_confidence": 1.0
         }
       }
@@ -7403,7 +7393,7 @@
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 115.75,
+          "avg_difference": 349.25,
           "avg_confidence": 1.0
         }
       }
@@ -7424,15 +7414,15 @@
       "total_cords": 12,
       "max_level": 2,
       "total_tests": 4,
-      "total_matches": 1,
-      "overall_match_rate": 0.25,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 4,
-          "matches": 1,
-          "match_rate": 0.25,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -7452,7 +7442,7 @@
           "tests_performed": 18,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 59.888888888888886,
+          "avg_difference": 456.3333333333333,
           "avg_confidence": 1.0
         }
       }
@@ -7512,7 +7502,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3217.0,
+          "avg_difference": 790.0,
           "avg_confidence": 1.0
         }
       }
@@ -7542,7 +7532,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 92.33333333333333,
+          "avg_difference": 203.33333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -7561,7 +7551,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 394.0,
+          "avg_difference": 529.0,
           "avg_confidence": 1.0
         }
       }
@@ -7593,15 +7583,15 @@
       "total_cords": 76,
       "max_level": 2,
       "total_tests": 22,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.045454545454545456,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 22,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.045454545454545456,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -7632,7 +7622,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 964.0,
+          "avg_difference": 40.0,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -7658,7 +7648,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 309.0,
+          "avg_difference": 330.0,
           "avg_confidence": 1.0
         }
       }
@@ -7677,7 +7667,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 39.0,
+          "avg_difference": 58.333333333333336,
           "avg_confidence": 1.0
         }
       }
@@ -7731,16 +7721,16 @@
       "total_cords": 91,
       "max_level": 2,
       "total_tests": 4,
-      "total_matches": 1,
-      "overall_match_rate": 0.25,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 4,
-          "matches": 1,
-          "match_rate": 0.25,
-          "avg_difference": 14.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 165.0,
           "avg_confidence": 1.0
         }
       }
@@ -7749,20 +7739,12 @@
       "khipu_id": 1000456,
       "total_cords": 62,
       "max_level": 2,
-      "total_tests": 1,
-      "total_matches": 1,
-      "overall_match_rate": 1.0,
+      "total_tests": 0,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2.0": {
-          "tests_performed": 1,
-          "matches": 1,
-          "match_rate": 1.0,
-          "avg_difference": 0.0,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000457,
@@ -7873,31 +7855,31 @@
       "khipu_id": 1000472,
       "total_cords": 225,
       "max_level": 4,
-      "total_tests": 76,
+      "total_tests": 75,
       "total_matches": 1,
-      "overall_match_rate": 0.013157894736842105,
+      "overall_match_rate": 0.013333333333333334,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 49,
-          "matches": 0,
-          "match_rate": 0.0,
+          "tests_performed": 48,
+          "matches": 1,
+          "match_rate": 0.020833333333333332,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 23,
-          "matches": 1,
-          "match_rate": 0.043478260869565216,
-          "avg_difference": 638.4347826086956,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 359.1304347826087,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 84.75,
+          "avg_difference": 422.5,
           "avg_confidence": 1.0
         }
       }
@@ -7916,7 +7898,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 40.0,
+          "avg_difference": 37.666666666666664,
           "avg_confidence": 1.0
         }
       }
@@ -7935,7 +7917,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 25.5,
+          "avg_difference": 285.0,
           "avg_confidence": 1.0
         }
       }
@@ -7945,16 +7927,16 @@
       "total_cords": 151,
       "max_level": 3,
       "total_tests": 43,
-      "total_matches": 3,
-      "overall_match_rate": 0.06976744186046512,
+      "total_matches": 2,
+      "overall_match_rate": 0.046511627906976744,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 38,
-          "matches": 3,
-          "match_rate": 0.07894736842105263,
-          "avg_difference": 20.894736842105264,
+          "matches": 2,
+          "match_rate": 0.05263157894736842,
+          "avg_difference": 58.81578947368421,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -8002,7 +7984,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 25.0,
+          "avg_difference": 41.0,
           "avg_confidence": 1.0
         }
       }
@@ -8043,7 +8025,7 @@
           "tests_performed": 4,
           "matches": 1,
           "match_rate": 0.25,
-          "avg_difference": 22.0,
+          "avg_difference": 57.25,
           "avg_confidence": 1.0
         }
       }
@@ -8164,30 +8146,30 @@
       "total_cords": 154,
       "max_level": 4,
       "total_tests": 57,
-      "total_matches": 3,
-      "overall_match_rate": 0.05263157894736842,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 42,
-          "matches": 1,
-          "match_rate": 0.023809523809523808,
-          "avg_difference": 66.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 506.4047619047619,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 13,
-          "matches": 2,
-          "match_rate": 0.15384615384615385,
-          "avg_difference": 60.69230769230769,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 494.61538461538464,
           "avg_confidence": 1.0
         },
         "level_4.0": {
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 85.0,
+          "avg_difference": 670.0,
           "avg_confidence": 1.0
         }
       }
@@ -8197,23 +8179,23 @@
       "total_cords": 90,
       "max_level": 3,
       "total_tests": 36,
-      "total_matches": 3,
-      "overall_match_rate": 0.08333333333333333,
+      "total_matches": 1,
+      "overall_match_rate": 0.027777777777777776,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 29,
-          "matches": 2,
-          "match_rate": 0.06896551724137931,
+          "matches": 1,
+          "match_rate": 0.034482758620689655,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 7,
-          "matches": 1,
-          "match_rate": 0.14285714285714285,
-          "avg_difference": 7.142857142857143,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 51.42857142857143,
           "avg_confidence": 1.0
         }
       }
@@ -8239,7 +8221,7 @@
           "tests_performed": 5,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 438.8,
+          "avg_difference": 299.6,
           "avg_confidence": 1.0
         }
       }
@@ -8270,7 +8252,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9833333333333334
+          "avg_confidence": 1.0
         }
       }
     },
@@ -8326,7 +8308,7 @@
           "tests_performed": 18,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 37.166666666666664,
+          "avg_difference": 289.05555555555554,
           "avg_confidence": 1.0
         }
       }
@@ -8345,7 +8327,7 @@
           "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 143.75,
+          "avg_difference": 209.75,
           "avg_confidence": 1.0
         }
       }
@@ -8364,7 +8346,7 @@
           "tests_performed": 7,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 37.285714285714285,
+          "avg_difference": 355.14285714285717,
           "avg_confidence": 1.0
         }
       }
@@ -8374,31 +8356,31 @@
       "total_cords": 226,
       "max_level": 4,
       "total_tests": 96,
-      "total_matches": 2,
-      "overall_match_rate": 0.020833333333333332,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 70,
-          "matches": 2,
-          "match_rate": 0.02857142857142857,
-          "avg_difference": 88.12857142857143,
-          "avg_confidence": 0.9507509157509152
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
+          "avg_confidence": 0.825699955721934
         },
         "level_3.0": {
           "tests_performed": 24,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 49.125,
-          "avg_confidence": 0.9541666666666666
+          "avg_difference": 321.6666666666667,
+          "avg_confidence": 0.8109375
         },
         "level_4.0": {
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 41.0,
-          "avg_confidence": 0.9
+          "avg_difference": 760.0,
+          "avg_confidence": 0.709090909090909
         }
       }
     },
@@ -8406,24 +8388,24 @@
       "khipu_id": 1000505,
       "total_cords": 120,
       "max_level": 3,
-      "total_tests": 25,
-      "total_matches": 1,
-      "overall_match_rate": 0.04,
+      "total_tests": 24,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 24,
-          "matches": 1,
-          "match_rate": 0.041666666666666664,
-          "avg_difference": 39.291666666666664,
-          "avg_confidence": 0.9958333333333332
+          "tests_performed": 23,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 190.1304347826087,
+          "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 41.0,
+          "avg_difference": 110.0,
           "avg_confidence": 1.0
         }
       }
@@ -8433,17 +8415,17 @@
       "total_cords": 167,
       "max_level": 2,
       "total_tests": 26,
-      "total_matches": 7,
-      "overall_match_rate": 0.2692307692307692,
+      "total_matches": 5,
+      "overall_match_rate": 0.19230769230769232,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 26,
-          "matches": 7,
-          "match_rate": 0.2692307692307692,
-          "avg_difference": 10.653846153846153,
-          "avg_confidence": 0.9884615384615383
+          "matches": 5,
+          "match_rate": 0.19230769230769232,
+          "avg_difference": 60.23076923076923,
+          "avg_confidence": 0.9365384615384614
         }
       }
     },
@@ -8490,17 +8472,17 @@
       "total_cords": 369,
       "max_level": 3,
       "total_tests": 67,
-      "total_matches": 9,
-      "overall_match_rate": 0.13432835820895522,
+      "total_matches": 8,
+      "overall_match_rate": 0.11940298507462686,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 64,
-          "matches": 8,
-          "match_rate": 0.125,
-          "avg_difference": 17.953125,
-          "avg_confidence": 0.9984375
+          "matches": 7,
+          "match_rate": 0.109375,
+          "avg_difference": NaN,
+          "avg_confidence": 0.99140625
         },
         "level_3.0": {
           "tests_performed": 3,
@@ -8547,14 +8529,14 @@
           "tests_performed": 14,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1109.357142857143,
+          "avg_difference": 550.5714285714286,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 549.3333333333334,
+          "avg_difference": 480.0,
           "avg_confidence": 1.0
         }
       }
@@ -8589,24 +8571,24 @@
       "khipu_id": 1000514,
       "total_cords": 167,
       "max_level": 3,
-      "total_tests": 38,
+      "total_tests": 35,
       "total_matches": 2,
-      "overall_match_rate": 0.05263157894736842,
+      "overall_match_rate": 0.05714285714285714,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 33,
+          "tests_performed": 30,
           "matches": 1,
-          "match_rate": 0.030303030303030304,
-          "avg_difference": 52.42424242424242,
-          "avg_confidence": 0.9580808080808078
+          "match_rate": 0.03333333333333333,
+          "avg_difference": NaN,
+          "avg_confidence": 0.8233492063492064
         },
         "level_3.0": {
           "tests_performed": 5,
           "matches": 1,
           "match_rate": 0.2,
-          "avg_difference": 25.0,
+          "avg_difference": 264.0,
           "avg_confidence": 1.0
         }
       }
@@ -8616,16 +8598,16 @@
       "total_cords": 79,
       "max_level": 3,
       "total_tests": 21,
-      "total_matches": 5,
-      "overall_match_rate": 0.23809523809523808,
+      "total_matches": 6,
+      "overall_match_rate": 0.2857142857142857,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 20,
-          "matches": 4,
-          "match_rate": 0.2,
-          "avg_difference": 22.75,
+          "matches": 5,
+          "match_rate": 0.25,
+          "avg_difference": 111.7,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -8658,7 +8640,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 5.0,
+          "avg_difference": 10.0,
           "avg_confidence": 1.0
         }
       }
@@ -8677,7 +8659,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 28.333333333333332,
+          "avg_difference": 270.0,
           "avg_confidence": 1.0
         }
       }
@@ -8706,15 +8688,15 @@
       "total_cords": 190,
       "max_level": 2,
       "total_tests": 19,
-      "total_matches": 5,
-      "overall_match_rate": 0.2631578947368421,
+      "total_matches": 6,
+      "overall_match_rate": 0.3157894736842105,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2.0": {
           "tests_performed": 19,
-          "matches": 5,
-          "match_rate": 0.2631578947368421,
+          "matches": 6,
+          "match_rate": 0.3157894736842105,
           "avg_difference": NaN,
           "avg_confidence": 1.0
         }
@@ -8783,7 +8765,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 11.0,
+          "avg_difference": 101.0,
           "avg_confidence": 1.0
         }
       }
@@ -8829,32 +8811,32 @@
       "khipu_id": 1000526,
       "total_cords": 268,
       "max_level": 4,
-      "total_tests": 76,
-      "total_matches": 6,
-      "overall_match_rate": 0.07894736842105263,
+      "total_tests": 73,
+      "total_matches": 8,
+      "overall_match_rate": 0.1095890410958904,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2.0": {
-          "tests_performed": 64,
-          "matches": 6,
-          "match_rate": 0.09375,
+          "tests_performed": 63,
+          "matches": 8,
+          "match_rate": 0.12698412698412698,
           "avg_difference": NaN,
-          "avg_confidence": 0.99296875
+          "avg_confidence": 0.973015873015873
         },
         "level_3.0": {
-          "tests_performed": 10,
+          "tests_performed": 9,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.96
+          "avg_confidence": 0.8333333333333334
         },
         "level_4.0": {
-          "tests_performed": 2,
+          "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 59.5,
-          "avg_confidence": 0.95
+          "avg_difference": 20.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -8899,7 +8881,7 @@
           "matches": 1,
           "match_rate": 0.0625,
           "avg_difference": NaN,
-          "avg_confidence": 0.99375
+          "avg_confidence": 0.95625
         },
         "level_3.0": {
           "tests_performed": 1,
@@ -9050,7 +9032,7 @@
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 149.0,
+          "avg_difference": 567.0,
           "avg_confidence": 1.0
         }
       }
@@ -9069,7 +9051,7 @@
           "tests_performed": 10,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 34.9,
+          "avg_difference": 119.1,
           "avg_confidence": 1.0
         },
         "level_3.0": {
@@ -9095,8 +9077,8 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 19.0,
-          "avg_confidence": 0.9
+          "avg_difference": 130.0,
+          "avg_confidence": 0.45
         }
       }
     },
@@ -9126,7 +9108,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.975
+          "avg_confidence": 0.9
         }
       }
     },
@@ -9155,14 +9137,14 @@
           "tests_performed": 39,
           "matches": 3,
           "match_rate": 0.07692307692307693,
-          "avg_difference": 80.58974358974359,
+          "avg_difference": 86.23076923076923,
           "avg_confidence": 1.0
         },
         "level_3.0": {
           "tests_performed": 3,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 165.66666666666666,
+          "avg_difference": 166.33333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -9195,14 +9177,14 @@
           "tests_performed": 5,
           "matches": 1,
           "match_rate": 0.2,
-          "avg_difference": 6.0,
+          "avg_difference": 14.6,
           "avg_confidence": 1.0
         },
         "level_5.0": {
           "tests_performed": 3,
           "matches": 2,
           "match_rate": 0.6666666666666666,
-          "avg_difference": 2.6666666666666665,
+          "avg_difference": 9.666666666666666,
           "avg_confidence": 1.0
         }
       }
@@ -9221,7 +9203,7 @@
           "tests_performed": 18,
           "matches": 1,
           "match_rate": 0.05555555555555555,
-          "avg_difference": 32.77777777777778,
+          "avg_difference": 198.94444444444446,
           "avg_confidence": 1.0
         }
       }
@@ -9251,7 +9233,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 70.0,
+          "avg_difference": 221.0,
           "avg_confidence": 1.0
         }
       }
@@ -9299,7 +9281,7 @@
           "tests_performed": 7,
           "matches": 2,
           "match_rate": 0.2857142857142857,
-          "avg_difference": 12.428571428571429,
+          "avg_difference": 41.142857142857146,
           "avg_confidence": 1.0
         }
       }
@@ -9336,7 +9318,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 50.0,
+          "avg_difference": 500.0,
           "avg_confidence": 1.0
         }
       }
@@ -9388,7 +9370,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3386.0,
+          "avg_difference": 330.0,
           "avg_confidence": 1.0
         }
       }
@@ -9407,7 +9389,7 @@
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 86.0,
+          "avg_difference": 380.0,
           "avg_confidence": 1.0
         }
       }
@@ -9428,16 +9410,16 @@
       "total_cords": 28,
       "max_level": 2,
       "total_tests": 2,
-      "total_matches": 1,
-      "overall_match_rate": 0.5,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
           "tests_performed": 2,
-          "matches": 1,
-          "match_rate": 0.5,
-          "avg_difference": 4.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
           "avg_confidence": 1.0
         }
       }
@@ -9457,18 +9439,18 @@
       "khipu_id": 1000564,
       "total_cords": 183,
       "max_level": 2,
-      "total_tests": 51,
-      "total_matches": 5,
-      "overall_match_rate": 0.09803921568627451,
+      "total_tests": 24,
+      "total_matches": 3,
+      "overall_match_rate": 0.125,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 51,
-          "matches": 5,
-          "match_rate": 0.09803921568627451,
-          "avg_difference": 26.784313725490197,
-          "avg_confidence": 0.915261437908496
+          "tests_performed": 24,
+          "matches": 3,
+          "match_rate": 0.125,
+          "avg_difference": 216.58333333333334,
+          "avg_confidence": 0.7607638888888887
         }
       }
     },
@@ -9476,18 +9458,18 @@
       "khipu_id": 1000565,
       "total_cords": 367,
       "max_level": 2,
-      "total_tests": 71,
+      "total_tests": 58,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 71,
+          "tests_performed": 58,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 2326.6619718309857,
-          "avg_confidence": 0.9354761904761906
+          "avg_difference": 1011.2241379310345,
+          "avg_confidence": 0.846410732945216
         }
       }
     },
@@ -9496,16 +9478,16 @@
       "total_cords": 32,
       "max_level": 2,
       "total_tests": 6,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 2,
+      "overall_match_rate": 0.3333333333333333,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
           "tests_performed": 6,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 505.0,
+          "matches": 2,
+          "match_rate": 0.3333333333333333,
+          "avg_difference": 133.33333333333334,
           "avg_confidence": 1.0
         }
       }
@@ -9514,18 +9496,18 @@
       "khipu_id": 1000567,
       "total_cords": 257,
       "max_level": 2,
-      "total_tests": 18,
-      "total_matches": 2,
-      "overall_match_rate": 0.1111111111111111,
+      "total_tests": 17,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 18,
-          "matches": 2,
-          "match_rate": 0.1111111111111111,
+          "tests_performed": 17,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9691269841269842
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9552,25 +9534,25 @@
       "khipu_id": 1000570,
       "total_cords": 125,
       "max_level": 3,
-      "total_tests": 23,
-      "total_matches": 6,
-      "overall_match_rate": 0.2608695652173913,
+      "total_tests": 16,
+      "total_matches": 2,
+      "overall_match_rate": 0.125,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 19,
-          "matches": 5,
-          "match_rate": 0.2631578947368421,
+          "tests_performed": 14,
+          "matches": 2,
+          "match_rate": 0.14285714285714285,
           "avg_difference": NaN,
-          "avg_confidence": 0.9383333333333334
+          "avg_confidence": 0.8595238095238095
         },
         "level_3": {
-          "tests_performed": 4,
-          "matches": 1,
-          "match_rate": 0.25,
-          "avg_difference": 14.75,
-          "avg_confidence": 0.95
+          "tests_performed": 2,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": 199.5,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9600,25 +9582,25 @@
       "khipu_id": 1000573,
       "total_cords": 39,
       "max_level": 3,
-      "total_tests": 15,
-      "total_matches": 9,
-      "overall_match_rate": 0.6,
+      "total_tests": 8,
+      "total_matches": 1,
+      "overall_match_rate": 0.125,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 13,
-          "matches": 8,
-          "match_rate": 0.6153846153846154,
+          "tests_performed": 7,
+          "matches": 1,
+          "match_rate": 0.14285714285714285,
           "avg_difference": NaN,
-          "avg_confidence": 0.9333333333333335
+          "avg_confidence": 0.8928571428571429
         },
         "level_3": {
-          "tests_performed": 2,
-          "matches": 1,
-          "match_rate": 0.5,
+          "tests_performed": 1,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.95
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9626,24 +9608,24 @@
       "khipu_id": 1000574,
       "total_cords": 82,
       "max_level": 5,
-      "total_tests": 11,
-      "total_matches": 1,
-      "overall_match_rate": 0.09090909090909091,
+      "total_tests": 7,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 9,
-          "matches": 1,
-          "match_rate": 0.1111111111111111,
+          "tests_performed": 5,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9481481481481482
+          "avg_confidence": 0.9491666666666667
         },
         "level_3": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 68.0,
+          "avg_difference": 698.0,
           "avg_confidence": 1.0
         },
         "level_5": {
@@ -9659,18 +9641,18 @@
       "khipu_id": 1000575,
       "total_cords": 66,
       "max_level": 3,
-      "total_tests": 6,
-      "total_matches": 2,
-      "overall_match_rate": 0.3333333333333333,
+      "total_tests": 1,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 6,
-          "matches": 2,
-          "match_rate": 0.3333333333333333,
+          "tests_performed": 1,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9
+          "avg_confidence": 0.3
         }
       }
     },
@@ -9678,18 +9660,18 @@
       "khipu_id": 1000576,
       "total_cords": 86,
       "max_level": 4,
-      "total_tests": 7,
-      "total_matches": 3,
-      "overall_match_rate": 0.42857142857142855,
+      "total_tests": 4,
+      "total_matches": 1,
+      "overall_match_rate": 0.25,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 6,
-          "matches": 2,
-          "match_rate": 0.3333333333333333,
+          "tests_performed": 3,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9500000000000001
+          "avg_confidence": 1.0
         },
         "level_3": {
           "tests_performed": 1,
@@ -9715,7 +9697,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9
+          "avg_confidence": 0.675
         }
       }
     },
@@ -9745,18 +9727,18 @@
       "khipu_id": 1000580,
       "total_cords": 29,
       "max_level": 2,
-      "total_tests": 5,
+      "total_tests": 2,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 5,
+          "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9199999999999999
+          "avg_confidence": 0.725
         }
       }
     },
@@ -9796,7 +9778,7 @@
           "tests_performed": 7,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 35.714285714285715,
+          "avg_difference": 357.14285714285717,
           "avg_confidence": 1.0
         }
       }
@@ -9824,18 +9806,18 @@
       "khipu_id": 1000585,
       "total_cords": 33,
       "max_level": 3,
-      "total_tests": 4,
-      "total_matches": 3,
-      "overall_match_rate": 0.75,
+      "total_tests": 1,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 4,
-          "matches": 3,
-          "match_rate": 0.75,
+          "tests_performed": 1,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9149999999999999
+          "avg_confidence": 0.8100000000000002
         }
       }
     },
@@ -9843,25 +9825,18 @@
       "khipu_id": 1000586,
       "total_cords": 180,
       "max_level": 3,
-      "total_tests": 10,
-      "total_matches": 2,
-      "overall_match_rate": 0.2,
-      "has_multi_level_summation": true,
-      "levels_tested": 2,
+      "total_tests": 7,
+      "total_matches": 1,
+      "overall_match_rate": 0.14285714285714285,
+      "has_multi_level_summation": false,
+      "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 9,
+          "tests_performed": 7,
           "matches": 1,
-          "match_rate": 0.1111111111111111,
-          "avg_difference": 62.333333333333336,
-          "avg_confidence": 0.9722222222222222
-        },
-        "level_3": {
-          "tests_performed": 1,
-          "matches": 1,
-          "match_rate": 1.0,
-          "avg_difference": 0.0,
-          "avg_confidence": 0.9
+          "match_rate": 0.14285714285714285,
+          "avg_difference": 370.14285714285717,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9869,18 +9844,18 @@
       "khipu_id": 1000587,
       "total_cords": 41,
       "max_level": 2,
-      "total_tests": 9,
-      "total_matches": 7,
-      "overall_match_rate": 0.7777777777777778,
+      "total_tests": 2,
+      "total_matches": 1,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 9,
-          "matches": 7,
-          "match_rate": 0.7777777777777778,
+          "tests_performed": 2,
+          "matches": 1,
+          "match_rate": 0.5,
           "avg_difference": NaN,
-          "avg_confidence": 0.9222222222222223
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9899,18 +9874,18 @@
       "khipu_id": 1000589,
       "total_cords": 49,
       "max_level": 2,
-      "total_tests": 8,
-      "total_matches": 3,
-      "overall_match_rate": 0.375,
+      "total_tests": 2,
+      "total_matches": 1,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 8,
-          "matches": 3,
-          "match_rate": 0.375,
+          "tests_performed": 2,
+          "matches": 1,
+          "match_rate": 0.5,
           "avg_difference": NaN,
-          "avg_confidence": 0.9250000000000002
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9918,18 +9893,18 @@
       "khipu_id": 1000590,
       "total_cords": 75,
       "max_level": 3,
-      "total_tests": 7,
-      "total_matches": 4,
-      "overall_match_rate": 0.5714285714285714,
+      "total_tests": 6,
+      "total_matches": 2,
+      "overall_match_rate": 0.3333333333333333,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 7,
-          "matches": 4,
-          "match_rate": 0.5714285714285714,
+          "tests_performed": 6,
+          "matches": 2,
+          "match_rate": 0.3333333333333333,
           "avg_difference": NaN,
-          "avg_confidence": 0.9857142857142858
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9937,25 +9912,25 @@
       "khipu_id": 1000591,
       "total_cords": 92,
       "max_level": 3,
-      "total_tests": 12,
-      "total_matches": 8,
-      "overall_match_rate": 0.6666666666666666,
+      "total_tests": 8,
+      "total_matches": 4,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 9,
-          "matches": 5,
-          "match_rate": 0.5555555555555556,
+          "tests_performed": 6,
+          "matches": 2,
+          "match_rate": 0.3333333333333333,
           "avg_difference": NaN,
-          "avg_confidence": 0.928835978835979
+          "avg_confidence": 0.78125
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 3,
+          "tests_performed": 2,
+          "matches": 2,
           "match_rate": 1.0,
-          "avg_difference": 0.6666666666666666,
-          "avg_confidence": 0.9666666666666667
+          "avg_difference": 0.5,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -9974,7 +9949,7 @@
           "matches": 1,
           "match_rate": 0.0625,
           "avg_difference": NaN,
-          "avg_confidence": 0.9375000000000001
+          "avg_confidence": 0.7374999999999998
         }
       }
     },
@@ -10003,15 +9978,15 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 3904.0,
-          "avg_confidence": 0.975
+          "avg_difference": 301.0,
+          "avg_confidence": 0.9428571428571428
         },
         "level_3": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 1572.0,
-          "avg_confidence": 0.9
+          "avg_difference": 498.0,
+          "avg_confidence": 0.81
         }
       }
     },
@@ -10030,14 +10005,14 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9333333333333332
+          "avg_confidence": 0.6833333333333335
         },
         "level_3": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": 2.0,
-          "avg_confidence": 0.9
+          "avg_confidence": 0.7200000000000001
         }
       }
     },
@@ -10045,32 +10020,32 @@
       "khipu_id": 1000598,
       "total_cords": 176,
       "max_level": 4,
-      "total_tests": 41,
-      "total_matches": 4,
-      "overall_match_rate": 0.0975609756097561,
+      "total_tests": 35,
+      "total_matches": 3,
+      "overall_match_rate": 0.08571428571428572,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 34,
+          "tests_performed": 30,
           "matches": 3,
-          "match_rate": 0.08823529411764706,
+          "match_rate": 0.1,
           "avg_difference": NaN,
-          "avg_confidence": 0.9411764705882348
+          "avg_confidence": 0.7972738095238093
         },
         "level_3": {
-          "tests_performed": 6,
-          "matches": 1,
-          "match_rate": 0.16666666666666666,
-          "avg_difference": 45.166666666666664,
-          "avg_confidence": 0.9
+          "tests_performed": 4,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
+          "avg_confidence": 0.6782142857142857
         },
         "level_4": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 30.0,
-          "avg_confidence": 0.9
+          "avg_difference": 300.0,
+          "avg_confidence": 0.3
         }
       }
     },
@@ -10078,25 +10053,18 @@
       "khipu_id": 1000599,
       "total_cords": 48,
       "max_level": 3,
-      "total_tests": 5,
+      "total_tests": 2,
       "total_matches": 1,
-      "overall_match_rate": 0.2,
-      "has_multi_level_summation": true,
-      "levels_tested": 2,
+      "overall_match_rate": 0.5,
+      "has_multi_level_summation": false,
+      "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 4,
+          "tests_performed": 2,
           "matches": 1,
-          "match_rate": 0.25,
-          "avg_difference": 85.0,
-          "avg_confidence": 0.925
-        },
-        "level_3": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 11.0,
-          "avg_confidence": 0.9
+          "match_rate": 0.5,
+          "avg_difference": 150.0,
+          "avg_confidence": 0.8600000000000001
         }
       }
     },
@@ -10105,16 +10073,16 @@
       "total_cords": 15,
       "max_level": 2,
       "total_tests": 1,
-      "total_matches": 1,
-      "overall_match_rate": 1.0,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
           "tests_performed": 1,
-          "matches": 1,
-          "match_rate": 1.0,
-          "avg_difference": 1.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
           "avg_confidence": 1.0
         }
       }
@@ -10124,24 +10092,24 @@
       "total_cords": 47,
       "max_level": 3,
       "total_tests": 18,
-      "total_matches": 3,
-      "overall_match_rate": 0.16666666666666666,
+      "total_matches": 2,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
           "tests_performed": 14,
-          "matches": 3,
-          "match_rate": 0.21428571428571427,
-          "avg_difference": 23.642857142857142,
-          "avg_confidence": 0.9357142857142858
+          "matches": 1,
+          "match_rate": 0.07142857142857142,
+          "avg_difference": NaN,
+          "avg_confidence": 0.7675
         },
         "level_3": {
           "tests_performed": 4,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 37.25,
-          "avg_confidence": 0.925
+          "matches": 1,
+          "match_rate": 0.25,
+          "avg_difference": 149.75,
+          "avg_confidence": 0.68125
         }
       }
     },
@@ -10168,39 +10136,32 @@
       "khipu_id": 1000603,
       "total_cords": 490,
       "max_level": 5,
-      "total_tests": 173,
-      "total_matches": 15,
-      "overall_match_rate": 0.08670520231213873,
+      "total_tests": 159,
+      "total_matches": 21,
+      "overall_match_rate": 0.1320754716981132,
       "has_multi_level_summation": true,
-      "levels_tested": 4,
+      "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 97,
-          "matches": 11,
-          "match_rate": 0.1134020618556701,
+          "tests_performed": 93,
+          "matches": 14,
+          "match_rate": 0.15053763440860216,
           "avg_difference": NaN,
-          "avg_confidence": 0.9349656357388326
+          "avg_confidence": 0.8055708518749688
         },
         "level_3": {
-          "tests_performed": 65,
-          "matches": 3,
-          "match_rate": 0.046153846153846156,
+          "tests_performed": 59,
+          "matches": 6,
+          "match_rate": 0.1016949152542373,
           "avg_difference": NaN,
-          "avg_confidence": 0.9392307692307686
+          "avg_confidence": 0.8232939094803503
         },
         "level_4": {
-          "tests_performed": 10,
+          "tests_performed": 7,
           "matches": 1,
-          "match_rate": 0.1,
+          "match_rate": 0.14285714285714285,
           "avg_difference": NaN,
-          "avg_confidence": 0.93
-        },
-        "level_5": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 10.0,
-          "avg_confidence": 0.9
+          "avg_confidence": 0.7785714285714286
         }
       }
     },
@@ -10208,20 +10169,12 @@
       "khipu_id": 1000604,
       "total_cords": 237,
       "max_level": 2,
-      "total_tests": 1,
+      "total_tests": 0,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": NaN,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000605,
@@ -10238,28 +10191,20 @@
       "khipu_id": 1000606,
       "total_cords": 25,
       "max_level": 3,
-      "total_tests": 3,
-      "total_matches": 3,
-      "overall_match_rate": 1.0,
+      "total_tests": 0,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 3,
-          "matches": 3,
-          "match_rate": 1.0,
-          "avg_difference": 0.0,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000607,
       "total_cords": 174,
       "max_level": 3,
-      "total_tests": 29,
+      "total_tests": 27,
       "total_matches": 3,
-      "overall_match_rate": 0.10344827586206896,
+      "overall_match_rate": 0.1111111111111111,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
@@ -10268,14 +10213,14 @@
           "matches": 1,
           "match_rate": 0.041666666666666664,
           "avg_difference": NaN,
-          "avg_confidence": 0.9416666666666665
+          "avg_confidence": 0.8370386904761906
         },
         "level_3": {
-          "tests_performed": 5,
+          "tests_performed": 3,
           "matches": 2,
-          "match_rate": 0.4,
-          "avg_difference": 8.2,
-          "avg_confidence": 0.9199999999999999
+          "match_rate": 0.6666666666666666,
+          "avg_difference": 66.66666666666667,
+          "avg_confidence": 0.7404761904761905
         }
       }
     },
@@ -10302,18 +10247,18 @@
       "khipu_id": 1000609,
       "total_cords": 131,
       "max_level": 4,
-      "total_tests": 7,
+      "total_tests": 6,
       "total_matches": 2,
-      "overall_match_rate": 0.2857142857142857,
+      "overall_match_rate": 0.3333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 5,
+          "tests_performed": 4,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9114285714285714
+          "avg_confidence": 0.6749999999999999
         },
         "level_3": {
           "tests_performed": 2,
@@ -10329,30 +10274,30 @@
       "total_cords": 169,
       "max_level": 4,
       "total_tests": 22,
-      "total_matches": 0,
-      "overall_match_rate": 0.0,
+      "total_matches": 1,
+      "overall_match_rate": 0.045454545454545456,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
           "tests_performed": 20,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.05,
           "avg_difference": NaN,
-          "avg_confidence": 0.9399999999999998
+          "avg_confidence": 0.8100681818181819
         },
         "level_3": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 310.0,
-          "avg_confidence": 0.9
+          "avg_difference": 600.0,
+          "avg_confidence": 0.84375
         },
         "level_4": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 261.0,
+          "avg_difference": 801.0,
           "avg_confidence": 1.0
         }
       }
@@ -10361,25 +10306,25 @@
       "khipu_id": 1000611,
       "total_cords": 330,
       "max_level": 3,
-      "total_tests": 23,
-      "total_matches": 1,
-      "overall_match_rate": 0.043478260869565216,
+      "total_tests": 22,
+      "total_matches": 2,
+      "overall_match_rate": 0.09090909090909091,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
           "tests_performed": 21,
-          "matches": 1,
-          "match_rate": 0.047619047619047616,
+          "matches": 2,
+          "match_rate": 0.09523809523809523,
           "avg_difference": NaN,
-          "avg_confidence": 0.9690476190476189
+          "avg_confidence": 0.8916071428571428
         },
         "level_3": {
-          "tests_performed": 2,
+          "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 165.5,
-          "avg_confidence": 0.9
+          "avg_difference": 400.0,
+          "avg_confidence": 0.675
         }
       }
     },
@@ -10387,25 +10332,25 @@
       "khipu_id": 1000612,
       "total_cords": 381,
       "max_level": 3,
-      "total_tests": 122,
-      "total_matches": 3,
-      "overall_match_rate": 0.02459016393442623,
+      "total_tests": 121,
+      "total_matches": 13,
+      "overall_match_rate": 0.10743801652892562,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 112,
-          "matches": 3,
-          "match_rate": 0.026785714285714284,
+          "tests_performed": 111,
+          "matches": 12,
+          "match_rate": 0.10810810810810811,
           "avg_difference": NaN,
-          "avg_confidence": 0.9280505952380961
+          "avg_confidence": 0.791854354354354
         },
         "level_3": {
           "tests_performed": 10,
-          "matches": 0,
-          "match_rate": 0.0,
+          "matches": 1,
+          "match_rate": 0.1,
           "avg_difference": NaN,
-          "avg_confidence": 0.9150000000000003
+          "avg_confidence": 0.706642857142857
         }
       }
     },
@@ -10413,25 +10358,25 @@
       "khipu_id": 1000613,
       "total_cords": 92,
       "max_level": 4,
-      "total_tests": 50,
-      "total_matches": 35,
-      "overall_match_rate": 0.7,
+      "total_tests": 27,
+      "total_matches": 11,
+      "overall_match_rate": 0.4074074074074074,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 32,
-          "matches": 22,
-          "match_rate": 0.6875,
-          "avg_difference": 232.5625,
-          "avg_confidence": 0.9249999999999994
+          "tests_performed": 12,
+          "matches": 1,
+          "match_rate": 0.08333333333333333,
+          "avg_difference": NaN,
+          "avg_confidence": 0.9441964285714285
         },
         "level_3": {
-          "tests_performed": 13,
-          "matches": 8,
-          "match_rate": 0.6153846153846154,
-          "avg_difference": 29.307692307692307,
-          "avg_confidence": 0.9692307692307693
+          "tests_performed": 10,
+          "matches": 5,
+          "match_rate": 0.5,
+          "avg_difference": 80.0,
+          "avg_confidence": 0.9771428571428572
         },
         "level_4": {
           "tests_performed": 5,
@@ -10446,25 +10391,25 @@
       "khipu_id": 1000614,
       "total_cords": 362,
       "max_level": 3,
-      "total_tests": 87,
-      "total_matches": 43,
-      "overall_match_rate": 0.4942528735632184,
+      "total_tests": 45,
+      "total_matches": 6,
+      "overall_match_rate": 0.13333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 80,
-          "matches": 40,
-          "match_rate": 0.5,
+          "tests_performed": 41,
+          "matches": 6,
+          "match_rate": 0.14634146341463414,
           "avg_difference": NaN,
-          "avg_confidence": 0.9335416666666669
+          "avg_confidence": 0.8602439024390245
         },
         "level_3": {
-          "tests_performed": 7,
-          "matches": 3,
-          "match_rate": 0.42857142857142855,
+          "tests_performed": 4,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9571428571428572
+          "avg_confidence": 1.0
         }
       }
     },
@@ -10472,39 +10417,23 @@
       "khipu_id": 1000615,
       "total_cords": 87,
       "max_level": 2,
-      "total_tests": 1,
+      "total_tests": 0,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": NaN,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000616,
       "total_cords": 124,
       "max_level": 2,
-      "total_tests": 1,
+      "total_tests": 0,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": NaN,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000617,
@@ -10521,18 +10450,18 @@
       "khipu_id": 1000618,
       "total_cords": 133,
       "max_level": 3,
-      "total_tests": 18,
+      "total_tests": 16,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 18,
+          "tests_performed": 16,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9416666666666669
+          "avg_confidence": 0.8589543269230769
         }
       }
     },
@@ -10540,18 +10469,18 @@
       "khipu_id": 1000619,
       "total_cords": 125,
       "max_level": 2,
-      "total_tests": 7,
+      "total_tests": 5,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 7,
+          "tests_performed": 5,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 934.1428571428571,
-          "avg_confidence": 0.9571428571428572
+          "avg_difference": 639.8,
+          "avg_confidence": 0.9349999999999999
         }
       }
     },
@@ -10559,18 +10488,18 @@
       "khipu_id": 1000620,
       "total_cords": 15,
       "max_level": 2,
-      "total_tests": 5,
-      "total_matches": 2,
-      "overall_match_rate": 0.4,
+      "total_tests": 2,
+      "total_matches": 1,
+      "overall_match_rate": 0.5,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 5,
-          "matches": 2,
-          "match_rate": 0.4,
-          "avg_difference": 8.0,
-          "avg_confidence": 0.93
+          "tests_performed": 2,
+          "matches": 1,
+          "match_rate": 0.5,
+          "avg_difference": 100.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -10588,15 +10517,15 @@
           "tests_performed": 7,
           "matches": 1,
           "match_rate": 0.14285714285714285,
-          "avg_difference": 28.285714285714285,
-          "avg_confidence": 0.9714285714285715
+          "avg_difference": 242.57142857142858,
+          "avg_confidence": 0.9196428571428571
         },
         "level_3": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 20.0,
-          "avg_confidence": 0.9
+          "avg_difference": 200.0,
+          "avg_confidence": 0.675
         }
       }
     },
@@ -10604,32 +10533,25 @@
       "khipu_id": 1000622,
       "total_cords": 247,
       "max_level": 4,
-      "total_tests": 43,
+      "total_tests": 21,
       "total_matches": 6,
-      "overall_match_rate": 0.13953488372093023,
+      "overall_match_rate": 0.2857142857142857,
       "has_multi_level_summation": true,
-      "levels_tested": 3,
+      "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 39,
-          "matches": 5,
-          "match_rate": 0.1282051282051282,
+          "tests_performed": 20,
+          "matches": 6,
+          "match_rate": 0.3,
           "avg_difference": NaN,
-          "avg_confidence": 0.9333333333333329
+          "avg_confidence": 0.8462499999999998
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 1,
-          "match_rate": 0.3333333333333333,
-          "avg_difference": 6.333333333333333,
-          "avg_confidence": 0.9333333333333332
-        },
-        "level_4": {
           "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": NaN,
-          "avg_confidence": 0.9
+          "avg_difference": 99.0,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -10637,25 +10559,25 @@
       "khipu_id": 1000623,
       "total_cords": 322,
       "max_level": 3,
-      "total_tests": 22,
+      "total_tests": 17,
       "total_matches": 2,
-      "overall_match_rate": 0.09090909090909091,
+      "overall_match_rate": 0.11764705882352941,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 13,
+          "tests_performed": 10,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 230.23076923076923,
-          "avg_confidence": 0.9423076923076923
+          "avg_difference": 498.3,
+          "avg_confidence": 0.7825
         },
         "level_3": {
-          "tests_performed": 9,
+          "tests_performed": 7,
           "matches": 2,
-          "match_rate": 0.2222222222222222,
-          "avg_difference": 2.2222222222222223,
-          "avg_confidence": 0.9333333333333333
+          "match_rate": 0.2857142857142857,
+          "avg_difference": NaN,
+          "avg_confidence": 0.7285714285714285
         }
       }
     },
@@ -10663,32 +10585,32 @@
       "khipu_id": 1000624,
       "total_cords": 250,
       "max_level": 5,
-      "total_tests": 73,
-      "total_matches": 10,
-      "overall_match_rate": 0.136986301369863,
+      "total_tests": 60,
+      "total_matches": 4,
+      "overall_match_rate": 0.06666666666666667,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 27,
-          "matches": 2,
-          "match_rate": 0.07407407407407407,
+          "tests_performed": 25,
+          "matches": 1,
+          "match_rate": 0.04,
           "avg_difference": NaN,
-          "avg_confidence": 0.9501234567901234
+          "avg_confidence": 0.8561469780219779
         },
         "level_3": {
-          "tests_performed": 36,
-          "matches": 5,
-          "match_rate": 0.1388888888888889,
+          "tests_performed": 30,
+          "matches": 3,
+          "match_rate": 0.1,
           "avg_difference": NaN,
-          "avg_confidence": 0.9231481481481478
+          "avg_confidence": 0.7137003968253968
         },
         "level_4": {
-          "tests_performed": 10,
-          "matches": 3,
-          "match_rate": 0.3,
+          "tests_performed": 5,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.915
+          "avg_confidence": 0.8140000000000001
         }
       }
     },
@@ -10729,25 +10651,25 @@
       "khipu_id": 1000628,
       "total_cords": 32,
       "max_level": 3,
-      "total_tests": 7,
-      "total_matches": 6,
-      "overall_match_rate": 0.8571428571428571,
+      "total_tests": 5,
+      "total_matches": 1,
+      "overall_match_rate": 0.2,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 4,
-          "matches": 3,
-          "match_rate": 0.75,
-          "avg_difference": 0.75,
-          "avg_confidence": 0.9249999999999999
+          "tests_performed": 3,
+          "matches": 1,
+          "match_rate": 0.3333333333333333,
+          "avg_difference": NaN,
+          "avg_confidence": 0.9083333333333333
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 3,
-          "match_rate": 1.0,
-          "avg_difference": 1.0,
-          "avg_confidence": 0.9333333333333332
+          "tests_performed": 2,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
+          "avg_confidence": 0.725
         }
       }
     },
@@ -10755,24 +10677,24 @@
       "khipu_id": 1000629,
       "total_cords": 193,
       "max_level": 3,
-      "total_tests": 37,
-      "total_matches": 8,
-      "overall_match_rate": 0.21621621621621623,
+      "total_tests": 27,
+      "total_matches": 1,
+      "overall_match_rate": 0.037037037037037035,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 36,
-          "matches": 7,
-          "match_rate": 0.19444444444444445,
+          "tests_performed": 26,
+          "matches": 1,
+          "match_rate": 0.038461538461538464,
           "avg_difference": NaN,
-          "avg_confidence": 0.9541666666666665
+          "avg_confidence": 0.9115384615384615
         },
         "level_3": {
           "tests_performed": 1,
-          "matches": 1,
-          "match_rate": 1.0,
-          "avg_difference": 1.0,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
           "avg_confidence": 1.0
         }
       }
@@ -10802,7 +10724,7 @@
           "tests_performed": 2,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 720.0,
+          "avg_difference": 900.0,
           "avg_confidence": 1.0
         }
       }
@@ -10822,25 +10744,25 @@
       "khipu_id": 1000633,
       "total_cords": 95,
       "max_level": 3,
-      "total_tests": 17,
-      "total_matches": 7,
-      "overall_match_rate": 0.4117647058823529,
+      "total_tests": 12,
+      "total_matches": 4,
+      "overall_match_rate": 0.3333333333333333,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 14,
-          "matches": 5,
-          "match_rate": 0.35714285714285715,
+          "tests_performed": 10,
+          "matches": 3,
+          "match_rate": 0.3,
           "avg_difference": NaN,
-          "avg_confidence": 0.9607142857142857
+          "avg_confidence": 0.945
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 2,
-          "match_rate": 0.6666666666666666,
-          "avg_difference": 4.0,
-          "avg_confidence": 0.9666666666666667
+          "tests_performed": 2,
+          "matches": 1,
+          "match_rate": 0.5,
+          "avg_difference": NaN,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -10848,32 +10770,32 @@
       "khipu_id": 1000634,
       "total_cords": 374,
       "max_level": 4,
-      "total_tests": 98,
-      "total_matches": 21,
-      "overall_match_rate": 0.21428571428571427,
+      "total_tests": 65,
+      "total_matches": 6,
+      "overall_match_rate": 0.09230769230769231,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 80,
-          "matches": 17,
-          "match_rate": 0.2125,
+          "tests_performed": 55,
+          "matches": 5,
+          "match_rate": 0.09090909090909091,
           "avg_difference": NaN,
-          "avg_confidence": 0.9474999999999998
+          "avg_confidence": 0.8785454545454546
         },
         "level_3": {
-          "tests_performed": 16,
-          "matches": 4,
-          "match_rate": 0.25,
+          "tests_performed": 9,
+          "matches": 1,
+          "match_rate": 0.1111111111111111,
           "avg_difference": NaN,
-          "avg_confidence": 0.9500000000000002
+          "avg_confidence": 0.9555555555555555
         },
         "level_4": {
-          "tests_performed": 2,
+          "tests_performed": 1,
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.95
+          "avg_confidence": 1.0
         }
       }
     },
@@ -10881,18 +10803,18 @@
       "khipu_id": 1000635,
       "total_cords": 126,
       "max_level": 4,
-      "total_tests": 26,
-      "total_matches": 15,
-      "overall_match_rate": 0.5769230769230769,
+      "total_tests": 13,
+      "total_matches": 4,
+      "overall_match_rate": 0.3076923076923077,
       "has_multi_level_summation": true,
       "levels_tested": 3,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 23,
-          "matches": 13,
-          "match_rate": 0.5652173913043478,
+          "tests_performed": 10,
+          "matches": 2,
+          "match_rate": 0.2,
           "avg_difference": NaN,
-          "avg_confidence": 0.9391304347826085
+          "avg_confidence": 1.0
         },
         "level_3": {
           "tests_performed": 2,
@@ -10925,25 +10847,18 @@
       "khipu_id": 1000637,
       "total_cords": 78,
       "max_level": 3,
-      "total_tests": 10,
-      "total_matches": 7,
-      "overall_match_rate": 0.7,
-      "has_multi_level_summation": true,
-      "levels_tested": 2,
+      "total_tests": 7,
+      "total_matches": 3,
+      "overall_match_rate": 0.42857142857142855,
+      "has_multi_level_summation": false,
+      "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 8,
-          "matches": 6,
-          "match_rate": 0.75,
+          "tests_performed": 7,
+          "matches": 3,
+          "match_rate": 0.42857142857142855,
           "avg_difference": NaN,
-          "avg_confidence": 0.9437500000000001
-        },
-        "level_3": {
-          "tests_performed": 2,
-          "matches": 1,
-          "match_rate": 0.5,
-          "avg_difference": NaN,
-          "avg_confidence": 0.9
+          "avg_confidence": 0.8102040816326531
         }
       }
     },
@@ -10961,8 +10876,8 @@
           "tests_performed": 10,
           "matches": 0,
           "match_rate": 0.0,
-          "avg_difference": 4.0,
-          "avg_confidence": 0.9800000000000002
+          "avg_difference": NaN,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -11014,20 +10929,12 @@
       "khipu_id": 1000643,
       "total_cords": 6,
       "max_level": 2,
-      "total_tests": 3,
+      "total_tests": 0,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 3,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 16.666666666666668,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000644,
@@ -11063,7 +10970,7 @@
           "matches": 0,
           "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9666666666666667
+          "avg_confidence": 0.9490196078431373
         }
       }
     },
@@ -11071,25 +10978,25 @@
       "khipu_id": 1000646,
       "total_cords": 24,
       "max_level": 3,
-      "total_tests": 7,
-      "total_matches": 6,
-      "overall_match_rate": 0.8571428571428571,
+      "total_tests": 4,
+      "total_matches": 0,
+      "overall_match_rate": 0.0,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 4,
-          "matches": 3,
-          "match_rate": 0.75,
+          "tests_performed": 3,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.9625
+          "avg_confidence": 1.0
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 3,
-          "match_rate": 1.0,
-          "avg_difference": 0.6666666666666666,
-          "avg_confidence": 0.9333333333333332
+          "tests_performed": 1,
+          "matches": 0,
+          "match_rate": 0.0,
+          "avg_difference": NaN,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -11097,25 +11004,25 @@
       "khipu_id": 1000647,
       "total_cords": 74,
       "max_level": 4,
-      "total_tests": 14,
-      "total_matches": 5,
-      "overall_match_rate": 0.35714285714285715,
+      "total_tests": 8,
+      "total_matches": 3,
+      "overall_match_rate": 0.375,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 12,
-          "matches": 4,
-          "match_rate": 0.3333333333333333,
+          "tests_performed": 7,
+          "matches": 3,
+          "match_rate": 0.42857142857142855,
           "avg_difference": NaN,
-          "avg_confidence": 0.9250000000000002
+          "avg_confidence": 0.7750000000000001
         },
         "level_3": {
-          "tests_performed": 2,
-          "matches": 1,
-          "match_rate": 0.5,
+          "tests_performed": 1,
+          "matches": 0,
+          "match_rate": 0.0,
           "avg_difference": NaN,
-          "avg_confidence": 0.95
+          "avg_confidence": 1.0
         }
       }
     },
@@ -11123,20 +11030,12 @@
       "khipu_id": 1000648,
       "total_cords": 216,
       "max_level": 2,
-      "total_tests": 1,
+      "total_tests": 0,
       "total_matches": 0,
       "overall_match_rate": 0.0,
       "has_multi_level_summation": false,
-      "levels_tested": 1,
-      "level_statistics": {
-        "level_2": {
-          "tests_performed": 1,
-          "matches": 0,
-          "match_rate": 0.0,
-          "avg_difference": 40.0,
-          "avg_confidence": 0.9
-        }
-      }
+      "levels_tested": 0,
+      "level_statistics": {}
     },
     {
       "khipu_id": 1000649,
@@ -11153,18 +11052,18 @@
       "khipu_id": 1000650,
       "total_cords": 198,
       "max_level": 2,
-      "total_tests": 8,
-      "total_matches": 7,
-      "overall_match_rate": 0.875,
+      "total_tests": 4,
+      "total_matches": 1,
+      "overall_match_rate": 0.25,
       "has_multi_level_summation": false,
       "levels_tested": 1,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 8,
-          "matches": 7,
-          "match_rate": 0.875,
-          "avg_difference": 1.5,
-          "avg_confidence": 0.9500000000000001
+          "tests_performed": 4,
+          "matches": 1,
+          "match_rate": 0.25,
+          "avg_difference": NaN,
+          "avg_confidence": 1.0
         }
       }
     },
@@ -11249,25 +11148,25 @@
       "khipu_id": 1000658,
       "total_cords": 272,
       "max_level": 3,
-      "total_tests": 58,
-      "total_matches": 23,
-      "overall_match_rate": 0.39655172413793105,
+      "total_tests": 26,
+      "total_matches": 3,
+      "overall_match_rate": 0.11538461538461539,
       "has_multi_level_summation": true,
       "levels_tested": 2,
       "level_statistics": {
         "level_2": {
-          "tests_performed": 55,
-          "matches": 20,
-          "match_rate": 0.36363636363636365,
+          "tests_performed": 25,
+          "matches": 2,
+          "match_rate": 0.08,
           "avg_difference": NaN,
-          "avg_confidence": 0.9299999999999994
+          "avg_confidence": 0.8696571428571427
         },
         "level_3": {
-          "tests_performed": 3,
-          "matches": 3,
+          "tests_performed": 1,
+          "matches": 1,
           "match_rate": 1.0,
           "avg_difference": 0.0,
-          "avg_confidence": 0.9333333333333332
+          "avg_confidence": 1.0
         }
       }
     },

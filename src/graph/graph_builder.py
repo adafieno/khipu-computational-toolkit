@@ -102,11 +102,11 @@ class KhipuGraphBuilder:
         return G
     
     def _get_cord_numeric_value(self, conn: sqlite3.Connection, cord_id: int) -> Optional[int]:
-        """Get numeric value encoded on cord by summing knots."""
+        """Get numeric value encoded on cord using Ascher notation."""
         cursor = conn.cursor()
         
         cursor.execute("""
-            SELECT TYPE_CODE, knot_value_type, NUM_TURNS
+            SELECT TYPE_CODE, NUM_TURNS
             FROM knot
             WHERE CORD_ID = ?
             ORDER BY KNOT_ORDINAL
@@ -120,17 +120,17 @@ class KhipuGraphBuilder:
         total = 0
         has_value = False
         
-        for knot_type, value_type, num_turns in knots:
-            if value_type is None:
-                continue
-            
+        for knot_type, num_turns in knots:
             has_value = True
             
-            if knot_type == 'L':  # Long knot
-                if num_turns is not None:
-                    total += int(value_type * num_turns)
-            elif knot_type in ('S', 'E'):  # Single or figure-eight
-                total += int(value_type)
+            # Ascher & Ascher positional notation
+            if knot_type == 'L':  # Long knot - tens position
+                if num_turns is not None and num_turns > 0:
+                    total += int(num_turns) * 10
+            elif knot_type == 'S':  # Single knot - hundreds position
+                total += 1 * 100
+            elif knot_type == 'E':  # Figure-eight - units position
+                total += 1 * 1
         
         return total if has_value else None
     

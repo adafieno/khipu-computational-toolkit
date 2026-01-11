@@ -93,10 +93,11 @@ class ArithmeticValidator:
         """
         Extract the numeric value encoded on a cord.
         
-        Decodes using positional decimal notation:
-        - knot_value_type = place value (1, 10, 100, 1000, etc.)
-        - NUM_TURNS = digit (for long knots)
-        - Total = sum of (knot_value_type * digit)
+        Decodes using Ascher & Ascher positional notation:
+        - S (single) = hundreds position (×100)
+        - L (long) = tens position (×10), digit = NUM_TURNS
+        - E (figure-eight) = units position (×1)
+        - Total = sum of knot values
         
         Args:
             cord_id: The cord to analyze
@@ -107,9 +108,9 @@ class ArithmeticValidator:
         with self._connect() as conn:
             cursor = conn.cursor()
             
-            # Get all knots for this cord with their positional values
+            # Get all knots for this cord
             cursor.execute("""
-                SELECT KNOT_ID, TYPE_CODE, knot_value_type, NUM_TURNS, 
+                SELECT KNOT_ID, TYPE_CODE, NUM_TURNS, 
                        CLUSTER_ID, KNOT_ORDINAL
                 FROM knot
                 WHERE CORD_ID = ?
@@ -127,36 +128,35 @@ class ArithmeticValidator:
                     validation_notes="No knots found"
                 )
             
-            # Decode numeric value
+            # Decode numeric value using Ascher notation
             total_value = 0
             decoded_knots = 0
             cluster_ids = set()
             issues = []
             
-            for knot_id, type_code, place_value, num_turns, cluster_id, ordinal in knots:
+            for knot_id, type_code, num_turns, cluster_id, ordinal in knots:
                 cluster_ids.add(cluster_id)
                 
-                if place_value is None:
-                    issues.append(f"Knot {knot_id}: NULL place_value")
-                    continue
-                
-                # Determine digit based on knot type
-                if type_code == 'L':  # Long knot - digit is NUM_TURNS
-                    digit = num_turns if num_turns is not None else 0
-                    if num_turns is None:
-                        issues.append(f"Knot {knot_id}: Long knot with NULL NUM_TURNS")
-                elif type_code == 'S':  # Single knot - represents 1 in that place
-                    digit = 1
-                elif type_code == 'E':  # Figure-eight - represents 1 in units
-                    digit = 1
+                # Ascher & Ascher positional notation
+                if type_code == 'L':  # Long knot - tens position
+                    if num_turns is not None and num_turns > 0:
+                        contribution = int(num_turns) * 10
+                        total_value += contribution
+                        decoded_knots += 1
+                    else:
+                        issues.append(f"Knot {knot_id}: Long knot with NULL/zero NUM_TURNS")
+                elif type_code == 'S':  # Single knot - hundreds position
+                    contribution = 1 * 100
+                    total_value += contribution
+                    decoded_knots += 1
+                elif type_code == 'E':  # Figure-eight - units position
+                    contribution = 1 * 1
+                    total_value += contribution
+                    decoded_knots += 1
                 else:
-                    digit = 1  # Default for other knot types
-                    issues.append(f"Knot {knot_id}: Unknown type {type_code}, assuming 1")
-                
-                # Add to total
-                contribution = int(place_value * digit)
-                total_value += contribution
-                decoded_knots += 1
+                    # Handle composite or unknown types
+                    issues.append(f"Knot {knot_id}: Unknown/composite type {type_code}, skipping")
+                    continue
             
             # Calculate confidence
             confidence = decoded_knots / len(knots) if knots else 0.0
@@ -415,9 +415,9 @@ class ArithmeticValidator:
             'total_cords': len(records),
             'cords_with_values': len([r for r in records if r['numeric_value'] is not None]),
             'khipu_count': len(df['khipu_id'].unique()),
-            'decoding_method': 'positional_decimal',
-            'formula': 'sum(knot_value_type * digit)',
-            'notes': 'digit = NUM_TURNS for long knots, 1 for single/figure-eight'
+            'decoding_method': 'Ascher_Ascher_positional_notation',
+            'formula': 'S=100, L=(NUM_TURNS×10), E=1',
+            'notes': 'S (single) = hundreds, L (long) = tens, E (figure-eight) = units'
         }
         
         metadata_path = output_path.with_suffix('.json')

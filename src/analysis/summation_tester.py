@@ -28,15 +28,15 @@ class SummationTester:
     
     def get_cord_numeric_value(self, cord_id: int) -> Optional[int]:
         """
-        Get the numeric value encoded on a cord by summing its knots.
+        Get the numeric value encoded on a cord using Ascher notation.
         Returns None if cord has no numeric encoding.
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get all knots on this cord with their decoded values
+        # Get all knots on this cord
         cursor.execute("""
-            SELECT TYPE_CODE, knot_value_type, NUM_TURNS
+            SELECT TYPE_CODE, NUM_TURNS
             FROM knot
             WHERE CORD_ID = ?
             ORDER BY KNOT_ORDINAL
@@ -51,17 +51,17 @@ class SummationTester:
         total = 0
         has_value = False
         
-        for knot_type, value_type, num_turns in knots:
-            if value_type is None:
-                continue
-            
+        for knot_type, num_turns in knots:
             has_value = True
             
-            if knot_type == 'L':  # Long knot
-                if num_turns is not None:
-                    total += int(value_type * num_turns)
-            elif knot_type in ('S', 'E'):  # Single or figure-eight
-                total += int(value_type)
+            # Ascher & Ascher positional notation
+            if knot_type == 'L':  # Long knot - tens position
+                if num_turns is not None and num_turns > 0:
+                    total += int(num_turns) * 10
+            elif knot_type == 'S':  # Single knot - hundreds position
+                total += 1 * 100
+            elif knot_type == 'E':  # Figure-eight - units position
+                total += 1 * 1
         
         return total if has_value else None
     
