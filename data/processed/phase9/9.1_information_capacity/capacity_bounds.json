@@ -1,12 +1,12 @@
 {
-  "numeric_states": 1487,
-  "numeric_capacity_bits": 10.53818893205242,
+  "numeric_states": 610,
+  "numeric_capacity_bits": 9.252665432450248,
   "color_states": 65,
   "color_capacity_bits": 6.022367813028454,
   "max_depth": 6,
   "max_branching": 319.0,
   "structural_capacity_bits": 10.902375114486025,
-  "system_lower_bound_bits": 10.53818893205242,
-  "system_upper_bound_bits": 27.4629318595669,
-  "capacity_range": "10.5 - 27.5 bits"
+  "system_lower_bound_bits": 9.252665432450248,
+  "system_upper_bound_bits": 26.17740835996473,
+  "capacity_range": "9.3 - 26.2 bits"
 }

@@ -217,21 +217,6 @@ Generate publication-ready static visualizations.
 python scripts/visualize_clusters.py
 ```
 
-### visualize_3d_khipu.py
-**Purpose:** Create 3D hierarchical visualizations of individual khipus  
-**Output:** `visualizations/3d_khipu/*.png`  
-**Phase:** 6 - Advanced Visualizations  
-**Features:** Multi-view, color modes, summation flow  
-**Usage:**
-```bash
-# Basic visualization
-python scripts/visualize_3d_khipu.py --khipu-id 1000000
-
-# With options
-python scripts/visualize_3d_khipu.py --khipu-id 1000000 --color-mode level --multi-view
-```
-**Guide:** See [VISUALIZATIONS_GUIDE.md](../docs/VISUALIZATIONS_GUIDE.md) for 78-page reference
-
 ### visualize_geographic_heatmap.py
 **Purpose:** Generate geographic distribution heatmaps  
 **Output:** `visualizations/geographic/*.png`  
@@ -313,16 +298,16 @@ streamlit run scripts/dashboard_app.py --server.port 8502
 
 **Note:** Dashboard includes error handling for statsmodels if not available. Trendlines can be enabled via checkbox if statsmodels is installed.
 
-### interactive_3d_viewer.py
-**Purpose:** Streamlit-based interactive 3D khipu visualization  
+### khipu_3d_viewer.py
+**Purpose:** Interactive 3D khipu visualization with Plotly  
 **Phase:** 6 - Advanced Visualizations  
-**Features:** Real-time rotation, zoom, color modes, khipu selection  
-**Dependencies:** streamlit, plotly
+**Features:** Dropdown khipu selection, interactive Plotly 3D plots, color-coded cords, hover tooltips, hierarchical structure  
+**Dependencies:** streamlit, plotly, networkx
 **Usage:**
 ```bash
-streamlit run scripts/interactive_3d_viewer.py
+streamlit run scripts/khipu_3d_viewer.py --server.port 8502
 ```
-**Access:** Default at http://localhost:8501 (or custom port with --server.port)
+**Access:** http://localhost:8502
 
 ### mine_motifs.py
 **Purpose:** Interactive motif mining and pattern discovery  
@@ -464,8 +449,7 @@ python scripts/predict_missing_values.py
 
 ### Phase 6: Advanced Visualizations
 - `dashboard_app.py` ⭐
-- `interactive_3d_viewer.py` ⭐
-- `visualize_3d_khipu.py`
+- `khipu_3d_viewer.py` ⭐
 - `visualize_geographic_heatmap.py`
 
 ### Phase 7: ML Extensions

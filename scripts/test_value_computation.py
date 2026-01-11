@@ -6,10 +6,19 @@ import sys
 sys.path.insert(0, 'c:/code/khipu-computational-toolkit/src')
 
 from analysis.value_computation import ValueComputer, ComputationMethod
+from config import Config
 import sqlite3
 
+# Get database path from config
+config = Config()
+db_path = config.get_database_path()
+
+print(f"Using database: {db_path}")
+print(f"Database exists: {db_path.exists()}")
+print()
+
 # Connect to database
-conn = sqlite3.connect("khipu.db")
+conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 
 # Get a sample of cords with knots

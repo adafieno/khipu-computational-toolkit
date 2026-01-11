@@ -1,7 +1,7 @@
 """
-Sequence Prediction for Cord Value Restoration
+Sequence Prediction for Confidence Improvement
 
-Predicts missing cord numeric values based on:
+Predicts improved values for low-confidence cords (confidence < 0.5) based on:
 1. Summation constraints (parent = sum of children)
 2. Sibling patterns (similar values in adjacent cords)
 3. Position-based patterns
@@ -10,6 +10,9 @@ Three approaches:
 1. Constraint-based inference (using summation)
 2. Statistical prediction (mean/median of siblings)
 3. ML-based prediction (Random Forest on context features)
+
+Compares predicted values against current low-confidence values to assess
+potential improvements in accuracy and confidence scores.
 
 Usage: python scripts/predict_missing_values.py
 """
@@ -55,25 +58,23 @@ def load_data():
             print(f"  • {error}")
         sys.exit(1)
 
-    # Load cord hierarchy and knot data from Phase 2 outputs
+    # Load cord hierarchy from Phase 2 and numeric values with confidence from Phase 1
     hierarchy_path = config.get_processed_file('cord_hierarchy.csv', phase=2)
-    knot_path = config.get_processed_file('knot_data.csv', phase=2)
+    cord_values_path = config.get_processed_file('cord_numeric_values.csv', phase=1)
 
-    print(f"  Loading from: {hierarchy_path.parent}")
+    print(f"  Loading hierarchy from: {hierarchy_path}")
+    print(f"  Loading values from: {cord_values_path}")
 
     hierarchy = pd.read_csv(hierarchy_path)
-    knots = pd.read_csv(knot_path)
+    cord_values = pd.read_csv(cord_values_path)
 
     # Normalize column names to uppercase for consistency
     hierarchy.columns = hierarchy.columns.str.upper()
-    knots.columns = knots.columns.str.upper()
+    cord_values.columns = cord_values.columns.str.upper()
 
-    # Aggregate knot values to cord level (sum of all knots on a cord)
-    # This gives us the decoded numeric value for each cord
-    cord_values = knots.groupby('CORD_ID').agg({
-        'NUMERIC_VALUE': 'sum',  # Sum all knot values on the cord
-        'CONFIDENCE': 'mean'      # Average confidence
-    }).reset_index()
+    # Drop confidence from hierarchy to avoid conflict (values confidence is what we want)
+    if 'CONFIDENCE' in hierarchy.columns:
+        hierarchy = hierarchy.drop(columns=['CONFIDENCE'])
 
     # Merge with hierarchy
     data = hierarchy.merge(
@@ -106,19 +107,21 @@ def load_data():
 
     print(f"Loaded {len(data)} cords from {data['KHIPU_ID'].nunique()} khipus")
     print(f"Built {len(graphs)} graphs")
-    print(f"Cords with values: {data['NUMERIC_VALUE'].notna().sum()} ({data['NUMERIC_VALUE'].notna().mean()*100:.1f}%)")
-    print(
-        f"Cords without values: {data['NUMERIC_VALUE'].isna().sum()} ({data['NUMERIC_VALUE'].isna().mean()*100:.1f}%)")
+    print(f"Average confidence: {data['CONFIDENCE'].mean():.3f}")
+    print(f"Low-confidence cords (<0.5): {(data['CONFIDENCE'] < 0.5).sum()} ({(data['CONFIDENCE'] < 0.5).mean()*100:.1f}%)")
+    print(f"High-confidence cords (>=0.5): {(data['CONFIDENCE'] >= 0.5).sum()} ({(data['CONFIDENCE'] >= 0.5).mean()*100:.1f}%)")
 
     return data, graphs
 
 
 def constraint_based_prediction(data, graphs):
     """
-    Predict missing values using summation constraints.
+    Predict improved values for low-confidence cords using summation constraints.
 
     If a parent has a value and all but one child have values,
-    we can infer the missing child value.
+    we can infer an improved child value using summation.
+
+    Targets cords with confidence < 0.5 for potential improvement.
 
     Improved validation:
     - Predicted value must be >= 0
@@ -131,6 +134,11 @@ def constraint_based_prediction(data, graphs):
 
     predictions = []
     TOLERANCE_RATIO = 0.05  # Allow 5% tolerance for measurement error
+    CONFIDENCE_THRESHOLD = 0.5
+
+    # Get low-confidence cords
+    low_conf_data = data[data['CONFIDENCE'] < CONFIDENCE_THRESHOLD].copy()
+    print(f"Targeting {len(low_conf_data)} low-confidence cords (confidence < {CONFIDENCE_THRESHOLD})")
 
     for khipu_id in data['KHIPU_ID'].unique():
         if khipu_id not in graphs:
@@ -138,14 +146,15 @@ def constraint_based_prediction(data, graphs):
 
         G = graphs[khipu_id]
         khipu_data = data[data['KHIPU_ID'] == khipu_id].copy()
+        low_conf_cords = set(low_conf_data[low_conf_data['KHIPU_ID'] == khipu_id]['CORD_ID'])
 
-        # Create cord_id -> value mapping
+        # Create cord_id -> value and confidence mappings
         value_map = dict(zip(khipu_data['CORD_ID'], khipu_data['NUMERIC_VALUE']))
+        confidence_map = dict(zip(khipu_data['CORD_ID'], khipu_data['CONFIDENCE']))
 
-        # Check each node
-        for node in G.nodes():
-            # Skip if value already known
-            if pd.notna(value_map.get(node)):
+        # Check each low-confidence node
+        for node in low_conf_cords:
+            if node not in G.nodes():
                 continue
 
             # Get parent
@@ -179,16 +188,22 @@ def constraint_based_prediction(data, graphs):
                     predicted_value = max(0, predicted_value)
 
                     # Confidence based on parent value magnitude
-                    confidence = 'high' if parent_value > 10 else 'medium'
+                    new_confidence = 0.95 if parent_value > 10 else 0.85
+                    current_value = value_map.get(node, 0)
+                    current_confidence = confidence_map.get(node, 0)
 
                     predictions.append({
                         'khipu_id': khipu_id,
                         'cord_id': node,
                         'method': 'constraint_summation',
                         'predicted_value': predicted_value,
+                        'current_value': current_value,
+                        'value_change': abs(predicted_value - current_value),
+                        'current_confidence': current_confidence,
+                        'predicted_confidence': new_confidence,
+                        'confidence_gain': new_confidence - current_confidence,
                         'parent_value': parent_value,
-                        'num_siblings': len(siblings) - 1,
-                        'confidence': confidence
+                        'num_siblings': len(siblings) - 1
                     })
 
     pred_df = pd.DataFrame(predictions)
@@ -197,31 +212,37 @@ def constraint_based_prediction(data, graphs):
     if len(pred_df) > 0:
         print("\nValue statistics:")
         print(f"  Mean predicted value: {pred_df['predicted_value'].mean():.2f}")
-        print(f"  Median predicted value: {pred_df['predicted_value'].median():.2f}")
-        print(f"  Range: [{pred_df['predicted_value'].min():.2f}, {pred_df['predicted_value'].max():.2f}]")
+        print(f"  Mean value change: {pred_df['value_change'].mean():.2f}")
+        print(f"  Mean confidence gain: {pred_df['confidence_gain'].mean():.3f}")
 
-        print("\nTop 10 predictions:")
-        print("-" * 60)
-        for _, row in pred_df.head(10).iterrows():
+        print("\nTop 10 predictions by confidence gain:")
+        print("-" * 80)
+        for _, row in pred_df.nlargest(10, 'confidence_gain').iterrows():
             print(f"Khipu {row['khipu_id']} | Cord {row['cord_id']} | "
-                  f"Predicted: {row['predicted_value']:.0f} | "
-                  f"Parent: {row['parent_value']:.0f} | "
-                  f"Siblings: {row['num_siblings']}")
+                  f"Current: {row['current_value']:.0f} ({row['current_confidence']:.2f}) → "
+                  f"Predicted: {row['predicted_value']:.0f} ({row['predicted_confidence']:.2f}) | "
+                  f"Gain: +{row['confidence_gain']:.3f}")
 
     return pred_df
 
 
 def sibling_based_prediction(data, graphs):
     """
-    Predict missing values based on sibling patterns.
+    Predict improved values for low-confidence cords based on sibling patterns.
 
-    Uses mean/median of sibling values as prediction.
+    Uses median of sibling values as prediction.
+    Targets cords with confidence < 0.5 for potential improvement.
     """
     print(f"\n{'='*60}")
     print("SIBLING-BASED PREDICTION")
     print(f"{'='*60}\n")
 
     predictions = []
+    CONFIDENCE_THRESHOLD = 0.5
+
+    # Get low-confidence cords
+    low_conf_data = data[data['CONFIDENCE'] < CONFIDENCE_THRESHOLD].copy()
+    print(f"Targeting {len(low_conf_data)} low-confidence cords (confidence < {CONFIDENCE_THRESHOLD})")
 
     for khipu_id in data['KHIPU_ID'].unique():
         if khipu_id not in graphs:
@@ -229,14 +250,15 @@ def sibling_based_prediction(data, graphs):
 
         G = graphs[khipu_id]
         khipu_data = data[data['KHIPU_ID'] == khipu_id].copy()
+        low_conf_cords = set(low_conf_data[low_conf_data['KHIPU_ID'] == khipu_id]['CORD_ID'])
 
-        # Create cord_id -> value mapping
+        # Create cord_id -> value and confidence mappings
         value_map = dict(zip(khipu_data['CORD_ID'], khipu_data['NUMERIC_VALUE']))
+        confidence_map = dict(zip(khipu_data['CORD_ID'], khipu_data['CONFIDENCE']))
 
-        # Check each node
-        for node in G.nodes():
-            # Skip if value already known
-            if pd.notna(value_map.get(node)):
+        # Check each low-confidence node
+        for node in low_conf_cords:
+            if node not in G.nodes():
                 continue
 
             # Get parent
@@ -249,20 +271,34 @@ def sibling_based_prediction(data, graphs):
             siblings = [s for s in G.successors(parent) if s != node]
             sibling_values = [value_map.get(s) for s in siblings if pd.notna(value_map.get(s))]
 
-            # Need at least 2 siblings with values
-            if len(sibling_values) >= 2:
-                # Use median of sibling values
-                predicted_value = np.median(sibling_values)
+            # Need at least 2 siblings with high-confidence values
+            high_conf_siblings = [v for v, conf in zip(sibling_values, 
+                                  [confidence_map.get(s, 0) for s in siblings if pd.notna(value_map.get(s))])
+                                  if conf >= 0.7]
+            
+            if len(high_conf_siblings) >= 2:
+                # Use median of high-confidence sibling values
+                predicted_value = np.median(high_conf_siblings)
+                sibling_std = np.std(high_conf_siblings) if len(high_conf_siblings) > 1 else 0
+
+                # Confidence based on sibling agreement (lower std = higher confidence)
+                new_confidence = 0.75 if sibling_std < 10 else 0.65
+                current_value = value_map.get(node, 0)
+                current_confidence = confidence_map.get(node, 0)
 
                 predictions.append({
                     'khipu_id': khipu_id,
                     'cord_id': node,
                     'method': 'sibling_median',
                     'predicted_value': predicted_value,
-                    'num_siblings_with_values': len(sibling_values),
-                    'sibling_mean': np.mean(sibling_values),
-                    'sibling_std': np.std(sibling_values) if len(sibling_values) > 1 else 0,
-                    'confidence': 'medium'
+                    'current_value': current_value,
+                    'value_change': abs(predicted_value - current_value),
+                    'current_confidence': current_confidence,
+                    'predicted_confidence': new_confidence,
+                    'confidence_gain': new_confidence - current_confidence,
+                    'num_siblings_with_values': len(high_conf_siblings),
+                    'sibling_mean': np.mean(high_conf_siblings),
+                    'sibling_std': sibling_std
                 })
 
     pred_df = pd.DataFrame(predictions)
@@ -271,22 +307,24 @@ def sibling_based_prediction(data, graphs):
     if len(pred_df) > 0:
         print("\nValue statistics:")
         print(f"  Mean predicted value: {pred_df['predicted_value'].mean():.2f}")
-        print(f"  Median predicted value: {pred_df['predicted_value'].median():.2f}")
-        print(f"  Mean sibling std: {pred_df['sibling_std'].mean():.2f}")
+        print(f"  Mean value change: {pred_df['value_change'].mean():.2f}")
+        print(f"  Mean confidence gain: {pred_df['confidence_gain'].mean():.3f}")
+        print(f"  Mean sibling agreement (std): {pred_df['sibling_std'].mean():.2f}")
 
-        print("\nTop 10 predictions:")
-        print("-" * 60)
-        for _, row in pred_df.head(10).iterrows():
+        print("\nTop 10 predictions by confidence gain:")
+        print("-" * 80)
+        for _, row in pred_df.nlargest(10, 'confidence_gain').iterrows():
             print(f"Khipu {row['khipu_id']} | Cord {row['cord_id']} | "
-                  f"Predicted: {row['predicted_value']:.0f} ± {row['sibling_std']:.0f} | "
-                  f"Siblings: {row['num_siblings_with_values']}")
+                  f"Current: {row['current_value']:.0f} ({row['current_confidence']:.2f}) → "
+                  f"Predicted: {row['predicted_value']:.0f} ({row['predicted_confidence']:.2f}) | "
+                  f"Gain: +{row['confidence_gain']:.3f}")
 
     return pred_df
 
 
 def ml_based_prediction(data, graphs):
     """
-    Predict missing values using ML on context features.
+    Predict improved values for low-confidence cords using ML on context features.
 
     Features:
     - Cord level in hierarchy
@@ -294,12 +332,14 @@ def ml_based_prediction(data, graphs):
     - Parent value
     - Position among siblings
     - Khipu-level statistics
+
+    Trains on high-confidence cords (>= 0.7) and predicts for low-confidence cords (< 0.5).
     """
     print(f"\n{'='*60}")
     print("ML-BASED PREDICTION (Random Forest)")
     print(f"{'='*60}\n")
 
-    # Build feature matrix for cords with known values
+    # Build feature matrix for all cords
     features_list = []
 
     for khipu_id in data['KHIPU_ID'].unique():
@@ -341,6 +381,14 @@ def ml_based_prediction(data, graphs):
             children = list(G.successors(node))
             num_children = len(children)
 
+            # Get confidence for this cord
+            cord_confidence = value_map.get(node)
+            cord_row = khipu_data[khipu_data['CORD_ID'] == node]
+            if len(cord_row) > 0:
+                cord_confidence_score = cord_row['CONFIDENCE'].values[0]
+            else:
+                cord_confidence_score = 0
+
             features_list.append({
                 'khipu_id': khipu_id,
                 'cord_id': node,
@@ -351,17 +399,18 @@ def ml_based_prediction(data, graphs):
                 'num_children': num_children,
                 'khipu_mean': khipu_mean,
                 'khipu_median': khipu_median,
-                'target_value': value_map.get(node)
+                'target_value': value_map.get(node),
+                'confidence': cord_confidence_score
             })
 
     features_df = pd.DataFrame(features_list)
 
-    # Split into training (has values) and prediction (missing values)
-    train_df = features_df[features_df['target_value'].notna()].copy()
-    predict_df = features_df[features_df['target_value'].isna()].copy()
+    # Split into training (high confidence >= 0.7) and prediction (low confidence < 0.5)
+    train_df = features_df[features_df['confidence'] >= 0.7].copy()
+    predict_df = features_df[features_df['confidence'] < 0.5].copy()
 
-    print(f"Training samples: {len(train_df)}")
-    print(f"Prediction samples: {len(predict_df)}")
+    print(f"Training samples (confidence >= 0.7): {len(train_df)}")
+    print(f"Prediction samples (confidence < 0.5): {len(predict_df)}")
 
     if len(train_df) < 100:
         print("Not enough training data for ML prediction")
@@ -410,18 +459,33 @@ def ml_based_prediction(data, graphs):
 
         predict_df['predicted_value'] = predictions
         predict_df['method'] = 'random_forest'
-        predict_df['confidence'] = 'medium'
+        
+        # Calculate improvements
+        predict_df['current_value'] = predict_df['target_value']
+        predict_df['value_change'] = abs(predict_df['predicted_value'] - predict_df['current_value'])
+        predict_df['current_confidence'] = predict_df['confidence']
+        predict_df['predicted_confidence'] = 0.70  # ML predictions get moderate confidence
+        predict_df['confidence_gain'] = predict_df['predicted_confidence'] - predict_df['current_confidence']
 
         # Filter out unreasonable predictions
         predict_df = predict_df[predict_df['predicted_value'] >= 0]
 
         print(f"\nPredictions made: {len(predict_df)}")
         print("Value statistics:")
-        print(f"  Mean: {predict_df['predicted_value'].mean():.2f}")
-        print(f"  Median: {predict_df['predicted_value'].median():.2f}")
-        print(f"  Range: [{predict_df['predicted_value'].min():.2f}, {predict_df['predicted_value'].max():.2f}]")
+        print(f"  Mean predicted value: {predict_df['predicted_value'].mean():.2f}")
+        print(f"  Mean value change: {predict_df['value_change'].mean():.2f}")
+        print(f"  Mean confidence gain: {predict_df['confidence_gain'].mean():.3f}")
 
-        return predict_df[['khipu_id', 'cord_id', 'method', 'predicted_value', 'confidence']]
+        print("\nTop 10 predictions by confidence gain:")
+        print("-" * 80)
+        for _, row in predict_df.nlargest(10, 'confidence_gain').iterrows():
+            print(f"Khipu {row['khipu_id']} | Cord {row['cord_id']} | "
+                  f"Current: {row['current_value']:.0f} ({row['current_confidence']:.2f}) → "
+                  f"Predicted: {row['predicted_value']:.0f} ({row['predicted_confidence']:.2f}) | "
+                  f"Gain: +{row['confidence_gain']:.3f}")
+
+        return predict_df[['khipu_id', 'cord_id', 'method', 'predicted_value', 'current_value', 
+                           'value_change', 'current_confidence', 'predicted_confidence', 'confidence_gain']]
 
     return pd.DataFrame()
 
@@ -457,12 +521,13 @@ def combine_predictions(constraint_pred, sibling_pred, ml_pred):
     print("\nBy method:")
     for method in combined['method'].unique():
         count = (combined['method'] == method).sum()
-        print(f"  {method:25s}: {count:4d} ({count/len(combined)*100:5.1f}%)")
+        avg_gain = combined[combined['method'] == method]['confidence_gain'].mean()
+        print(f"  {method:25s}: {count:4d} ({count/len(combined)*100:5.1f}%) | Avg gain: +{avg_gain:.3f}")
 
-    print("\nBy confidence:")
-    for conf in combined['confidence'].unique():
-        count = (combined['confidence'] == conf).sum()
-        print(f"  {conf:10s}: {count:4d} ({count/len(combined)*100:5.1f}%)")
+    print("\nOverall improvement metrics:")
+    print(f"  Mean confidence gain: +{combined['confidence_gain'].mean():.3f}")
+    print(f"  Mean value change: {combined['value_change'].mean():.2f}")
+    print(f"  Cords with gain > 0.3: {(combined['confidence_gain'] > 0.3).sum()} ({(combined['confidence_gain'] > 0.3).mean()*100:.1f}%)")
 
     return combined
 
@@ -502,7 +567,11 @@ def save_results(combined, constraint_pred, sibling_pred, ml_pred):
     summary = {
         'total_predictions': len(combined) if len(combined) > 0 else 0,
         'by_method': combined['method'].value_counts().to_dict() if len(combined) > 0 else {},
-        'by_confidence': combined['confidence'].value_counts().to_dict() if len(combined) > 0 else {},
+        'improvement_metrics': {
+            'mean_confidence_gain': float(combined['confidence_gain'].mean()) if len(combined) > 0 else 0,
+            'mean_value_change': float(combined['value_change'].mean()) if len(combined) > 0 else 0,
+            'high_gain_count': int((combined['confidence_gain'] > 0.3).sum()) if len(combined) > 0 else 0
+        },
         'method_counts': {
             'constraint': len(constraint_pred),
             'sibling': len(sibling_pred),
@@ -519,7 +588,7 @@ def save_results(combined, constraint_pred, sibling_pred, ml_pred):
 def main():
     """Main prediction pipeline."""
     print(f"\n{'='*70}")
-    print(" CORD VALUE PREDICTION FOR RESTORATION ")
+    print(" CORD VALUE PREDICTION FOR CONFIDENCE IMPROVEMENT ")
     print(f"{'='*70}\n")
 
     # Load data
@@ -537,13 +606,13 @@ def main():
     save_results(combined, constraint_pred, sibling_pred, ml_pred)
 
     print(f"\n{'='*70}")
-    print(" VALUE PREDICTION COMPLETE ")
+    print(" CONFIDENCE IMPROVEMENT ANALYSIS COMPLETE ")
     print(f"{'='*70}\n")
 
     print("Review the following files:")
-    print("  • data/processed/cord_value_predictions.csv - Combined predictions")
-    print("  • data/processed/constraint_based_predictions.csv - Summation-based")
-    print("  • data/processed/sibling_based_predictions.csv - Sibling pattern-based")
+    print("  • data/processed/cord_value_predictions.csv - Combined predictions with improvements")
+    print("  • data/processed/constraint_based_predictions.csv - Summation-based improvements")
+    print("  • data/processed/sibling_based_predictions.csv - Sibling pattern-based improvements")
     print("  • data/processed/ml_based_predictions.csv - Random Forest predictions")
     print("  • data/processed/value_prediction_summary.json - Summary statistics")
 

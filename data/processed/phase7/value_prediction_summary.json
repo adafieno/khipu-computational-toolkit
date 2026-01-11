@@ -1,17 +1,18 @@
 {
-  "total_predictions": 17321,
+  "total_predictions": 24043,
   "by_method": {
-    "random_forest": 15253,
-    "constraint_summation": 1295,
-    "sibling_median": 773
+    "random_forest": 22441,
+    "constraint_summation": 960,
+    "sibling_median": 642
   },
-  "by_confidence": {
-    "medium": 16026,
-    "high": 1295
+  "improvement_metrics": {
+    "mean_confidence_gain": 0.7083630295720167,
+    "mean_value_change": 10330554.972682016,
+    "high_gain_count": 24043
   },
   "method_counts": {
-    "constraint": 1295,
-    "sibling": 884,
-    "ml": 17321
+    "constraint": 960,
+    "sibling": 729,
+    "ml": 24043
   }
 }

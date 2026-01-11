@@ -1,8 +1,8 @@
 {
   "numeric": {
-    "mean_cv": 1.3689540505998892,
-    "standardization": "medium",
-    "interpretation": "Values show moderate consistency"
+    "mean_cv": 3.8110496298612118,
+    "standardization": "low",
+    "interpretation": "Values are highly variable"
   },
   "color": {
     "within_khipu_standardization": 0.2543214845781564,

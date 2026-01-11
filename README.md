@@ -37,12 +37,14 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 
 ### Key Statistics
 
-- **619 khipus** analyzed from the Open Khipu Repository
+- **612 khipus** analyzed from the Open Khipu Repository
 - **54,403 cords** with hierarchical relationships extracted
-- **110,151 knots** decoded (95.2% of knot records with sufficient data)
+- **110,677 knots** decoded (all knot records with sufficient data)
 - **7 structural clusters** identified via k-means (moderate separation; see [Phase 8](reports/phase8_administrative_function_report.md))
-- **73.8%** exhibit numeric patterns consistent with summation relationships
-- **27 structural anomalies** detected using computational outlier methods
+- **72.2%** exhibit numeric patterns consistent with summation relationships
+- **55.7% average confidence** in numeric value extractions (44.2% low-confidence)
+- **13 high-confidence structural anomalies** detected using computational outlier methods
+- **24,043 predictions** generated for confidence improvement (+0.708 avg gain)
 - **100+ datasets** generated for reproducible exploration
 
 **Note:** All counts and percentages reflect computational processing results. See [DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) for detailed explanations of how these numbers are derived and why they may differ across phases.
@@ -55,7 +57,7 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **Phase 3:** Summation Testing - Arithmetic relationship pattern exploration
 - **Phase 4:** Pattern Discovery - Clustering, motif mining, geographic analysis
 - **Phase 5:** Multi-Model Framework - Simultaneous hypothesis testing framework
-- **Phase 7:** ML Extensions - Predictive modeling and pattern classification
+- **Phase 7:** ML Extensions - Confidence improvement predictions and anomaly detection
 - **Phase 8:** Comparative Analysis - Chromatic features and operational typology
 - **Phase 9:** Meta-Analysis - Stability testing and robustness validation
 
@@ -144,7 +146,7 @@ $env:KHIPU_DB_PATH = "..\open-khipu-repository\data\khipu.db"  # Windows
 streamlit run scripts/dashboard_app.py
 
 # Launch 3D viewer (on port 8502)
-streamlit run scripts/interactive_3d_viewer.py --server.port 8502
+streamlit run scripts/khipu_3d_viewer.py --server.port 8502
 ```
 
 ### Execute Analysis Pipeline
@@ -174,9 +176,9 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ```
 khipu-computational-toolkit/
- scripts/              # Analysis scripts (36 scripts, all operational)
+ scripts/              # Analysis scripts (34 scripts, all operational)
     dashboard_app.py              # Interactive web dashboard
-    interactive_3d_viewer.py      # 3D khipu visualization
+    khipu_3d_viewer.py            # 3D khipu visualization
     detect_anomalies.py           # Outlier detection
     predict_missing_values.py     # ML prediction
     visualize_phase*.py           # Phase visualization generators
@@ -216,10 +218,10 @@ khipu-computational-toolkit/
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
-- ✓ Summation hypothesis testing (73.8% exhibit consistent numeric patterns)
+- ✓ Summation hypothesis testing (72.2% exhibit consistent numeric patterns)
 - ✓ K-means clustering (7 structural groups with moderate separation)
 - ✓ Anomaly detection (Isolation Forest and LOF methods)
-- ✓ Missing value prediction (constraint-based, statistical, and ML approaches)
+- ✓ Confidence improvement prediction (24,043 predictions via constraint, sibling, and ML methods)
 - ✓ Operational classification (unsupervised typology requiring expert validation)
 - ✓ Motif mining (color and structure pattern discovery)
 - ✓ Geographic correlation analysis
@@ -248,13 +250,13 @@ python scripts/detect_anomalies.py
 
 Identifies outliers using Isolation Forest and Local Outlier Factor.
 
-### Missing Value Prediction
+### Confidence Improvement Prediction
 
 ```bash
 python scripts/predict_missing_values.py
 ```
 
-Predicts missing numeric values using ML, sibling patterns, and structural constraints.
+Generates improved predictions for low-confidence cord values (<0.5 confidence) using constraint-based, sibling pattern, and Random Forest ML methods. Produces 24,043 predictions with average +0.708 confidence gain.
 
 ### Visualization Generation
 
@@ -321,7 +323,7 @@ flake8 src/ scripts/
 - **Source:** Open Khipu Repository (OKR)
 - **Database:** khipu.db from OKR GitHub repository
 - **Extraction date:** December 2025
-- **Khipus analyzed:** 619 (612 with complete cord data)
+- **Khipus analyzed:** 612 with complete cord data
 
 ### Environment
 

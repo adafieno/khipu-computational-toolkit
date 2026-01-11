@@ -46,6 +46,12 @@ from dataclasses import dataclass
 from typing import List, Dict, Tuple, Optional
 from enum import Enum
 import math
+import sys
+from pathlib import Path
+
+# Add src to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from config import Config
 
 
 class KnotType(Enum):
@@ -80,7 +86,7 @@ class Knot:
     """Represents a single knot with database fields"""
     cord_id: str
     type_code: str  # S, L, E, 8
-    cluster_ordinal: int  # Position in cluster (1, 2, 3...)
+    cluster_ordinal: Optional[float]  # Position in cluster (1.0, 2.0, 3.0...), can be None
     num_turns: Optional[int]  # For long string knots
     direction: str  # S, Z, U
     
@@ -137,8 +143,12 @@ class ComputedValue:
 class ValueComputer:
     """Main value computation engine"""
     
-    def __init__(self, db_path: str = "khipu.db"):
-        self.db_path = db_path
+    def __init__(self, db_path: Optional[str] = None):
+        if db_path is None:
+            config = Config()
+            self.db_path = str(config.get_database_path())
+        else:
+            self.db_path = db_path
     
     def get_cord_knots(self, cord_id: str) -> List[Knot]:
         """
@@ -166,34 +176,32 @@ class ValueComputer:
         """
         Group knots into clusters by CLUSTER_ORDINAL.
         
-        In Ascher notation, gaps in CLUSTER_ORDINAL represent decimal positions.
-        Example: CLUSTER_ORDINAL [5, 4, 3, 1] → clusters at positions [1000s, 100s, 10s, units]
+        CLUSTER_ORDINAL directly represents decimal position:
+        - 1.0 = units (10^0)
+        - 2.0 = tens (10^1)
+        - 3.0 = hundreds (10^2), etc.
+        
+        Knots with the same CLUSTER_ORDINAL belong to the same cluster.
         """
         if not knots:
             return []
         
-        # Sort by CLUSTER_ORDINAL descending (highest = leftmost = most significant)
-        sorted_knots = sorted(knots, key=lambda k: k.cluster_ordinal, reverse=True)
+        # Group knots by CLUSTER_ORDINAL
+        from collections import defaultdict
+        cluster_dict = defaultdict(list)
         
+        for knot in knots:
+            # Skip knots with None cluster_ordinal
+            if knot.cluster_ordinal is not None:
+                cluster_dict[knot.cluster_ordinal].append(knot)
+        
+        # Convert to KnotCluster objects, sorted by position (ascending)
         clusters = []
-        current_ordinal = sorted_knots[0].cluster_ordinal
-        current_cluster = []
-        
-        for knot in sorted_knots:
-            if knot.cluster_ordinal == current_ordinal:
-                current_cluster.append(knot)
-            else:
-                # New cluster
-                if current_cluster:
-                    position = 10 ** (len(clusters))  # 1, 10, 100, 1000...
-                    clusters.append(KnotCluster(position, current_cluster))
-                current_cluster = [knot]
-                current_ordinal = knot.cluster_ordinal
-        
-        # Add final cluster
-        if current_cluster:
-            position = 10 ** (len(clusters))
-            clusters.append(KnotCluster(position, current_cluster))
+        for ordinal in sorted(cluster_dict.keys()):
+            # CLUSTER_ORDINAL maps directly to power of 10
+            # 1.0 → 1, 2.0 → 10, 3.0 → 100, etc.
+            position = 10 ** (int(ordinal) - 1)
+            clusters.append(KnotCluster(position, cluster_dict[ordinal]))
         
         return clusters
     
@@ -272,6 +280,21 @@ class ValueComputer:
         """
         knots = self.get_cord_knots(cord_id)
         
+        if not knots:
+            return []
+        
+        # Check if any knots have valid cluster_ordinal
+        valid_knots = [k for k in knots if k.cluster_ordinal is not None]
+        if not valid_knots:
+            # Return zero value with low confidence if no valid cluster data
+            return [ComputedValue(
+                value=0.0,
+                method=ComputationMethod.ASCHER_DECIMAL,
+                confidence=0.0,
+                ambiguities=['No valid CLUSTER_ORDINAL data'],
+                knot_breakdown={}
+            )]
+        
         results = []
         
         # Always compute Ascher decimal (standard method)
@@ -294,13 +317,13 @@ class ValueComputer:
 
 
 # Convenience functions
-def compute_cord_value(cord_id: str, db_path: str = "khipu.db") -> float:
+def compute_cord_value(cord_id: str, db_path: Optional[str] = None) -> float:
     """Quick function to get best value for a cord"""
     computer = ValueComputer(db_path)
     return computer.get_best_value(cord_id).value
 
 
-def get_value_with_confidence(cord_id: str, db_path: str = "khipu.db") -> Tuple[float, float]:
+def get_value_with_confidence(cord_id: str, db_path: Optional[str] = None) -> Tuple[float, float]:
     """Get value and confidence score"""
     computer = ValueComputer(db_path)
     result = computer.get_best_value(cord_id)

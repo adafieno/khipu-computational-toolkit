@@ -7,6 +7,9 @@ Tests summation consistency following established conventions:
 - Internal arithmetic relationships should be consistent
 
 Based on findings from Medrano & Khosla (2024) and Ascher & Ascher.
+
+IMPORTANT: Uses ValueComputer for correct value computation with
+CLUSTER_ORDINAL clustering (not fixed position decoding).
 """
 
 import sqlite3
@@ -17,6 +20,11 @@ from enum import Enum
 import json
 import pandas as pd
 from datetime import datetime
+import sys
+
+# Import value computation
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from analysis.value_computation import ValueComputer
 
 
 class SummationType(Enum):
@@ -84,6 +92,9 @@ class ArithmeticValidator:
         self.db_path = Path(db_path)
         if not self.db_path.exists():
             raise FileNotFoundError(f"Database not found: {self.db_path}")
+        
+        # Initialize value computer for correct value calculations
+        self.value_computer = ValueComputer(str(self.db_path))
     
     def _connect(self) -> sqlite3.Connection:
         """Create database connection."""
@@ -91,13 +102,9 @@ class ArithmeticValidator:
     
     def get_cord_numeric_value(self, cord_id: int) -> CordValue:
         """
-        Extract the numeric value encoded on a cord.
+        Extract the numeric value encoded on a cord using correct CLUSTER_ORDINAL clustering.
         
-        Decodes using Ascher & Ascher positional notation:
-        - S (single) = hundreds position (×100)
-        - L (long) = tens position (×10), digit = NUM_TURNS
-        - E (figure-eight) = units position (×1)
-        - Total = sum of knot values
+        Delegates to ValueComputer for proper computation.
         
         Args:
             cord_id: The cord to analyze
@@ -108,18 +115,20 @@ class ArithmeticValidator:
         with self._connect() as conn:
             cursor = conn.cursor()
             
-            # Get all knots for this cord
+            # Get cluster IDs for this cord
             cursor.execute("""
-                SELECT KNOT_ID, TYPE_CODE, NUM_TURNS, 
-                       CLUSTER_ID, KNOT_ORDINAL
+                SELECT DISTINCT CLUSTER_ORDINAL
                 FROM knot
-                WHERE CORD_ID = ?
-                ORDER BY CLUSTER_ID, KNOT_ORDINAL
+                WHERE CORD_ID = ? AND CLUSTER_ORDINAL IS NOT NULL
+                ORDER BY CLUSTER_ORDINAL
             """, (cord_id,))
             
-            knots = cursor.fetchall()
+            cluster_ordinals = [row[0] for row in cursor.fetchall()]
             
-            if not knots:
+            # Use ValueComputer for correct value calculation
+            computed = self.value_computer.get_best_value(str(cord_id))
+            
+            if not cluster_ordinals:
                 return CordValue(
                     cord_id=cord_id,
                     total_value=None,
@@ -128,51 +137,12 @@ class ArithmeticValidator:
                     validation_notes="No knots found"
                 )
             
-            # Decode numeric value using Ascher notation
-            total_value = 0
-            decoded_knots = 0
-            cluster_ids = set()
-            issues = []
-            
-            for knot_id, type_code, num_turns, cluster_id, ordinal in knots:
-                cluster_ids.add(cluster_id)
-                
-                # Ascher & Ascher positional notation
-                if type_code == 'L':  # Long knot - tens position
-                    if num_turns is not None and num_turns > 0:
-                        contribution = int(num_turns) * 10
-                        total_value += contribution
-                        decoded_knots += 1
-                    else:
-                        issues.append(f"Knot {knot_id}: Long knot with NULL/zero NUM_TURNS")
-                elif type_code == 'S':  # Single knot - hundreds position
-                    contribution = 1 * 100
-                    total_value += contribution
-                    decoded_knots += 1
-                elif type_code == 'E':  # Figure-eight - units position
-                    contribution = 1 * 1
-                    total_value += contribution
-                    decoded_knots += 1
-                else:
-                    # Handle composite or unknown types
-                    issues.append(f"Knot {knot_id}: Unknown/composite type {type_code}, skipping")
-                    continue
-            
-            # Calculate confidence
-            confidence = decoded_knots / len(knots) if knots else 0.0
-            if issues:
-                confidence *= 0.9  # Reduce confidence if there were issues
-            
-            notes = f"Decoded {decoded_knots}/{len(knots)} knots"
-            if issues:
-                notes += f" ({len(issues)} issues)"
-            
             return CordValue(
                 cord_id=cord_id,
-                total_value=total_value if decoded_knots > 0 else None,
-                knot_clusters=sorted(cluster_ids),
-                confidence=confidence,
-                validation_notes=notes
+                total_value=int(computed.value) if computed.value is not None else None,
+                knot_clusters=cluster_ordinals,
+                confidence=computed.confidence,
+                validation_notes=f"Computed using {computed.method.value}"
             )
     
     def test_pendant_summation(

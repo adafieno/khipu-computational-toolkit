@@ -5,6 +5,9 @@ Creates directed graphs where:
 - Nodes represent cords with attributes (numeric value, color, level)
 - Edges represent pendant relationships (parent -> child)
 - Node/edge attributes enable pattern mining and clustering
+
+IMPORTANT: Uses ValueComputer for correct value computation with
+CLUSTER_ORDINAL clustering (not fixed position decoding).
 """
 
 import sqlite3
@@ -15,6 +18,11 @@ from typing import Dict, List, Optional
 import json
 from datetime import datetime
 import pickle
+import sys
+
+# Import value computation
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from analysis.value_computation import ValueComputer
 
 
 class KhipuGraphBuilder:
@@ -25,6 +33,9 @@ class KhipuGraphBuilder:
         self.db_path = Path(db_path)
         if not self.db_path.exists():
             raise FileNotFoundError(f"Database not found: {db_path}")
+        
+        # Initialize value computer for correct value calculations
+        self.value_computer = ValueComputer(str(db_path))
     
     def build_khipu_graph(self, khipu_id: int, include_colors: bool = True, 
                           include_numeric: bool = True) -> nx.DiGraph:
@@ -101,38 +112,14 @@ class KhipuGraphBuilder:
         
         return G
     
-    def _get_cord_numeric_value(self, conn: sqlite3.Connection, cord_id: int) -> Optional[int]:
-        """Get numeric value encoded on cord using Ascher notation."""
-        cursor = conn.cursor()
+    def _get_cord_numeric_value(self, conn: sqlite3.Connection, cord_id: int) -> Optional[float]:
+        """
+        Get numeric value encoded on cord using correct CLUSTER_ORDINAL clustering.
         
-        cursor.execute("""
-            SELECT TYPE_CODE, NUM_TURNS
-            FROM knot
-            WHERE CORD_ID = ?
-            ORDER BY KNOT_ORDINAL
-        """, (cord_id,))
-        
-        knots = cursor.fetchall()
-        
-        if not knots:
-            return None
-        
-        total = 0
-        has_value = False
-        
-        for knot_type, num_turns in knots:
-            has_value = True
-            
-            # Ascher & Ascher positional notation
-            if knot_type == 'L':  # Long knot - tens position
-                if num_turns is not None and num_turns > 0:
-                    total += int(num_turns) * 10
-            elif knot_type == 'S':  # Single knot - hundreds position
-                total += 1 * 100
-            elif knot_type == 'E':  # Figure-eight - units position
-                total += 1 * 1
-        
-        return total if has_value else None
+        Delegates to ValueComputer for proper computation.
+        """
+        computed = self.value_computer.get_best_value(str(cord_id))
+        return computed.value if computed.confidence > 0.0 else None
     
     def _get_cord_color(self, conn: sqlite3.Connection, cord_id: int) -> Dict:
         """Get color information for cord."""

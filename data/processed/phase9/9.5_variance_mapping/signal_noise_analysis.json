@@ -1,9 +1,9 @@
 {
   "numeric": {
-    "low_variance_khipus": 44,
-    "high_variance_khipus": 183,
-    "signal_interpretation": "44 khipus show structured numeric patterns (signal)",
-    "noise_interpretation": "183 khipus show high numeric variability (noise or flexibility)"
+    "low_variance_khipus": 35,
+    "high_variance_khipus": 368,
+    "signal_interpretation": "35 khipus show structured numeric patterns (signal)",
+    "noise_interpretation": "368 khipus show high numeric variability (noise or flexibility)"
   },
   "color": {
     "high_standardization_khipus": 49,

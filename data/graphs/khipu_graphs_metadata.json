@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-02T17:29:06.766743",
+  "generated_at": "2026-01-11T09:25:03.491953",
   "total_graphs": 619,
   "total_nodes": 55028,
   "total_edges": 54403,
@@ -7,6 +7,6 @@
   "avg_edges_per_graph": 87.88852988691438,
   "max_nodes": 1832,
   "min_nodes": 0,
-  "graphs_with_numeric_data": 593,
+  "graphs_with_numeric_data": 494,
   "graphs_with_color_data": 601
 }

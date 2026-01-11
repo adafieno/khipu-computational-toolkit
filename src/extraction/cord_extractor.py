@@ -56,7 +56,7 @@ class CordExtractor:
             c.CORD_ORDINAL,
             c.CORD_LENGTH,
             COUNT(k.KNOT_ID) as num_knots,
-            COUNT(CASE WHEN k.knot_value_type IS NOT NULL THEN 1 END) as num_valued_knots
+            COUNT(CASE WHEN k.CLUSTER_ORDINAL IS NOT NULL THEN 1 END) as num_valued_knots
         FROM cord c
         LEFT JOIN knot k ON c.CORD_ID = k.CORD_ID
         WHERE c.KHIPU_ID = ?
@@ -98,7 +98,7 @@ class CordExtractor:
             c.TWIST,
             c.FIBER,
             COUNT(k.KNOT_ID) as num_knots,
-            COUNT(CASE WHEN k.knot_value_type IS NOT NULL THEN 1 END) as num_valued_knots
+            COUNT(CASE WHEN k.CLUSTER_ORDINAL IS NOT NULL THEN 1 END) as num_valued_knots
         FROM cord c
         LEFT JOIN knot k ON c.CORD_ID = k.CORD_ID
         GROUP BY c.CORD_ID
@@ -250,7 +250,7 @@ class CordExtractor:
                 c.CORD_ORDINAL,
                 c.CORD_LENGTH,
                 COUNT(k.KNOT_ID) as num_knots,
-                COUNT(CASE WHEN k.knot_value_type IS NOT NULL THEN 1 END) as num_valued_knots
+                COUNT(CASE WHEN k.CLUSTER_ORDINAL IS NOT NULL THEN 1 END) as num_valued_knots
             FROM cord c
             LEFT JOIN knot k ON c.CORD_ID = k.CORD_ID
             WHERE c.KHIPU_ID IN ({placeholders})

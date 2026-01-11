@@ -75,25 +75,25 @@ class AdministrativeFunctionClassifier:
 
         # Load structural features (Phase 4)
         structural = pd.read_csv(
-            self.data_dir /
+            self.data_dir / "phase4" /
             "graph_structural_features.csv")
         print(f"  ✓ Structural features: {len(structural)} khipus")
 
         # Load summation results (Phase 3)
-        summation = pd.read_csv(self.data_dir / "summation_test_results.csv")
+        summation = pd.read_csv(self.data_dir / "phase3" / "summation_test_results.csv")
         print(f"  ✓ Summation results: {len(summation)} khipus")
 
         # Load color data (Phase 2)
-        color_data = pd.read_csv(self.data_dir / "color_data.csv")
+        color_data = pd.read_csv(self.data_dir / "phase2" / "color_data.csv")
         print(f"  ✓ Color data: {len(color_data)} records")
 
         # Load numeric values (Phase 1)
-        numeric_data = pd.read_csv(self.data_dir / "cord_numeric_values.csv")
+        numeric_data = pd.read_csv(self.data_dir / "phase1" / "cord_numeric_values.csv")
         print(f"  ✓ Numeric values: {len(numeric_data)} cords")
 
         # Load existing clusters (Phase 4)
         clusters = pd.read_csv(
-            self.data_dir /
+            self.data_dir / "phase4" /
             "cluster_assignments_kmeans.csv")
         print(f"  ✓ Existing clusters: {len(clusters)} khipus")
 
@@ -207,8 +207,8 @@ class AdministrativeFunctionClassifier:
         print("=" * 80)
 
         # Load full color and hierarchy data
-        color_data = pd.read_csv(self.data_dir / "color_data.csv")
-        hierarchy_data = pd.read_csv(self.data_dir / "cord_hierarchy.csv")
+        color_data = pd.read_csv(self.data_dir / "phase2" / "color_data.csv")
+        hierarchy_data = pd.read_csv(self.data_dir / "phase2" / "cord_hierarchy.csv")
 
         chromatic_features = pd.DataFrame()
         chromatic_features['khipu_id'] = base_df['khipu_id']
@@ -409,7 +409,7 @@ class AdministrativeFunctionClassifier:
         # Use Phase 5 function predictions as ground truth
         try:
             function_data = pd.read_csv(
-                self.data_dir / "khipu_function_classification.csv")
+                self.data_dir / "phase8" / "khipu_function_classification.csv")
             integrated = integrated.merge(
                 function_data[['khipu_id', 'predicted_function']],
                 on='khipu_id',
@@ -678,7 +678,7 @@ def run_phase8_analysis():
 
     # 8.2: Extract chromatic features
     config = get_config()
-    color_data = pd.read_csv(config.get_processed_file("color_data.csv"))
+    color_data = pd.read_csv(config.get_processed_file("color_data.csv", phase=2))
     chromatic_features = classifier.extract_chromatic_features(
         base_df, color_data)
 

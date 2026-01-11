@@ -25,7 +25,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 2. **confidence_scores.png**
    - Distribution of confidence scores for numeric decoding across all khipus
    - Shows validation quality metrics for the decoding process
-   - Key insight: Average confidence of 0.947 indicates high reliability
+   - Key insight: Average confidence of 0.557 (55.7%) with 44.2% low-confidence cords
 
 3. **data_coverage_heatmap.png**
    - Heatmap showing data coverage across khipu collection

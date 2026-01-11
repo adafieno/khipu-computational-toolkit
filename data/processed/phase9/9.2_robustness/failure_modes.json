@@ -1,6 +1,6 @@
 {
   "no_error_detection": {
-    "count": 458,
+    "count": 490,
     "description": "No summation hierarchy - errors undetectable",
     "khipus": [
       1000000,
@@ -12,7 +12,7 @@
       1000006,
       1000008,
       1000010,
-      1000011
+      1000012
     ]
   },
   "no_error_localization": {
@@ -32,7 +32,7 @@
     ]
   },
   "high_propagation_risk": {
-    "count": 432,
+    "count": 365,
     "description": "Single error impacts >10% of total value",
     "khipus": [
       1000000,
@@ -44,7 +44,7 @@
       1000006,
       1000008,
       1000010,
-      1000011
+      1000012
     ]
   },
   "low_redundancy": {

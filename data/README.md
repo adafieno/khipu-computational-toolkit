@@ -143,23 +143,23 @@ Located in `processed/phase9/` with 10 subdirectories (9.1-9.10):
 - `robustness_summary.json` - Summary statistics
 
 ### 9.3 Cognitive Load
-- `cognitive_load_metrics.csv` - Visual complexity scores (619 khipus)
+- `cognitive_load_metrics.csv` - Visual complexity scores (612 khipus)
 - `cognitive_load_summary.json` - Summary statistics
 
 ### 9.4 Minimalism & Expressiveness
-- `minimalism_metrics.csv` - Efficiency vs expressiveness (619 khipus)
+- `minimalism_metrics.csv` - Efficiency vs expressiveness (612 khipus)
 - `minimalism_summary.json` - Summary statistics
 
 ### 9.5 Variance Mapping
-- `variance_metrics.csv` - Feature variance analysis (619 khipus)
+- `variance_metrics.csv` - Feature variance analysis (612 khipus)
 - `variance_summary.json` - Summary statistics
 
 ### 9.6 Boundary Phenomena
-- `boundary_metrics.csv` - Edge case detection (619 khipus)
+- `boundary_metrics.csv` - Edge case detection (612 khipus)
 - `boundary_summary.json` - Summary statistics
 
 ### 9.7 Anomaly Taxonomy
-- `anomaly_taxonomy.csv` - Categorized anomalies (619 khipus)
+- `anomaly_taxonomy.csv` - Categorized anomalies (612 khipus)
 - `anomaly_categories.json` - Anomaly type definitions
 - `analysis_summary.json` - Taxonomy summary
 
@@ -190,8 +190,8 @@ Located in `processed/phase9/` with 10 subdirectories (9.1-9.10):
 - **95.2% knot decoding success** (110,151 knots)
 
 ### Confidence Levels
-- Numeric validation: 94.7% average confidence
-- Cord hierarchy: 94.9% average confidence  
+- Numeric validation: 55.7% average confidence
+- Cord hierarchy: 55.7% average confidence  
 - Knot decoding: 89.6% average confidence
 
 ### Missing Data
@@ -262,7 +262,7 @@ capacity = pd.read_csv('data/processed/phase9/9.1_information_capacity/capacity_
 All data derived from:
 - **Source:** Open Khipu Repository (OKR)
 - **Database:** `khipu.db` (should be in `../open-khipu-repository/data/`)
-- **Version:** 2024 snapshot (619 khipus)
+- **Version:** 2024 snapshot (612 khipus with complete cord data)
 - **Processing:** Khipu Computational Toolkit (2025)
 - **DOI:** https://doi.org/10.5281/zenodo.5037551
 

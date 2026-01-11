@@ -274,30 +274,39 @@ def plot_predictions(data, out_dir):
     ax2.legend()
     ax2.grid(axis='y', alpha=0.3)
 
-    # 3. Confidence distribution
+    # 3. Confidence gain distribution
     ax3 = axes[1, 0]
-    conf_counts = preds['confidence'].value_counts()
-    conf_colors = {'high': 'darkgreen', 'medium': 'orange', 'low': 'red'}
-    colors = [conf_colors.get(c, 'gray') for c in conf_counts.index]
-
-    bars = ax3.bar(conf_counts.index, conf_counts.values, color=colors,
-                   edgecolor='black', linewidth=1.5)
-    ax3.set_ylabel('Count', fontweight='bold')
-    ax3.set_title('Confidence Distribution')
-
-    total = len(preds)
-    for bar in bars:
-        h = bar.get_height()
-        pct = h / total * 100
-        ax3.text(
-            bar.get_x() +
-            bar.get_width() /
-            2,
-            h,
-            f'{int(h):,}\n({pct:.1f}%)',
-            ha='center',
-            va='bottom',
-            fontweight='bold')
+    if 'confidence_gain' in preds.columns:
+        # New format: show confidence gain histogram
+        conf_gain = preds['confidence_gain']
+        ax3.hist(conf_gain, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
+        ax3.axvline(conf_gain.mean(), color='red', linestyle='--', linewidth=2, label=f'Mean: +{conf_gain.mean():.3f}')
+        ax3.set_xlabel('Confidence Gain', fontweight='bold')
+        ax3.set_ylabel('Frequency', fontweight='bold')
+        ax3.set_title('Confidence Gain Distribution')
+        ax3.legend()
+        ax3.grid(axis='y', alpha=0.3)
+    else:
+        # Old format: show confidence categories
+        conf_counts = preds['confidence'].value_counts()
+        conf_colors = {'high': 'darkgreen', 'medium': 'orange', 'low': 'red'}
+        colors = [conf_colors.get(c, 'gray') for c in conf_counts.index]
+        bars = ax3.bar(conf_counts.index, conf_counts.values, color=colors,
+                       edgecolor='black', linewidth=1.5)
+        ax3.set_ylabel('Count', fontweight='bold')
+        ax3.set_title('Confidence Distribution')
+        
+        total = len(preds)
+        for bar in bars:
+            h = bar.get_height()
+            pct = h / total * 100
+            ax3.text(
+                bar.get_x() + bar.get_width() / 2,
+                h,
+                f'{int(h):,}\n({pct:.1f}%)',
+                ha='center',
+                va='bottom',
+                fontweight='bold')
 
     # 4. Statistics table
     ax4 = axes[1, 1]
@@ -305,17 +314,32 @@ def plot_predictions(data, out_dir):
 
     stats = []
     for method in preds['method'].unique():
-        subset = preds[preds['method'] == method]['predicted_value']
-        stats.append([
-            method.replace('_', ' ').title(),
-            f"{len(subset):,}",
-            f"{subset.mean():.1f}",
-            f"{subset.median():.1f}",
-            f"{subset.min():.0f}-{subset.max():.0f}"
-        ])
+        subset = preds[preds['method'] == method]
+        predicted = subset['predicted_value']
+        
+        # Add confidence gain if available
+        if 'confidence_gain' in subset.columns:
+            avg_gain = subset['confidence_gain'].mean()
+            stats.append([
+                method.replace('_', ' ').title(),
+                f"{len(subset):,}",
+                f"{predicted.mean():.1f}",
+                f"{predicted.median():.1f}",
+                f"+{avg_gain:.3f}"
+            ])
+            col_labels = ['Method', 'Count', 'Mean Value', 'Median', 'Avg Gain']
+        else:
+            stats.append([
+                method.replace('_', ' ').title(),
+                f"{len(subset):,}",
+                f"{predicted.mean():.1f}",
+                f"{predicted.median():.1f}",
+                f"{predicted.min():.0f}-{predicted.max():.0f}"
+            ])
+            col_labels = ['Method', 'Count', 'Mean', 'Median', 'Range']
 
     table = ax4.table(cellText=stats,
-                      colLabels=['Method', 'Count', 'Mean', 'Median', 'Range'],
+                      colLabels=col_labels,
                       loc='center', cellLoc='center')
     table.auto_set_font_size(False)
     table.set_fontsize(9)

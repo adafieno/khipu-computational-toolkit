@@ -2,8 +2,10 @@
 Analysis module for khipu pattern discovery and hypothesis testing.
 """
 
-from .summation_tester import SummationTester
+from .value_computation import ValueComputer
+from .summation_patterns import SummationPatternDetector
 
 __all__ = [
-    'SummationTester',
+    'ValueComputer',
+    'SummationPatternDetector',
 ]

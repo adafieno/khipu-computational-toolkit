@@ -1,32 +1,17 @@
 {
-  "generated_at": "2026-01-02T16:47:12.037678",
+  "generated_at": "2026-01-11T10:06:00.856372",
   "total_khipus": 619,
   "total_comparisons": 191271,
   "similarity_statistics": {
-    "mean_similarity": 0.0646598434306686,
-    "median_similarity": 0.04038439747804623,
-    "std_similarity": 0.49355807387183287,
-    "min_similarity": -0.9530048748075548,
+    "mean_similarity": 0.06022650878417977,
+    "median_similarity": 0.02753680752549692,
+    "std_similarity": 0.49027857245397694,
+    "min_similarity": -0.9752120776779136,
     "max_similarity": 1.0,
-    "q25_similarity": -0.3422432039887373,
-    "q75_similarity": 0.47328854421071265
+    "q25_similarity": -0.337744153506208,
+    "q75_similarity": 0.46633397535067844
   },
   "top_similar_pairs": [
-    {
-      "khipu_1": 1000001,
-      "khipu_2": 1000632,
-      "similarity": 1.0
-    },
-    {
-      "khipu_1": 1000001,
-      "khipu_2": 1000653,
-      "similarity": 1.0
-    },
-    {
-      "khipu_1": 1000031,
-      "khipu_2": 1000652,
-      "similarity": 1.0
-    },
     {
       "khipu_1": 1000036,
       "khipu_2": 1000116,
@@ -60,6 +45,21 @@
     {
       "khipu_1": 1000086,
       "khipu_2": 1000420,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000086,
+      "khipu_2": 1000485,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000106,
+      "khipu_2": 1000122,
+      "similarity": 1.0
+    },
+    {
+      "khipu_1": 1000106,
+      "khipu_2": 1000441,
       "similarity": 1.0
     }
   ]

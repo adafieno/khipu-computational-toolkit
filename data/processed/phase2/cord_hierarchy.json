@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-01-02T16:05:46.536277",
+  "generated_at": "2026-01-11T08:59:19.879872",
   "source_database": "C:\\code\\open-khipu-repository\\data\\khipu.db",
   "total_cords": 54403,
   "unique_khipus": 612,
-  "cords_with_numeric_values": 37082,
+  "cords_with_numeric_values": 30361,
   "missing_attachment_count": 9199,
   "missing_ordinal_count": 0,
   "average_confidence": 0.9492730180320937,

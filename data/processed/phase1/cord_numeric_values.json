@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-01-10T11:34:00.927476",
+  "generated_at": "2026-01-11T07:48:13.251321",
   "source_database": "C:\\code\\open-khipu-repository\\data\\khipu.db",
   "total_cords": 54403,
-  "cords_with_values": 35162,
+  "cords_with_values": 30361,
   "khipu_count": 612,
   "decoding_method": "Ascher_Ascher_positional_notation",
   "formula": "S=100, L=(NUM_TURNS\u00d710), E=1",

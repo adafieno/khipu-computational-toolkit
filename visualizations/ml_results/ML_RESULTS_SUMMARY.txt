@@ -37,17 +37,17 @@ Median numeric coverage: 0.790
 
 3. SEQUENCE PREDICTION
 ----------------------------------------------------------------------
-Total predictions: 17,321
+Total predictions: 24,043
 
 By method:
-  * Random Forest: 15,253 (88.1%)
-  * Constraint Summation: 1,295 (7.5%)
-  * Sibling Median: 773 (4.5%)
+  * Random Forest: 22,441 (93.3%)
+  * Constraint Summation: 960 (4.0%)
+  * Sibling Median: 642 (2.7%)
 
 Statistics:
-  Mean: 126.38
-  Median: 32.65
-  Range: 0-25228
+  Mean: 194634272.73
+  Median: 2702.57
+  Range: 0-77381013810
 
 4. KEY FINDINGS
 ----------------------------------------------------------------------
@@ -61,8 +61,8 @@ Statistics:
   - 589 khipus >90% confidence
 
 * Value Prediction:
-  - Predicted 17,321 missing values
-  - 1,295 high-confidence (summation constraints)
+  - Predicted 24,043 missing values
+  - 960 high-confidence (summation constraints)
   - Random Forest baseline for remaining values
 
 ======================================================================

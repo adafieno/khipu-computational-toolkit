@@ -26,11 +26,19 @@ config = get_config()
 
 st.set_page_config(
     page_title="3D Khipu Viewer",
-    page_icon="🧶",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-st.title("🧶 Interactive 3D Khipu Structure Viewer")
+# Reduce top padding
+st.markdown("""
+    <style>
+        .block-container {
+            padding-top: 2rem;
+            padding-bottom: 0rem;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 @st.cache_data
 def get_color_mappings():
@@ -552,10 +560,20 @@ st.sidebar.markdown("""**Cord Colors:** True colors from Ascher database
 *Note: Shows structural relationships only. No numeric interpretation applied.*
 """)
 
-# Load and visualize
-st.subheader(f"Khipu {khipu_id}")
-if provenance and provenance != 'Unknown':
-    st.caption(f"Provenance: {provenance}")
+# Add some top spacing to prevent clipping
+st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+
+# Load and visualize - Title with Khipu ID and Provenance on same line
+title_col, id_col, prov_col = st.columns([3, 2, 3])
+with title_col:
+    st.markdown("### Interactive 3D Khipu Structure Viewer")
+with id_col:
+    st.markdown(f"<h4 style='margin:0; color:#88c0d0;'>Khipu {khipu_id}</h4>", unsafe_allow_html=True)
+with prov_col:
+    if provenance and provenance != 'Unknown':
+        st.markdown(f"<h4 style='margin:0; color:#88c0d0;'>{provenance}</h4>", unsafe_allow_html=True)
+    else:
+        st.markdown("<h4 style='margin:0; color:#88c0d0;'>Unknown Location</h4>", unsafe_allow_html=True)
 
 if len(khipu_data) > 0:
     # Display statistics

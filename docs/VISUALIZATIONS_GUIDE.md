@@ -60,91 +60,57 @@ The dashboard will open in your default web browser at `http://localhost:8501`
 
 ## 📐 3D Khipu Structure Viewer
 
-### Command-Line Viewer
+### Interactive 3D Viewer with Plotly
 
-**File:** `scripts/visualize_3d_khipu.py`
+**File:** `scripts/khipu_3d_viewer.py`
 
-Creates interactive 3D visualizations of individual khipu hierarchical structures.
+![3D Viewer Main Interface](images/3d_viewer_main_interface.png)
+*Main interface showing dropdown selector, interactive Plotly 3D visualization, and overall layout*
 
-**Features:**
-- Hierarchical layout showing parent-child cord relationships
-- Interactive rotation and zoom (in matplotlib window)
-- Three color modes:
-  - `value`: Color by numeric value (gradient)
-  - `level`: Color by hierarchy level
-  - `color`: Uniform coloring
-- Multiple viewing angles
-- Summation flow visualization (highlights summation relationships in red)
-
-**Usage:**
-
-**Basic visualization:**
-```bash
-python scripts/visualize_3d_khipu.py --khipu-id 1000000
-```
-
-**Note:** Khipu IDs start at 1000000 (not 1). Use the interactive viewer (below) for easier browsing.
-
-### 🌟 Interactive 3D Viewer (NEW)
-
-**File:** `scripts/interactive_3d_viewer.py`
-![3D Viewer Interface](images/3d_viewer_interface.png)
-*Interactive 3D viewer showing hierarchical khipu structure with color-coded cord levels*
-
-
-Streamlit-based web interface for browsing 3D khipu structures with dropdown selection.
+Streamlit-based web interface with interactive Plotly 3D visualizations.
 
 **Features:**
 - **Dropdown menu** with all 612 khipus (no command-line arguments needed!)
-- **Live statistics** panel showing cord count, hierarchy depth, numeric values
-- **Interactive controls:** Elevation and azimuth sliders to rotate view
-- **Color modes:** Switch between numeric value and hierarchy level coloring
-- **Provenance display:** See location and cord count for each khipu
-- **Auto-refresh:** Visualization updates instantly when you change selections
+- **Interactive Plotly 3D plots** - Rotate, zoom, pan in real-time using mouse
+- **Color-coded cords** - Using authentic Ascher color mappings from database
+- **Hierarchical structure** - Main cord, pendants, and subsidiaries clearly distinguished with elbow joints
+- **Knot visualization** - Different shapes for S/L/E knots with turn counts displayed as text labels
+- **Hover tooltips** - Detailed information on cords, colors, lengths, and knots appears on mouseover
+- **Provenance display** - See location and metadata for each khipu
+- **Smart layout** - Adaptive spacing based on cord count (1.2x to 1.5x spacing)
 
 **Requirements:**
-- Database file at `data/khipu.db` (for khipu list and provenance)
+- Database connection for khipu list and Ascher color mappings
+- Plotly and Streamlit installed
 
 **Usage:**
 ```bash
-streamlit run scripts/interactive_3d_viewer.py --server.port 8502
+streamlit run scripts/khipu_3d_viewer.py --server.port 8502
 ```
 
 The viewer will open at `http://localhost:8502`
 
-**Interface:**
-- **Left sidebar:** Select khipu from dropdown, choose color mode, adjust view angles
-- **Main panel:** Interactive 3D visualization
-- **Right panel:** Real-time statistics and hierarchy level distribution
+**Interface Components:**
+- **Left sidebar:** Khipu dropdown selector with ID and provenance information
+- **Main panel:** Interactive Plotly 3D visualization with rotation/zoom controls
+- **Hover tooltips:** Mouseover any cord or knot to see detailed structural information
 
-**Why use this instead of command-line?**
-- No need to remember khipu IDs
-- Browse through all khipus quickly
-![3D Khipu Detail](images/3d_khipu_detail.png)
-*Example khipu showing hierarchical cord structure with summation relationships*
+![3D Viewer Hover Tooltip](images/3d_viewer_hover_tooltip.png)
+*Hover tooltip showing detailed cord/knot information - a key advantage of Plotly over static viewers*
 
-- See metadata (provenance, cord count) before viewing
-- Instant visual feedback when adjusting parameters
+![3D Viewer Hierarchical Structure](images/3d_viewer_hierarchical_structure.png)
+*Clear visualization of hierarchical structure: main cord (horizontal), pendant cords (hanging), subsidiaries (with elbow joints), and knots (S/L/E shapes)*
 
-**With specific color mode:**
-```bash
-python scripts/visualize_3d_khipu.py --khipu-id 1000000 --color-mode level
-```
+![3D Viewer Complex Khipu](images/3d_viewer_complex_khipu.png)
+*Complex khipu with 200+ cords demonstrating scalability, adaptive spacing, and multiple Ascher colors*
 
-**Save to file:**
-```bash
-python scripts/visualize_3d_khipu.py --khipu-id 1000000 --output outputs/khipu_1000000.png
-```
-
-**Multi-view (4 angles):**
-```bash
-python scripts/visualize_3d_khipu.py --khipu-id 1000000 --multi-view
-```
-
-**Summation flow (highlight summation edges):**
-```bash
-python scripts/visualize_3d_khipu.py --khipu-id 1000000 --summation-flow
-```
+**Why use this viewer?**
+- **No khipu ID memorization** - Browse through dropdown
+- **Real-time 3D manipulation** - Smooth Plotly interactions
+- **Hover for details** - No need to click or open separate panels
+- **Complete structural fidelity** - No numeric interpretation, pure structure
+- **Production-ready** - Actively maintained, handles 200+ cord khipus smoothly
+- **Authentic colors** - Uses Ascher color system from database RGB values
 
 ### Running Multiple Viewers
 

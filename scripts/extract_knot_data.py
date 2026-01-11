@@ -45,23 +45,15 @@ def main():
     print(f"Total knots: {stats['total_knots']:,}")
     print(f"Unique cords: {stats['unique_cords']:,}")
     print(f"Unique khipus: {stats['unique_khipus']}")
-    print(f"Knots with numeric values: {stats['knots_with_numeric_values']:,} ({stats['knots_with_numeric_pct']:.1f}%)")
-    print(f"Missing KNOT_ORDINAL: {stats['missing_ordinal_count']:,} ({stats['missing_ordinal_pct']:.1f}%)")
-    print(f"Missing knot_value_type: {stats['missing_value_type_count']:,} ({stats['missing_value_type_pct']:.1f}%)")
-    print(f"Average confidence: {stats['average_confidence']:.3f}")
+    print(f"Cords with numeric values: {stats['cords_with_numeric_values']:,} ({stats['cords_with_numeric_pct']:.1f}%)")
+    print(f"Missing CLUSTER_ORDINAL: {stats['missing_cluster_ordinal_count']:,} ({stats['missing_cluster_ordinal_pct']:.1f}%)")
+    print(f"Missing NUM_TURNS: {stats['missing_num_turns_count']:,} ({stats['missing_num_turns_pct']:.1f}%)")
+    print(f"Average confidence: {stats['average_confidence']:.1%}")
     print()
 
     print("Knot types:")
     for knot_type, count in sorted(stats['knot_types'].items(), key=lambda x: -x[1]):
-        print(f"  {knot_type}: {count:,}")
-    print()
-
-    print("Value types (place values):")
-    for value_type, count in sorted(stats['value_types'].items(), key=lambda x: -x[1] if x[0] else 0):
-        if value_type:
-            print(f"  {int(value_type)}: {count:,}")
-        else:
-            print(f"  NULL: {count:,}")
+        print(f"  {knot_type or 'NULL'}: {count:,}")
     print()
 
     # Export full knot dataset
@@ -81,14 +73,41 @@ def main():
     print(f"  {output_path.with_suffix('.json')} (metadata)")
     print()
 
+    # Export cord values (FULL DATASET)
+    print("Computing cord values for all cords...")
+    print("-" * 80)
+    print("Note: This computes values for all 54K+ cords (may take 3-5 minutes)")
+    print()
+    
+    import time
+    start_time = time.time()
+    
+    cord_values_path = config.get_processed_file('cord_values.csv', phase=2)
+    df_cord_values = extractor.get_cord_values()  # No sample_size = full dataset
+    df_cord_values.to_csv(cord_values_path, index=False)
+    
+    elapsed = time.time() - start_time
+    
+    print(f"✓ Computed and exported {len(df_cord_values):,} cord values")
+    print(f"  {cord_values_path}")
+    print(f"  Completed in {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)")
+    print()
+    
+    print("Cord value statistics:")
+    print(f"  Non-zero values: {(df_cord_values['numeric_value'] > 0).sum():,}")
+    print(f"  Average confidence: {df_cord_values['confidence'].mean():.1%}")
+    print()
+
     print("=" * 80)
     print("EXTRACTION COMPLETE")
     print("=" * 80)
     print()
-    print(f"Generated: {output_path}")
+    print(f"Generated files:")
+    print(f"  1. {output_path} ({len(df):,} knots)")
+    print(f"  2. {cord_values_path} ({len(df_cord_values):,} cord values)")
     print()
     print("Next steps:")
-    print("  1. Test summation hypotheses with validated data")
+    print("  1. Run Phase 3 summation testing with corrected values")
     print("  2. Build color extractor")
     print("  3. Construct graph representations")
 
