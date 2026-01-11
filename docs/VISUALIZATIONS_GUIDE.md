@@ -96,9 +96,11 @@ The viewer will open at `http://localhost:8502`
 - **Hover tooltips:** Mouseover any cord or knot to see detailed structural information
 
 ![3D Viewer Hover Tooltip](images/3d_viewer_hover_tooltip.png)
+
 *Hover tooltip showing detailed cord/knot information - a key advantage of Plotly over static viewers*
 
 ![3D Viewer Hierarchical Structure](images/3d_viewer_hierarchical_structure.png)
+
 *Clear visualization of hierarchical structure: main cord (horizontal), pendant cords (hanging), subsidiaries (with elbow joints), and knots (S/L/E shapes)*
 
 ![3D Viewer Complex Khipu](images/3d_viewer_complex_khipu.png)
