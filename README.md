@@ -41,8 +41,9 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **54,403 cords** with hierarchical relationships extracted
 - **110,677 knots** decoded (all knot records with sufficient data)
 - **7 structural clusters** identified via k-means (moderate separation; see [Phase 8](reports/phase8_administrative_function_report.md))
-- **72.2%** exhibit numeric patterns consistent with summation relationships
-- **55.7% average confidence** in numeric value extractions (44.2% low-confidence)
+- **27.9%** exhibit pendant-to-parent summation patterns (173 khipus; see [Phase 3](reports/phase3_summation_testing_report.md))
+- **48.3%** show numeric patterns when including exploratory alternative models (modulo-10, hierarchical)
+- **55.7% average confidence** in numeric value extractions (bimodal: 55.5% high-confidence, 44.2% low-confidence due to missing data)
 - **13 high-confidence structural anomalies** detected using computational outlier methods
 - **24,043 predictions** generated for confidence improvement (+0.708 avg gain)
 - **100+ datasets** generated for reproducible exploration
@@ -218,7 +219,7 @@ khipu-computational-toolkit/
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
-- ✓ Summation hypothesis testing (72.2% exhibit consistent numeric patterns)
+- ✓ Summation hypothesis testing (27.9% validated pendant summation; 48.3% with alternative patterns)
 - ✓ K-means clustering (7 structural groups with moderate separation)
 - ✓ Anomaly detection (Isolation Forest and LOF methods)
 - ✓ Confidence improvement prediction (24,043 predictions via constraint, sibling, and ML methods)
