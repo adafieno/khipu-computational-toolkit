@@ -47,7 +47,7 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **24,043 predictions** generated for confidence improvement (+0.708 avg gain)
 - **100+ datasets** generated for reproducible exploration
 
-**Note:** All counts and percentages reflect computational processing results. See [DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) for detailed explanations of how these numbers are derived and why they may differ across phases.
+**Note:** All counts and percentages reflect computational processing results.
 
 ### Research Phases
 
