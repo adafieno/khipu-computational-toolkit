@@ -150,6 +150,28 @@ streamlit run scripts/dashboard_app.py
 streamlit run scripts/khipu_3d_viewer.py --server.port 8502
 ```
 
+### Run the Cloud-Ready Viewer
+
+A modern, cloud-ready alternative viewer is available with blob storage support:
+
+```bash
+# Export data to JSON format
+python scripts/export_from_processed.py --output data/blob_export
+
+# Run with Docker
+cd cloud_viewer
+docker-compose up --build
+
+# Or run directly
+cd cloud_viewer
+pip install -r requirements.txt
+export STORAGE_TYPE=local
+export STORAGE_PATH=../data/blob_export
+python app.py
+```
+
+See [cloud_viewer/README.md](cloud_viewer/README.md) for full documentation and cloud deployment guides.
+
 ### Execute Analysis Pipeline
 
 All scripts accept an optional `--db` parameter to specify the database location:
@@ -179,11 +201,19 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 khipu-computational-toolkit/
  scripts/              # Analysis scripts (34 scripts, all operational)
     dashboard_app.py              # Interactive web dashboard
-    khipu_3d_viewer.py            # 3D khipu visualization
+    khipu_3d_viewer.py            # 3D khipu visualization (Streamlit)
+    export_from_processed.py      # Export data for cloud viewer
     detect_anomalies.py           # Outlier detection
     predict_missing_values.py     # ML prediction
     visualize_phase*.py           # Phase visualization generators
     ...
+ cloud_viewer/         # Cloud-ready alternative viewer
+    app.py                        # Flask API backend
+    static/index.html             # Modern HTML/JS frontend
+    Dockerfile                    # Container configuration
+    docker-compose.yml            # Local development
+    README.md                     # Cloud viewer documentation
+    DEPLOYMENT.md                 # Cloud deployment guides
  data/
     processed/        # Analysis outputs (100+ files)
     graphs/           # NetworkX graph structures
@@ -215,7 +245,8 @@ khipu-computational-toolkit/
 
 ### Interactive Tools
 - **Web Dashboard** - Streamlit app for khipu exploration
-- **3D Viewer** - Interactive visualization of khipu structure
+- **3D Viewer (Streamlit)** - Interactive visualization of khipu structure (database-based)
+- **Cloud Viewer** - Modern, cloud-ready 3D viewer with blob storage support
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
