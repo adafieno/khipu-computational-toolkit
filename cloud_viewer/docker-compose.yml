@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  khipu-viewer:
+    build:
+      context: ..
+      dockerfile: cloud_viewer/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - STORAGE_TYPE=local
+      - STORAGE_PATH=./data/blob_export
+      - DEBUG=true
+    volumes:
+      # Mount local data for development
+      - ../data/blob_export:/app/data/blob_export:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # Example: Azure Blob Storage configuration
+  khipu-viewer-azure:
+    build:
+      context: ..
+      dockerfile: cloud_viewer/Dockerfile
+    ports:
+      - "5001:5000"
+    environment:
+      - STORAGE_TYPE=azure
+      - STORAGE_PATH=khipu-data
+      - AZURE_CONNECTION_STRING=${AZURE_CONNECTION_STRING}
+    restart: unless-stopped
+    profiles:
+      - azure
+
+  # Example: AWS S3 configuration
+  khipu-viewer-aws:
+    build:
+      context: ..
+      dockerfile: cloud_viewer/Dockerfile
+    ports:
+      - "5002:5000"
+    environment:
+      - STORAGE_TYPE=aws
+      - STORAGE_PATH=khipu-data-bucket
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+    restart: unless-stopped
+    profiles:
+      - aws

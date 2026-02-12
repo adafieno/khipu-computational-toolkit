@@ -1,0 +1,8 @@
+Flask>=3.0.0
+flask-cors>=4.0.0
+
+# Optional: Azure Blob Storage support
+azure-storage-blob>=12.19.0
+
+# Optional: AWS S3 support
+boto3>=1.34.0

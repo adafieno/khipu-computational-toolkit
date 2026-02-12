@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khipu 3D Viewer - Cloud Edition</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+
+        .viewer-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .khipu-list {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .khipu-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .khipu-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .khipu-item.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .khipu-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .khipu-meta {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        #viewer-container {
+            width: 100%;
+            height: 700px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-symbol {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .error-message {
+            padding: 15px;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🪢 Khipu 3D Viewer</h1>
+            <p class="subtitle">Interactive cloud-based visualization of Inka khipu structures</p>
+            <div class="stats-bar" id="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-khipus">-</div>
+                    <div class="stat-label">Total Khipus</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-cords">-</div>
+                    <div class="stat-label">Total Cords</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-knots">-</div>
+                    <div class="stat-label">Total Knots</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-cords">-</div>
+                    <div class="stat-label">Avg Cords/Khipu</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h2 class="section-title">Browse Khipus</h2>
+                
+                <input type="text" class="search-box" id="search-box" placeholder="Search by ID or provenance...">
+                
+                <div class="filter-group">
+                    <label class="filter-label">Provenance</label>
+                    <select id="provenance-filter">
+                        <option value="">All Provenances</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Min Cords</label>
+                    <input type="number" id="min-cords" placeholder="Minimum cord count" min="0">
+                </div>
+
+                <div class="khipu-list" id="khipu-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading khipus...
+                    </div>
+                </div>
+            </div>
+
+            <div class="viewer-panel">
+                <h2 class="section-title">3D Visualization</h2>
+                
+                <div id="khipu-info" style="display: none;">
+                    <div class="info-panel">
+                        <div class="info-item">
+                            <div class="info-value" id="info-cords">-</div>
+                            <div class="info-label">Cords</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value" id="info-knots">-</div>
+                            <div class="info-label">Knots</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value" id="info-pendants">-</div>
+                            <div class="info-label">Pendants</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value" id="info-subsidiaries">-</div>
+                            <div class="info-label">Subsidiaries</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewer-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Select a khipu to view
+                    </div>
+                </div>
+
+                <div class="legend" style="display: none;" id="legend">
+                    <div class="legend-title">Knot Types</div>
+                    <div class="legend-item">
+                        <div class="legend-symbol" style="background: #8B4513;"></div>
+                        <span>● Single knot (S)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-symbol" style="background: #DAA520; border-radius: 0; transform: rotate(45deg);"></div>
+                        <span>◆ Long knot (L) - shows turn count</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-symbol" style="background: #4169E1; border-radius: 0;"></div>
+                        <span>■ Figure-eight knot (E)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let allKhipus = [];
+        let colors = {};
+        let selectedKhipuId = null;
+
+        // Initialize app
+        async function init() {
+            try {
+                // Load stats
+                const statsResponse = await fetch('/api/stats');
+                const stats = await statsResponse.json();
+                updateStats(stats);
+
+                // Load colors
+                const colorsResponse = await fetch('/api/colors');
+                colors = await colorsResponse.json();
+
+                // Load khipus
+                const khipusResponse = await fetch('/api/khipus');
+                allKhipus = await khipusResponse.json();
+                
+                // Populate provenance filter
+                const provenances = [...new Set(allKhipus.map(k => k.provenance))].sort();
+                const provenanceFilter = document.getElementById('provenance-filter');
+                provenances.forEach(prov => {
+                    const option = document.createElement('option');
+                    option.value = prov;
+                    option.textContent = prov;
+                    provenanceFilter.appendChild(option);
+                });
+
+                renderKhipuList(allKhipus);
+
+                // Setup event listeners
+                document.getElementById('search-box').addEventListener('input', filterKhipus);
+                document.getElementById('provenance-filter').addEventListener('change', filterKhipus);
+                document.getElementById('min-cords').addEventListener('input', filterKhipus);
+
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                showError('Failed to load khipu data. Please check your connection.');
+            }
+        }
+
+        function updateStats(stats) {
+            document.getElementById('total-khipus').textContent = stats.total_khipus;
+            document.getElementById('total-cords').textContent = stats.total_cords.toLocaleString();
+            document.getElementById('total-knots').textContent = stats.total_knots.toLocaleString();
+            document.getElementById('avg-cords').textContent = stats.avg_cords_per_khipu;
+        }
+
+        function renderKhipuList(khipus) {
+            const listElement = document.getElementById('khipu-list');
+            
+            if (khipus.length === 0) {
+                listElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">No khipus found</div>';
+                return;
+            }
+
+            listElement.innerHTML = khipus.map(khipu => `
+                <div class="khipu-item ${selectedKhipuId === khipu.id ? 'selected' : ''}" data-id="${khipu.id}">
+                    <div class="khipu-name">${khipu.id}</div>
+                    <div class="khipu-meta">
+                        📍 ${khipu.provenance} • ${khipu.cord_count} cords • ${khipu.knot_count} knots
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.khipu-item').forEach(item => {
+                item.addEventListener('click', () => loadKhipu(item.dataset.id));
+            });
+        }
+
+        function filterKhipus() {
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            const provenance = document.getElementById('provenance-filter').value;
+            const minCords = parseInt(document.getElementById('min-cords').value) || 0;
+
+            const filtered = allKhipus.filter(khipu => {
+                const matchesSearch = khipu.id.toLowerCase().includes(searchTerm) || 
+                                     khipu.provenance.toLowerCase().includes(searchTerm);
+                const matchesProvenance = !provenance || khipu.provenance === provenance;
+                const matchesCords = khipu.cord_count >= minCords;
+                
+                return matchesSearch && matchesProvenance && matchesCords;
+            });
+
+            renderKhipuList(filtered);
+        }
+
+        async function loadKhipu(khipuId) {
+            selectedKhipuId = khipuId;
+            
+            // Update selection in list
+            document.querySelectorAll('.khipu-item').forEach(item => {
+                item.classList.toggle('selected', item.dataset.id === khipuId);
+            });
+
+            // Show loading
+            document.getElementById('viewer-container').innerHTML = '<div class="loading"><div class="spinner"></div>Loading khipu data...</div>';
+
+            try {
+                const response = await fetch(`/api/khipus/${khipuId}`);
+                const data = await response.json();
+                
+                displayKhipuInfo(data);
+                visualizeKhipu(data);
+                
+                document.getElementById('khipu-info').style.display = 'block';
+                document.getElementById('legend').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading khipu:', error);
+                showError('Failed to load khipu visualization');
+            }
+        }
+
+        function displayKhipuInfo(data) {
+            const stats = data.statistics;
+            document.getElementById('info-cords').textContent = stats.total_cords;
+            document.getElementById('info-knots').textContent = stats.total_knots;
+            document.getElementById('info-pendants').textContent = stats.pendant_count;
+            document.getElementById('info-subsidiaries').textContent = stats.subsidiary_count;
+        }
+
+        function visualizeKhipu(data) {
+            const traces = [];
+            const cords = data.cords;
+            const knots = data.knots;
+
+            // Calculate positions
+            const positions = {};
+            const spacing = cords.length > 100 ? 1.5 : 1.2;
+
+            // Position cords
+            cords.forEach((cord, i) => {
+                const xPos = i * spacing;
+                const depth = -Math.min(cord.length_cm / 30.0, 3.0);
+                positions[cord.cord_id] = { x: xPos, y: 0, z: depth };
+            });
+
+            // Draw main cord
+            const mainX = cords.map((c, i) => i * spacing);
+            const mainY = mainX.map(() => 0);
+            const mainZ = mainX.map(() => 0);
+
+            traces.push({
+                x: mainX,
+                y: mainY,
+                z: mainZ,
+                mode: 'lines',
+                type: 'scatter3d',
+                line: { color: '#8B7355', width: 12 },
+                hoverinfo: 'skip',
+                showlegend: false
+            });
+
+            // Draw pendant cords
+            cords.forEach(cord => {
+                const pos = positions[cord.cord_id];
+                const colorHex = colors[cord.color_code]?.hex || '#CCCCCC';
+
+                traces.push({
+                    x: [pos.x, pos.x],
+                    y: [0, pos.y],
+                    z: [0, pos.z],
+                    mode: 'lines',
+                    type: 'scatter3d',
+                    line: { color: colorHex, width: 10 },
+                    hovertext: `Cord ${cord.cord_id}<br>Color: ${cord.color_code}<br>Length: ${cord.length_cm.toFixed(1)}cm`,
+                    hoverinfo: 'text',
+                    showlegend: false
+                });
+            });
+
+            // Draw knots
+            const knotsByType = { S: [], L: [], E: [] };
+
+            knots.forEach(knot => {
+                const cord = cords.find(c => c.cord_id === knot.cord_id);
+                if (!cord) return;
+
+                const pos = positions[knot.cord_id];
+                const t = 0.5; // Simple midpoint positioning
+
+                const knotPos = {
+                    x: pos.x,
+                    y: pos.y * t,
+                    z: pos.z * t
+                };
+
+                const knotInfo = {
+                    x: knotPos.x,
+                    y: knotPos.y,
+                    z: knotPos.z,
+                    text: knot.type === 'L' && knot.turns > 0 ? knot.turns.toString() : '',
+                    hovertext: `Cord: ${knot.cord_id}<br>Type: ${knot.type}${knot.turns > 0 ? '<br>Turns: ' + knot.turns : ''}`
+                };
+
+                if (knotsByType[knot.type]) {
+                    knotsByType[knot.type].push(knotInfo);
+                }
+            });
+
+            // Add S knots
+            if (knotsByType.S.length > 0) {
+                traces.push({
+                    x: knotsByType.S.map(k => k.x),
+                    y: knotsByType.S.map(k => k.y),
+                    z: knotsByType.S.map(k => k.z),
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    marker: { size: 10, color: '#8B4513', symbol: 'circle', line: { width: 1, color: 'white' } },
+                    hovertext: knotsByType.S.map(k => k.hovertext),
+                    hoverinfo: 'text',
+                    name: 'S (Single)',
+                    showlegend: true
+                });
+            }
+
+            // Add L knots
+            if (knotsByType.L.length > 0) {
+                traces.push({
+                    x: knotsByType.L.map(k => k.x),
+                    y: knotsByType.L.map(k => k.y),
+                    z: knotsByType.L.map(k => k.z),
+                    mode: 'markers+text',
+                    type: 'scatter3d',
+                    marker: { size: 12, color: '#DAA520', symbol: 'diamond', line: { width: 1, color: 'white' } },
+                    text: knotsByType.L.map(k => k.text),
+                    textposition: 'middle right',
+                    textfont: { size: 9, color: '#000000', family: 'Arial Black' },
+                    hovertext: knotsByType.L.map(k => k.hovertext),
+                    hoverinfo: 'text',
+                    name: 'L (Long)',
+                    showlegend: true
+                });
+            }
+
+            // Add E knots
+            if (knotsByType.E.length > 0) {
+                traces.push({
+                    x: knotsByType.E.map(k => k.x),
+                    y: knotsByType.E.map(k => k.y),
+                    z: knotsByType.E.map(k => k.z),
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    marker: { size: 10, color: '#4169E1', symbol: 'square', line: { width: 1, color: 'white' } },
+                    hovertext: knotsByType.E.map(k => k.hovertext),
+                    hoverinfo: 'text',
+                    name: 'E (Figure-8)',
+                    showlegend: true
+                });
+            }
+
+            // Layout
+            const layout = {
+                scene: {
+                    xaxis: { title: 'Position along main cord', showgrid: true, gridcolor: '#a0a0a0' },
+                    yaxis: { title: '', showgrid: true, gridcolor: '#b8b8b8', showticklabels: false },
+                    zaxis: { title: 'Cord depth', showgrid: true, gridcolor: '#a0a0a0' },
+                    bgcolor: '#c0c8d0',
+                    camera: { eye: { x: 1.3, y: -1.5, z: 0.8 } }
+                },
+                title: { text: `Khipu ${data.id} - ${data.provenance}`, font: { size: 20 } },
+                showlegend: true,
+                hovermode: 'closest',
+                height: 700,
+                paper_bgcolor: 'rgba(255,255,255,0)',
+                plot_bgcolor: '#c0c8d0',
+                legend: { bgcolor: 'rgba(255, 255, 255, 0.95)', bordercolor: '#666', borderwidth: 2 }
+            };
+
+            Plotly.newPlot('viewer-container', traces, layout, { responsive: true });
+        }
+
+        function showError(message) {
+            const container = document.getElementById('viewer-container');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
