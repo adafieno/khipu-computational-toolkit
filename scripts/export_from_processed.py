@@ -47,6 +47,10 @@ PREDEFINED_COLORS = {
     'Unknown': {'description': 'Unknown', 'rgb': {'r': 204, 'g': 204, 'b': 204}, 'hex': '#cccccc'},
 }
 
+# Khipu ID formatting threshold - IDs below this use AS### format, above use K### format
+# This matches the Open Khipu Repository's ID scheme where earlier catalog entries use AS prefix
+KHIPU_ID_FORMAT_THRESHOLD = 1000
+
 
 def export_colors(output_dir: Path) -> Dict:
     """Export predefined color mappings."""
@@ -119,9 +123,11 @@ def build_khipu_index(hierarchy: pd.DataFrame, metadata: pd.DataFrame) -> List[D
     
     khipus = []
     for _, row in khipu_stats.iterrows():
-        # Generate khipu ID string (format: AS### or similar)
+        # Generate khipu ID string using standard format
+        # IDs < KHIPU_ID_FORMAT_THRESHOLD use AS### format (Ascher catalog entries)
+        # IDs >= KHIPU_ID_FORMAT_THRESHOLD use K### format (newer entries)
         khipu_num = int(row['KHIPU_ID'])
-        khipu_id_str = f"AS{khipu_num:03d}" if khipu_num < 1000 else f"K{khipu_num}"
+        khipu_id_str = f"AS{khipu_num:03d}" if khipu_num < KHIPU_ID_FORMAT_THRESHOLD else f"K{khipu_num}"
         
         khipus.append({
             'id': khipu_id_str,

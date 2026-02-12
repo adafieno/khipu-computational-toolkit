@@ -382,6 +382,26 @@
     </div>
 
     <script>
+        // Visualization Constants
+        const VIZ_CONFIG = {
+            // Cord spacing based on khipu density
+            SPACING_CROWDED: 1.5,      // Spacing for khipus with >100 cords
+            SPACING_DENSE: 1.3,        // Spacing for khipus with 50-100 cords
+            SPACING_DEFAULT: 1.2,      // Default spacing for <50 cords
+            CORD_COUNT_CROWDED: 100,   // Threshold for crowded khipus
+            CORD_COUNT_DENSE: 50,      // Threshold for dense khipus
+            
+            // Depth calculation for 3D visualization
+            LENGTH_SCALE_FACTOR: 30.0, // Normalize cord length in cm to depth units
+            MAX_DEPTH: 3.0,            // Maximum depth for very long cords
+            DEFAULT_CORD_LENGTH: 30.0, // Default length if not specified
+            
+            // Knot positioning
+            KNOT_POSITION_MIN: 0.2,    // Minimum position along cord (avoid endpoints)
+            KNOT_POSITION_MAX: 0.9,    // Maximum position along cord
+            KNOT_DEFAULT_POS: 0.5      // Default position if only one knot
+        };
+        
         // Global state
         let allKhipus = [];
         let colors = {};
@@ -566,7 +586,7 @@
                 if (!cord) return;
 
                 const pos = positions[knot.cord_id];
-                const t = 0.5; // Simple midpoint positioning
+                const t = VIZ_CONFIG.KNOT_DEFAULT_POS; // Simple midpoint positioning
 
                 const knotPos = {
                     x: pos.x,
