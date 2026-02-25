@@ -11,7 +11,7 @@
 
 This standalone toolkit provides computational infrastructure for exploring Inka khipu structure, numeric patterns, color distributions, and hierarchical relationships. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
-> **🆕 KFG Integration:** This toolkit is being extended to support the [Khipu Field Guide](https://khipufieldguide.com) dataset, which provides more modern and accurate data (709 khipus vs 612 in OKR). See [docs/KFG_QUICK_REFERENCE](docs/KFG_QUICK_REFERENCE) for details on this integration effort.
+> **🆕 KFG Integration:** This toolkit is being extended to support the [Khipu Field Guide](https://khipufieldguide.com) dataset, which provides more modern and accurate data (709 khipus vs 612 in OKR). See [docs/KFG_QUICK_REFERENCE.md](docs/KFG_QUICK_REFERENCE.md) for details on this integration effort.
 
 **This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work. All computational results require expert validation and should be understood as exploratory findings, not definitive conclusions.
 
@@ -167,13 +167,13 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ## Documentation
 
-- **Phase Reports** - [Phase 0](reports/phase0_reconnaissance_report) | [Phase 1](reports/phase1_baseline_validation_report) | [Phase 2](reports/phase2_extraction_infrastructure_report) | [Phase 3](reports/phase3_summation_testing_report) | [Phase 4](reports/phase4_pattern_discovery_report) | [Phase 5](reports/phase5_multi_model_framework_report) | [Phase 7](reports/phase7_ml_extensions_report) | [Phase 8](reports/phase8_administrative_function_report) | [Phase 9](reports/phase9_meta_analysis_report)
-- [**Visualizations Index**](visualizations/) - Complete index of all 39 visualizations with descriptions
-- [**API Reference**](docs/API_REFERENCE) - Complete API documentation for all modules
-- [**Architecture Guide**](docs/ARCHITECTURE) - System architecture and design patterns
-- [**Contributing Guidelines**](docs/CONTRIBUTING) - Contribution guidelines and development setup
-- [**FAQ**](docs/FAQ) - Frequently asked questions and troubleshooting
-- [**Visualizations Guide**](docs/VISUALIZATIONS_GUIDE) - 78-page comprehensive visualization guide
+- **Phase Reports** - [Phase 0](reports/phase0_reconnaissance_report.md) | [Phase 1](reports/phase1_baseline_validation_report.md) | [Phase 2](reports/phase2_extraction_infrastructure_report.md) | [Phase 3](reports/phase3_summation_testing_report.md) | [Phase 4](reports/phase4_pattern_discovery_report.md) | [Phase 5](reports/phase5_multi_model_framework_report.md) | [Phase 7](reports/phase7_ml_extensions_report.md) | [Phase 8](reports/phase8_administrative_function_report.md) | [Phase 9](reports/phase9_meta_analysis_report.md)
+- [**Visualizations Index**](visualizations/README.md) - Complete index of all 39 visualizations with descriptions
+- [**API Reference**](docs/API_REFERENCE.md) - Complete API documentation for all modules
+- [**Architecture Guide**](docs/ARCHITECTURE.md) - System architecture and design patterns
+- [**Contributing Guidelines**](docs/CONTRIBUTING.md) - Contribution guidelines and development setup
+- [**FAQ**](docs/FAQ.md) - Frequently asked questions and troubleshooting
+- [**Visualizations Guide**](docs/VISUALIZATIONS_GUIDE.md) - 78-page comprehensive visualization guide
 
 ## Repository Structure
 
@@ -396,13 +396,13 @@ This toolkit is designed to work with data from the Open Khipu Repository.
 
 This is a research project and contributions are welcome. To contribute:
 
-1. Review existing documentation ([API Reference](docs/API_REFERENCE), [Architecture](docs/ARCHITECTURE), [FAQ](docs/FAQ))
+1. Review existing documentation ([API Reference](docs/API_REFERENCE.md), [Architecture](docs/ARCHITECTURE.md), [FAQ](docs/FAQ.md))
 2. Follow the code style guidelines (Black formatting, flake8 linting)
 3. Add tests for new analytical features
 4. Document new hypotheses or analytical approaches
 5. Ensure reproducibility by including data provenance
 
-See [Contributing Guidelines](docs/CONTRIBUTING) for detailed guidelines.
+See [Contributing Guidelines](docs/CONTRIBUTING.md) for detailed guidelines.
 
 This toolkit builds upon the foundational work of many researchers and organizations:
 
