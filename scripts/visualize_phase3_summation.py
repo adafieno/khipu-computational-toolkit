@@ -238,20 +238,20 @@ def plot_validation_comparison():
 def main():
     """Generate all Phase 3 visualizations."""
     print("=" * 80)
-    print("PHASE 3 VISUALIZATION GENERATION")
+    print("PHASE 3 VISUALIZATION GENERATION (CORRECTED)")
     print("=" * 80)
     print()
 
-    plot_summation_match_distribution()
-    plot_white_cord_boundary_effect()
-    plot_hierarchical_summation_cascade()
-    plot_alternative_hypotheses_rejection()
-    plot_summation_by_cluster()
+    plot_summation_prevalence()
+    plot_pattern_type_distribution()
+    plot_pattern_overlap()
+    plot_validation_comparison()
 
     print()
     print("=" * 80)
-    print("PHASE 3 VISUALIZATIONS COMPLETE")
+    print("✅ PHASE 3 VISUALIZATIONS COMPLETE")
     print(f"Output: {OUTPUT_DIR}")
+    print("4 charts generated reflecting corrected 69.5% findings")
     print("=" * 80)
 
 
