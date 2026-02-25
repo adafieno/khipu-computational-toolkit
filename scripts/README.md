@@ -57,7 +57,7 @@ python scripts/extract_cord_hierarchy.py
 python scripts/extract_knot_data.py
 ```
 
-*Note: 110,151 decoded knots from 110,677 raw database records (526 filtered for data quality). See [DATA_RECONCILIATION.md](../docs/DATA_RECONCILIATION.md) for count explanations.
+*Note: 110,151 decoded knots from 110,677 raw database records (526 filtered for data quality).
 
 ### extract_color_data.py
 **Purpose:** Extract and analyze color patterns across khipus  

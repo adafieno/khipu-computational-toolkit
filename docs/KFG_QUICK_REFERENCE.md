@@ -131,3 +131,35 @@ khipu-computational-toolkit/
         ├── knot_extractor.py   ← Knot extraction
         └── color_extractor.py  ← Color extraction
 ```
+
+## 📚 Related Resources
+
+- **[Khipu Field Guide Website](https://khipufieldguide.com)** - Main KFG portal with interactive analyses
+- **[KFG Excel Specification](https://khipufieldguide.com/databook/KFGExcelSpecification.html)** - Official format documentation
+- **[KFG Summation Analysis](https://www.khipufieldguide.com/notebook/analyses/ascher_sums_overview.html)** - Authoritative summation findings (~71% of khipus)
+- **[Open Khipu Repository (OKR)](https://github.com/khipulab/open-khipu-repository)** - Original dataset (612 khipus)
+- **[Toolkit Documentation](../README.md)** - Main project README
+- **[API Reference](API_REFERENCE.md)** - Complete function documentation
+
+## 📖 Citation
+
+If you use the KFG dataset in your research, please cite:
+
+```
+Khosla, A., & Medrano, M. (2020-present). Khipu Field Guide. 
+https://khipufieldguide.com
+```
+
+For this toolkit:
+
+```
+Da Fieno Delucchi, A. (2026). Khipu Computational Analysis Toolkit.
+https://github.com/adafieno/khipu-computational-toolkit
+```
+
+For the Open Khipu Repository:
+
+```
+OKR Team. (2021). The Open Khipu Repository (v1.0) [Data set]. Zenodo.
+https://doi.org/10.5281/zenodo.5037551
+```

@@ -275,6 +275,5 @@ conn = sqlite3.connect(config.get_database_path())
 ## Related Documentation
 
 - [src/config.py](src/config.py) - Configuration implementation
-- [docs/DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) - Explanation of count differences across phases
 - [README.md](README.md) - Quick start and setup guide
 - [scripts/README.md](scripts/README.md) - Individual script documentation

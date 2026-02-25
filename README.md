@@ -363,8 +363,6 @@ All processed datasets include:
 - Processing parameters
 - Validation checksums (where applicable)
 
-See [docs/DATA_RECONCILIATION.md](docs/DATA_RECONCILIATION.md) for explanations of count differences across phases.
-
 ## Citation
 
 If you use this toolkit in your research, please cite:
@@ -374,7 +372,14 @@ Da Fieno Delucchi, A. (2026). Khipu Computational Analysis Toolkit.
 https://github.com/adafieno/khipu-computational-toolkit
 ```
 
-And the Open Khipu Repository:
+For the Khipu Field Guide dataset:
+
+```
+Khosla, A., & Medrano, M. (2020-present). Khipu Field Guide. 
+https://khipufieldguide.com
+```
+
+For the Open Khipu Repository:
 
 ```
 OKR Team. (2021). The Open Khipu Repository (v1.0) [Data set]. Zenodo.
@@ -399,16 +404,19 @@ This is a research project and contributions are welcome. To contribute:
 
 See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed guidelines.
 
-## Contact
+This toolkit builds upon the foundational work of many researchers and organizations:
 
-- **Author:** Agustín Da Fieno Delucchi
-- **Project:** Khipu Computational Analysis Toolkit
+**Data Sources:**
+- **Open Khipu Repository (OKR)** - OKR Team, especially Mack FitzPatrick, and Advisory Board for providing the foundational open dataset
+- **Khipu Field Guide (KFG)** - Ashok Khosla, Manuel Medrano, and the KFG Affiliates team for creating the most comprehensive and accurate khipu dataset (700+ khipus with 3-4 person-years of quality corrections)
 
-## Acknowledgments
+**Research Contributions:**
+- **MIT Khipu Lab** - For invaluable feedback on summation detection algorithms and validation of computational approaches
+- **Marcia & Robert Ascher** - For foundational work on khipu mathematics and summation patterns
 
-- OKR Team and Advisory Board for the Open Khipu Repository
-- The khipu research community for foundational work on numeric interpretation
-- Contributors to NetworkX, scikit-learn, pandas, and matplotlib
+**Special Thanks:**
+- The KFG team for providing detailed format specifications and authoritative summation analysis (~71% validation)
+
 
 ---
 
