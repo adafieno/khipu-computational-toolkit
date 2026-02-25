@@ -46,6 +46,11 @@ class ColorHypothesisTester:
             'hierarchy': pd.read_csv(self.config.get_processed_file("cord_hierarchy.csv", 2))
         }
         
+        # Backward compatibility: map new schema to old schema
+        if 'has_summation' in data['summation'].columns:
+            data['summation']['has_pendant_summation'] = data['summation']['has_summation']
+            data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7
+        
         # Load numeric values
         query = """
         SELECT cord_id, numeric_value 

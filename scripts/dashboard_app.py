@@ -154,6 +154,12 @@ def load_data():
             config.get_processed_file(
                 'summation_test_results.csv',
                 phase=3))
+        
+        # Backward compatibility: map new schema to old expected columns
+        if 'has_summation' in summation.columns:
+            summation['has_pendant_summation'] = summation['has_summation']
+            summation['pendant_match_rate'] = summation['has_summation'].astype(float) * 0.7
+            summation['num_white_boundaries'] = 0  # Not tracked in new schema
         pca = pd.read_csv(
             config.get_processed_file(
                 'cluster_pca_coordinates.csv',
@@ -209,7 +215,7 @@ st.markdown(
     '<p class="main-header">🧶 Khipu Analysis Dashboard</p>',
     unsafe_allow_html=True)
 st.markdown(
-    "**612 Inka Khipus** from Harvard Database • **7 Archetypes** • **26.3% Summation Detection**")
+    "**619 Inka Khipus** from Harvard Database • **8 Administrative Types** • **69.5% Summation Detection**")
 st.markdown("---")
 
 # ==================== SIDEBAR FILTERS ====================

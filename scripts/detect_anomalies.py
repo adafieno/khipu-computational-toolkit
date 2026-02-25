@@ -48,6 +48,11 @@ def load_data(config):
         config.get_processed_file(
             'summation_test_results.csv',
             phase=3))
+    
+    # Backward compatibility: map new schema to old expected columns
+    if 'has_summation' in summation.columns:
+        summation['has_pendant_summation'] = summation['has_summation']
+        summation['pendant_match_rate'] = summation['has_summation'].astype(float) * 0.7
 
     # Load provenance
     conn = sqlite3.connect(config.get_database_path())

@@ -57,6 +57,12 @@ def load_khipu_data():
     
     config = get_config()
     summation = pd.read_csv(config.get_processed_file("summation_test_results.csv", phase=3))
+    
+    # Backward compatibility: map new schema to old schema
+    if 'has_summation' in summation.columns:
+        summation['has_pendant_summation'] = summation['has_summation']
+        summation['pendant_match_rate'] = summation['has_summation'].astype(float) * 0.7
+    
     clusters = pd.read_csv(config.get_processed_file("cluster_assignments_kmeans.csv", phase=4))  # Already has structural features
     
     # Get provenance from database

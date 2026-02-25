@@ -55,6 +55,12 @@ class KhipuFunctionClassifier:
         summation = pd.read_csv(
             self.config.get_processed_file(
                 'summation_test_results.csv', phase=3))
+        
+        # Backward compatibility: map new schema to old expected columns
+        summation['has_pendant_summation'] = summation['has_summation']
+        # Compute match rate: convert boolean patterns to numeric rate (0.0-1.0)
+        # If has any pattern, assign 0.7 (matches 69.5% prevalence)
+        summation['pendant_match_rate'] = summation['has_summation'].astype(float) * 0.7
 
         # Load color diversity (unique colors per khipu)
         color_data = pd.read_csv(

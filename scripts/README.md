@@ -160,7 +160,7 @@ Test specific hypotheses about khipu arithmetic and color encoding.
 **Output:** `data/processed/phase3/summation_test_results.csv` (619 khipus)  
 **Phase:** 3 - Summation Testing  
 **Report:** [phase3_summation_testing_report.md](../reports/phase3_summation_testing_report.md)  
-**Result:** 26.3% show consistent summation  
+**Result:** 69.5% show consistent summation (corrected Feb 2026)  
 **Usage:**
 ```bash
 # With database path

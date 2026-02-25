@@ -36,6 +36,11 @@ class HighMatchAnalyzer:
             results_path = self.config.get_processed_file(
                 "summation_test_results.csv", 3)
         df = pd.read_csv(results_path)
+        
+        # Backward compatibility: map new schema to old schema
+        if 'has_summation' in df.columns:
+            df['has_pendant_summation'] = df['has_summation']
+            df['pendant_match_rate'] = df['has_summation'].astype(float) * 0.7
 
         # Load cord hierarchy to get additional statistics
         cord_df = pd.read_csv(

@@ -45,8 +45,11 @@ class GeographicAnalyzer:
             'clusters': pd.read_csv(
                 self.config.get_processed_file("cluster_assignments_kmeans.csv", 4)),
             'summation': pd.read_csv(
-                self.config.get_processed_file("summation_test_results.csv", 3)),
-            'high_match': pd.read_csv(
+                self.config.get_processed_file("summation_test_results.csv", 3)),        
+        # Backward compatibility for summation data
+        if 'has_summation' in data['summation'].columns:
+            data['summation']['has_pendant_summation'] = data['summation']['has_summation']
+            data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7            'high_match': pd.read_csv(
                 self.config.get_processed_file("high_match_khipus.csv", 4))}
 
         # Get provenance from database

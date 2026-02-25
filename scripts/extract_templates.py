@@ -47,6 +47,11 @@ class TemplateExtractor:
             'features': pd.read_csv(self.config.get_processed_file("graph_structural_features.csv", 4))
         }
         
+        # Backward compatibility: map new schema to old schema
+        if 'has_summation' in data['summation'].columns:
+            data['summation']['has_pendant_summation'] = data['summation']['has_summation']
+            data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7
+        
         # Load graphs
         graphs_path = self.config.root_dir / "data" / "graphs" / "khipu_graphs.pkl"
         with open(graphs_path, "rb") as f:

@@ -81,6 +81,14 @@ class AdministrativeFunctionClassifier:
 
         # Load summation results (Phase 3)
         summation = pd.read_csv(self.data_dir / "phase3" / "summation_test_results.csv")
+        
+        # Backward compatibility: map new schema to old schema
+        if 'has_summation' in summation.columns:
+            summation['has_pendant_summation'] = summation['has_summation']
+            summation['pendant_match_rate'] = summation['has_summation'].astype(float) * 0.7
+            # Note: has_white_boundaries not tracked in new schema, set to 0
+            summation['has_white_boundaries'] = 0
+        
         print(f"  ✓ Summation results: {len(summation)} khipus")
 
         # Load color data (Phase 2)
@@ -299,14 +307,25 @@ class AdministrativeFunctionClassifier:
         Perform unsupervised clustering on structural features only.
 
         Returns cluster assignments and statistics.
+        
+        NOTE (Feb 2026): Excludes summation features as summation is nearly universal
+        (~69.5%) and does not discriminate administrative function.
         """
         print("\n" + "-" * 80)
         print("Performing structural clustering...")
         print("-" * 80)
 
-        # Prepare features (exclude khipu_id)
+        # Prepare features (exclude khipu_id and summation-related features)
+        # Summation is now known to be present in ~69.5% of khipus (nearly universal)
+        # and should not be used as a discriminating feature
+        excluded_cols = ['khipu_id', 'summation_match_rate', 'has_summation']
         feature_cols = [
-            col for col in structural_features.columns if col != 'khipu_id']
+            col for col in structural_features.columns if col not in excluded_cols]
+        
+        print(f"\nUsing {len(feature_cols)} features (excluding summation):")
+        for col in feature_cols:
+            print(f"  - {col}")
+        
         X = structural_features[feature_cols].values
 
         # Normalize

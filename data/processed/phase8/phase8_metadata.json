@@ -1,21 +1,21 @@
 {
-  "generated": "2026-01-11T10:12:16.841991",
+  "generated": "2026-02-25T07:32:20.963167",
   "phase": "Phase 8: Administrative Function & Encoding Strategies",
   "total_khipus": 619,
   "n_clusters": 7,
   "cluster_quality": {
-    "silhouette_score": 0.3021536251714834,
-    "calinski_harabasz": 174.4373532029748
+    "silhouette_score": 0.33850118262364337,
+    "calinski_harabasz": 183.11843301485405
   },
   "model_performance": {
     "structure_only": {
-      "cv_mean": 0.9790060319958037,
-      "cv_std": 0.008208948030838109,
+      "cv_mean": 0.9773931287699973,
+      "cv_std": 0.009386899492264903,
       "n_features": 11
     },
     "structure_numeric": {
-      "cv_mean": 0.9790060319958037,
-      "cv_std": 0.008208948030838109,
+      "cv_mean": 0.9773931287699973,
+      "cv_std": 0.009386899492264903,
       "n_features": 11
     },
     "structure_numeric_color": {
@@ -25,13 +25,13 @@
     }
   },
   "administrative_types": {
-    "Exceptional/Anomalous": 287,
-    "Compact Operational Record": 108,
-    "Standard Administrative Record": 102,
-    "Aggregated Summary": 54,
-    "Local Operational Record": 32,
-    "Lateral Category Tracking": 22,
+    "Aggregated Summary": 282,
+    "Standard Administrative Record": 115,
+    "Compact Operational Record": 70,
+    "Local Operational Record": 59,
+    "Exceptional/Anomalous": 52,
+    "Lateral Category Tracking": 33,
     "Multi-Level Aggregation": 7,
-    "Multi-Category Record": 7
+    "Multi-Category Record": 1
   }
 }

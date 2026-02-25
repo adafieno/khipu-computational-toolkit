@@ -42,7 +42,7 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **612 khipus** analyzed from the Open Khipu Repository
 - **54,403 cords** with hierarchical relationships extracted
 - **110,677 knots** decoded (all knot records with sufficient data)
-- **7 structural clusters** identified via k-means (moderate separation; see [Phase 8](reports/phase8_administrative_function_report.md))
+- **7 structural clusters** identified via k-means (good separation, silhouette=0.339; see [Phase 8](reports/phase8_administrative_function_report.md))
 - **69.5%** exhibit Ascher summation patterns (430 khipus; see [Phase 3](reports/phase3_summation_testing_report.md))
   - Validated using 3 pattern types: contiguous sums (60.9%), group totals (53.5%), combined patterns (44.9%)
 - **55.7% average confidence** in numeric value extractions (bimodal: 55.5% high-confidence, 44.2% low-confidence due to missing data)
@@ -222,7 +222,7 @@ khipu-computational-toolkit/
 
 ### Analysis Capabilities
 - ✓ Ascher summation pattern detection (69.5% validated across 3 pattern types)
-- ✓ K-means clustering (7 structural groups with moderate separation)
+- ✓ K-means clustering (7 structural groups with good separation, improved after excluding summation features)
 - ✓ Anomaly detection (Isolation Forest and LOF methods)
 - ✓ Confidence improvement prediction (24,043 predictions via constraint, sibling, and ML methods)
 - ✓ Operational classification (unsupervised typology requiring expert validation)

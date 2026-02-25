@@ -42,12 +42,12 @@ A computational research toolkit for analyzing Inka khipus from the Open Khipu R
 - ✅ Phase 0: Database reconnaissance (619 khipus analyzed)
 - ✅ Phase 1: Numeric validation (95.8% success rate)
 - ✅ Phase 2: Data extraction (54K cords, 110K knots)
-- ✅ Phase 3: Summation testing (26.3% exhibit summation)
+- ✅ Phase 3: Summation testing (69.5% exhibit summation, corrected Feb 2026)
 - ✅ Phase 4: Pattern discovery (7 archetypes found)
 - ✅ Phase 5: Hypothesis testing (4 color hypotheses tested)
 - ✅ Phase 6: Interactive visualizations (dashboards & 3D viewer)
 - ✅ Phase 7: ML extensions (anomaly detection, predictions)
-- ✅ Phase 8: Administrative function (6 typologies)
+- ✅ Phase 8: Administrative function (8 typologies, re-run Feb 2026)
 - ✅ Phase 9: Meta-analysis (10 modules: robustness, stability, etc.)
 
 ### How is this different from the Open Khipu Repository?
@@ -197,19 +197,20 @@ Pendant cords: [60, 40]
 Result: MATCH (60 + 40 = 100)
 ```
 
-**Finding:** 26.3% of khipus exhibit summation (161/612)
+**Finding:** 69.5% of khipus exhibit summation (430/619), corrected Feb 2026
 
-### What are the "7 archetypes"?
+### What are the "8 administrative types"?
 
-K-means clustering identified 7 structural patterns:
+Phase 8 clustering (re-run Feb 2026) identified 8 administrative types:
 
-1. **Simple Linear** (23.9%) - Few pendants, minimal hierarchy
-2. **Standard Hierarchical** (31.2%) - Moderate structure
-3. **Complex Hierarchical** (18.3%) - Multi-level branching
-4. **Highly Complex** (11.6%) - Dense, deep trees
-5. **Minimal Record** (8.5%) - Very small khipus
-6. **Deep Hierarchical** (6.5%) - Extreme depth (>5 levels)
-7. **Unknown/Mixed** (remaining)
+1. **Aggregated Summary** (45.6%) - Most common, standard administrative records
+2. **Standard Administrative Record** (18.6%) - Well-structured routine accounting
+3. **Compact Operational Record** (11.3%) - Small, focused local record-keeping
+4. **Local Operational Record** (9.5%) - Context-specific operational tracking
+5. **Exceptional/Anomalous** (8.4%) - Outliers with atypical characteristics
+6. **Lateral Category Tracking** (5.3%) - Specialized category-based organization
+7. **Multi-Level Aggregation** (1.1%) - Deep hierarchies, complex aggregation (rare)
+8. **Multi-Category Record** (0.2%) - Unique structural combination (1 khipu)
 
 ### What is "Phase 9 meta-analysis"?
 
@@ -262,8 +263,8 @@ Create new module in `src/analysis/` and add script in `scripts/`.
 ### What CAN you claim about khipus?
 
 **Empirical findings:**
-1. 26.3% exhibit summation patterns
-2. 7 distinct structural archetypes exist
+1. 69.5% exhibit summation patterns (corrected Feb 2026)
+2. 8 distinct administrative types exist (re-run Feb 2026)
 3. 98% appear administrative (vs narrative)
 4. White cords correlate with boundary marking (+10.7%)
 5. Depth is most stable structural feature

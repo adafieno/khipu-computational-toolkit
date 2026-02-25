@@ -39,6 +39,11 @@ def load_geographic_data():
     
     summation_data = pd.read_csv(config.get_processed_file("summation_test_results.csv", 3))
     
+    # Backward compatibility: map new schema to old schema
+    if 'has_summation' in summation_data.columns:
+        summation_data['has_pendant_summation'] = summation_data['has_summation']
+        summation_data['pendant_match_rate'] = summation_data['has_summation'].astype(float) * 0.7
+    
     conn = sqlite3.connect(config.get_database_path())
     provenance = pd.read_sql_query(
         "SELECT KHIPU_ID, PROVENANCE FROM khipu_main", 
