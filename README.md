@@ -42,8 +42,8 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **612 khipus** analyzed from the Open Khipu Repository
 - **54,403 cords** with hierarchical relationships extracted
 - **110,677 knots** decoded (all knot records with sufficient data)
-- **7 structural clusters** identified via k-means (good separation, silhouette=0.339; see [Phase 8](reports/phase8_administrative_function_report.md))
-- **69.5%** exhibit Ascher summation patterns (430 khipus; see [Phase 3](reports/phase3_summation_testing_report.md))
+- **7 structural clusters** identified via k-means (good separation, silhouette=0.339; see [Phase 8](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase8_administrative_function_report.md))
+- **69.5%** exhibit Ascher summation patterns (430 khipus; see [Phase 3](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase3_summation_testing_report.md))
   - Validated using 3 pattern types: contiguous sums (60.9%), group totals (53.5%), combined patterns (44.9%)
 - **55.7% average confidence** in numeric value extractions (bimodal: 55.5% high-confidence, 44.2% low-confidence due to missing data)
 - **13 high-confidence structural anomalies** detected using computational outlier methods
@@ -167,7 +167,7 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ## Documentation
 
-- **Phase Reports** - [Phase 0](reports/phase0_reconnaissance_report.md) | [Phase 1](reports/phase1_baseline_validation_report.md) | [Phase 2](reports/phase2_extraction_infrastructure_report.md) | [Phase 3](reports/phase3_summation_testing_report.md) | [Phase 4](reports/phase4_pattern_discovery_report.md) | [Phase 5](reports/phase5_multi_model_framework_report.md) | [Phase 7](reports/phase7_ml_extensions_report.md) | [Phase 8](reports/phase8_administrative_function_report.md) | [Phase 9](reports/phase9_meta_analysis_report.md)
+- **Phase Reports** - [Phase 0](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase0_reconnaissance_report.md) | [Phase 1](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase1_baseline_validation_report.md) | [Phase 2](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase2_extraction_infrastructure_report.md) | [Phase 3](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase3_summation_testing_report.md) | [Phase 4](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase4_pattern_discovery_report.md) | [Phase 5](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase5_multi_model_framework_report.md) | [Phase 7](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase7_ml_extensions_report.md) | [Phase 8](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase8_administrative_function_report.md) | [Phase 9](https://github.com/adafieno/khipu-computational-toolkit/blob/main/reports/phase9_meta_analysis_report.md)
 - [**Visualizations Index**](visualizations/README.md) - Complete index of all 39 visualizations with descriptions
 - [**API Reference**](docs/API_REFERENCE.md) - Complete API documentation for all modules
 - [**Architecture Guide**](docs/ARCHITECTURE.md) - System architecture and design patterns
