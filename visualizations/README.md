@@ -109,7 +109,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 
 ## Phase 4: Pattern Discovery
 **Directory:** `phase4_patterns/`  
-**Reports:** [reports/phase4_pattern_discovery_progress.md](../reports/phase4_pattern_discovery_progress.md)  
+**Reports:** [reports/phase4_pattern_discovery_report.md](../reports/phase4_pattern_discovery_report.md)  
 **Purpose:** Discover structural patterns, motifs, and geographic correlations across the khipu corpus
 
 ### Visualizations (8 files)
@@ -337,7 +337,7 @@ This folder contains all visualizations generated during the Khipu analysis proj
 
 ## Related Documentation
 
-- **Project Overview:** [OVERVIEW.md](../OVERVIEW.md)
+- **Project Overview:** [README.md](../README.md)
 - **Phase Reports:** [reports/](../reports/)
 - **Data Files:** [data/processed/](../data/processed/)
 - **Analysis Scripts:** [scripts/](../scripts/)
