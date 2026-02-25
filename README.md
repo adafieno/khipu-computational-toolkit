@@ -11,6 +11,8 @@
 
 This standalone toolkit provides computational infrastructure for exploring Inka khipu structure, numeric patterns, color distributions, and hierarchical relationships. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
+> **🆕 KFG Integration:** This toolkit is being extended to support the [Khipu Field Guide](https://khipufieldguide.com) dataset, which provides more modern and accurate data (709 khipus vs 612 in OKR). See [docs/KFG_QUICK_REFERENCE.md](docs/KFG_QUICK_REFERENCE.md) for details on this integration effort.
+
 **This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work. All computational results require expert validation and should be understood as exploratory findings, not definitive conclusions.
 
 ### Scope: What This Toolkit Does
@@ -41,8 +43,8 @@ This standalone toolkit provides computational infrastructure for exploring Inka
 - **54,403 cords** with hierarchical relationships extracted
 - **110,677 knots** decoded (all knot records with sufficient data)
 - **7 structural clusters** identified via k-means (moderate separation; see [Phase 8](reports/phase8_administrative_function_report.md))
-- **27.9%** exhibit pendant-to-parent summation patterns (173 khipus; see [Phase 3](reports/phase3_summation_testing_report.md))
-- **48.3%** show numeric patterns when including exploratory alternative models (modulo-10, hierarchical)
+- **69.5%** exhibit Ascher summation patterns (430 khipus; see [Phase 3](reports/phase3_summation_testing_report.md))
+  - Validated using 3 pattern types: contiguous sums (60.9%), group totals (53.5%), combined patterns (44.9%)
 - **55.7% average confidence** in numeric value extractions (bimodal: 55.5% high-confidence, 44.2% low-confidence due to missing data)
 - **13 high-confidence structural anomalies** detected using computational outlier methods
 - **24,043 predictions** generated for confidence improvement (+0.708 avg gain)
@@ -219,7 +221,7 @@ khipu-computational-toolkit/
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
-- ✓ Summation hypothesis testing (27.9% validated pendant summation; 48.3% with alternative patterns)
+- ✓ Ascher summation pattern detection (69.5% validated across 3 pattern types)
 - ✓ K-means clustering (7 structural groups with moderate separation)
 - ✓ Anomaly detection (Isolation Forest and LOF methods)
 - ✓ Confidence improvement prediction (24,043 predictions via constraint, sibling, and ML methods)

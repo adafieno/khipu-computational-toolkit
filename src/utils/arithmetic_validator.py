@@ -145,72 +145,215 @@ class ArithmeticValidator:
                 validation_notes=f"Computed using {computed.method.value}"
             )
     
-    def test_pendant_summation(
-        self,
-        khipu_id: int,
-        tolerance: int = 0
-    ) -> List[SummationTest]:
+    def detect_white_cord_groups(self, khipu_id: int) -> List[Dict]:
         """
-        Test if pendant cords sum to expected totals.
+        Detect groups of cords separated by white cord boundaries.
         
-        Checks common patterns:
-        - Sum of all pendants = value on special summary cord
-        - Groups of pendants sum to intermediate totals
+        MIT-validated approach (per feedback from Ashok Khosla):
+        "We don't look at all white cords in our summation analysis. 
+        Generally, only white cords that are the first cord in a group 
+        are summation cords."
+        
+        Algorithm:
+        1. Get all Level 1 pendants in ordinal order
+        2. Identify white cords (using color data)
+        3. Group cords between white boundaries
+        4. Each group: [white_boundary_cord, pendant1, ..., pendantN]
         
         Args:
-            khipu_id: The khipu to test
-            tolerance: Allowable difference for "match" (default 0)
+            khipu_id: The khipu to analyze
             
         Returns:
-            List of SummationTest results
+            List of group dictionaries:
+            {
+                'group_id': int,
+                'boundary_cord_id': int,  # The white cord
+                'boundary_value': Optional[int],
+                'member_cord_ids': List[int],  # Cords in this group
+                'member_values': List[int],
+                'expected_sum': Optional[int],  # Boundary cord value
+                'actual_sum': int,  # Sum of member values
+                'confidence': float
+            }
         """
         with self._connect() as conn:
             cursor = conn.cursor()
             
-            # Get all pendant cords (CORD_LEVEL = 1)
+            # Get all Level 1 pendants with colors
+            # Note: Colors can be in COLOR_CD_1 through COLOR_CD_5
             cursor.execute("""
-                SELECT CORD_ID, CLUSTER_ID, CORD_ORDINAL
-                FROM cord
-                WHERE KHIPU_ID = ? AND CORD_LEVEL = 1
-                ORDER BY CORD_ORDINAL
+                SELECT c.CORD_ID, c.CORD_ORDINAL, 
+                       ac.COLOR_CD_1, ac.COLOR_CD_2, ac.COLOR_CD_3, 
+                       ac.COLOR_CD_4, ac.COLOR_CD_5
+                FROM cord c
+                LEFT JOIN ascher_cord_color ac ON c.CORD_ID = ac.CORD_ID
+                WHERE c.KHIPU_ID = ? AND c.CORD_LEVEL = 1
+                ORDER BY c.CORD_ORDINAL
             """, (khipu_id,))
             
-            pendants = cursor.fetchall()
+            cord_data = cursor.fetchall()
             
-            if len(pendants) < 2:
-                return []  # Need at least 2 pendants to sum
+            if not cord_data:
+                return []
             
-            results = []
+            # Identify white cords (W appears in any color column)
+            white_indices = []
+            for i, row in enumerate(cord_data):
+                cord_id, ordinal = row[0], row[1]
+                colors = [c for c in row[2:7] if c]  # Get non-null color columns
+                
+                # Check if 'W' appears in any color
+                is_white = any('W' in str(c).upper() for c in colors if c)
+                if is_white:
+                    white_indices.append(i)
             
-            # Get numeric values for all pendants
-            pendant_values = []
-            for cord_id, cluster_id, ordinal in pendants:
-                cord_val = self.get_cord_numeric_value(cord_id)
-                if cord_val.total_value is not None:
-                    pendant_values.append((cord_id, cord_val.total_value, cord_val.confidence))
+            if not white_indices:
+                return []  # No white boundaries
             
-            if len(pendant_values) < 2:
-                return []  # Need at least 2 numeric pendants
+            # Build groups between white boundaries
+            groups = []
+            for group_idx, white_idx in enumerate(white_indices):
+                boundary_cord_id = cord_data[white_idx][0]
+                
+                # Find end of this group (next white cord or end of list)
+                if group_idx + 1 < len(white_indices):
+                    end_idx = white_indices[group_idx + 1]
+                else:
+                    end_idx = len(cord_data)
+                
+                # Members are cords AFTER the white boundary, before next white
+                member_indices = range(white_idx + 1, end_idx)
+                member_cord_ids = [cord_data[i][0] for i in member_indices]
+                
+                if not member_cord_ids:
+                    continue  # Empty group
+                
+                # Get numeric values
+                boundary_val = self.get_cord_numeric_value(boundary_cord_id)
+                member_vals = []
+                member_confidences = []
+                
+                for member_id in member_cord_ids:
+                    val = self.get_cord_numeric_value(member_id)
+                    if val.total_value is not None:
+                        member_vals.append(val.total_value)
+                        member_confidences.append(val.confidence)
+                
+                if not member_vals:
+                    continue  # No numeric data in group
+                
+                groups.append({
+                    'group_id': group_idx,
+                    'boundary_cord_id': boundary_cord_id,
+                    'boundary_value': boundary_val.total_value,
+                    'member_cord_ids': member_cord_ids,
+                    'member_values': member_vals,
+                    'expected_sum': boundary_val.total_value,
+                    'actual_sum': sum(member_vals),
+                    'confidence': min([boundary_val.confidence] + member_confidences)
+                })
             
-            # Test simple summation: do consecutive groups sum?
-            # This is a simplified version - real analysis would test multiple groupings
-            total_sum = sum(v[1] for v in pendant_values)
+            return groups
+    
+    def test_pendant_summation(
+        self,
+        khipu_id: int,
+        tolerance: int = 1
+    ) -> Dict:
+        """
+        Test Ascher summation hypothesis using MIT-validated methodology.
+        
+        CORRECTED ALGORITHM (based on MIT feedback, Feb 2026):
+        "We don't look at all white cords in our summation analysis. 
+        Generally, only white cords that are the first cord in a group 
+        are summation cords."
+        
+        Previous (INCORRECT) approach tested ALL white cords.
+        New (CORRECT) approach tests white cord GROUPS.
+        
+        Algorithm:
+        1. Detect cord groups separated by white boundaries
+        2. For each group where first cord is white:
+           - Sum all pendants in the group
+           - Compare to white boundary cord value
+           - Mark as match if within tolerance
+        3. Compute match rate across all groups
+        4. Use 30% threshold per MIT guidance (not 80%)
+        
+        Args:
+            khipu_id: The khipu to test
+            tolerance: Allowable difference for "match" (default 1)
             
-            # Check if there's a summary cord (often at the end or marked by color)
-            # For now, create a test record documenting what we found
-            results.append(SummationTest(
-                khipu_id=khipu_id,
-                summation_type=SummationType.SIMPLE_SUM,
-                expected_sum=None,  # Would need to identify summary cord
-                actual_sum=total_sum,
-                matches=False,  # Can't verify without expected value
-                tolerance=tolerance,
-                cord_ids=[v[0] for v in pendant_values],
-                confidence=min(v[2] for v in pendant_values),
-                notes=f"Sum of {len(pendant_values)} pendants = {total_sum}"
-            ))
-            
-            return results
+        Returns:
+            Dictionary with:
+            {
+                'khipu_id': int,
+                'has_pendant_summation': bool,  # >30% match rate
+                'pendant_match_rate': float,  # 0.0 to 1.0
+                'num_pendant_groups': int,
+                'num_matches': int,
+                'has_white_boundaries': bool,
+                'num_white_boundaries': int,
+                'groups': List[Dict],  # Detailed group data
+                'confidence': float
+            }
+        """
+        # Detect white cord groups
+        groups = self.detect_white_cord_groups(khipu_id)
+        
+        if not groups:
+            # No white boundaries found
+            return {
+                'khipu_id': khipu_id,
+                'has_pendant_summation': False,
+                'pendant_match_rate': 0.0,
+                'num_pendant_groups': 0,
+                'num_matches': 0,
+                'has_white_boundaries': False,
+                'num_white_boundaries': 0,
+                'groups': [],
+                'confidence': 0.0
+            }
+        
+        # Test each group for summation
+        num_matches = 0
+        testable_groups = 0
+        
+        for group in groups:
+            if group['expected_sum'] is not None:
+                testable_groups += 1
+                diff = abs(group['expected_sum'] - group['actual_sum'])
+                if diff <= tolerance:
+                    num_matches += 1
+                    group['matches'] = True
+                else:
+                    group['matches'] = False
+            else:
+                group['matches'] = None  # Untestable (no boundary value)
+        
+        # Compute match rate
+        if testable_groups > 0:
+            match_rate = num_matches / testable_groups
+        else:
+            match_rate = 0.0
+        
+        # MIT guidance: 30% occurrence = "interesting sign"
+        has_summation = match_rate >= 0.30
+        
+        # Overall confidence (minimum across all groups)
+        confidence = min([g['confidence'] for g in groups]) if groups else 0.0
+        
+        return {
+            'khipu_id': khipu_id,
+            'has_pendant_summation': has_summation,
+            'pendant_match_rate': match_rate,
+            'num_pendant_groups': testable_groups,
+            'num_matches': num_matches,
+            'has_white_boundaries': True,
+            'num_white_boundaries': len(groups),
+            'groups': groups,
+            'confidence': confidence
+        }
     
     def validate_khipu_arithmetic(self, khipu_id: int) -> Dict:
         """
