@@ -195,7 +195,7 @@ python scripts/test_hierarchical_summation.py
 **Purpose:** Test statistical hypotheses about color encoding  
 **Output:** `data/processed/phase5/color_hypothesis_tests.json`  
 **Phase:** 5 - Multi-Model Framework  
-**Key Finding:** White boundary cords show +10.7% summation rate  
+**Key Finding:** First-position white cords (CORD_ORDINAL=1) show +11.3% summation rate (Clindaniel/Ascher)  
 **Usage:**
 ```bash
 python scripts/test_color_hypotheses.py

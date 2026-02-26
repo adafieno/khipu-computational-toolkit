@@ -266,7 +266,7 @@ Create new module in `src/analysis/` and add script in `scripts/`.
 1. 69.5% exhibit summation patterns (corrected Feb 2026)
 2. 8 distinct administrative types exist (re-run Feb 2026)
 3. 98% appear administrative (vs narrative)
-4. White cords correlate with boundary marking (+10.7%)
+4. First-position white cords correlate with summation marking (+11.3%)
 5. Depth is most stable structural feature
 6. NOT random (p<0.0001 vs random models)
 

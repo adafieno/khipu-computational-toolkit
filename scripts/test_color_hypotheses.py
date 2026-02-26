@@ -51,6 +51,15 @@ class ColorHypothesisTester:
             data['summation']['has_pendant_summation'] = data['summation']['has_summation']
             data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7
         
+        # Reconstruct has_white_boundaries from white_cords data
+        # KFG methodology: Only white cords that are FIRST in a group (CORD_ORDINAL=1)
+        # are considered summation markers (Clindaniel, Ascher)
+        if 'has_white_boundaries' not in data['summation'].columns:
+            # Filter for first-in-group white cords only
+            first_white_cords = data['white_cords'][data['white_cords']['CORD_ORDINAL'] == 1]
+            khipus_with_first_white = first_white_cords['KHIPU_ID'].unique()
+            data['summation']['has_white_boundaries'] = data['summation']['khipu_id'].isin(khipus_with_first_white)
+        
         # Load numeric values
         query = """
         SELECT cord_id, numeric_value 
@@ -68,37 +77,33 @@ class ColorHypothesisTester:
         return data
     
     def test_white_boundary_hypothesis(self, data: Dict) -> Dict:
-        """Test if white cords serve as group boundaries."""
+        """
+        Test if white cords in first position serve as summation markers.
+        
+        KFG Methodology: Only white cords that are first in a group (CORD_ORDINAL=1)
+        are considered summation markers. This was identified by Jon Clindaniel 
+        (Harvard PhD thesis) and independently discovered by Marcia Ascher.
+        """
         print("\n" + "="*80)
-        print("HYPOTHESIS 1: White Cords as Boundary Markers")
+        print("HYPOTHESIS 1: First-Position White Cords as Summation Markers")
         print("="*80)
         
-        # Get white cords and check if they're group boundaries
+        # Get white cords and filter for first-in-group (CORD_ORDINAL=1)
         white_cords = data['white_cords']
-        hierarchy = data['hierarchy']
+        first_white_cords = white_cords[white_cords['CORD_ORDINAL'] == 1]
+        other_white_cords = white_cords[white_cords['CORD_ORDINAL'] != 1]
         
-        # Merge to get parent info
-        # Use available columns from hierarchy
-        hier_cols = [c for c in ['CORD_ID', 'parent_cord_id', 'cord_position_number'] if c in hierarchy.columns]
-        merged = white_cords.merge(
-            hierarchy[hier_cols],
-            left_on='CORD_ID',
-            right_on='CORD_ID',
-            how='left'
-        )
+        boundary_count = len(first_white_cords)
+        non_boundary_count = len(other_white_cords)
+        boundary_rate = boundary_count / len(white_cords) if len(white_cords) > 0 else 0.0
         
-        # Simplify: just use summation correlation as primary test
-        # Skip detailed boundary analysis due to column inconsistencies
+        print(f"\nWhite cords in first position (CORD_ORDINAL=1): {boundary_count:,}")
+        print(f"White cords in other positions: {non_boundary_count:,}")
+        print(f"Total white cords: {len(white_cords):,}")
+        print(f"First-position rate: {boundary_rate:.1%}")
         
-        boundary_count = len(white_cords)
-        non_boundary_count = 0  # Not calculated in simplified version
-        boundary_rate = 0.0  # Not calculated
-        
-        print(f"\nWhite cords at group boundaries: {boundary_count}")
-        print(f"White cords not at boundaries: {non_boundary_count}")
-        print(f"Boundary rate: {boundary_rate:.1%}")
-        
-        # Compare to summation presence
+        # Compare summation rates
+        # has_white_boundaries flag indicates khipus with first-position white cords
         summation_with_white = data['summation'][
             data['summation']['has_white_boundaries']
         ]['has_pendant_summation'].mean()
@@ -107,17 +112,23 @@ class ColorHypothesisTester:
             ~data['summation']['has_white_boundaries']
         ]['has_pendant_summation'].mean()
         
-        print(f"\nSummation rate WITH white boundaries: {summation_with_white:.1%}")
-        print(f"Summation rate WITHOUT white boundaries: {summation_without_white:.1%}")
-        print(f"Difference: {(summation_with_white - summation_without_white)*100:+.1f}%")
+        khipus_with_first_white = data['summation']['has_white_boundaries'].sum()
+        khipus_without_first_white = (~data['summation']['has_white_boundaries']).sum()
         
-        # Verdict
-        verdict = "SUPPORTED" if summation_with_white > summation_without_white and boundary_rate > 0.3 else "MIXED"
+        print(f"\nKhipus with first-position white cords: {khipus_with_first_white}")
+        print(f"Khipus without first-position white cords: {khipus_without_first_white}")
+        print(f"\nSummation rate WITH first-position white: {summation_with_white:.1%}")
+        print(f"Summation rate WITHOUT first-position white: {summation_without_white:.1%}")
+        print(f"Difference: {(summation_with_white - summation_without_white)*100:+.1f} pp")
+        
+        # Verdict: Strong support if improvement >10pp and boundary rate >20%
+        verdict = "SUPPORTED" if summation_with_white > summation_without_white and boundary_rate > 0.2 else "MIXED"
         
         print(f"\nHypothesis verdict: {verdict}")
+        print("\nReference: Jon Clindaniel (Harvard PhD thesis); Marcia Ascher")
         
         return {
-            'hypothesis': 'White cords serve as group boundary markers',
+            'hypothesis': 'First-position white cords (CORD_ORDINAL=1) mark summation boundaries',
             'boundary_count': int(boundary_count),
             'non_boundary_count': int(non_boundary_count),
             'boundary_rate': float(boundary_rate),

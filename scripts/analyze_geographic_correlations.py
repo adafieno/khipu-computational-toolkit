@@ -45,12 +45,26 @@ class GeographicAnalyzer:
             'clusters': pd.read_csv(
                 self.config.get_processed_file("cluster_assignments_kmeans.csv", 4)),
             'summation': pd.read_csv(
-                self.config.get_processed_file("summation_test_results.csv", 3)),        
+                self.config.get_processed_file("summation_test_results.csv", 3)),
+            'high_match': pd.read_csv(
+                self.config.get_processed_file("high_match_khipus.csv", 4)),
+            'white_cords': pd.read_csv(
+                self.config.get_processed_file("white_cords.csv", 2))
+        }
+        
         # Backward compatibility for summation data
         if 'has_summation' in data['summation'].columns:
             data['summation']['has_pendant_summation'] = data['summation']['has_summation']
-            data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7            'high_match': pd.read_csv(
-                self.config.get_processed_file("high_match_khipus.csv", 4))}
+            data['summation']['pendant_match_rate'] = data['summation']['has_summation'].astype(float) * 0.7
+        
+        # Reconstruct has_white_boundaries from white_cords data
+        # KFG methodology: Only white cords that are FIRST in a group (CORD_ORDINAL=1)
+        # are considered summation markers (Clindaniel, Ascher)
+        if 'has_white_boundaries' not in data['summation'].columns:
+            # Filter for first-in-group white cords only
+            first_white_cords = data['white_cords'][data['white_cords']['CORD_ORDINAL'] == 1]
+            khipus_with_first_white = first_white_cords['KHIPU_ID'].unique()
+            data['summation']['has_white_boundaries'] = data['summation']['khipu_id'].isin(khipus_with_first_white)
 
         # Get provenance from database
         query = """

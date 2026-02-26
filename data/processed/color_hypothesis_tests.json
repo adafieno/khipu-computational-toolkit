@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-01-11T10:06:33.566868",
+  "generated_at": "2026-02-25T20:42:35.399044",
   "hypotheses_tested": 4,
   "results": {
     "white_boundary": {
-      "hypothesis": "White cords serve as group boundary markers",
-      "boundary_count": 14882,
-      "non_boundary_count": 0,
-      "boundary_rate": 0.0,
-      "summation_with_white": 0.31057268722466963,
-      "summation_without_white": 0.19393939393939394,
+      "hypothesis": "First-position white cords (CORD_ORDINAL=1) mark summation boundaries",
+      "boundary_count": 1873,
+      "non_boundary_count": 13009,
+      "boundary_rate": 0.12585673968552613,
+      "summation_with_white": 0.7469879518072289,
+      "summation_without_white": 0.6341463414634146,
       "verdict": "MIXED"
     },
     "color_value_correlation": {
@@ -19,7 +19,7 @@
           "count": 9076,
           "mean_value": 297.84067871308946,
           "median_value": 141.0,
-          "std_value": 365.86873522936907
+          "std_value": 365.8687352293691
         },
         {
           "color": "AB",
