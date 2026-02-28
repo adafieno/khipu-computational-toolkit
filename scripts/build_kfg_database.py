@@ -160,8 +160,10 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
     
     try:
         # Read all sheets
-        khipu_df = pd.read_excel(excel_file, sheet_name='Khipu')
-        primary_cord_df = pd.read_excel(excel_file, sheet_name='PrimaryCord')
+        # Khipu and PrimaryCord are key-value format (row 1 = first data entry,
+        # not a header), so header=None prevents pandas consuming it as a column name.
+        khipu_df = pd.read_excel(excel_file, sheet_name='Khipu', header=None)
+        primary_cord_df = pd.read_excel(excel_file, sheet_name='PrimaryCord', header=None)
         cords_df = pd.read_excel(excel_file, sheet_name='Cords')
         
         # 1. Parse and insert metadata
