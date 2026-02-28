@@ -1,0 +1,28 @@
+# Version control
+.git
+.github
+
+# Python
+**/__pycache__
+**/*.pyc
+.venv
+*.egg-info
+
+# Dev/test artifacts
+scripts/legacy_okr/
+visualizations/
+reports/
+outputs/
+models/
+notebooks/
+docs/
+
+# Node (frontend is built separately in Dockerfile stage 1)
+app/frontend/node_modules
+
+# Local data (DB is downloaded from Azure Blob in CI)
+data/kfg/KFG/
+
+# Misc
+*.log
+.DS_Store
