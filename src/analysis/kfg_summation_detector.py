@@ -28,7 +28,7 @@ Pattern catalogue
 import sqlite3
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Set
 from dataclasses import dataclass
 from collections import defaultdict
 import sys
@@ -178,6 +178,35 @@ class KFGSummationDetector:
         m = re.match(r'([A-Z]+)', color)
         return m.group(1) if m else ''
 
+    @staticmethod
+    def _dominant_color(color: Optional[str]) -> str:
+        """
+        Return the color of the longest section of a (possibly spliced) cord.
+
+        For solid cords (no '(' in color string) the full color is returned.
+        For spliced cords like 'W(0.0-5.0)/W:0G(5.0-7.0)/W(7.0-34.0)' the
+        color of the longest section ('W' with 27 cm) is returned.
+
+        This matches the KFG GT convention: a cord is labeled by its dominant
+        color, so 'W:SY(0.0-2.0)/W(2.0-25.0)' becomes 'W'.
+        """
+        if not color:
+            return ''
+        if '(' not in color:
+            return color   # solid cord -- full color is canonical
+        # Parse sections: each looks like  COLOR(start-end)  separated by '/'
+        SECTION = re.compile(r'([A-Z][A-Z0-9:^%-]*(?:[Wa-z]*)?)'  # color
+                             r'\((\d+\.?\d*)-(\d+\.?\d*)\)'        # (lo-hi)
+                             )
+        best_color = ''
+        best_len = -1.0
+        for m in SECTION.finditer(color):
+            sec_len = float(m.group(3)) - float(m.group(2))
+            if sec_len > best_len:
+                best_len = sec_len
+                best_color = m.group(1)
+        return best_color if best_color else color
+
     # ------------------------------------------------------------------
     # Pattern 1: pendant_pendant_sum
     # ------------------------------------------------------------------
@@ -229,16 +258,20 @@ class KFGSummationDetector:
                                    cords: Optional[List[Cord]] = None,
                                    tolerance: int = 0) -> List[SummationMatch]:
         """
-        A pendant = sum of all other pendants sharing the same primary color.
-        Also applies sliding window within each color group.
+        A pendant = sum of a contiguous window of same-color pendants.
+
+        Key insight: use FULL color string for grouping (W:KB != W).  The
+        GT summand_string never includes zero-value cords, so we filter them
+        out of the returned summand_cords to enable exact-recall matching.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = [c for c in self._pendants(cords) if c.value is not None]
 
+        # Group by DOMINANT color string (handles spliced cords correctly)
         by_color: Dict[str, List[Cord]] = defaultdict(list)
         for c in flat:
-            col = self._primary_color(c.color)
+            col = self._dominant_color(c.color)
             if col:
                 by_color[col].append(c)
 
@@ -255,7 +288,9 @@ class KFGSummationDetector:
                 # (a) cord = sum of ALL others in color group
                 rest = sum(c.value for c in group) - cord.value
                 if abs(cord.value - rest) <= tolerance:
-                    summands = [c for c in group if c.cord_id != cord.cord_id]
+                    # GT skips zero-value summands
+                    summands = [c for c in group
+                                if c.cord_id != cord.cord_id and (c.value or 0) != 0]
                     matches.append(SummationMatch(
                         pattern_type='colored_pendant_sum',
                         sum_cord=cord,
@@ -268,7 +303,8 @@ class KFGSummationDetector:
                     continue
                 # (b) sliding window within color group
                 for l, r in self._find_windows(cord.value, i, prefix, n, values):
-                    summands = group[l:r + 1]
+                    # GT skips zero-value summands
+                    summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
                     actual = sum(s.value for s in summands)
                     matches.append(SummationMatch(
                         pattern_type='colored_pendant_sum',
@@ -289,8 +325,11 @@ class KFGSummationDetector:
                                    cords: Optional[List[Cord]] = None,
                                    tolerance: int = 0) -> List[SummationMatch]:
         """
-        cord[g][p] sums over cord[g'][p] for g' in some set.
-        Applies sliding window within each position_in_group bucket.
+        cord[g][p] = sum of a sliding window of other cords at the same
+        position_in_group p across different groups.
+
+        GT summand_string never lists zero-value cords, so zero-value cords
+        are filtered from returned summand_cords.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
@@ -311,7 +350,8 @@ class KFGSummationDetector:
                 if cord.value is None or cord.value <= 0:
                     continue
                 for l, r in self._find_windows(cord.value, i, prefix, n, values):
-                    summands = group[l:r + 1]
+                    # GT skips zero-value summands
+                    summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
                     actual = sum(s.value for s in summands)
                     matches.append(SummationMatch(
                         pattern_type='indexed_pendant_sum',
@@ -355,7 +395,8 @@ class KFGSummationDetector:
                 continue
             # Use n as exclude_idx (no exclusion) to scan entire pendant sequence
             for l, r in self._find_windows(sub.value, n, prefix, n, values):
-                summands = pendants[l:r + 1]
+                # GT skips zero-value summands
+                summands = [c for c in pendants[l:r + 1] if (c.value or 0) != 0]
                 actual = sum(s.value or 0 for s in summands)
                 matches.append(SummationMatch(
                     pattern_type='subsidiary_pendant_sum',
@@ -376,42 +417,199 @@ class KFGSummationDetector:
                                       cords: Optional[List[Cord]] = None,
                                       tolerance: int = 0) -> List[SummationMatch]:
         """
-        A subsidiary at index k (s1, s2...) sums same-index subsidiaries
-        across other pendants.  Applies sliding window within each s_k group.
+        A subsidiary cord = sum of a sliding window of same-position subsidiaries.
+
+        Two complementary groupings are tried and results are unioned:
+
+        A) Same-level grouping: (parent.pos_in_group, sub_0idx)
+           For each sub-level k, window over same-level-k subs at same parent
+           position across groups. Handles 's2 = sum of s2's of other groups'.
+
+        B) Cross-level + dominant-color grouping: (parent.pos_in_group, dominant_col)
+           All subs of the same color at the same parent position, regardless of
+           sub-level. Handles 's2 = sum of s1's of other groups' (cross-level).
+
+        Within each bucket, subsidiaries are ordered by (parent.group_idx, sub_0idx).
+        Zero-value cords are filtered from summand_cords (GT convention).
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
+
         SUB_IDX = re.compile(r's(\d+)$')
-        by_idx: Dict[int, List[Cord]] = defaultdict(list)
+
+        # Build parent lookup
+        parent_map: Dict[str, Cord] = {c.cord_name: c
+                                       for c in cords if c.hierarchy_level == 0}
+
+        # Collect subsidiary info
+        sub_info = []  # (sub_cord, parent.position_in_group, parent.group_idx, sub_0idx, dom_color)
         for c in self._subsidiaries(cords):
             if c.value is None:
                 continue
             m = SUB_IDX.search(c.cord_name)
-            if m:
-                by_idx[int(m.group(1))].append(c)
+            if not m:
+                continue
+            sub_1idx = int(m.group(1))
+            parent = parent_map.get(c.parent_cord)
+            if parent is None or parent.position_in_group is None:
+                continue
+            sub_info.append((c, parent.position_in_group,
+                             parent.group_idx, sub_1idx - 1,
+                             self._dominant_color(c.color)))
+
+        def _scan_buckets(by_bucket):
+            out = []
+            for key, items in by_bucket.items():
+                if len(items) < 2:
+                    continue
+                items.sort(key=lambda x: (x[0], x[1]))   # (group_idx, sub_0idx)
+                group = [c for c, _, _ in items]
+                values = [c.value for c in group]
+                prefix = self._prefix_sums(values)
+                n = len(group)
+                for i, cord in enumerate(group):
+                    if cord.value is None or cord.value <= 0:
+                        continue
+                    for l, r in self._find_windows(cord.value, i, prefix, n, values):
+                        summands = [c for c in group[l:r + 1]
+                                    if (c.value or 0) != 0]
+                        actual = sum(s.value for s in summands)
+                        out.append(SummationMatch(
+                            pattern_type='indexed_subsidiary_sum',
+                            sum_cord=cord,
+                            summand_cords=summands,
+                            expected_sum=cord.value,
+                            actual_sum=actual,
+                            matches=True,
+                            notes=f'key={key} window[{l}-{r}]'
+                        ))
+            return out
+
+        # Strategy A: (pos, sub_0idx) -- same level
+        bucket_a: Dict[tuple, List] = defaultdict(list)
+        for c, pos, gidx, sub_0idx, dcol in sub_info:
+            bucket_a[(pos, sub_0idx)].append((c, gidx, sub_0idx))
+
+        # Strategy B: (pos, dominant_color) -- cross-level
+        bucket_b: Dict[tuple, List] = defaultdict(list)
+        for c, pos, gidx, sub_0idx, dcol in sub_info:
+            bucket_b[(pos, dcol)].append((c, gidx, sub_0idx))
+
+        # Fix _scan_buckets to accept the tuple format (cord, gidx, sub_0idx)
+        def _scan(bucket):
+            out = []
+            for key, items in bucket.items():
+                if len(items) < 2:
+                    continue
+                items.sort(key=lambda x: (x[1], x[2]))   # sort by (gidx, sub_0idx)
+                group = [c for c, _, _ in items]
+                values = [c.value for c in group]
+                prefix = self._prefix_sums(values)
+                n = len(group)
+                for i, cord in enumerate(group):
+                    if cord.value is None or cord.value <= 0:
+                        continue
+                    for l, r in self._find_windows(cord.value, i, prefix, n, values):
+                        summands = [c for c in group[l:r + 1]
+                                    if (c.value or 0) != 0]
+                        actual = sum(s.value for s in summands)
+                        out.append(SummationMatch(
+                            pattern_type='indexed_subsidiary_sum',
+                            sum_cord=cord,
+                            summand_cords=summands,
+                            expected_sum=cord.value,
+                            actual_sum=actual,
+                            matches=True,
+                            notes=f'key={key} window[{l}-{r}]'
+                        ))
+            return out
+
+        # Strategy C: (pos,) only -- any sub_idx, consecutive groups
+        # Catches cases where the sum cord and its summands are at the same
+        # pendant position but have different sub_0idx values.
+        bucket_c: Dict[tuple, List] = defaultdict(list)
+        for c, pos, gidx, sub_0idx, dcol in sub_info:
+            bucket_c[(pos,)].append((c, gidx, sub_0idx))
+
+        return _scan(bucket_a) + _scan(bucket_b) + _scan(bucket_c)
+
+
+    # ------------------------------------------------------------------
+    # Pattern X: pendant_sub_neighbor
+    # ------------------------------------------------------------------
+
+    def detect_pendant_sub_neighbor(self, kfg_id: str,
+                                    cords: Optional[List[Cord]] = None,
+                                    tolerance: int = 0) -> List[SummationMatch]:
+        """
+        For each pendant P with subsidiaries: neighbor.value = P.value + sub_sum
+        where sub_sum = sum of P's direct subsidiary values, and neighbor is the
+        immediately adjacent pendant (left or right) in flat group order.
+
+        GT columns: pendant_sub_name (P), neighbor_name (N), handedness (-1=left).
+        """
+        if cords is None:
+            cords = self._load_all_cords(kfg_id)
+        flat = self._pendants(cords)
+        if len(flat) < 2:
+            return []
+
+        # Build subsidiary value map: pendant_cord_name -> sum of ALL sub-level values
+        # GT includes subsidiaries at ALL hierarchy levels (level-1, level-2, etc.)
+        cord_map_local: Dict[str, Cord] = {c.cord_name: c for c in cords}
+        sub_sums: Dict[str, int] = defaultdict(int)
+        for c in cords:
+            if getattr(c, 'hierarchy_level', 0) == 0 or c.parent_cord is None:
+                continue
+            if c.value is None or c.value == 0:
+                continue
+            # Trace up to the root pendant
+            current = c.parent_cord
+            visited: set = set()
+            while current and current not in visited:
+                visited.add(current)
+                ancestor = cord_map_local.get(current)
+                if ancestor is None or getattr(ancestor, 'hierarchy_level', 0) == 0:
+                    break
+                current = ancestor.parent_cord
+            pendant_root = current
+            if pendant_root and cord_map_local.get(pendant_root) is not None:
+                sub_sums[pendant_root] += c.value
 
         matches = []
-        for sub_idx, group in by_idx.items():
-            if len(group) < 2:
+        seen_pairs: set = set()
+        for i, pendant in enumerate(flat):
+            if pendant.value is None:
                 continue
-            values = [c.value for c in group]
-            prefix = self._prefix_sums(values)
-            n = len(group)
-            for i, cord in enumerate(group):
-                if cord.value is None or cord.value <= 0:
+            ss = sub_sums.get(pendant.cord_name, 0)
+            if ss == 0:
+                continue  # no subsidiaries or all zero
+            # GT formula: n = abs(p + signed_ssum)
+            # Since DB always stores subsidiary values as positive, ssum could be
+            # positive or negative in the GT:
+            #   GT ssum < 0 (most cases): n = abs(p - ss)
+            #   GT ssum > 0 (rare cases): n = p + ss
+            # We check both candidates to cover either sign.
+            expected_abs = abs(pendant.value - ss)  # covers negative ssum
+            expected_pos = pendant.value + ss        # covers positive ssum
+            for neighbor in (flat[i - 1] if i > 0 else None,
+                             flat[i + 1] if i < len(flat) - 1 else None):
+                if neighbor is None or neighbor.value is None:
                     continue
-                for l, r in self._find_windows(cord.value, i, prefix, n, values):
-                    summands = group[l:r + 1]
-                    actual = sum(s.value for s in summands)
-                    matches.append(SummationMatch(
-                        pattern_type='indexed_subsidiary_sum',
-                        sum_cord=cord,
-                        summand_cords=summands,
-                        expected_sum=cord.value,
-                        actual_sum=actual,
-                        matches=True,
-                        notes=f's{sub_idx} window[{l}-{r}]'
-                    ))
+                if abs(neighbor.value - expected_abs) <= tolerance or abs(neighbor.value - expected_pos) <= tolerance:
+                    matched_expected = expected_abs if abs(neighbor.value - expected_abs) <= tolerance else expected_pos
+                    key = (pendant.cord_name, neighbor.cord_name)
+                    if key not in seen_pairs:
+                        seen_pairs.add(key)
+                        matches.append(SummationMatch(
+                            pattern_type='pendant_sub_neighbor',
+                            sum_cord=pendant,
+                            summand_cords=[neighbor],
+                            expected_sum=matched_expected,
+                            actual_sum=neighbor.value,
+                            matches=True,
+                            notes=f'{pendant.cord_name}+subs=>{matched_expected} neighbor={neighbor.cord_name}'
+                        ))
         return matches
 
     # ------------------------------------------------------------------
@@ -431,55 +629,92 @@ class KFGSummationDetector:
         if not flat:
             return []
 
-        group_totals: Dict[int, int] = defaultdict(int)
         group_members: Dict[int, List[Cord]] = defaultdict(list)
+        cord_to_group: Dict[str, int] = {}
+        cord_map_gg: Dict[str, Cord] = {c.cord_name: c for c in cords}
+
+        # Strategy 1: pendant-only group totals
+        group_totals_pend: Dict[int, int] = defaultdict(int)
         for c in flat:
-            group_totals[c.group_idx] += c.value
+            group_totals_pend[c.group_idx] += c.value
             group_members[c.group_idx].append(c)
+            cord_to_group[c.cord_name] = c.group_idx
 
-        groups = sorted(group_totals)
-        totals = [group_totals[g] for g in groups]
-        prefix = self._prefix_sums(totals)
-        ng = len(groups)
-        matches = []
+        # Strategy 2: pendant + full sub-tree totals
+        group_totals_subs: Dict[int, int] = defaultdict(int, group_totals_pend)
+        for c in cords:
+            if getattr(c, 'hierarchy_level', 0) == 0 or c.parent_cord is None:
+                continue
+            if c.value is None or c.value == 0:
+                continue
+            current = c.parent_cord
+            visited: set = set()
+            while current and current not in visited:
+                visited.add(current)
+                ancestor = cord_map_gg.get(current)
+                if ancestor is None or getattr(ancestor, 'hierarchy_level', 0) == 0:
+                    break
+                current = ancestor.parent_cord
+            parent_grp = cord_to_group.get(current)
+            if parent_grp is not None:
+                group_totals_subs[parent_grp] += c.value
 
-        # (a) pairwise equal group totals
-        seen = set()
-        for i, gi in enumerate(groups):
-            for j, gj in enumerate(groups):
-                if j <= i or totals[i] <= 0:
-                    continue
-                if abs(totals[i] - totals[j]) <= tolerance:
-                    key = (min(gi, gj), max(gi, gj))
-                    if key not in seen:
-                        seen.add(key)
-                        matches.append(SummationMatch(
+        def _run_strategy(group_totals):
+            """Find equal-group pairs and range sums for a given total map."""
+            groups = sorted(group_totals)
+            totals = [group_totals[g] for g in groups]
+            prefix = self._prefix_sums(totals)
+            ng = len(groups)
+            out = []
+            seen_eq: set = set()
+
+            # (a) pairwise equal group totals
+            for i, gi in enumerate(groups):
+                for j, gj in enumerate(groups):
+                    if j <= i or totals[i] <= 0:
+                        continue
+                    if abs(totals[i] - totals[j]) <= tolerance:
+                        key = (min(gi, gj), max(gi, gj))
+                        if key not in seen_eq:
+                            seen_eq.add(key)
+                            out.append(SummationMatch(
+                                pattern_type='group_group_sum',
+                                sum_cord=group_members[gi][0],
+                                summand_cords=group_members[gj],
+                                expected_sum=totals[i],
+                                actual_sum=totals[j],
+                                matches=True,
+                                notes=f'grp{gi}==grp{gj}'
+                            ))
+
+            # (b) single cord = contiguous group-range sum
+            for g_i, gi in enumerate(groups):
+                for cord in group_members[gi]:
+                    if cord.value is None or cord.value <= 0:
+                        continue
+                    for l, r in self._find_windows(cord.value, g_i, prefix, ng, totals):
+                        summands = [c for k in range(l, r + 1)
+                                    for c in group_members[groups[k]]]
+                        out.append(SummationMatch(
                             pattern_type='group_group_sum',
-                            sum_cord=group_members[gi][0],
-                            summand_cords=group_members[gj],
-                            expected_sum=totals[i],
-                            actual_sum=totals[j],
+                            sum_cord=cord,
+                            summand_cords=summands,
+                            expected_sum=cord.value,
+                            actual_sum=sum(s.value for s in summands),
                             matches=True,
-                            notes=f'grp{gi}==grp{gj}'
+                            notes=f'{cord.cord_name}=grps[{groups[l]}-{groups[r]}]'
                         ))
+            return out
 
-        # (b) single cord = contiguous group-range sum
-        for g_i, gi in enumerate(groups):
-            for cord in group_members[gi]:
-                if cord.value is None or cord.value <= 0:
-                    continue
-                for l, r in self._find_windows(cord.value, g_i, prefix, ng, totals):
-                    summands = [c for k in range(l, r + 1)
-                                for c in group_members[groups[k]]]
-                    matches.append(SummationMatch(
-                        pattern_type='group_group_sum',
-                        sum_cord=cord,
-                        summand_cords=summands,
-                        expected_sum=cord.value,
-                        actual_sum=sum(s.value for s in summands),
-                        matches=True,
-                        notes=f'{cord.cord_name}=grps[{groups[l]}-{groups[r]}]'
-                    ))
+        # Union both strategies (deduplicate by (sum_cord, frozenset(summands)))
+        seen_matches: set = set()
+        matches = []
+        for m in _run_strategy(group_totals_pend) + _run_strategy(group_totals_subs):
+            key = (m.sum_cord.cord_name, m.expected_sum,
+                   frozenset(s.cord_name for s in m.summand_cords))
+            if key not in seen_matches:
+                seen_matches.add(key)
+                matches.append(m)
         return matches
 
     # ------------------------------------------------------------------
@@ -564,7 +799,7 @@ class KFGSummationDetector:
             'group_group_sum':         gg,
             'group_sum_bands':         gg,   # same structural logic
             'ascher_decreasing_group': self.detect_ascher_decreasing_group(kfg_id, cords),
-            'pendant_sub_neighbor':    [],   # TODO
+            'pendant_sub_neighbor':    self.detect_pendant_sub_neighbor(kfg_id, cords, tolerance),
         }
 
     def summarize(self, kfg_id: str, tolerance: int = 0) -> Dict:

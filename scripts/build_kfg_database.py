@@ -65,6 +65,11 @@ def create_schema(conn: sqlite3.Connection):
             length REAL,
             color TEXT,
             fiber TEXT,
+            beginning TEXT,
+            termination TEXT,
+            twist TEXT,
+            notes TEXT,
+            plain_notes TEXT,
             FOREIGN KEY (kfg_id) REFERENCES khipu_metadata(kfg_id)
         )
     """)
@@ -87,7 +92,10 @@ def create_schema(conn: sqlite3.Connection):
             color TEXT,
             value INTEGER,
             alt_value INTEGER,
-            position REAL,
+            position TEXT,
+            position_group INTEGER,
+            position_cm REAL,
+            position_cm_end REAL,
             notes TEXT,
             FOREIGN KEY (kfg_id) REFERENCES khipu_metadata(kfg_id)
         )
@@ -181,14 +189,19 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
         # 2. Parse and insert primary cord
         primary = parse_primary_cord(primary_cord_df)
         cursor.execute("""
-            INSERT INTO primary_cord VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO primary_cord VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             kfg_id,
             primary.get('structure'),
             primary.get('thickness'),
             primary.get('length'),
             primary.get('color'),
-            primary.get('fiber')
+            primary.get('fiber'),
+            primary.get('beginning'),
+            primary.get('termination'),
+            primary.get('twist'),
+            primary.get('notes'),
+            primary.get('plain_notes'),
         ))
         
         # 3. Parse and insert cords
@@ -200,14 +213,27 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
             pendant_num = hierarchy['pendant_num'] if hierarchy else None
             level = hierarchy['level'] if hierarchy else None
             parent = hierarchy['parent'] if hierarchy else None
+
+            # Parse position string "(group:cm)" or "(group:cm)(group:cm_end)" -> typed columns
+            pos_raw = cord_row.get('Position')
+            pos_group, pos_cm, pos_cm_end = None, None, None
+            if pd.notna(pos_raw):
+                import re as _re
+                pairs = _re.findall(r'\((\d+):([\d.]+)\)', str(pos_raw).strip())
+                if pairs:
+                    pos_group = int(pairs[0][0])
+                    pos_cm    = float(pairs[0][1])
+                    if len(pairs) >= 2:
+                        pos_cm_end = float(pairs[1][1])
             
             # Insert cord
             cursor.execute("""
                 INSERT INTO cords (
                     kfg_id, cord_name, pendant_num, hierarchy_level, parent_cord,
                     twist, attachment, knots, length, termination, thickness,
-                    color, value, alt_value, position, notes
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    color, value, alt_value, position, position_group, position_cm,
+                    position_cm_end, notes
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 kfg_id,
                 cord_name,
@@ -223,7 +249,10 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
                 cord_row.get('Color'),
                 cord_row.get('Value'),
                 cord_row.get('Alt_Value'),
-                cord_row.get('Position'),
+                str(pos_raw).strip() if pd.notna(pos_raw) else None,
+                pos_group,
+                pos_cm,
+                pos_cm_end,
                 cord_row.get('Notes')
             ))
             

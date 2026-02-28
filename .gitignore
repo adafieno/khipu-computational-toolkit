@@ -58,6 +58,10 @@ models/*.pkl
 *.bak
 query_colors.py
 
+# Root-level generated output files (test runs, logs)
+/*.txt
+/*.csv
+
 data/kfg/
 docs/MIT_FEEDBACK_AND_CORRECTIONS.md
 scripts/investigate_kfg_format.py

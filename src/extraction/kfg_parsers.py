@@ -343,6 +343,7 @@ def parse_kfg_metadata(khipu_df: pd.DataFrame) -> Dict[str, Any]:
     # Map of field keys to metadata dictionary keys
     field_mapping = {
         'KFG_Name': 'kfg_name',
+        'Name': 'kfg_name',           # KH0483 uses 'Name' instead of 'KFG_Name'
         'Aliases': 'aliases',
         'Contributors': 'contributors',
         'KFG URL': 'kfg_url',
@@ -411,7 +412,12 @@ def parse_primary_cord(primary_cord_df: pd.DataFrame) -> Dict[str, Any]:
         'Thickness': 'thickness',
         'Length': 'length',
         'Color': 'color',
-        'Fiber': 'fiber'
+        'Fiber': 'fiber',
+        'Beginning': 'beginning',
+        'Termination': 'termination',
+        'Twist': 'twist',
+        'Notes': 'notes',
+        'Plain_Notes': 'plain_notes',
     }
     
     for _, row in primary_cord_df.iterrows():
