@@ -1,7 +1,8 @@
 """
 Phase 1 — Corpus Foundation: Corpus Statistics
 ===============================================
-Computes and reports baseline statistics for the KFG khipu database.
+Computes and reports baseline statistics for the KCAT khipu database
+(built from KFG source data).
 
 This script is corpus-agnostic: it reads whatever SQLite database is
 configured and reports what is there. It does not interpret findings.

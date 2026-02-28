@@ -1,7 +1,7 @@
 # Phase 1: Corpus Foundation
 
 **Generated:** 2026-02-28  
-**Database:** Khipu Field Guide (KFG) SQLite database  
+**Database:** KCAT SQLite database (built from KFG source data)  
 **Script:** `scripts/corpus_statistics.py`  
 **Status:** ✅ Complete
 
@@ -162,7 +162,7 @@ python scripts/corpus_statistics.py --db path/to/other.db --report  # any corpus
 
 ## Limitations
 
-- Statistics reflect the state of the KFG database at time of generation. The database is rebuilt from KFG source XLS files by `scripts/build_kfg_database.py`; re-run that script first to incorporate any upstream KFG updates.
+- Statistics reflect the state of the KCAT database at time of generation. The KCAT database is rebuilt from KFG source XLS files by `scripts/build_kfg_database.py`; re-run that script first to incorporate any upstream KFG updates.
 - Numeric decoding uses the Ascher positional system. Alternative decoding proposals (e.g., Urton's binary system) would produce different value distributions.
 - Provenance data quality depends on KFG source records. The 236 unknown-provenance khipus represent a real gap in the archaeological record, not a data entry error.
 
