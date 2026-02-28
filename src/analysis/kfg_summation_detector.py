@@ -51,6 +51,13 @@ class Cord:
     position_in_group: Optional[int]
     value: Optional[int]
     color: Optional[str]
+    termination: Optional[str] = None
+
+    @property
+    def is_broken(self) -> bool:
+        """True when the cord is physically broken (termination='B')."""
+        return self.termination == 'B'
+
 
 
 @dataclass
@@ -62,6 +69,20 @@ class SummationMatch:
     actual_sum: int
     matches: bool
     notes: str = ""
+
+    @property
+    def broken_cords(self) -> List[str]:
+        """Names of broken (termination='B') cords involved in this relationship."""
+        b = []
+        if self.sum_cord.is_broken:
+            b.append(self.sum_cord.cord_name)
+        b.extend(c.cord_name for c in self.summand_cords if c.is_broken)
+        return b
+
+    @property
+    def has_broken_cord(self) -> bool:
+        """True if any cord in this summation relationship is physically broken."""
+        return bool(self.broken_cords)
 
 
 # ---------------------------------------------------------------------------
@@ -95,7 +116,8 @@ class KFGSummationDetector:
             cur = conn.cursor()
             cur.execute("""
                 SELECT cord_id, cord_name, pendant_num, hierarchy_level,
-                       parent_cord, group_idx, position_in_group, value, color
+                       parent_cord, group_idx, position_in_group, value, color,
+                       termination
                 FROM cords
                 WHERE kfg_id = ?
                 ORDER BY hierarchy_level, group_idx, position_in_group
