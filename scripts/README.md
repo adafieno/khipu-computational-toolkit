@@ -1,6 +1,26 @@
 # Scripts Directory
 
-This directory contains 36 production-ready Python scripts for khipu analysis, organized by function. All scripts are designed to be run from the repository root directory.
+This directory contains KFG-focused analysis and explorer scripts for the Khipu Computational Analysis Toolkit (KCAT). All scripts are designed to be run from the repository root directory.
+
+---
+
+## Launch the Local Browser
+
+The fastest way to explore the corpus is the standalone Streamlit browser:
+
+```bash
+streamlit run scripts/browse.py
+```
+
+This opens three interactive views in your browser:
+
+| View | What it shows |
+|------|---------------|
+| **Corpus Browser** | Filterable/sortable table of all 709 khipus |
+| **3D Viewer** | Interactive Plotly 3D cord structure for any selected khipu |
+| **X-Ray View** | Cord color grid by group, with summation arc overlay (coming soon) |
+
+No server setup needed — reads directly from `data/kfg/khipu_database.db`.
 
 ---
 

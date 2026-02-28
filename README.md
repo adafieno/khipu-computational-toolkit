@@ -11,7 +11,22 @@
 
 This standalone toolkit provides computational infrastructure for exploring Inka khipu structure, numeric patterns, color distributions, and hierarchical relationships. It analyzes data from the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) and focuses on **computational hypothesis-testing tools for khipu analysis** using rigorous, falsifiable methods.
 
-> **🆕 KFG Integration:** This toolkit is being extended to support the [Khipu Field Guide](https://khipufieldguide.com) dataset, which provides more modern and accurate data (709 khipus vs 612 in OKR). See [docs/KFG_QUICK_REFERENCE.md](docs/KFG_QUICK_REFERENCE.md) for details on this integration effort.
+> **🆕 KFG Integration:** This toolkit is being extended to support the [Khipu Field Guide](https://khipufieldguide.com) dataset, which provides more modern and accurate data (709 khipus vs 612 in OKR). See [docs/kfg/KFG_QUICK_REFERENCE.md](docs/kfg/KFG_QUICK_REFERENCE.md) for details.
+
+### Quick start — local browser
+
+```bash
+# Build the KFG database (once)
+python scripts/build_kfg_database.py
+
+# Launch the interactive local explorer
+streamlit run scripts/browse.py
+```
+
+Three views are available: **Corpus Browser** (filterable table of all 709 khipus), **3D Viewer** (interactive Plotly cord structure), and **X-Ray View** (cord color grid by group, summation arcs coming soon).  
+A hosted version runs on Azure Container Apps — see `app/` for the React + FastAPI cloud build.
+
+---
 
 **This is not a "decipherment" project.** Rather, it provides computational infrastructure to help scholars test hypotheses transparently, quantify uncertainty, and surface structural patterns that may inform future interpretive work. All computational results require expert validation and should be understood as exploratory findings, not definitive conclusions.
 
