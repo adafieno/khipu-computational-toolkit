@@ -168,4 +168,42 @@ python scripts/corpus_statistics.py --db path/to/other.db --report  # any corpus
 
 ---
 
+## Citations and Acknowledgments
+
+### Primary Data Source
+
+This report analyzes the **Khipu Field Guide (KFG)** database, the world's most accurate and largest digital database of Inka khipus.
+
+> Khosla, Ashok. *The Khipu Field Guide*. [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
+
+The KFG was created and is edited by **Ashok Khosla**. Substantial database curation and correction work was contributed by **Karen Thompson** (Senior Research Data Specialist, University of Melbourne), along with KFG affiliates **Manuel Medrano** (Harvard University), **Kylie Quave** (George Washington University), **Mack FitzPatrick** (Harvard University), **Saoirse Byrne**, and **Andrés Chirinos**. Per Ashok Khosla: "Karen Thompson and I both have invested at least 3 or 4 person-years of effort in improving and correcting the database."
+
+### Numeric Decoding Methodology
+
+The positional notation system used to decode cord values from knot type and position was established by:
+
+> Ascher, Marcia and Robert Ascher. *Mathematics of the Incas: Code of the Quipu*. Dover Publications, 1997. (Reprint of the 1981 edition.)
+
+> Ascher, Marcia and Robert Ascher. "Code of the Quipu: Databook." Cornell University, 1978.
+
+### Published KFG Research
+
+The primary publication applying data science methodology to KFG khipu data:
+
+> Khosla, Ashok and Manuel Medrano. "How Can Data Science Contribute to Understanding the Khipu Code?" *Latin American Antiquity*, 2023.
+
+Karen Thompson's work on KFG Ascher khipus (including the relationship between KH0082 and KH0083) has been published in *Nawpa Pacha* (Journal of Andean Archaeology).
+
+### Historical Reference Corpus
+
+Cross-corpus comparison figures in this report use the **Open Khipu Repository (OKR)** as a historical baseline. The OKR is the earlier community-maintained dataset that preceded the KFG. Per the KFG team, the KFG is now the authoritative source for computational khipu research.
+
+> Open Khipu Repository. Harvard Dataverse. (Historical reference only — superseded by the KFG.)
+
+### About This Toolkit
+
+The Khipu Computational Analysis Toolkit (KCAT) is an independent computational companion to the KFG, providing reproducible Python scripts for corpus-scale methods research. It does not modify or redistribute the underlying KFG data. If you use these analyses, please cite the KFG primary source and the Ascher & Ascher reference for the decoding methodology.
+
+---
+
 *Report generated automatically by `scripts/corpus_statistics.py`. Re-run to refresh with the latest database state.*

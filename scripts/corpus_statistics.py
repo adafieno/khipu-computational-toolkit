@@ -14,6 +14,12 @@ Usage:
 Output:
     Console summary (always)
     reports/phase1_corpus_foundation.md  (with --report flag)
+
+Data Attribution:
+    Primary data source: The Khipu Field Guide (KFG) — Ashok Khosla et al.
+    https://khipufieldguide.com
+    Numeric decoding: Ascher & Ascher (1978, 1981 / 1997 Dover reprint)
+    Published KFG research: Khosla & Medrano, Latin American Antiquity (2023)
 """
 
 import argparse
