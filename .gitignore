@@ -65,3 +65,7 @@ query_colors.py
 data/kfg/
 docs/MIT_FEEDBACK_AND_CORRECTIONS.md
 scripts/investigate_kfg_format.py
+
+# Cloud app lives in its own private repo (khipu-explorer)
+app/
+.github/workflows/deploy-azure.yml
