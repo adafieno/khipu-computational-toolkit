@@ -448,6 +448,13 @@ def load_analytics_data() -> pd.DataFrame:
         result = result.merge(f, on="kfg_id", how="outer")
     pat_cols = [k for k, *_ in PATTERN_CONFIG if k in result.columns]
     result[pat_cols] = result[pat_cols].fillna(False)
+
+    # Ensure every khipu in the DB corpus is represented (7 khipus have no CSV
+    # entries at all; they should appear as all-False rather than being absent).
+    all_ids = load_corpus()[["kfg_id"]]
+    result = all_ids.merge(result, on="kfg_id", how="left")
+    result[pat_cols] = result[pat_cols].fillna(False)
+
     return result.reset_index(drop=True)
 
 
@@ -481,7 +488,8 @@ def load_full_analytics() -> pd.DataFrame:
         return pd.DataFrame()
 
     corp = load_corpus()[["kfg_id", "provenance", "region"]]
-    result = result.merge(corp, on="kfg_id", how="left")
+    # Use right-join so all 709 DB khipus appear; the 7 with no CSV data get NaN numerics.
+    result = result.merge(corp, on="kfg_id", how="right")
     # outer-merging multiple CSVs can introduce duplicates; keep first occurrence
     result = result.drop_duplicates(subset=["kfg_id"]).reset_index(drop=True)
     return result
