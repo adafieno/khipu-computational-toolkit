@@ -1120,17 +1120,30 @@ def main() -> None:
             c3, c4 = st.columns(2)
             with c3:
                 st.subheader("Instance-Count Distribution")
-                st.caption(
-                    "Box plots of *how many* summation instances a khipu has "
-                    "(positive cases only). Outliers shown individually."
-                )
+                st.caption("Box plots of *how many* summation instances each khipu has (positive cases only).")
+                with st.expander("ℹ️ How to read this chart", expanded=False):
+                    st.markdown(
+                        "Each box covers the **interquartile range** (25th–75th percentile) of instance counts "
+                        "across all khipus that have at least one of that pattern.  \n"
+                        "The line inside the box = median; whiskers extend to 1.5× IQR.  \n"
+                        "Dots beyond the whiskers = outlier khipus with unusually many instances.  \n\n"
+                        "A tall box means high variability — some khipus use that pattern extensively, "
+                        "others only sparingly."
+                    )
                 st.plotly_chart(build_count_dist_figure(full_df), width="stretch")
             with c4:
                 st.subheader("Sum Magnitude Distribution")
-                st.caption(
-                    "Box plots of the mean cord-value sum per khipu, "
-                    "for patterns that report numeric magnitudes."
-                )
+                st.caption("Box plots of the mean cord-value sum per khipu, for patterns that report numeric magnitudes.")
+                with st.expander("ℹ️ How to read this chart", expanded=False):
+                    st.markdown(
+                        "For each khipu that has a given pattern, the **mean sum value** is computed as the "
+                        "average of all individual cord sums attributed to that pattern.  \n"
+                        "Box layout is the same as the Instance-Count chart: IQR box, median line, "
+                        "1.5× IQR whiskers, individual outlier dots.  \n\n"
+                        "High magnitudes for IP or CP can indicate that those patterns were used to "
+                        "aggregate large commodity totals, while low-magnitude patterns may represent "
+                        "fine-grained sub-unit accounting."
+                    )
                 st.plotly_chart(build_magnitude_figure(full_df), width="stretch")
 
             st.divider()
