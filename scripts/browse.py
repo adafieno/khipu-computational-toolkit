@@ -205,11 +205,13 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
     if df.empty:
         return None
 
-    SPACING   = 1.4   # horizontal gap between pendants
-    SUB_X_OFF = 0.4   # x offset for each subsidiary level
+    # hierarchy_level: 0 = pendant, 1 = first sub, 2 = second sub, …
+    GROUP_SPACING = 10.0   # x-gap between groups
+    PEND_SPACING  = 1.6    # x-gap between pendants within a group
+    SUB_X_OFF     = 0.5    # x-offset per subsidiary level
 
-    pendants = df[df["hierarchy_level"] == 1].reset_index(drop=True)
-    subs     = df[df["hierarchy_level"] > 1].sort_values("hierarchy_level").reset_index(drop=True)
+    pendants = df[df["hierarchy_level"] == 0].reset_index(drop=True)
+    subs     = df[df["hierarchy_level"] > 0].sort_values("hierarchy_level").reset_index(drop=True)
 
     # position lookup: cord_name → (x, y, z)
     pos: dict[str, tuple[float, float, float]] = {}
@@ -218,8 +220,11 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
     edge_x, edge_y, edge_z = [], [], []
 
     # Pendants hang vertically from the primary cord (y=0 plane)
+    # x = group_idx * GROUP_SPACING + position_in_group * PEND_SPACING
     for i, row in pendants.iterrows():
-        x = float(row["position"] or i) * SPACING
+        g = float(row["group_idx"]) if pd.notna(row["group_idx"]) else float(i)
+        p = float(row["position_in_group"]) if pd.notna(row["position_in_group"]) else 0.0
+        x = g * GROUP_SPACING + p * PEND_SPACING
         z = float(row["length"] or 10.0) * 0.3
         xs.append(x); ys.append(0.0); zs.append(z)
         colors.append(color_to_hex(str(row["color"] or "")))
@@ -240,7 +245,7 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
         if parent_name not in pos:
             continue
         px, py, pz = pos[parent_name]
-        depth = float(row["hierarchy_level"] - 1)
+        depth = float(row["hierarchy_level"])   # level 1 = first sub
         sx = px + SUB_X_OFF * depth
         sy = py + depth * 0.5
         sz = pz - float(row["length"] or 5.0) * 0.1
@@ -308,7 +313,8 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
 
 def build_xray_figure(cords_df: pd.DataFrame) -> go.Figure:
     """Flat 2D color grid: one square per pendant, grouped by group_idx."""
-    pendants = cords_df[cords_df["hierarchy_level"] == 1].copy()
+    # hierarchy_level 0 = pendant; fall back to all cords if no level-0 rows
+    pendants = cords_df[cords_df["hierarchy_level"] == 0].copy()
     if pendants.empty:
         pendants = cords_df.copy()
 
@@ -772,8 +778,8 @@ def main() -> None:
             st.warning("No cord data found for this khipu.")
             return
 
-        pendants    = cords_df[cords_df["hierarchy_level"] == 1]
-        subs        = cords_df[cords_df["hierarchy_level"] > 1]
+        pendants    = cords_df[cords_df["hierarchy_level"] == 0]
+        subs        = cords_df[cords_df["hierarchy_level"] > 0]
         n_groups    = cords_df["group_idx"].nunique()
         valued      = cords_df[pd.to_numeric(cords_df["value"], errors="coerce").notna()]
 
