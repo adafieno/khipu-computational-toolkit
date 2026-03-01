@@ -1105,12 +1105,15 @@ def main() -> None:
         # ── Tab 2: Deep Dive ───────────────────────────────────────────────────
         with tab2:
             st.subheader("Handedness (Left vs Right Sums)")
-            st.caption(
-                "For cord-level patterns only (PP · IP · CP · SP · IS). "
-                "**Left (←)** = summands lie to the left of the sum cord along the primary cord. "
-                "**Right (→)** = summands lie to the right. "
-                "Imbalance can indicate a preferred reading direction within a khipu tradition."
-            )
+            st.caption("Total left- vs right-oriented summation instances across the corpus (cord-level patterns: PP · IP · CP · SP · IS).")
+            with st.expander("ℹ️ How to read this chart", expanded=False):
+                st.markdown(
+                    "**Left (←)** — the summand cords lie to the *left* of the sum cord along the primary cord.  \n"
+                    "**Right (→)** — the summand cords lie to the *right*.  \n\n"
+                    "Handedness reflects the direction in which the scribe accumulated the running total. "
+                    "A strong imbalance toward one side may indicate a preferred reading convention "
+                    "within a khipu tradition or find-site group."
+                )
             st.plotly_chart(build_handedness_figure(full_df), width="stretch")
 
             st.divider()
@@ -1132,30 +1135,31 @@ def main() -> None:
 
             st.divider()
             st.subheader("Dual- & Multi-Summand Breakdown")
-            st.caption(
-                "PP, IP, and CP cord instances split by summation complexity:"
-            )
-            st.markdown(
-                "- **Regular** — sum cord = A + B (the standard two-summand form)  \n"
-                "- **Dual-summand** — the same cord independently participates in *two* separate summation relationships  \n"
-                "- **Multi-summand** — sum cord = A + B + C + … (three or more addends)"
-            )
+            st.caption("PP, IP, and CP cord instances split by summation complexity.")
+            with st.expander("ℹ️ Summation complexity types", expanded=False):
+                st.markdown(
+                    "**Regular** — sum cord = A + B (the standard, most common form).  \n"
+                    "**Dual-summand** — the same cord independently participates in *two* separate summation relationships.  \n"
+                    "**Multi-summand** — sum cord = A + B + C + … (three or more addends).  \n\n"
+                    "Dual- and multi-summand instances suggest a cord was used as a pivot point "
+                    "in overlapping accounting structures."
+                )
             st.plotly_chart(build_dual_multi_figure(full_df), width="stretch")
 
         # ── Tab 3: Geography ───────────────────────────────────────────────────
         with tab3:
             st.subheader("Pattern Rate by Provenance")
-            st.caption(
-                "Percentage of khipus from each provenance (top 25 by count) "
-                "that exhibit each summation pattern. "
-                "Darker cell = higher rate. Cell label shows percentage and sample size (n=…)."
-            )
-            st.info(
-                "💡 Each column is a pattern code (PP, IP, CP…); each row is a find site. "
-                "A dark cell means khipus from that site disproportionately use that pattern, "
-                "which may indicate regional accounting conventions.",
-                icon=None,
-            )
+            st.caption("Percentage of khipus from each provenance (top 25 by count) that exhibit each summation pattern.")
+            with st.expander("ℹ️ How to read this heatmap", expanded=False):
+                st.markdown(
+                    "**Columns** = pattern codes (PP, IP, CP, SP, IS, GG, GSB, ADG, PSN).  \n"
+                    "**Rows** = archaeological find sites, sorted by total khipu count.  \n"
+                    "**Cell colour** — darker = higher rate; lighter = lower or absent.  \n"
+                    "**Cell label** — shows the percentage and sample size (n=…) for that site.  \n\n"
+                    "A consistently dark column across many sites indicates a corpus-wide pattern; "
+                    "a dark cell in just one row suggests a pattern that may be regionally specific "
+                    "or linked to a particular administrative tradition."
+                )
             st.plotly_chart(build_geo_heatmap(full_df, flags_df), width="stretch")
 
         # ── Tab 4: Pattern Space ───────────────────────────────────────────────
