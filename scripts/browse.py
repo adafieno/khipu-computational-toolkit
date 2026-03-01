@@ -524,12 +524,19 @@ def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
     mat  = flags_df[pat_cols].astype(int).values
     cooc = mat.T @ mat
 
+    # Per-cell text colour: dark text on light cells, light text on dark cells.
+    threshold  = cooc.max() * 0.45
+    text_colors = [
+        ["#0f172a" if v < threshold else "#e2e8f0" for v in row]
+        for row in cooc
+    ]
+
     fig = go.Figure(go.Heatmap(
         z=cooc, x=labels, y=labels,
         colorscale="Blues",
         text=cooc,
         texttemplate="%{text}",
-        textfont=dict(size=11, color="#e2e8f0"),
+        textfont=dict(size=11, color=text_colors),
         hovertemplate="%{y} ∩ %{x}: %{z}<extra></extra>",
         showscale=True,
     ))
@@ -773,12 +780,21 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
         text_vals.append(row_t)
 
     col_labels = [short[k] for k in available]
+
+    # Per-cell text colour: dark on light cells, light on dark cells.
+    max_z = max(v for row in z_vals for v in row) or 1
+    threshold = max_z * 0.45
+    text_colors = [
+        ["#0f172a" if v < threshold else "#f8fafc" for v in row]
+        for row in z_vals
+    ]
+
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
         colorscale="YlOrRd",
         text=text_vals,
         texttemplate="%{text}",
-        textfont=dict(size=9),
+        textfont=dict(size=9, color=text_colors),
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
         showscale=True,
         colorbar=dict(title="%", ticksuffix="%"),
