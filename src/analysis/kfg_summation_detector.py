@@ -150,10 +150,14 @@ class KFGSummationDetector:
                       exclude_idx: int,
                       prefix: List[int],
                       n: int,
-                      values: Optional[List[int]] = None) -> List[Tuple[int, int]]:
+                      values: Optional[List[int]] = None,
+                      min_window: int = 2) -> List[Tuple[int, int]]:
         """
         All [l, r] (inclusive) contiguous windows NOT containing exclude_idx
-        that sum exactly to target.
+        that sum exactly to target, with at least min_window elements.
+
+        min_window defaults to 2: a "sum" of a single element is not a
+        summation pattern — it is just two equal values coinciding.
 
         The two-pointer finds the leftmost window per r-position.  Because
         leading zero-value cords may be captured, each raw window is also
@@ -170,7 +174,7 @@ class KFGSummationDetector:
             for r in range(lo, hi):
                 while l <= r and (prefix[r + 1] - prefix[l]) > target:
                     l += 1
-                if (prefix[r + 1] - prefix[l]) == target:
+                if (prefix[r + 1] - prefix[l]) == target and r - l + 1 >= min_window:
                     raw.append((l, r))
 
         scan(0, exclude_idx)
@@ -188,7 +192,7 @@ class KFGSummationDetector:
                 tl += 1
             while tr > tl and values[tr] == 0:
                 tr -= 1
-            if (tl, tr) not in seen:
+            if (tl, tr) not in seen and tr - tl + 1 >= min_window:
                 seen.add((tl, tr))
                 results.append((tl, tr))
         return results
@@ -239,15 +243,23 @@ class KFGSummationDetector:
         """
         Sliding window on the group-ordered flat pendant sequence.
 
-        For each pendant with value V > 0, finds every contiguous run of
-        OTHER pendants whose values sum to V (within tolerance).
-        Confirmed: every relationship in the KFG ground truth is a contiguous
-        window in this ordering.
+        For each pendant with value V >= 11, finds every contiguous run of
+        OTHER pendants whose values sum to V.  Zero-value cords between non-zero
+        summands do not break contiguity (per KFG documentation).
+
+        KFG criteria (from pendant_pendant_sum.html#search-criteria):
+          - sum cord value must be >= 11
+          - at least 2 non-zero summand cords required (min_window=2)
+          - 0-value cords in the physical span are allowed (contiguity is not
+            broken by zeros); the '3 cords' phrasing in the doc refers to the
+            physical span including zeros, confirmed by KFG ground truth
+          - exact numerical match required
+          - maximum window span = 250
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = self._pendants(cords)
-        if len(flat) < 2:
+        if len(flat) < 3:  # need at least 2 summands + 1 sum cord
             return []
 
         values = [c.value if c.value is not None else 0 for c in flat]
@@ -256,9 +268,9 @@ class KFGSummationDetector:
         matches = []
 
         for i, cord in enumerate(flat):
-            if cord.value is None or cord.value <= 0:
+            if cord.value is None or cord.value < 11:
                 continue
-            for l, r in self._find_windows(cord.value, i, prefix, n, values):
+            for l, r in self._find_windows(cord.value, i, prefix, n, values, min_window=2):
                 summands = flat[l:r + 1]
                 actual = sum(s.value or 0 for s in summands)
                 matches.append(SummationMatch(
@@ -299,13 +311,13 @@ class KFGSummationDetector:
 
         matches = []
         for color, group in by_color.items():
-            if len(group) < 2:
+            if len(group) < 3:  # need ≥2 summands + 1 sum cord
                 continue
             values = [c.value for c in group]
             prefix = self._prefix_sums(values)
             n = len(group)
             for i, cord in enumerate(group):
-                if cord.value is None or cord.value <= 0:
+                if cord.value is None or cord.value < 11:
                     continue
                 # (a) cord = sum of ALL others in color group
                 rest = sum(c.value for c in group) - cord.value
@@ -313,6 +325,11 @@ class KFGSummationDetector:
                     # GT skips zero-value summands
                     summands = [c for c in group
                                 if c.cord_id != cord.cord_id and (c.value or 0) != 0]
+                    # KFG criteria: cord value > number of summands, summands span >= 2 groups
+                    if cord.value <= len(summands):
+                        continue
+                    if len(set(c.group_idx for c in summands)) < 2:
+                        continue
                     matches.append(SummationMatch(
                         pattern_type='colored_pendant_sum',
                         sum_cord=cord,
@@ -328,6 +345,11 @@ class KFGSummationDetector:
                     # GT skips zero-value summands
                     summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
                     actual = sum(s.value for s in summands)
+                    # KFG criteria: cord value > number of summands, summands span >= 2 groups
+                    if cord.value <= len(summands):
+                        continue
+                    if len(set(c.group_idx for c in summands)) < 2:
+                        continue
                     matches.append(SummationMatch(
                         pattern_type='colored_pendant_sum',
                         sum_cord=cord,
@@ -352,6 +374,13 @@ class KFGSummationDetector:
 
         GT summand_string never lists zero-value cords, so zero-value cords
         are filtered from returned summand_cords.
+
+        KFG criteria (from indexed_pendant_sum.html#search-criteria):
+          - sum cord value must be >= 5
+          - exclude multiples of 10 when cord value < 100 (trivial round sums)
+          - exclude multiples of 100 when cord value < 1000
+          - at least 2 summands required (no identity matches)
+          - summands must be in contiguous groups
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
@@ -363,15 +392,21 @@ class KFGSummationDetector:
 
         matches = []
         for pos, group in by_pos.items():
-            if len(group) < 2:
+            if len(group) < 3:  # need ≥2 summands + 1 sum cord
                 continue
             values = [c.value for c in group]
             prefix = self._prefix_sums(values)
             n = len(group)
             for i, cord in enumerate(group):
-                if cord.value is None or cord.value <= 0:
+                v = cord.value
+                if v is None or v < 5:
                     continue
-                for l, r in self._find_windows(cord.value, i, prefix, n, values):
+                # KFG: exclude round-number trivial sums
+                if v < 100 and v % 10 == 0:
+                    continue
+                if v < 1000 and v % 100 == 0:
+                    continue
+                for l, r in self._find_windows(v, i, prefix, n, values):
                     # GT skips zero-value summands
                     summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
                     actual = sum(s.value for s in summands)
@@ -379,7 +414,7 @@ class KFGSummationDetector:
                         pattern_type='indexed_pendant_sum',
                         sum_cord=cord,
                         summand_cords=summands,
-                        expected_sum=cord.value,
+                        expected_sum=v,
                         actual_sum=actual,
                         matches=True,
                         notes=f'pos={pos} window[{l}-{r}]'
@@ -397,8 +432,13 @@ class KFGSummationDetector:
         A subsidiary cord's value = sum of a contiguous window of top-level
         pendants in the flat group-ordered sequence.
 
-        KFG ground truth pattern: the subsidiary encodes a cross-group sum --
-        its value equals a sliding-window run of pendant values.
+        KFG criteria (from subsidiary_pendant_sum.html#search-criteria):
+          - subsidiary (sum) cord value must be >= 5
+          - summand pendant cords must be contiguous (zeros allowed between)
+          - maximum window span = 250
+          - multiples of 10 when subsidiary value < 100 are excluded
+          - when multiple windows match, shortest is chosen
+          - exact numerical match required
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
@@ -413,10 +453,19 @@ class KFGSummationDetector:
         matches = []
 
         for sub in subs:
-            if sub.value is None or sub.value <= 0:
+            if sub.value is None or sub.value < 5:
+                continue
+            # KFG: exclude multiples of 10 when subsidiary value < 100
+            v = sub.value
+            if v < 100 and v % 10 == 0:
                 continue
             # Use n as exclude_idx (no exclusion) to scan entire pendant sequence
-            for l, r in self._find_windows(sub.value, n, prefix, n, values):
+            windows = self._find_windows(v, n, prefix, n, values)
+            if not windows:
+                continue
+            # When multiple windows match, choose shortest
+            windows.sort(key=lambda w: w[1] - w[0])
+            for l, r in windows:
                 # GT skips zero-value summands
                 summands = [c for c in pendants[l:r + 1] if (c.value or 0) != 0]
                 actual = sum(s.value or 0 for s in summands)
@@ -642,8 +691,15 @@ class KFGSummationDetector:
                                cords: Optional[List[Cord]] = None,
                                tolerance: int = 0) -> List[SummationMatch]:
         """
-        (a) Total of group A == total of group B.
-        (b) A single cord == sum of a contiguous range of group totals.
+        Total of all cords in group A (including subsidiaries) equals total
+        of all cords in group B.
+
+        KFG criteria (from group_group_sum.html#search-criteria):
+          - group sum must be >= 21 (threshold raised from 11 to suppress
+            accidental matches in the 11-20 range)
+          - group sum must NOT be divisible by 10, OR must be >= 100
+          - top cords are excluded (to avoid overlap with sum_top_cord fieldmarks)
+          - subsidiaries ARE included in each group's total
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
@@ -681,62 +737,100 @@ class KFGSummationDetector:
             if parent_grp is not None:
                 group_totals_subs[parent_grp] += c.value
 
-        def _run_strategy(group_totals):
-            """Find equal-group pairs and range sums for a given total map."""
-            groups = sorted(group_totals)
-            totals = [group_totals[g] for g in groups]
-            prefix = self._prefix_sums(totals)
-            ng = len(groups)
-            out = []
-            seen_eq: set = set()
-
-            # (a) pairwise equal group totals
-            for i, gi in enumerate(groups):
-                for j, gj in enumerate(groups):
-                    if j <= i or totals[i] <= 0:
-                        continue
-                    if abs(totals[i] - totals[j]) <= tolerance:
-                        key = (min(gi, gj), max(gi, gj))
-                        if key not in seen_eq:
-                            seen_eq.add(key)
-                            out.append(SummationMatch(
-                                pattern_type='group_group_sum',
-                                sum_cord=group_members[gi][0],
-                                summand_cords=group_members[gj],
-                                expected_sum=totals[i],
-                                actual_sum=totals[j],
-                                matches=True,
-                                notes=f'grp{gi}==grp{gj}'
-                            ))
-
-            # (b) single cord = contiguous group-range sum
-            for g_i, gi in enumerate(groups):
-                for cord in group_members[gi]:
-                    if cord.value is None or cord.value <= 0:
-                        continue
-                    for l, r in self._find_windows(cord.value, g_i, prefix, ng, totals):
-                        summands = [c for k in range(l, r + 1)
-                                    for c in group_members[groups[k]]]
-                        out.append(SummationMatch(
-                            pattern_type='group_group_sum',
-                            sum_cord=cord,
-                            summand_cords=summands,
-                            expected_sum=cord.value,
-                            actual_sum=sum(s.value for s in summands),
-                            matches=True,
-                            notes=f'{cord.cord_name}=grps[{groups[l]}-{groups[r]}]'
-                        ))
-            return out
-
-        # Union both strategies (deduplicate by (sum_cord, frozenset(summands)))
-        seen_matches: set = set()
+        # KFG definition: pairwise equal group totals only (subsidiaries included).
+        # "Part (b)" range-sums are not in the KFG definition and inflate FPs.
+        groups = sorted(group_totals_subs)
+        totals = [group_totals_subs[g] for g in groups]
+        seen_eq: set = set()
         matches = []
-        for m in _run_strategy(group_totals_pend) + _run_strategy(group_totals_subs):
-            key = (m.sum_cord.cord_name, m.expected_sum,
-                   frozenset(s.cord_name for s in m.summand_cords))
-            if key not in seen_matches:
-                seen_matches.add(key)
-                matches.append(m)
+
+        for i, gi in enumerate(groups):
+            for j, gj in enumerate(groups):
+                if j <= i or totals[i] <= 0:
+                    continue
+                # KFG: group sum must be >= 21
+                if totals[i] < 21:
+                    continue
+                # KFG: not divisible by 10 unless >= 100
+                if totals[i] % 10 == 0 and totals[i] < 100:
+                    continue
+                if abs(totals[i] - totals[j]) <= tolerance:
+                    key = (min(gi, gj), max(gi, gj))
+                    if key not in seen_eq:
+                        seen_eq.add(key)
+                        matches.append(SummationMatch(
+                            pattern_type='group_group_sum',
+                            sum_cord=group_members[gi][0],
+                            summand_cords=group_members[gj],
+                            expected_sum=totals[i],
+                            actual_sum=totals[j],
+                            matches=True,
+                            notes=f'grp{gi}==grp{gj}'
+                        ))
+        return matches
+
+    # ------------------------------------------------------------------
+    # Pattern 7: group_sum_bands
+    # ------------------------------------------------------------------
+
+    def detect_group_sum_bands(self, kfg_id: str,
+                               cords: Optional[List[Cord]] = None,
+                               tolerance: int = 0) -> List[SummationMatch]:
+        """
+        Groups whose left-half sum equals their right-half sum at some split.
+
+        KFG criteria (from group_sum_bands.html#search-criteria):
+          - group total sum must be >= 5
+          - groups where only one distinct value is repeated are excluded
+          - left or right band of 1 cord is excluded (those are pendant-pendant
+            sum relationships)
+          - any split index where left_sum == right_sum is accepted
+        """
+        if cords is None:
+            cords = self._load_all_cords(kfg_id)
+        flat = [c for c in self._pendants(cords) if c.value is not None]
+        if not flat:
+            return []
+
+        # Group pendants by group_idx (top-level pendants only)
+        by_group: Dict[int, List[Cord]] = defaultdict(list)
+        for c in flat:
+            if c.group_idx is not None:
+                by_group[c.group_idx].append(c)
+
+        matches = []
+        for gidx, members in sorted(by_group.items()):
+            if len(members) < 4:  # need >= 2 cords each side
+                continue
+            ordered = sorted(members, key=lambda c: c.position_in_group)
+            vals = [c.value for c in ordered]
+            total = sum(vals)
+
+            # KFG: group total >= 5
+            if total < 5:
+                continue
+            # KFG: skip groups where only one distinct non-zero value is repeated
+            non_zero_vals = [v for v in vals if v != 0]
+            if len(set(non_zero_vals)) <= 1 and len(non_zero_vals) > 0:
+                continue
+
+            # Try every split k: left=ordered[0:k], right=ordered[k:n]
+            n = len(ordered)
+            for k in range(2, n - 1):  # left >= 2, right >= 2
+                left_sum = sum(vals[:k])
+                right_sum = sum(vals[k:])
+                if abs(left_sum - right_sum) <= tolerance and left_sum > 0:
+                    # Use first cord of left band as sum_cord, right band as summands
+                    matches.append(SummationMatch(
+                        pattern_type='group_sum_bands',
+                        sum_cord=ordered[0],
+                        summand_cords=ordered,
+                        expected_sum=left_sum,
+                        actual_sum=right_sum,
+                        matches=True,
+                        notes=f'grp{gidx} split@{k} left={left_sum} right={right_sum}'
+                    ))
+                    break  # one match per group is enough
         return matches
 
     # ------------------------------------------------------------------
@@ -811,15 +905,14 @@ class KFGSummationDetector:
                             tolerance: int = 0) -> Dict[str, List[SummationMatch]]:
         """Run every detector and return results keyed by pattern type."""
         cords = self._load_all_cords(kfg_id)
-        gg = self.detect_group_group_sum(kfg_id, cords, tolerance)
         return {
             'pendant_pendant_sum':     self.detect_pendant_pendant_sum(kfg_id, cords, tolerance),
             'colored_pendant_sum':     self.detect_colored_pendant_sum(kfg_id, cords, tolerance),
             'indexed_pendant_sum':     self.detect_indexed_pendant_sum(kfg_id, cords, tolerance),
             'subsidiary_pendant_sum':  self.detect_subsidiary_pendant_sum(kfg_id, cords, tolerance),
             'indexed_subsidiary_sum':  self.detect_indexed_subsidiary_sum(kfg_id, cords, tolerance),
-            'group_group_sum':         gg,
-            'group_sum_bands':         gg,   # same structural logic
+            'group_group_sum':         self.detect_group_group_sum(kfg_id, cords, tolerance),
+            'group_sum_bands':         self.detect_group_sum_bands(kfg_id, cords, tolerance),
             'ascher_decreasing_group': self.detect_ascher_decreasing_group(kfg_id, cords),
             'pendant_sub_neighbor':    self.detect_pendant_sub_neighbor(kfg_id, cords, tolerance),
         }

@@ -1,8 +1,9 @@
 # Phase 2: Summation Patterns
 
-**Generated:** 2026-02-28  
+**Generated:** 2026-02-28 (revised 2026-03-02, detector v2, reconciliation v3)  
 **Database:** KCAT SQLite database (built from KFG source data)  
-**Detector:** `src/analysis/kfg_summation_detector.py`  
+**Detector:** `src/analysis/kfg_summation_detector.py` (v2 — criteria verified against KFG documentation)  
+**Reconciliation:** v3 — ground truth loaded from `data/kfg/KFG/KFG/checks/*.csv`, not scraped from fieldmarks page  
 **Status:** ✅ Complete
 
 ---
@@ -51,21 +52,28 @@ The OKR-era detector (`scripts/test_value_computation.py`) implemented three of 
 
 ## Cross-Corpus Comparison
 
-| Metric | OKR (reference) | KCAT (this run) |
-|--------|----------------|----------------|
-| Khipus tested | 619 | 709 |
-| With any summation pattern | 430 (69.5%) | 643 (90.7%) |
-| Without any pattern | 189 (30.5%) | 66 (9.3%) |
-| Contiguous / pendant–pendant | 377 (60.9%) | 601 (84.8%) |
-| Group totals / group–group | 331 (53.5%) | 360 (50.8%) |
-| Both types combined | 278 (44.9%) | — |
-| Hierarchical (OKR) / indexed (KCAT) | 0% ⚠️ bug | 440 (62.1%) |
+| Metric | OKR (reference) | KCAT v1 (2026-02-28) | KCAT v2 (2026-03-01) | KCAT v3 (2026-03-02) |
+|--------|----------------|---------------------|---------------------|---------------------|
+| Khipus tested | 619 | 702 (KFG overlap) | 702 (KFG overlap) | 703 (KFG checks) |
+| With any summation pattern | 430 (69.5%) | 636 (90.6%) | 551 (78.5%) | 573 (81.5%) |
+| Without any pattern | 189 (30.5%) | 66 (9.4%) | 151 (21.5%) | 130 (18.5%) |
+| Agreement with KFG ground truth | — | ~78.9%† | ~86.5%† | **87.8%** |
+
+†v1 and v2 compared against HTML-scraped fieldmarks page; column order was incorrect (see reconciliation section).
 
 *OKR reference figures from KCAT Phase 3 (summation testing) report, January 2026.*
 
-The increase from 69.5% to 90.7% is partly explained by the expanded detector vocabulary: the OKR detector covered 2–3 pattern types while the KCAT detector covers 8, so khipus that carry only the less common pattern types were not detectable by the OKR tool.
+**Reconciliation v3 note:** The v1 and v2 reconciliations compared against the KFG Ascher Sum Browser HTML table at `khipufieldguide.com/fieldmarks`. Investigation revealed that the HTML table columns are in the order **PP, IP, CP, SP, GSB, GG, ADG** — differing from the analysis-page narrative order (PP, CP, IP, SP, GG, IS, PSN). This caused columns CP⟷IP and GG⟷IS to be swapped in v1/v2. Additionally, `indexed_subsidiary_sum` and `pendant_sub_neighbor` are not displayed on that page at all; the 7th column is `ascher_decreasing_group`. The v3 reconciliation uses the authoritative `data/kfg/KFG/KFG/checks/*.csv` files instead, yielding unambiguous ground truth for all 9 patterns.
 
-The KFG Ascher Sum Browser (khipufieldguide.com/fieldmarks) publishes per-khipu summation fieldmark counts for 702 khipus and shows a "has summation" rate of 69.5% (488/702) — see Reconciliation section below.
+The v2 detector applies KFG-documented criteria learned from a full read of the KFG source documentation (all pattern pages on khipufieldguide.com). The main improvements are:
+
+- **pendant_pendant_sum**: minimum 2 summands (docs confirmed the "3 cords" phrasing refers to physical span including zeros, not 3 non-zero summands)
+- **subsidiary_pendant_sum**: subsidiary value ≥ 5, multiples of 10 < 100 excluded  
+- **group_group_sum**: sum threshold raised to ≥ 21, not-divisible-by-10 (unless ≥ 100) filter added, part-(b) range sums removed (not in KFG definition), all-subsidiary totals used
+- **group_sum_bands**: implemented as a real split-band detector (left half sum = right half sum); previously aliased to group_group_sum  
+- **pendant_sub_neighbor**: KFG significance threshold of > 1 occurrence applied (single occurrence is not considered significant by KFG authors)
+
+The KFG Ascher Sum Browser (khipufieldguide.com/fieldmarks) shows 69.5% (488/702). The v2 KCAT detector at 78.5% is much closer to this ground truth than the v1 at 90.6%.
 
 ---
 
@@ -111,51 +119,69 @@ The majority of summation-carrying khipus (357 of 643, 55.5%) show 4 or more dis
 
 ---
 
-## Reconciliation Against KFG Fieldmarks
+## Reconciliation Against KFG Ground Truth (v3)
 
-The KFG Ascher Sum Browser (khipufieldguide.com/fieldmarks) publishes per-khipu counts for 7 Ascher fieldmarks (4 pendant sums + 3 group relationships). A per-khipu comparison was run on 2026-02-28 using `scripts/reconcile_kfg_fieldmarks.py`, matching the 702 KFG-listed khipus against KCAT detector output.
+The authoritative per-khipu ground truth is in `data/kfg/KFG/KFG/checks/*.csv` — one CSV per pattern type, one row per khipu (703 total), with counts computed by the KFG team. `scripts/reconcile_kfg_fieldmarks.py` (v3, 2026-03-02) loads these CSVs directly and compares against the KCAT v2 detector output.
 
-### Corpus-Level Comparison (702-khipu overlap)
+### Fieldmarks Page Column Order Discovery
 
-| Metric | KFG fieldmarks page | KCAT detector |
-|--------|--------------------|--------------|
-| Khipus evaluated | 702 | 702 |
-| With any summation pattern | 488 (69.5%) | 636 (90.6%) |
-| Without any pattern | 214 (30.5%) | 66 (9.4%) |
+The KFG fieldmarks browser (`khipufieldguide.com/fieldmarks`) displays 7 columns in this actual HTML order, which differs from the analysis-page narrative:
 
-### Per-Khipu Agreement
+| HTML col | Pattern | v1/v2 label |
+|----------|---------|------------|
+| 1 | `pendant_pendant_sum` (num_sum_cords) | kfg_pp ✓ |
+| 2 | `indexed_pendant_sum` (num_sum_cords) | kfg_cp ✗ (was CP) |
+| 3 | `colored_pendant_sum` (num_sum_cords) | kfg_ip ✗ (was IP) |
+| 4 | `subsidiary_pendant_sum` (num_sum_cords) | kfg_sp ✓ |
+| 5 | `group_sum_bands` (num_group_sum_bands) | kfg_gg ✗ (was GG) |
+| 6 | `group_group_sum` (num_sum_groups) | kfg_is ✗ (was IS) |
+| 7 | `ascher_decreasing_group` (num_decreasing_groups) | kfg_psn ✗ (was PSN) |
 
-| Verdict | Count |
-|---------|-------|
-| Both positive (KFG ✓, KCAT ✓) | 488 |
-| Both negative (KFG ✗, KCAT ✗) | 66 |
-| KCAT positive, KFG not flagged | 148 |
-| KFG positive, KCAT negative | 0 |
-| Agreement rate | 78.9% (554/702) |
+`indexed_subsidiary_sum` and `pendant_sub_neighbor` are **not on the fieldmarks page**; their v3 ground truth comes from the checks CSVs.
 
-KFG does not flag any khipu that KCAT misses. The 148 cases where KCAT is positive but KFG is not flagged are the primary source of divergence.
+### Corpus-Level Comparison (703-khipu KFG checks)
 
-A structural check on these 148 khipus reveals a size signal: their median cord count is 16, compared to 68 for the 488 khipus both sources agree on. Small khipus at `tolerance = 0` are susceptible to spurious arithmetic coincidences — for example, any three cords with values 1, 2, 3 will pass `pendant_pendant_sum` exactly. KFG fieldmarks represent expert judgment on whether a relationship is structurally meaningful, not merely arithmetically satisfied. The detector does not yet distinguish genuine accounting structure from low-number coincidences.
+| Metric | KFG ground truth | KCAT v2 detector |
+|--------|-----------------|------------------|
+| Khipus evaluated | 703 | 703 |
+| With any summation pattern | 491 (69.8%) | 573 (81.5%) |
+| Without any pattern | 212 (30.2%) | 130 (18.5%) |
 
-Of the 148 discordant khipus: 8 are positive only for `ascher_decreasing_group` (a pattern not present in the KFG 7-fieldmark set); the remaining 140 show at least one of the 7 shared pattern types at exact match, but are not flagged by KFG.
+### Per-Khipu Overall Agreement
 
-### Per-Pattern Agreement (7 Shared Types)
+| Verdict | v3 (correct ground truth) |
+|---------|--------------------------|
+| Both positive (KFG ✓, KCAT ✓) | 491 |
+| Both negative (KFG ✗, KCAT ✗) | 128 |
+| KCAT positive, KFG negative (FP) | 84 |
+| KFG positive, KCAT negative (FN) | 2 |
+| **Agreement rate** | **87.8%** |
 
-| Pattern | KFG flagged | KCAT flagged | Agreement |
-|---------|------------|-------------|----------|
-| `pendant_pendant_sum` | 406 | 595 | 73.1% |
-| `colored_pendant_sum` | 202 | 557 | 49.1% |
-| `indexed_pendant_sum` | 274 | 434 | 68.1% |
-| `subsidiary_pendant_sum` | 145 | 372 | 67.7% |
-| `group_group_sum` | 103 | 354 | 56.6% |
-| `indexed_subsidiary_sum` | 101 | 256 | 64.2% |
-| `pendant_sub_neighbor` | 142 | 222 | 65.5% |
+With correct ground truth, only **2 FNs** (virtually perfect recall) and **84 FPs** (over-detection in IS and SP patterns).
 
-`colored_pendant_sum` shows the largest divergence (KFG: 202, KCAT: 557). This is consistent with DQ Note 3: compound color codes in the KCAT database may cause two cords with only a shared color prefix to be grouped as same-color when they are not. Color code normalization is examined in Phase 3.
+### Per-Pattern Agreement — v2 Detector vs Checks CSV Ground Truth
 
-**The reconciliation indicates that the KCAT 90.7% figure includes detections that KFG expert review does not confirm.** The degree of over-detection attributable to small-khipu coincidences and compound color codes is not yet quantified. Per-pattern figures from this report should be read as detector output, not as validated summation prevalence.
+| Pattern | Sig | KFG+ | KCAT+ | FP | FN | Agreement |
+|---------|-----|------|-------|----|----|-----------|
+| `pendant_pendant_sum` | >=1 | 409 | 473 | 64 | 0 | **90.9%** |
+| `indexed_pendant_sum` | >=1 | 205 | 294 | 89 | 0 | **87.4%** |
+| `colored_pendant_sum` | >=1 | 277 | 274 | 34 | 37 | **89.9%** |
+| `subsidiary_pendant_sum` | >=1 | 148 | 255 | 107 | 0 | **84.8%** |
+| `group_group_sum` | >=1 | 101 | 125 | 41 | 17 | **91.8%** |
+| `group_sum_bands` | >=1 | 106 | 88 | 0 | 18 | **97.4%** |
+| `indexed_subsidiary_sum` | >1 | 30 | 183 | 154 | 1 | 78.0% |
+| `pendant_sub_neighbor` | >1 | 74 | 150 | 76 | 0 | **89.2%** |
+| `ascher_decreasing_group` | >=1 | 142 | 202 | 60 | 0 | **91.5%** |
 
-The source data for this reconciliation is saved at `data/processed/kfg_fieldmarks_reconciliation.csv`.
+**Key observations:**
+
+- **PP, IP, SP, PSN, ADG: 0 false negatives** — perfect recall, all real instances detected.
+- **GSB: 97.4% with zero FPs** — the explicit left-sum = right-sum split detector is precise with no over-detection; 18 FNs remain.
+- **GG: 91.8%** — properly separated from GSB; 17 FNs likely from group total boundary conditions.
+- **IS: 78.0% — largest problem area.** KCAT detects 183 khipus vs KFG's 30 (>1 significance). The color-index sliding window is too permissive; algorithm revision needed.
+- **SP: 84.8%** — 107 FPs; subsidiary pendant sum over-detection; significance or criteria tightening needed.
+
+The full per-khipu comparison is saved at `data/processed/kfg_fieldmarks_reconciliation.csv`.
 
 ---
 
@@ -167,7 +193,7 @@ The source data for this reconciliation is saved at `data/processed/kfg_fieldmar
 
 3. **`colored_pendant_sum` and compound color codes.** The KCAT database stores compound color codes (e.g., `MB:W`, `KB-DB`) as single strings. Two cords sharing only a color prefix may be counted as same-color when they are not. Color codes should be normalized before drawing conclusions about color-based grouping — see Phase 3.
 
-4. **66 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus that may be narrative, ceremonial, or structured by conventions not yet modeled.
+4. **130 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus that may be narrative, ceremonial, or structured by conventions not yet modeled.
 
 ---
 
@@ -194,7 +220,7 @@ for kid in khipu_ids:
 
 ## Limitations
 
-- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as a deliberate accounting entry. The reconciliation against KFG fieldmarks shows this matters in practice: 148 of 702 khipus (21%) are flagged by KCAT but not by KFG, and these skew toward smaller khipus (median 16 cords) where chance coincidences at tolerance = 0 are more probable.
+- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as a deliberate accounting entry. The reconciliation against KFG ground truth (v3) shows this matters: 84 of 703 khipus (12%) are flagged by KCAT but not by KFG, concentrated in `indexed_subsidiary_sum` (154 FPs) and `subsidiary_pendant_sum` (107 FPs).
 - The corpus sweep uses `tolerance = 0`. A small tolerance (1–2 units) would be appropriate when cord values are subject to transcription uncertainty; such analysis is left for future work.
 - Pattern type taxonomy follows Ascher & Ascher (1978, 1981). Other researchers (Urton, Hyland) propose alternative non-numeric interpretations in which these "summation patterns" have a different significance.
 

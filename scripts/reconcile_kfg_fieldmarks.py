@@ -1,239 +1,272 @@
-"""
-Reconciliation: KFG Ascher Sum Browser vs KCAT detector output.
+﻿"""
+Reconciliation: KFG Ascher Sum Ground-Truth vs KCAT detector output (v2).
 
-Fetches the per-khipu summation fieldmark table from khipufieldguide.com/fieldmarks
-and compares it against KFGSummationDetector.summarize() on the KCAT database.
+GROUND-TRUTH SOURCE: data/kfg/KFG/KFG/checks/*.csv
+  These files contain one row per khipu (all 703), with per-pattern statistics
+  computed by the KFG team.  They are the authoritative source, avoiding the
+  HTML-column-order ambiguity of the fieldmarks browser page.
 
-KFG publishes 7 Ascher fieldmarks (4 pendant sums + 3 group relationships):
-  col1: pendant_pendant_sum
-  col2: colored_pendant_sum
-  col3: indexed_pendant_sum
-  col4: subsidiary_pendant_sum
-  col5: group_group_sum
-  col6: indexed_subsidiary_sum
-  col7: pendant_sub_neighbor  (or ascher_decreasing_group)
+NOTE ON FIELDMARKS PAGE COLUMN ORDER
+  The https://khipufieldguide.com/fieldmarks page shows 7 columns in this
+  order (DIFFERENT from the analysis-page narrative):
+      1. pendant_pendant_sum      (num_sum_cords)
+      2. indexed_pendant_sum      (num_sum_cords)   <- NOT colored
+      3. colored_pendant_sum      (num_sum_cords)   <- NOT indexed
+      4. subsidiary_pendant_sum   (num_sum_cords)
+      5. group_sum_bands          (num_group_sum_bands)
+      6. group_group_sum          (num_sum_groups)
+      7. ascher_decreasing_group  (num_decreasing_groups)
+  indexed_subsidiary_sum and pendant_sub_neighbor are NOT shown on that page.
 
-KCAT detector implements 8 types (above + ascher_decreasing_group).
+SIGNIFICANCE THRESHOLDS (from individual analysis pages)
+  pendant_pendant_sum    : > 0  (any match)
+  indexed_pendant_sum    : > 0  (significance > mean 7, but fieldmarks uses any)
+  colored_pendant_sum    : > 0
+  subsidiary_pendant_sum : > 0
+  group_group_sum        : > 0
+  group_sum_bands        : > 0
+  indexed_subsidiary_sum : > 1  ("1 deemed possibly accidental")
+  pendant_sub_neighbor   : > 1  (same reasoning)
+  ascher_decreasing_group: any  (has_decreasing_groups == True)
+
+KCAT detector implements all 9 patterns.  The reconciler compares each one
+against the KFG ground truth.
 
 Usage:
     python scripts/reconcile_kfg_fieldmarks.py
 """
 
-import re
+import csv
 import sys
 import sqlite3
 from pathlib import Path
 
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
 
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-ROOT = Path(__file__).resolve().parent.parent
-DB = ROOT / "data" / "kfg" / "khipu_database.db"
+ROOT    = Path(__file__).resolve().parent.parent
+DB      = ROOT / "data" / "kfg" / "khipu_database.db"
+CHKS    = ROOT / "data" / "kfg" / "KFG" / "KFG" / "checks"
 OUT_CSV = ROOT / "data" / "processed" / "kfg_fieldmarks_reconciliation.csv"
 OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
 
 sys.path.insert(0, str(ROOT))
 from src.analysis.kfg_summation_detector import KFGSummationDetector
 
-KFG_URL = "https://khipufieldguide.com/fieldmarks"
 
 # ---------------------------------------------------------------------------
-# Step 1: Fetch & parse KFG Ascher Sum Browser table
+# Pattern definitions
+# ---------------------------------------------------------------------------
+# Each entry: (short_key, csv_file, value_column, significance_threshold)
+# significance_threshold = minimum *exclusive* value that counts as a match.
+# E.g. thresh=0 means any value > 0; thresh=1 means count must be > 1.
+
+PATTERNS = [
+    ("pp",  "pendant_pendant_sum.csv",      "num_sum_cords",                   0),
+    ("ip",  "indexed_pendant_sum.csv",       "num_sum_cords",                   0),
+    ("cp",  "colored_pendant_sum.csv",       "num_sum_cords",                   0),
+    ("sp",  "subsidiary_pendant_sum.csv",    "num_sum_cords",                   0),
+    ("gg",  "group_group_sum.csv",           "num_sum_groups",                  0),
+    ("gsb", "group_sum_bands.csv",           "num_group_sum_bands",             0),
+    ("is",  "indexed_subsidiary_sum.csv",    "num_sum_cords",                   1),
+    ("psn", "pendant_sub_neighbor.csv",      "num_pendant_sub_neighbor_groups", 1),
+    ("adg", "ascher_decreasing_group.csv",   "num_decreasing_groups",           0),
+]
+
+
+# ---------------------------------------------------------------------------
+# Step 1: Load KFG ground-truth from checks CSVs
 # ---------------------------------------------------------------------------
 
-def fetch_kfg_table() -> pd.DataFrame:
-    """Fetch the KFG fieldmarks page and parse the summation table.
+def load_kfg_ground_truth():
+    """Load per-khipu binary flags from the KFG checks CSV files.
 
-    Returns a DataFrame indexed by khipu_id with columns:
-        kfg_pp, kfg_cp, kfg_ip, kfg_sp, kfg_gg, kfg_is, kfg_psn
-        kfg_any  (True if any of the 7 counts > 0)
+    Returns a DataFrame with columns:
+        khipu_id, kfg_pp, kfg_ip, kfg_cp, kfg_sp, kfg_gg, kfg_gsb,
+        kfg_is, kfg_psn, kfg_adg, kfg_any
     """
-    print(f"Fetching {KFG_URL} ...")
-    resp = requests.get(KFG_URL, timeout=30)
-    resp.raise_for_status()
-    soup = BeautifulSoup(resp.text, "html.parser")
+    roster_path = CHKS / "pendant_pendant_sum.csv"
+    with open(roster_path, newline="", encoding="utf-8") as f:
+        roster_rows = list(csv.reader(f))
+    khipu_ids = [row[0] for row in roster_rows[1:]]
 
-    # The fieldmarks table has alternating icon/count column pairs.
-    # Columns: [index, khipu_id, icon1, count1, icon2, count2, ..., icon7, count7]
-    rows = []
-    for tr in soup.find_all("tr"):
-        tds = tr.find_all("td")
-        if len(tds) < 16:
-            continue  # skip header / malformed
-        try:
-            khipu_id = tds[1].get_text(strip=True)
-            if not khipu_id:
+    result = {kid: {} for kid in khipu_ids}
+
+    for key, fname, val_col, thresh in PATTERNS:
+        path = CHKS / fname
+        with open(path, newline="", encoding="utf-8") as f:
+            rows = list(csv.reader(f))
+        header = rows[0]
+        col_idx = header.index(val_col) if val_col in header else None
+
+        for row in rows[1:]:
+            kid = row[0]
+            if kid not in result:
                 continue
-            # extract the 7 count columns (odd positions 3,5,7,9,11,13,15)
-            counts = []
-            for i in [3, 5, 7, 9, 11, 13, 15]:
-                txt = tds[i].get_text(strip=True)
-                counts.append(int(txt) if txt.isdigit() else 0)
-            rows.append([khipu_id] + counts)
-        except (IndexError, ValueError):
-            continue
+            raw = row[col_idx] if col_idx is not None else "0"
+            try:
+                val = int(float(raw))
+            except (ValueError, TypeError):
+                val = 1 if raw == "True" else 0
+            result[kid][f"kfg_{key}"] = 1 if val > thresh else 0
 
-    if not rows:
-        raise RuntimeError("Failed to parse any rows from the KFG fieldmarks page. "
-                           "The page layout may have changed.")
+    records = []
+    kfg_cols = [f"kfg_{k}" for k, *_ in PATTERNS]
+    for kid in khipu_ids:
+        row = {"khipu_id": kid}
+        row.update(result[kid])
+        row["kfg_any"] = int(any(result[kid].get(c, 0) for c in kfg_cols))
+        records.append(row)
 
-    df = pd.DataFrame(
-        rows,
-        columns=["khipu_id", "kfg_pp", "kfg_cp", "kfg_ip",
-                 "kfg_sp", "kfg_gg", "kfg_is", "kfg_psn"]
-    )
-    # Deduplicate: KH0350 appears twice in the fetched data
-    df = df.drop_duplicates(subset="khipu_id", keep="first")
-    df["kfg_any"] = (df[["kfg_pp", "kfg_cp", "kfg_ip",
-                          "kfg_sp", "kfg_gg", "kfg_is", "kfg_psn"]] > 0).any(axis=1)
-    print(f"  Parsed {len(df)} khipus from KFG fieldmarks page.")
-    print(f"  KFG 'has summation': {df['kfg_any'].sum()} / {len(df)} "
-          f"({df['kfg_any'].mean()*100:.1f}%)")
+    df = pd.DataFrame(records)
+    n_any = df["kfg_any"].sum()
+    print(f"KFG ground truth loaded: {len(df)} khipus, "
+          f"{n_any} ({n_any/len(df)*100:.1f}%) have any summation.")
+    print("\nKFG pattern counts (khipus with flag=1):")
+    for key, *_ in PATTERNS:
+        col = f"kfg_{key}"
+        n = df[col].sum()
+        print(f"  {col:12s}: {n:4d} ({n/len(df)*100:.1f}%)")
     return df
 
 
 # ---------------------------------------------------------------------------
-# Step 2: Run KCAT detector on the same set
+# Step 2: Run KCAT detector
 # ---------------------------------------------------------------------------
 
-def run_kcat_detector(kfg_ids: list[str]) -> pd.DataFrame:
+def run_kcat_detector(kfg_ids):
     """Run KFGSummationDetector on every khipu in kfg_ids.
 
     Returns a DataFrame with columns:
-        khipu_id, kcat_any, kcat_pp, kcat_cp, kcat_ip, kcat_sp,
-        kcat_gg, kcat_is, kcat_psn, kcat_adg
+        khipu_id, kcat_any, kcat_pp, kcat_ip, kcat_cp, kcat_sp,
+        kcat_gg, kcat_gsb, kcat_is, kcat_psn, kcat_adg
     """
     detector = KFGSummationDetector(str(DB))
 
-    # All IDs in KCAT database
     conn = sqlite3.connect(str(DB))
     all_kcat_ids = set(
         pd.read_sql("SELECT kfg_id FROM khipu_metadata", conn)["kfg_id"].tolist()
     )
     conn.close()
 
+    # Map KCAT detector pattern keys -> our short keys
+    detector_key_map = {
+        "pendant_pendant_sum":      "pp",
+        "indexed_pendant_sum":      "ip",
+        "colored_pendant_sum":      "cp",
+        "subsidiary_pendant_sum":   "sp",
+        "group_group_sum":          "gg",
+        "group_sum_bands":          "gsb",
+        "indexed_subsidiary_sum":   "is",
+        "pendant_sub_neighbor":     "psn",
+        "ascher_decreasing_group":  "adg",
+    }
+
+    # Significance thresholds for KCAT detector match counts
+    kcat_thresholds = {
+        "is":  1,   # > 1 occurrence
+        "psn": 1,   # > 1 group
+    }
+
     rows = []
-    pattern_keys = [
-        "pendant_pendant_sum", "colored_pendant_sum", "indexed_pendant_sum",
-        "subsidiary_pendant_sum", "group_group_sum", "indexed_subsidiary_sum",
-        "pendant_sub_neighbor", "ascher_decreasing_group"
-    ]
-    short_keys = ["kcat_pp", "kcat_cp", "kcat_ip", "kcat_sp",
-                  "kcat_gg", "kcat_is", "kcat_psn", "kcat_adg"]
+    none_row = {"kcat_any": None, **{f"kcat_{k}": None for k, *_ in PATTERNS}}
 
     for kid in kfg_ids:
         if kid not in all_kcat_ids:
-            # KFG has this khipu but KCAT doesn't - record as missing
-            rows.append([kid, None] + [None] * 8)
+            rows.append({"khipu_id": kid, **none_row})
             continue
         try:
             summary = detector.summarize(kid)
             stats = summary.get("pattern_stats", {})
-            has_any = summary.get("has_summation", False)
-            counts = [1 if stats.get(pk, {}).get("matches", 0) > 0 else 0 for pk in pattern_keys]
-            rows.append([kid, has_any] + counts)
+            row = {"khipu_id": kid}
+            for dkey, skey in detector_key_map.items():
+                n = stats.get(dkey, {}).get("matches", 0)
+                th = kcat_thresholds.get(skey, 0)
+                row[f"kcat_{skey}"] = 1 if n > th else 0
+            kcat_cols = [f"kcat_{k}" for k, *_ in PATTERNS]
+            row["kcat_any"] = int(any(row.get(c, 0) for c in kcat_cols))
+            rows.append(row)
         except Exception as exc:
             print(f"  WARNING: detector failed on {kid}: {exc}")
-            rows.append([kid, None] + [None] * 8)
+            rows.append({"khipu_id": kid, **none_row})
 
-    df = pd.DataFrame(rows, columns=["khipu_id", "kcat_any"] + short_keys)
-    print(f"\nKCAT detector run on {len(kfg_ids)} khipus.")
+    df = pd.DataFrame(rows)
     valid = df["kcat_any"].notna()
     n_valid = valid.sum()
     n_any = df.loc[valid, "kcat_any"].sum()
-    print(f"  KCAT 'has summation' (KFG-overlap set): {n_any} / {n_valid} "
+    print(f"\nKCAT detector run on {len(kfg_ids)} khipus.")
+    print(f"  KCAT 'has summation': {n_any} / {n_valid} "
           f"({n_any/n_valid*100:.1f}%)")
     return df
 
 
 # ---------------------------------------------------------------------------
-# Step 3: Merge and analyse
+# Step 3: Merge and print summary
 # ---------------------------------------------------------------------------
 
-def reconcile(kfg: pd.DataFrame, kcat: pd.DataFrame) -> pd.DataFrame:
-    merged = pd.merge(kfg, kcat, on="khipu_id", how="outer", indicator=True)
-
-    # Classification
-    def classify(row):
-        if pd.isna(row["kcat_any"]):
-            return "kfg_only"        # in KFG, not in KCAT DB
-        if pd.isna(row["kfg_any"]):
-            return "kcat_only"       # in KCAT DB, not on KFG fieldmarks page
-        if row["kfg_any"] and row["kcat_any"]:
-            return "agree_positive"  # both say summation
-        if not row["kfg_any"] and not row["kcat_any"]:
-            return "agree_negative"  # both say no summation
-        if not row["kfg_any"] and row["kcat_any"]:
-            return "kcat_only_pos"   # KCAT positive, KFG negative
-        if row["kfg_any"] and not row["kcat_any"]:
-            return "kfg_only_pos"    # KFG positive, KCAT negative
-        return "unknown"
-
-    merged["verdict"] = merged.apply(classify, axis=1)
-    return merged
+def reconcile(kfg, kcat):
+    return pd.merge(kfg, kcat, on="khipu_id", how="outer", indicator=True)
 
 
-def print_summary(merged: pd.DataFrame):
-    counts = merged["verdict"].value_counts()
-    total = len(merged)
+def print_summary(merged):
+    both  = merged.dropna(subset=["kfg_any", "kcat_any"])
+    total = len(both)
 
-    in_both  = merged["verdict"].isin(
-        ["agree_positive", "agree_negative", "kcat_only_pos", "kfg_only_pos"]
-    ).sum()
+    agree_p = ((both["kfg_any"] == 1) & (both["kcat_any"] == 1)).sum()
+    agree_n = ((both["kfg_any"] == 0) & (both["kcat_any"] == 0)).sum()
+    kcat_fp = ((both["kfg_any"] == 0) & (both["kcat_any"] == 1)).sum()
+    kfg_fn  = ((both["kfg_any"] == 1) & (both["kcat_any"] == 0)).sum()
+    agreement_rate = (agree_p + agree_n) / total * 100
 
-    agree_p  = counts.get("agree_positive", 0)
-    agree_n  = counts.get("agree_negative", 0)
-    kcat_p   = counts.get("kcat_only_pos",  0)
-    kfg_p    = counts.get("kfg_only_pos",   0)
-    kfg_o    = counts.get("kfg_only",       0)
-    kcat_o   = counts.get("kcat_only",      0)
+    kfg_only  = (merged["_merge"] == "left_only").sum()
+    kcat_only = (merged["_merge"] == "right_only").sum()
 
-    print("\n" + "="*60)
-    print("RECONCILIATION SUMMARY")
-    print("="*60)
-    print(f"Total rows in merged table         : {total}")
-    print(f"  Khipus in both KFG + KCAT        : {in_both}")
-    print(f"  KFG page only (not in KCAT DB)   : {kfg_o}")
-    print(f"  KCAT DB only (not on KFG page)   : {kcat_o}")
+    print("\n" + "=" * 70)
+    print("RECONCILIATION SUMMARY  (KFG checks CSVs vs KCAT detector v2)")
+    print("=" * 70)
+    print(f"Total rows merged                           : {len(merged)}")
+    print(f"  Khipus in both KFG checks + KCAT DB       : {total}")
+    print(f"  KFG checks only (not in KCAT DB)          : {kfg_only}")
+    print(f"  KCAT DB only    (not in KFG checks)       : {kcat_only}")
     print()
-    print(f"Agreement on summation presence:")
-    print(f"  Both positive (agree +)          : {agree_p}")
-    print(f"  Both negative (agree -)          : {agree_n}")
-    print(f"  KCAT positive, KFG negative      : {kcat_p}")
-    print(f"  KFG positive, KCAT negative      : {kfg_p}")
-    if in_both:
-        agreement_rate = (agree_p + agree_n) / in_both * 100
-        print(f"\n  Agreement rate (in_both set)     : {agreement_rate:.1f}%")
+    print("Overall 'has summation' agreement:")
+    print(f"  Both positive (agree +)                   : {agree_p}")
+    print(f"  Both negative (agree -)                   : {agree_n}")
+    print(f"  KCAT positive, KFG negative (FP)          : {kcat_fp}")
+    print(f"  KFG positive,  KCAT negative (FN)         : {kfg_fn}")
+    print(f"\n  Agreement rate (in-both set)              : {agreement_rate:.1f}%")
 
-    # Per-pattern type agreement (for the 7 shared patterns)
-    shared_pairs = [
-        ("kfg_pp",  "kcat_pp",  "pendant_pendant"),
-        ("kfg_cp",  "kcat_cp",  "colored_pendant"),
-        ("kfg_ip",  "kcat_ip",  "indexed_pendant"),
-        ("kfg_sp",  "kcat_sp",  "subsidiary_pendant"),
-        ("kfg_gg",  "kcat_gg",  "group_group"),
-        ("kfg_is",  "kcat_is",  "indexed_subsidiary"),
-        ("kfg_psn", "kcat_psn", "pendant_sub_neighbor"),
-    ]
-    print("\nPer-pattern agreement (KFG col vs KCAT col):")
-    print(f"  {'Pattern':<26} {'KFG+':>6} {'KCAT+':>6} {'Agree+':>7} {'Agree-':>7} {'Agr%':>6}")
-    print("  " + "-"*62)
-    for kfg_col, kcat_col, label in shared_pairs:
-        sub = merged.dropna(subset=[kfg_col, kcat_col])
+    # Per-pattern breakdown
+    print("\nPer-pattern (KFG checks vs KCAT, in-both set):")
+    header = (f"  {'Pattern':<8}  {'Sig':>3}  {'KFG+':>5}  {'KCAT+':>5}  "
+              f"{'Agree+':>6}  {'Agree-':>6}  {'FP':>4}  {'FN':>4}  {'Agr%':>6}")
+    print(header)
+    print("  " + "-" * 68)
+
+    for key, _, _, thresh in PATTERNS:
+        kfg_col  = f"kfg_{key}"
+        kcat_col = f"kcat_{key}"
+        sub = both.dropna(subset=[kfg_col, kcat_col])
         if sub.empty:
             continue
-        kfg_pos  = (sub[kfg_col]  > 0).sum()
-        kcat_pos = (sub[kcat_col] > 0).sum()
-        ap = ((sub[kfg_col] > 0) & (sub[kcat_col] > 0)).sum()
+        kfg_pos  = (sub[kfg_col]  == 1).sum()
+        kcat_pos = (sub[kcat_col] == 1).sum()
+        ap = ((sub[kfg_col] == 1) & (sub[kcat_col] == 1)).sum()
         an = ((sub[kfg_col] == 0) & (sub[kcat_col] == 0)).sum()
+        fp = ((sub[kfg_col] == 0) & (sub[kcat_col] == 1)).sum()
+        fn = ((sub[kfg_col] == 1) & (sub[kcat_col] == 0)).sum()
         agr = (ap + an) / len(sub) * 100
-        print(f"  {label:<26} {kfg_pos:>6} {kcat_pos:>6} {ap:>7} {an:>7} {agr:>5.1f}%")
+        sig = f">{thresh}" if thresh else ">=1"
+        print(f"  {key:<8}  {sig:>3}  {kfg_pos:>5}  {kcat_pos:>5}  "
+              f"{ap:>6}  {an:>6}  {fp:>4}  {fn:>4}  {agr:>5.1f}%")
 
-    print("="*60)
+    print("=" * 70)
+    print()
+    print("Notes:")
+    print("  PP, IP, CP, SP, GSB, GG, ADG = 7 cols on KFG fieldmarks page")
+    print("  IS, PSN  = verified via checks CSVs; not on fieldmarks page")
 
 
 # ---------------------------------------------------------------------------
@@ -241,7 +274,9 @@ def print_summary(merged: pd.DataFrame):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    kfg_df  = fetch_kfg_table()
+    print("Loading KFG ground truth from checks CSVs ...")
+    kfg_df  = load_kfg_ground_truth()
+    print("\nRunning KCAT detector ...")
     kcat_df = run_kcat_detector(kfg_df["khipu_id"].tolist())
     merged  = reconcile(kfg_df, kcat_df)
     print_summary(merged)
