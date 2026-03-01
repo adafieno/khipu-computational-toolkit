@@ -1056,47 +1056,6 @@ def main() -> None:
         best_label = best_k.upper()
         m5.metric("Most common", f"{best_label} ({best_n:,})")
 
-        # ── Legend ─────────────────────────────────────────────────────────────
-        with st.expander("📖 Pattern & terminology legend", expanded=False):
-            st.markdown(
-                """
-#### Summation pattern codes
-
-| Code | Full name | What it means |
-|------|-----------|---------------|
-| **PP** | Pendant-Pendant Sum | A pendant cord whose numeric value equals the sum of other pendant cords in the same or adjacent group |
-| **IP** | Indexed Pendant Sum | A pendant cord that sums other pendants sharing the same *position index* across multiple groups |
-| **CP** | Colored Pendant Sum | A pendant cord that sums other pendants of a matching Ascher color code |
-| **SP** | Subsidiary Pendant Sum | A pendant cord that sums its own subsidiary (child) cords |
-| **IS** | Indexed Subsidiary Sum | A subsidiary cord that sums other subsidiary cords at the same position index across groups |
-| **GG** | Group-Group Sum | An entire cord *group* whose total equals the sum of two other groups |
-| **GSB** | Group Sum Bands | The corpus is partitioned into "bands" where alternating groups sum adjacent ones |
-| **ADG** | Ascher Decreasing Groups | Groups whose per-cord values decrease monotonically — a pattern identified by Marcia & Robert Ascher |
-| **PSN** | Pendant-Sub-Neighbor | A pendant cord whose value equals the value of a neighboring pendant plus that pendant's subsidiary |
-
-#### Handedness (left / right)
-
-A sum cord can be oriented relative to its summands:
-
-- **Left (←)** — the summands lie to the *left* of the sum cord along the primary cord
-- **Right (→)** — the summands lie to the *right*
-
-Handedness reflects the direction in which the scribe "read" or accumulated the running total.
-
-#### Dual- and multi-summand sums
-
-- **Regular** — sum cord = A + B (exactly two summands, the most common form)
-- **Dual-summand** — the same cord participates as a sum cord in *two independent* summation relationships
-- **Multi-summand** — sum cord = A + B + C + … (three or more summands)
-
-#### PCA (Pattern Space tab)
-
-Principal Component Analysis reduces the 9 binary pattern flags to two dimensions for visualisation.  
-Points close together have similar pattern profiles. Colour indicates the total number of distinct patterns per khipu.  
-The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meaning is assigned to them.
-"""
-            )
-
         st.divider()
 
         tab1, tab2, tab3, tab4 = st.tabs([
@@ -1108,6 +1067,20 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
 
         # ── Tab 1: Overview ────────────────────────────────────────────────────
         with tab1:
+            with st.expander("ℹ️ What do the pattern codes mean?", expanded=False):
+                st.markdown(
+                    "| Code | Full name | What it detects |\n"
+                    "|------|-----------|-----------------|\n"
+                    "| **PP** | Pendant-Pendant Sum | Pendant = sum of other pendants in same/adjacent group |\n"
+                    "| **IP** | Indexed Pendant Sum | Pendant = sum of pendants at the same position index across groups |\n"
+                    "| **CP** | Colored Pendant Sum | Pendant = sum of pendants sharing its Ascher color code |\n"
+                    "| **SP** | Subsidiary Pendant Sum | Pendant = sum of its own subsidiary (child) cords |\n"
+                    "| **IS** | Indexed Subsidiary Sum | Subsidiary = sum of subsidiaries at the same index across groups |\n"
+                    "| **GG** | Group-Group Sum | A whole cord group = sum of two other groups |\n"
+                    "| **GSB** | Group Sum Bands | Alternating groups sum adjacent ones, forming bands |\n"
+                    "| **ADG** | Ascher Decreasing Groups | Groups with monotonically decreasing cord values (Ascher 1981) |\n"
+                    "| **PSN** | Pendant-Sub-Neighbor | Pendant = neighboring pendant + that pendant's subsidiary |"
+                )
             c1, c2 = st.columns(2)
             with c1:
                 st.subheader("Pattern Prevalence")
@@ -1116,15 +1089,16 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
             with c2:
                 st.subheader("Pattern Co-occurrence")
                 st.caption(
-                    "# khipus expressing both patterns simultaneously. "
-                    "Diagonal = single-pattern count."
+                    "# khipus that simultaneously exhibit both patterns. "
+                    "Diagonal = single-pattern count. "
+                    "Strong off-diagonal values indicate patterns that tend to co-occur."
                 )
                 st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
 
             st.subheader("Pattern Complexity")
             st.caption(
-                "How many distinct summation patterns does a single khipu exhibit? "
-                "0 = no detected summation structure."
+                "How many *distinct* summation patterns does a single khipu exhibit? "
+                "0 = no detected summation structure; higher = richer accounting system."
             )
             st.plotly_chart(build_complexity_figure(flags_df), width="stretch")
 
@@ -1132,9 +1106,10 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
         with tab2:
             st.subheader("Handedness (Left vs Right Sums)")
             st.caption(
-                "For cord-level patterns (PP/IP/CP/SP/IS): total left-handed (←, summands to the left) vs "
-                "right-handed (→, summands to the right) summation instances across the entire corpus. "
-                "Expand the legend above for definitions."
+                "For cord-level patterns only (PP · IP · CP · SP · IS). "
+                "**Left (←)** = summands lie to the left of the sum cord along the primary cord. "
+                "**Right (→)** = summands lie to the right. "
+                "Imbalance can indicate a preferred reading direction within a khipu tradition."
             )
             st.plotly_chart(build_handedness_figure(full_df), width="stretch")
 
@@ -1158,10 +1133,12 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
             st.divider()
             st.subheader("Dual- & Multi-Summand Breakdown")
             st.caption(
-                "PP/IP/CP cord instances split by summation complexity. "
-                "**Regular** = standard A+B sum · "
-                "**Dual-summand** = cord participates in two independent sum relationships · "
-                "**Multi-summand** = three or more addends."
+                "PP, IP, and CP cord instances split by summation complexity:"
+            )
+            st.markdown(
+                "- **Regular** — sum cord = A + B (the standard two-summand form)  \n"
+                "- **Dual-summand** — the same cord independently participates in *two* separate summation relationships  \n"
+                "- **Multi-summand** — sum cord = A + B + C + … (three or more addends)"
             )
             st.plotly_chart(build_dual_multi_figure(full_df), width="stretch")
 
@@ -1171,7 +1148,13 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
             st.caption(
                 "Percentage of khipus from each provenance (top 25 by count) "
                 "that exhibit each summation pattern. "
-                "Darker = higher rate."
+                "Darker cell = higher rate. Cell label shows percentage and sample size (n=…)."
+            )
+            st.info(
+                "💡 Each column is a pattern code (PP, IP, CP…); each row is a find site. "
+                "A dark cell means khipus from that site disproportionately use that pattern, "
+                "which may indicate regional accounting conventions.",
+                icon=None,
             )
             st.plotly_chart(build_geo_heatmap(full_df, flags_df), width="stretch")
 
@@ -1179,11 +1162,20 @@ The axes (PC 1, PC 2) are linear combinations of the 9 flags; no physical meanin
         with tab4:
             st.subheader("Khipu Pattern-Space (PCA)")
             st.caption(
-                "Each dot = one khipu, projected from a 9-dimensional space of binary pattern flags "
-                "(PP · IP · CP · SP · IS · GG · GSB · ADG · PSN) onto the first two principal components. "
-                "Colour = number of distinct patterns expressed. "
-                "Clusters suggest structural families. PC axes have no physical meaning."
+                "Each dot = one khipu, projected from a 9-dimensional boolean pattern-flag space "
+                "onto the first two principal components."
             )
+            with st.expander("ℹ️ How to read this plot", expanded=False):
+                st.markdown(
+                    "**What is PCA?**  \n"
+                    "Principal Component Analysis finds the directions of maximum variance in the data. "
+                    "Here the 9 input dimensions are the binary flags for PP, IP, CP, SP, IS, GG, GSB, ADG, PSN.\n\n"
+                    "**Axes (PC 1, PC 2)** are linear combinations of those 9 flags. "
+                    "They don't have a simple physical meaning, but khipus that sit close together "
+                    "are *similar in their summation profiles*.\n\n"
+                    "**Colour** = number of distinct patterns expressed (0 = grey, 1 = blue, 2 = orange, …).  \n"
+                    "**Clusters** in the scatter suggest structural families or regional schools of accounting."
+                )
             st.plotly_chart(build_pca_figure(flags_df), width="stretch")
 
             st.divider()
