@@ -153,18 +153,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### Run the Dashboard
+### Run the Local Browser
 
 ```bash
-# IMPORTANT: Set the database path
-$env:KHIPU_DB_PATH = "..\open-khipu-repository\data\khipu.db"  # Windows
-# export KHIPU_DB_PATH="../open-khipu-repository/data/khipu.db"  # Linux/Mac
-
-# Launch interactive web dashboard
-streamlit run scripts/dashboard_app.py
-
-# Launch 3D viewer (on port 8502)
-streamlit run scripts/khipu_3d_viewer.py --server.port 8502
+# Launch the Khipu Explorer (Corpus Browser · Analytics · 3D Viewer · X-Ray View)
+streamlit run scripts/browse.py
 ```
 
 ### Execute Analysis Pipeline
@@ -194,9 +187,8 @@ python scripts/test_summation_hypotheses.py  # Uses env variable
 
 ```
 khipu-computational-toolkit/
- scripts/              # Analysis scripts (34 scripts, all operational)
-    dashboard_app.py              # Interactive web dashboard
-    khipu_3d_viewer.py            # 3D khipu visualization
+ scripts/              # Analysis scripts
+    browse.py                     # Khipu Explorer (Corpus Browser · Analytics · 3D Viewer · X-Ray View)
     detect_anomalies.py           # Outlier detection
     predict_missing_values.py     # ML prediction
     visualize_phase*.py           # Phase visualization generators
@@ -231,8 +223,7 @@ khipu-computational-toolkit/
 ## Features
 
 ### Interactive Tools
-- **Web Dashboard** - Streamlit app for khipu exploration
-- **3D Viewer** - Interactive visualization of khipu structure
+- **Khipu Explorer** (`browse.py`) - Four-tab Streamlit app: Corpus Browser · Analytics · 3D Viewer · X-Ray View with summation arc overlays
 - **Jupyter Notebooks** - 4 interactive analysis notebooks
 
 ### Analysis Capabilities
@@ -252,13 +243,13 @@ khipu-computational-toolkit/
 
 ## Usage Examples
 
-### Dashboard Exploration
+### Khipu Explorer
 
 ```bash
-streamlit run scripts/dashboard_app.py
+streamlit run scripts/browse.py
 ```
 
-Browse khipus by cluster, provenance, summation behavior, and structural features.
+Browse all 709 KFG khipus; view per-pattern analytics and co-occurrence; inspect 3D cord structure; explore the X-Ray color grid with summation arc overlays.
 
 ### Anomaly Detection
 

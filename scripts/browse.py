@@ -15,10 +15,13 @@ Requirements (already in requirements.txt):
     pip install streamlit plotly pandas
 """
 
+import ast
+import re
 import sys
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import sqlite3
@@ -26,8 +29,46 @@ import streamlit as st
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
-ROOT = Path(__file__).parent.parent
-DB_PATH = ROOT / "data" / "kfg" / "khipu_database.db"
+ROOT        = Path(__file__).parent.parent
+DB_PATH     = ROOT / "data" / "kfg" / "khipu_database.db"
+CHECKS_PATH = ROOT / "data" / "kfg" / "KFG" / "KFG" / "checks"
+
+sys.path.insert(0, str(ROOT / "src"))
+try:
+    from analysis.kfg_relation_loader import KFGRelationLoader as _KFGLoader
+    _LOADER_INSTANCE: Optional["_KFGLoader"] = None
+
+    def _get_loader() -> Optional["_KFGLoader"]:
+        global _LOADER_INSTANCE
+        if _LOADER_INSTANCE is None and CHECKS_PATH.exists():
+            _LOADER_INSTANCE = _KFGLoader(str(CHECKS_PATH))
+        return _LOADER_INSTANCE
+except ImportError:
+    def _get_loader():  # type: ignore[misc]
+        return None
+
+# ── Per-pattern config ─────────────────────────────────────────────────────────
+# Each entry: (short_key, display_name, csv_filename, positive_col)
+PATTERN_CONFIG = [
+    ("pp",  "PP — Pendant-Pendant Sum",       "pendant_pendant_sum.csv",       "num_sum_cords"),
+    ("ip",  "IP — Indexed Pendant Sum",        "indexed_pendant_sum.csv",        "num_sum_cords"),
+    ("cp",  "CP — Colored Pendant Sum",        "colored_pendant_sum.csv",        "num_sum_cords"),
+    ("sp",  "SP — Subsidiary Pendant Sum",     "subsidiary_pendant_sum.csv",     "num_sum_cords"),
+    ("is",  "IS — Indexed Subsidiary Sum",     "indexed_subsidiary_sum.csv",     "num_sum_cords"),
+    ("gg",  "GG — Group-Group Sum",            "group_group_sum.csv",            "num_sum_groups"),
+    ("gsb", "GSB — Group Sum Bands",           "group_sum_bands.csv",            "num_group_sum_bands"),
+    ("adg", "ADG — Ascher Decreasing Groups",  "ascher_decreasing_group.csv",    "num_decreasing_groups"),
+    ("psn", "PSN — Pendant-Sub-Neighbor",      "pendant_sub_neighbor.csv",       "num_pendant_sub_neighbor_groups"),
+]
+
+# Cord-level patterns that have relation CSVs with cord_index + summand_string
+ARC_PATTERNS = {
+    "pendant_pendant_sum":    ("#3b82f6", "PP"),
+    "indexed_pendant_sum":    ("#f97316", "IP"),
+    "colored_pendant_sum":    ("#22c55e", "CP"),
+    "subsidiary_pendant_sum": ("#a855f7", "SP"),
+    "indexed_subsidiary_sum": ("#f43f5e", "IS"),
+}
 
 # ── Ascher color map ───────────────────────────────────────────────────────────
 
@@ -338,7 +379,7 @@ def main() -> None:
 
         view = st.radio(
             "View",
-            ["Corpus Browser", "3D Viewer", "X-Ray View"],
+            ["Corpus Browser", "Analytics", "3D Viewer", "X-Ray View"],
             index=0,
         )
 
@@ -424,7 +465,44 @@ def main() -> None:
             hide_index=True,
             height=600,
         )
+    # ── Analytics ───────────────────────────────────────────────────────────────────────
+    elif view == "Analytics":
+        flags_df = load_analytics_data()
+        n        = len(flags_df)
+        st.header("Corpus Analytics")
+        st.caption(
+            f"Pattern prevalence and co-occurrence across {n:,} KFG khipus · "
+            "sourced from authoritative KFG checks/ ground-truth files"
+        )
 
+        if flags_df.empty:
+            st.warning(
+                "KFG checks/ directory not found. "
+                "Run `python scripts/build_kfg_database.py` and ensure the "
+                "checks/ directory is present."
+            )
+        else:
+            pat_cols    = [k for k, *_ in PATTERN_CONFIG]
+            any_pattern = (flags_df[pat_cols].sum(axis=1) > 0)
+            m1, m2, m3  = st.columns(3)
+            m1.metric("KFG khipus", f"{n:,}")
+            m2.metric("With ≥1 pattern", f"{int(any_pattern.sum()):,}")
+            m3.metric("Pattern coverage", f"{any_pattern.mean() * 100:.1f}%")
+
+            st.divider()
+
+            c1, c2 = st.columns(2)
+            with c1:
+                st.subheader("Pattern Prevalence")
+                st.caption("Khipus with ≥1 instance of each Ascher summation pattern type")
+                st.plotly_chart(build_prevalence_figure(flags_df), use_container_width=True)
+            with c2:
+                st.subheader("Pattern Co-occurrence")
+                st.caption(
+                    "Number of khipus that exhibit both patterns simultaneously. "
+                    "Diagonal = khipus with that single pattern."
+                )
+                st.plotly_chart(build_cooccurrence_figure(flags_df), use_container_width=True)
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
         if not selected_id:
@@ -492,13 +570,41 @@ def main() -> None:
         m3.metric("Subsidiaries", len(subs))
         m4.metric("Cord groups", n_groups)
 
-        # Color grid
+        # ─ Arc overlay controls
+        st.subheader("Summation Arc Overlay")
+        loader_inst = _get_loader()
+        arc_traces: list = []
+        if loader_inst and loader_inst.in_kfg(selected_id):
+            arc_data  = load_arc_data(selected_id)
+            available = [p for p in ARC_PATTERNS if arc_data.get(p)]
+            if available:
+                st.caption("Toggle pattern types to show/hide arcs on the color grid.")
+                toggle_cols     = st.columns(max(1, len(available)))
+                enabled_patterns: set = set()
+                for i, p in enumerate(available):
+                    _arc_color, label = ARC_PATTERNS[p]
+                    if toggle_cols[i].checkbox(label, value=True, key=f"arc_{p}"):
+                        enabled_patterns.add(p)
+                arc_traces = build_arc_traces(arc_data, enabled_patterns)
+            else:
+                st.caption("No cord-level summation patterns found for this khipu.")
+        else:
+            if loader_inst:
+                st.caption("This khipu is not in the KFG corpus — arc overlays unavailable.")
+            else:
+                st.caption("KFG checks/ directory not found — arc overlays unavailable.")
+
+        # ─ Color grid
         st.subheader("Color grid (pendants by group)")
         st.caption(
-            "Each square is one pendant cord, positioned by group and position within group. "
-            "Summation arcs will overlay this grid once the detection layer is wired in."
+            "Each square is one pendant cord, colored by Ascher color code. "
+            "Arcs connect sum cords to their summands; arc color = pattern type."
         )
         xray_fig = build_xray_figure(cords_df)
+        for trace in arc_traces:
+            xray_fig.add_trace(trace)
+        if arc_traces:
+            xray_fig.update_layout(showlegend=True)
         st.plotly_chart(xray_fig, use_container_width=True)
 
         # Group summary table
@@ -524,14 +630,7 @@ def main() -> None:
         )
         st.dataframe(groups_df, use_container_width=True, hide_index=True)
 
-        st.info(
-            "**Summation arc overlay coming soon.** "
-            "This view will draw arcs between cord groups that satisfy summation "
-            "relationships detected by the toolkit's summation tests. "
-            "Run `python scripts/test_kfg_summation_detector.py` to generate "
-            "detection results, which will then appear as arcs here.",
-            icon="ℹ️",
-        )
+
 
 
 if __name__ == "__main__":

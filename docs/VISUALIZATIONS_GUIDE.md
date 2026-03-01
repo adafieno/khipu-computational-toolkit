@@ -11,50 +11,34 @@ All scripts use the centralized configuration system. See [DATA_PATHS.md](../DAT
 python src/config.py
 ```
 
-## 🌐 Interactive Web Dashboard
+## 🔬 Khipu Explorer (`browse.py`)
 
-**File:** `scripts/dashboard_app.py`
+**File:** `scripts/browse.py`
 
-A comprehensive Streamlit web application for exploring khipu data with real-time filtering and interactive visualizations.
+The primary interactive tool for exploring the KFG corpus. A four-tab Streamlit app backed directly by the authoritative KFG ground-truth data.
 
-![Dashboard Overview](images/dashboard_overview.png)
-*The main dashboard interface showing PCA scatter plot and cluster distribution*
+### Tabs
 
-### Features:
-- **Real-time Filtering:** Select clusters, provenances, size ranges, and summation patterns
-- **Multi-tab Interface:**
-  - **Overview:** PCA scatter, size vs depth, cluster distribution
-  - **Geographic:** Interactive Andes region map showing all 612 khipus across 15+ locations, summation rates by provenance, structural features, enrichment heatmap
-  - **Clusters:** Detailed cluster analysis with feature distributions
-  - **Features:** Correlation analysis and feature relationships
-- **Data Export:** Download filtered data and summary statistics as CSV
-- **Geographic Map:** Plotly scatter_geo showing complete distribution with fuzzy provenance matching
-
-### Database Access:
-
-The dashboard requires access to the Open Khipu Repository database for provenance data:
-
-- **Default:** Uses `../open-khipu-repository/data/khipu.db` (sibling directory)
-- **Custom location:** Set `KHIPU_DB_PATH` environment variable
-- **Fallback:** If database not found, provenance shows as "Unknown" but other features work
-
-See [DATA_PATHS.md](../DATA_PATHS.md) for configuration details.
+| Tab | Description |
+|-----|-------------|
+| **Corpus Browser** | Filterable/sortable table of all 709 KFG khipus with direct links to the KFG viewer |
+| **Analytics** | Pattern prevalence bar chart + 9×9 co-occurrence heatmap sourced from `data/kfg/KFG/KFG/checks/` |
+| **3D Viewer** | Interactive Plotly 3D cord hierarchy with Ascher color coding and hover tooltips |
+| **X-Ray View** | 2D pendant×group color grid; summation arc overlays togglable by pattern type (PP / IP / CP / SP / IS) |
 
 ### Usage:
 ```bash
-streamlit run scripts/dashboard_app.py
+streamlit run scripts/browse.py
 ```
 
-The dashboard will open in your default web browser at `http://localhost:8501`
+Opens at `http://localhost:8501`.
 
 ### Controls:
-- Use the **sidebar** to filter data by cluster, provenance, size, and summation pattern
-- Switch between **tabs** to explore different aspects of the data
-- **Hover** over plot elements for detailed information
-- Use **export buttons** at the bottom to download filtered data
+- **Sidebar** — choose view; filter by museum/provenance; select individual khipu
+- **Hover** over any plot element for detailed cord/knot information
+- **Arc toggles** (X-Ray View) — enable/disable each summation pattern independently
 
-![Dashboard Geographic Tab](images/dashboard_geographic.png)
-*Geographic tab showing khipu distribution across the Andes region*
+> **Note:** The earlier OKR-era `dashboard_app.py` has been retired. Its functionality is superseded by `browse.py`.
 
 ---
 
@@ -114,22 +98,18 @@ The viewer will open at `http://localhost:8502`
 - **Production-ready** - Actively maintained, handles 200+ cord khipus smoothly
 - **Authentic colors** - Uses Ascher color system from database RGB values
 
-### Running Multiple Viewers
+### Using Multiple Tabs
 
-You can run both the dashboard and 3D viewer simultaneously:
+All views are available within a single `browse.py` session — use the sidebar to switch between
+**Corpus Browser**, **Analytics**, **3D Viewer**, and **X-Ray View**:
 
 ```bash
-# Terminal 1: Main dashboard
-streamlit run scripts/dashboard_app.py
-
-# Terminal 2: 3D viewer
-streamlit run scripts/interactive_3d_viewer.py --server.port 8502
+streamlit run scripts/browse.py
 ```
 
-- Dashboard: http://localhost:8501
-- 3D Viewer: http://localhost:8502
+- Khipu Explorer: http://localhost:8501
 
-This allows you to browse the dataset in the dashboard, then inspect interesting khipus in the 3D viewer.
+The 3D Viewer and X-Ray View tabs replace the former standalone viewers.
 
 ---
 
@@ -184,12 +164,12 @@ Open the `.html` files in any web browser. The maps are fully interactive:
 
 ### Recommended Exploration Sequence:
 
-1. **Start with the Dashboard** to get an overview:
+1. **Start with the Khipu Explorer** to get an overview:
    ```bash
-   streamlit run scripts/dashboard_app.py
+   streamlit run scripts/browse.py
    ```
-   - Filter to specific clusters or provenances of interest
-   - Export filtered data for focused analysis
+   - Browse the **Corpus Browser** tab; filter by museum/provenance
+   - Check the **Analytics** tab for pattern prevalence and co-occurrence
 
 2. **Explore Geographic Patterns**:
    ```bash
@@ -286,9 +266,9 @@ pip install streamlit plotly folium matplotlib pandas numpy networkx statsmodels
 
 ## 🐛 Troubleshooting
 
-**Dashboard won't start:**
+**Khipu Explorer won't start:**
 - Ensure port 8501 is available: `netstat -ano | findstr :8501`
-- Try alternate port: `streamlit run scripts/dashboard_app.py --server.port 8502`
+- Try alternate port: `streamlit run scripts/browse.py --server.port 8502`
 - Kill existing Streamlit: `Stop-Process -Name streamlit -Force`
 
 **3D viewer shows empty plot:**

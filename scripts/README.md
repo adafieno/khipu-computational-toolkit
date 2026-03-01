@@ -47,8 +47,8 @@ All scripts should be run from the repository root:
 # Standard pattern
 python scripts/script_name.py
 
-# Interactive apps
-streamlit run scripts/dashboard_app.py
+# Interactive explorer
+streamlit run scripts/browse.py
 ```
 
 Scripts automatically add `src/` to the Python path for imports.
@@ -292,31 +292,22 @@ python scripts/visualize_phase9_meta.py
 
 Web-based interactive exploration and analysis tools.
 
-### dashboard_app.py
-**Purpose:** Streamlit dashboard for interactive khipu exploration  
-**Phase:** 6 - Advanced Visualizations  
-**Report:** [phase6_advanced_visualizations_report.md](../reports/phase6_advanced_visualizations_report.md)  
+### browse.py
+**Purpose:** Primary interactive Khipu Explorer (KFG corpus)  
 **Features:**
-- Multi-level drill-down (cluster → provenance → khipu → cord)
-- Real-time filtering and selection
-- Interactive Plotly visualizations
-- Data export capabilities
-- Feature correlation analysis with optional OLS trendlines
+- **Corpus Browser** — filterable/sortable table of all 709 KFG khipus with direct KFG links
+- **Analytics** — pattern prevalence bar chart + 9×9 co-occurrence heatmap sourced from authoritative KFG checks/ ground-truth files
+- **3D Viewer** — interactive Plotly 3D cord hierarchy with Ascher color coding and hover tooltips
+- **X-Ray View** — 2D color grid (pendant × group) with live summation arc overlays; arcs togglable by pattern type (PP/IP/CP/SP/IS)
 
-**Dependencies:** streamlit, plotly, statsmodels (optional for trendlines)
+**Dependencies:** streamlit, plotly, pandas, numpy
 
 **Usage:**
 ```bash
-# Basic launch
-streamlit run scripts/dashboard_app.py
-
-# Custom port
-streamlit run scripts/dashboard_app.py --server.port 8502
+streamlit run scripts/browse.py
 ```
 
 **Access:** http://localhost:8501
-
-**Note:** Dashboard includes error handling for statsmodels if not available. Trendlines can be enabled via checkbox if statsmodels is installed.
 
 ### khipu_3d_viewer.py
 **Purpose:** Interactive 3D khipu visualization with Plotly  
@@ -468,8 +459,7 @@ python scripts/predict_missing_values.py
 - `classify_khipu_function.py`
 
 ### Phase 6: Advanced Visualizations
-- `dashboard_app.py` ⭐
-- `khipu_3d_viewer.py` ⭐
+- `browse.py` ⭐ (primary Khipu Explorer — all four tabs)
 - `visualize_geographic_heatmap.py`
 
 ### Phase 7: ML Extensions
@@ -614,7 +604,7 @@ python scripts/script_name.py
 
 **Solution:** Use custom port:
 ```bash
-streamlit run scripts/dashboard_app.py --server.port 8502
+streamlit run scripts/browse.py --server.port 8502
 ```
 
 ---
