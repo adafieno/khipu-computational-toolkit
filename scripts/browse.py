@@ -1085,14 +1085,25 @@ def main() -> None:
             with c1:
                 st.subheader("Pattern Prevalence")
                 st.caption("Khipus exhibiting ≥1 instance of each summation pattern")
+                with st.expander("ℹ️ How to read this chart", expanded=False):
+                    st.markdown(
+                        "Each bar = one pattern code. Bar length = number of khipus that have "
+                        "at least one confirmed instance of that pattern.  \n\n"
+                        "The chart is sorted by prevalence. A long bar means the pattern is "
+                        "common across the corpus; a short bar means it is rare or harder to detect."
+                    )
                 st.plotly_chart(build_prevalence_figure(flags_df), width="stretch")
             with c2:
                 st.subheader("Pattern Co-occurrence")
-                st.caption(
-                    "# khipus that simultaneously exhibit both patterns. "
-                    "Diagonal = single-pattern count. "
-                    "Strong off-diagonal values indicate patterns that tend to co-occur."
-                )
+                st.caption("Khipus that simultaneously exhibit both patterns (diagonal = single-pattern count).")
+                with st.expander("ℹ️ How to read this heatmap", expanded=False):
+                    st.markdown(
+                        "**Cells** show how many khipus express *both* the row pattern and the column pattern simultaneously.  \n"
+                        "**Diagonal** = khipus that have that single pattern (same as the prevalence bar chart).  \n"
+                        "**Darker off-diagonal** = the two patterns frequently co-occur — suggesting they belong to "
+                        "the same scribe tradition or accounting layer.  \n"
+                        "**White/blank cells** = the pair rarely or never co-occurs."
+                    )
                 st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
 
             st.subheader("Pattern Complexity")
@@ -1100,6 +1111,14 @@ def main() -> None:
                 "How many *distinct* summation patterns does a single khipu exhibit? "
                 "0 = no detected summation structure; higher = richer accounting system."
             )
+            with st.expander("ℹ️ How to read this chart", expanded=False):
+                st.markdown(
+                    "Each khipu is scored by counting how many of the 9 pattern flags are True.  \n"
+                    "**0** = no summation structure detected (or below detection threshold).  \n"
+                    "**1–2** = most common — khipus focused on one or two accounting conventions.  \n"
+                    "**3+** = complex khipus that combine multiple summation strategies simultaneously.  \n\n"
+                    "The long tail toward higher complexities is where the most analytically interesting khipus sit."
+                )
             st.plotly_chart(build_complexity_figure(flags_df), width="stretch")
 
         # ── Tab 2: Deep Dive ───────────────────────────────────────────────────
@@ -1198,6 +1217,15 @@ def main() -> None:
             st.divider()
             st.subheader("Pattern Detail Table")
             st.caption("Per-pattern corpus-wide statistics from the KFG checks/ ground truth.")
+            with st.expander("ℹ️ Column definitions", expanded=False):
+                st.markdown(
+                    "**Khipus** — number of khipus with at least one confirmed instance of this pattern.  \n"
+                    "**Coverage %** — Khipus ÷ total corpus size.  \n"
+                    "**Avg count/khipu** — mean number of individual summation instances per positive khipu "
+                    "(e.g. how many PP sum-cords a khipu typically has).  \n"
+                    "**Avg mean-sum** — mean of the per-khipu average cord-value sum; gives a sense of "
+                    "the numeric magnitude of the values involved."
+                )
 
             rows = []
             for key, name, _csv, pos_col in PATTERN_CONFIG:
