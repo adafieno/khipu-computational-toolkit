@@ -436,6 +436,8 @@ def load_analytics_data() -> pd.DataFrame:
             continue
         df = df.rename(columns={"kfg_name": "kfg_id", pos_col: key})
         df[key] = pd.to_numeric(df[key], errors="coerce").fillna(0) > 0
+        # Collapse any duplicate kfg_id rows by taking the max (True wins over False)
+        df = df.groupby("kfg_id", as_index=False)[key].max()
         frames.append(df.reset_index(drop=True))
 
     if not frames:
@@ -470,6 +472,9 @@ def load_full_analytics() -> pd.DataFrame:
         for c in df.columns:
             if c != "kfg_id":
                 df[c] = pd.to_numeric(df[c], errors="coerce")
+        # Collapse duplicate kfg_id rows before merging to prevent cartesian explosion
+        num_cols = [c for c in df.columns if c != "kfg_id"]
+        df = df.groupby("kfg_id", as_index=False)[num_cols].max()
         result = df if result is None else result.merge(df, on="kfg_id", how="outer")
 
     if result is None:
