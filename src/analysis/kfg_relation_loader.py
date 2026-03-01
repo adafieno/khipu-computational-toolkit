@@ -345,7 +345,7 @@ class KFGRelationLoader:
         self,
         kfg_id: str,
         cords: List[Cord],
-        apply_excl: bool = True,
+        apply_excl: bool = False,
         resolve_summands: bool = True,
     ) -> Dict[str, List[SummationMatch]]:
         """
@@ -356,6 +356,18 @@ class KFGRelationLoader:
         kfg_id          : khipu identifier (must be in the KFG corpus)
         cords           : list of Cord objects from the database
         apply_excl      : if True, enforce mutual exclusivity at cord level
+                          (IS > SP > IP > CP > PP priority order).
+
+                          **Default is False** because the KFG ground-truth
+                          relation CSVs intentionally record the same cord in
+                          multiple pattern tables — a cord can simultaneously
+                          be a PP sum cord, an IP sum cord, and a CP sum cord,
+                          each with a different set of summand cords.  Applying
+                          exclusivity removes those valid relationships and
+                          reduces agreement from 99.4% to 98.6%.
+
+                          Set apply_excl=True only when you need a SINGLE
+                          primary pattern label per cord (classification use).
         resolve_summands: if True, try to populate summand_cords from
                           coordinate lookups (slightly slower)
         """

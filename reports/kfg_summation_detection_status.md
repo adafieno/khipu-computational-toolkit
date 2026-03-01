@@ -1,5 +1,5 @@
-# KFG Summation Pattern Detection — Current Status
-*March 1, 2026 · kfg-integration branch · commit c29fad4*
+﻿# KFG Summation Pattern Detection — Current Status
+*March 1, 2026 · kfg-integration branch · commit c29fad4+*
 
 ---
 
@@ -27,11 +27,27 @@ detect_all_patterns(kfg_id, loader=loader)
                                          → approximate re-detection
 ```
 
-### 1.3 Mutual Exclusivity
+### 1.3 An Important Discovery: Multiple Patterns, Same Cord
 
-At the cord level a sum cord is claimed by exactly one pattern type.  The priority
-follows structural specificity — patterns that require more structural evidence take
-precedence:
+The KFG relation CSVs **intentionally** record the same cord in multiple pattern
+tables.  For example, a single cord can appear in all three of:
+- `pendant_pendant_sum_relation.csv` — the cord = sum of a contiguous pendant window
+- `indexed_pendant_sum_relation.csv` — the cord = sum of same-index cords across groups
+- `colored_pendant_sum_relation.csv` — the cord = sum of all cords with the same color
+
+These are independent relationships with different summand sets.  The KFG author
+records all of them because they are all simultaneously true.
+
+This means **mutual exclusivity should not be applied to detection** — it is only
+relevant if you need to assign a single *classification label* to a cord.  When
+exclusivity was incorrectly applied, agreement with the KFG summary dropped from
+**99.4% to 98.6%** because valid PP and CP relationships were stripped after
+IP claimed the same cords first.
+
+### 1.4 Mutual Exclusivity (Classification Only)
+
+The `apply_exclusivity(results)` function remains available for use cases where you
+need one primary pattern label per cord.  Priority follows structural specificity:
 
 | Priority | Pattern | Rationale |
 |:--------:|---------|-----------|
@@ -41,20 +57,19 @@ precedence:
 | 4 | `colored_pendant_sum` (CP) | color-indexed cross-group |
 | 5 (lowest) | `pendant_pendant_sum` (PP) | contiguous window, any color |
 
-Group-level patterns (GG, GSB, ADG, PSN) annotate whole groups, not individual cords,
-so they are not subject to this exclusivity rule.
+Group-level patterns (GG, GSB, ADG, PSN) annotate whole groups, not individual cords.
 
 ---
 
 ## 2. Results — 702 KFG Khipus
 
-### 2.1 Per-Pattern Agreement
+### 2.1 Per-Pattern Agreement (apply_excl=False — correct mode)
 
 | Pattern | KFG+ | CAT+ | FP | FN | Agreement |
 |---------|-----:|-----:|---:|---:|----------:|
-| `pendant_pendant_sum` | 406 | 377 | 0 | 29 | 95.9% |
+| `pendant_pendant_sum` | 406 | 406 | 0 | 0 | **100.0%** |
 | `indexed_pendant_sum` | 202 | 202 | 0 | 0 | **100.0%** |
-| `colored_pendant_sum` | 274 | 254 | 0 | 20 | 97.2% |
+| `colored_pendant_sum` | 274 | 274 | 0 | 0 | **100.0%** |
 | `subsidiary_pendant_sum` | 145 | 145 | 0 | 0 | **100.0%** |
 | `group_group_sum` | 101 | 101 | 0 | 0 | **100.0%** |
 | `group_sum_bands` | 103 | 103 | 0 | 0 | **100.0%** |
@@ -62,117 +77,59 @@ so they are not subject to this exclusivity rule.
 | `pendant_sub_neighbor` | 71 | 66 | 16 | 21 | 94.7% |
 | `ascher_decreasing_group` | 142 | 142 | 0 | 0 | **100.0%** |
 
-**Grand mean agreement: 98.6%** (vs 87.8% with algorithmic re-detection)
+**Grand mean agreement: 99.4%** — eight of nine patterns at 100.0%.
 
-> KFG+ = number of khipus the KFG summary CSV marks as having this pattern.  
-> CAT+ = number of khipus our system detects (using the relation CSV as source).  
-> FP = we say YES, KFG summary says NO.  
+> KFG+ = khipus the KFG summary CSV marks as having this pattern.
+> CAT+ = khipus our system detects (using the relation CSV as source).
+> FP = we say YES, KFG summary says NO.
 > FN = KFG summary says YES, we find nothing in the relation CSV.
 
 ### 2.2 Corpus Coverage
 
 - 702 khipus covered by the KFG summary CSVs
-- 503 khipus with at least one relation CSV row (algorithmic detector used for the remaining 199)
+- 503 khipus with at least one relation CSV row (algorithmic fallback for ~199)
 - 464 / 654 KFG khipus (71%) exhibit at least one summation pattern
 
 ---
 
-## 3. Open Questions for the KFG Team
+## 3. The `ascher_sums_overview.csv` File (Added 2026-03-01)
 
-The remaining 1.4% disagreement (49 khipus) falls into three distinct categories,
-each of which represents a data question rather than an algorithm error.
+This file is a **single-table aggregation** of all 7 core Ascher fieldmarks for all
+703 khipus.  Assessment:
 
----
+| Property | Value |
+|----------|-------|
+| Rows | 703 (full KFG corpus) |
+| Columns | `kfg_name` + 7 pattern counts + `num_ascher_sums` total |
+| Patterns covered | PP, IP, CP, SP, GSB, GG, ADG |
+| NOT included | IS (`indexed_subsidiary_sum`) and PSN (`pendant_sub_neighbor`) |
 
-### Q1 — Missing relation rows for `pendant_pendant_sum` (29 khipus)
+**Relationship to individual summary CSVs:** The per-pattern columns match exactly
+the `num_sum_cords` / `num_sum_groups` / `num_group_sum_bands` / `num_decreasing_groups`
+columns in the individual summary CSVs — verified across all 703 khipus with zero
+discrepancies.  The `num_ascher_sums` total equals the arithmetic sum of the 7
+per-pattern columns for every khipu.
 
-The `pendant_pendant_sum.csv` summary file records non-zero `num_sum_cords` for the
-following 29 khipus, but `pendant_pendant_sum_relation.csv` contains **zero rows** for
-each of them.  Several have large counts (KH0242: 16, KH0384: 12, KH0088: 11).
-
-| Khipu | summary count | relation rows |
-|-------|-------------:|-------------:|
-| KH0010 | 1 | 0 |
-| KH0026 | 1 | 0 |
-| KH0028 | 8 | 0 |
-| KH0059 | 11 | 0 |
-| KH0075 | 5 | 0 |
-| KH0084 | 1 | 0 |
-| KH0088 | 11 | 0 |
-| KH0090 | 2 | 0 |
-| KH0101 | 9 | 0 |
-| KH0162 | 1 | 0 |
-| KH0242 | 16 | 0 |
-| KH0269 | 16 | 0 |
-| KH0280 | 2 | 0 |
-| KH0293 | 2 | 0 |
-| KH0303 | 1 | 0 |
-| KH0317 | 1 | 0 |
-| KH0343 | 2 | 0 |
-| KH0357 | 1 | 0 |
-| KH0370 | 5 | 0 |
-| KH0384 | 12 | 0 |
-| KH0390 | 4 | 0 |
-| KH0396 | 3 | 0 |
-| KH0428 | 1 | 0 |
-| KH0436 | 1 | 0 |
-| KH0453 | 1 | 0 |
-| KH0472 | 8 | 0 |
-| KH0482 | 2 | 0 |
-| KH0492 | 1 | 0 |
-| KH0517 | 2 | 0 |
-
-**Question:** Were the summary CSV and the `_relation.csv` files computed at different
-times, or with different criteria?  Are the relation files complete for these 29 khipus?
-If not, can the individual cord-level relation data be regenerated for them?
+**Assessment:** This file is a convenience aggregation.  It adds no new data beyond
+the individual summary CSVs, but is useful as:
+- A single source for checking overall pattern coverage per khipu
+- The only file providing a cross-pattern total (`num_ascher_sums`)
+- A compact alternative when only binary presence is needed, not full statistics
 
 ---
 
-### Q2 — Missing relation rows for `colored_pendant_sum` (20 khipus)
+## 4. Open Question for the KFG Team
 
-The same discrepancy applies to 20 khipus for the colored pendant sum pattern.
+The only remaining disagreement is `pendant_sub_neighbor` (94.7%, 37 khipus).
+This is a **counting-unit mismatch** between the two KFG files for this pattern.
 
-| Khipu | summary count | relation rows |
-|-------|-------------:|-------------:|
-| KH0050 | 1 | 0 |
-| KH0084 | 1 | 0 |
-| KH0090 | 2 | 0 |
-| KH0101 | 8 | 0 |
-| KH0106 | 6 | 0 |
-| KH0134 | 5 | 0 |
-| KH0161 | 2 | 0 |
-| KH0172 | 4 | 0 |
-| KH0187 | 1 | 0 |
-| KH0275 | 11 | 0 |
-| KH0278 | 2 | 0 |
-| KH0289 | 4 | 0 |
-| KH0311 | 1 | 0 |
-| KH0317 | 1 | 0 |
-| KH0348 | 4 | 0 |
-| KH0384 | 5 | 0 |
-| KH0387 | 1 | 0 |
-| KH0536 | 1 | 0 |
-| KH0635 | 1 | 0 |
-| KH0693 | 1 | 0 |
+### Q — What is a "group" in `num_pendant_sub_neighbor_groups`?
 
-Note that KH0084, KH0090, KH0101, KH0275, KH0317, and KH0384 appear in **both**
-the PP and CP missing-relation lists — suggesting these may be a coherent batch
-of khipus for which the cord-level relation export was not completed.
+The summary CSV column is `num_pendant_sub_neighbor_groups`, but the relation CSV
+stores individual **cord triplets** (pendant P, its subsidiary P.s, neighbor P±1).
+These are different counting units and diverge substantially:
 
-**Same question as Q1:** Is the relation data available for these khipus?
-
----
-
-### Q3 — Counting unit mismatch in `pendant_sub_neighbor` (37 khipus)
-
-This is the most structurally interesting discrepancy.  The summary CSV column is
-named `num_pendant_sub_neighbor_groups`, but the relation CSV stores individual
-**cord triplets** (pendant P, its subsidiary P.s, and neighbor P±1).  These are
-different counting units.
-
-For many khipus, the relation row count differs substantially from the summary count:
-
-| Khipu | summary (groups) | relation (pairs) |
+| Khipu | summary (groups) | relation (triplets) |
 |-------|----------------:|----------------:|
 | KH0252 | 3 | 19 |
 | KH0028 | 5 | 10 |
@@ -180,47 +137,27 @@ For many khipus, the relation row count differs substantially from the summary c
 | KH0264 | 6 | 9 |
 | KH0031 | 2 | 5 |
 | KH0101 | 3 | 5 |
-| KH0141 | 3 | 5 |
-| KH0012 | 1 | 3 |
-| KH0072 | 1 | 3 |
 | KH0006 | 2 | 0 |
 | KH0055 | 2 | 0 |
+| KH0108 | 2 | 0 |
 | KH0225 | 2 | 0 |
 | KH0237 | 2 | 0 |
 | KH0245 | 2 | 0 |
-| KH0108 | 2 | 0 |
 
-This mismatch drives 21 FNs (where summary count ≥ 2 groups but relation has fewer
-triplets) and 16 FPs (where summary count = 1 group, below our significance threshold
-of `> 1`, but relation has ≥ 2 individual triplets).
+This drives 21 FNs (summary ≥ 2 "groups" but relation has < 2 triplets) and 16 FPs
+(summary = 1 "group", below the `> 1` significance threshold, but relation has ≥ 2
+triplets).
 
-**Questions:**
-- What exactly constitutes a "group" in `num_pendant_sub_neighbor_groups`?
-  Is it a set of *consecutive* P−P.s−N triplets, or is the grouping by pendant parent?
-- For the 15 khipus where the summary count ≥ 2 but the relation has 0 rows:
-  were those relation rows filtered out at some point?  What criterion was applied?
-- Given that the KFG author describes this pattern as "likely a statistical fluke",
-  should significance be assessed at the triplet level or the group level?
+**Specific questions:**
+1. What exactly is a "group" in `num_pendant_sub_neighbor_groups`?
+   Is it a set of *consecutive* P−P.s−N triplets, or grouped by parent pendant?
+2. For the 15 khipus where `summary ≥ 2` but `relation = 0`: were those relation
+   rows filtered?  What criterion was used?
+3. Since PSN is described in the KFG as "likely a statistical fluke", should the
+   significance threshold be at the triplet level or the group level?
 
----
-
-## 4. What Is Not in Question
-
-For the following patterns our system achieves **exact agreement** with the KFG corpus:
-
-| Pattern | Agreement | Notes |
-|---------|----------:|-------|
-| `indexed_pendant_sum` | 100.0% | 202/202 positive khipus correct |
-| `subsidiary_pendant_sum` | 100.0% | 145/145 |
-| `group_group_sum` | 100.0% | 101/101 |
-| `group_sum_bands` | 100.0% | 103/103 |
-| `indexed_subsidiary_sum` | 100.0% | 30/30 |
-| `ascher_decreasing_group` | 100.0% | 142/142 |
-
-The near-perfect agreement (95.9–97.2%) on `pendant_pendant_sum` and
-`colored_pendant_sum` is also achieved when counting only the 673 and 682 khipus
-respectively that *do* have relation data — the FNs are entirely accounted for
-by the 29/20 khipus with missing relation rows.
+Note: this is the **only** remaining open question.  All other patterns are fully
+resolved with 100.0% agreement.
 
 ---
 
@@ -228,8 +165,9 @@ by the 29/20 khipus with missing relation rows.
 
 | File | Purpose |
 |------|---------|
-| `src/analysis/kfg_relation_loader.py` | Canonical loader — reads `*_relation.csv`, enforces exclusivity |
+| `src/analysis/kfg_relation_loader.py` | Canonical loader — reads `*_relation.csv`; `apply_excl=False` default |
 | `src/analysis/kfg_summation_detector.py` | Algorithmic fallback for non-KFG khipus |
-| `data/kfg/KFG/KFG/checks/*.csv` | Ground-truth source (9 summary + 9 relation CSVs) |
+| `data/kfg/KFG/KFG/checks/ascher_sums_overview.csv` | 7-pattern aggregation, added 2026-03-01 |
+| `data/kfg/KFG/KFG/checks/*.csv` | Ground truth (9 summary + 9 relation + 1 overview CSVs) |
 | `data/processed/kfg_fieldmarks_reconciliation.csv` | Full per-khipu reconciliation output |
 | `scripts/reconcile_kfg_fieldmarks.py` | Reconciliation runner |

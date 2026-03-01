@@ -906,7 +906,7 @@ class KFGSummationDetector:
         kfg_id: str,
         tolerance: int = 0,
         loader=None,
-        apply_exclusivity: bool = True,
+        apply_exclusivity: bool = False,
     ) -> Dict[str, List[SummationMatch]]:
         """
         Run every detector and return results keyed by pattern type.
@@ -920,10 +920,14 @@ class KFGSummationDetector:
                             ground-truth relation CSV data is used instead
                             of the algorithmic detector — eliminating false
                             positives from re-detection noise.
-        apply_exclusivity : when True (default), enforce mutual exclusivity
-                            at the cord level (IS > SP > IP > CP > PP).  Only
-                            applied when ground-truth data is used or when
-                            explicitly requested for algorithmic results.
+        apply_exclusivity : when True, enforce mutual exclusivity at the cord
+                            level (IS > SP > IP > CP > PP).
+
+                            **Default is False** because the KFG ground-truth
+                            data intentionally records the same cord in
+                            multiple pattern tables.  Set to True only when
+                            assigning a single primary pattern label per cord
+                            (classification use case).
         """
         cords = self._load_all_cords(kfg_id)
 
