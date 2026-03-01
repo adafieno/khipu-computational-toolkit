@@ -356,6 +356,219 @@ def build_xray_figure(cords_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+# ── Analytics helpers ──────────────────────────────────────────────────────────
+
+def _parse_coord_index(s: str) -> Optional[tuple[float, float]]:
+    """Extract (group, position) from a cord coordinate string.
+
+    Handles all formats found in the checks/ CSVs:
+      '[4, 2]'           → (4.0, 2.0)   bare list (PP / IP / CP relations)
+      'GG@[2, 6]:3'      → (2.0, 6.0)   embedded with color + value
+      'W@[4, 0, 0]:138'  → (4.0, 0.0)   3-element subsidiary form
+    """
+    m = re.search(r"\[(\d+),\s*(\d+)", str(s))
+    if m:
+        return float(m.group(1)), float(m.group(2))
+    return None
+
+
+def _parse_summand_grid_coords(summand_string: str) -> list[tuple[float, float]]:
+    """Parse all (group, position) coords from a summand_string column value.
+
+    e.g. 'GG@[2, 6]:3 + W:KB@[2, 7]:1 + W@[3, 0]:56'
+      → [(2.0, 6.0), (2.0, 7.0), (3.0, 0.0)]
+    """
+    return [
+        (float(m.group(1)), float(m.group(2)))
+        for m in re.finditer(r"\[(\d+),\s*(\d+)", str(summand_string))
+    ]
+
+
+def _bezier_arc(
+    x1: float, y1: float, x2: float, y2: float, n: int = 18
+) -> tuple[list, list]:
+    """Quadratic Bézier arc from (x1,y1) to (x2,y2) for Plotly overlay.
+
+    The control point bows *upward* (lower y value — grid is y-reversed).
+    Returns (xs, ys) with a trailing None so multiple arcs can be concatenated
+    into a single Plotly trace.
+    """
+    cx = (x1 + x2) / 2
+    cy = min(y1, y2) - max(1.0, abs(x2 - x1) * 0.35)
+    xs: list = []
+    ys: list = []
+    for i in range(n + 1):
+        t = i / n
+        xs.append((1 - t) ** 2 * x1 + 2 * (1 - t) * t * cx + t ** 2 * x2)
+        ys.append((1 - t) ** 2 * y1 + 2 * (1 - t) * t * cy + t ** 2 * y2)
+    return xs + [None], ys + [None]
+
+
+@st.cache_data(ttl=3600)
+def load_analytics_data() -> pd.DataFrame:
+    """Read all 9 summary CSVs; return one boolean-flag row per KFG khipu.
+
+    Columns: 'kfg_id' + one column per PATTERN_CONFIG short key (True / False).
+    Returns an empty DataFrame when CHECKS_PATH is missing.
+    """
+    if not CHECKS_PATH.exists():
+        return pd.DataFrame()
+
+    frames: list[pd.DataFrame] = []
+    for key, _name, csv_file, pos_col in PATTERN_CONFIG:
+        path = CHECKS_PATH / csv_file
+        if not path.exists():
+            continue
+        try:
+            df = pd.read_csv(path, usecols=["kfg_name", pos_col])
+        except Exception:
+            continue
+        df = df.rename(columns={"kfg_name": "kfg_id", pos_col: key})
+        df[key] = pd.to_numeric(df[key], errors="coerce").fillna(0) > 0
+        frames.append(df.reset_index(drop=True))
+
+    if not frames:
+        return pd.DataFrame()
+
+    result = frames[0]
+    for f in frames[1:]:
+        result = result.merge(f, on="kfg_id", how="outer")
+    pat_cols = [k for k, *_ in PATTERN_CONFIG if k in result.columns]
+    result[pat_cols] = result[pat_cols].fillna(False)
+    return result.reset_index(drop=True)
+
+
+def build_prevalence_figure(flags_df: pd.DataFrame) -> go.Figure:
+    """Horizontal bar chart: # khipus with ≥1 of each summation pattern."""
+    pat_cols = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
+    short    = {k: name.split("—")[0].strip() for k, name, *_ in PATTERN_CONFIG}
+
+    sorted_items = sorted(
+        ((k, int(flags_df[k].sum())) for k in pat_cols),
+        key=lambda x: x[1],
+        reverse=True,
+    )
+    keys   = [k for k, _ in sorted_items]
+    names  = [short[k] for k in keys]
+    values = [cnt for _, cnt in sorted_items]
+
+    fig = go.Figure(go.Bar(
+        x=values, y=names,
+        orientation="h",
+        marker_color="#3b82f6",
+        text=values,
+        textposition="outside",
+    ))
+    fig.update_layout(
+        xaxis_title="Khipus",
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#e2e8f0"),
+        margin=dict(l=0, r=50, t=10, b=40),
+        height=370,
+    )
+    return fig
+
+
+def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
+    """9×9 pattern co-occurrence heatmap (diagonal = single-pattern count)."""
+    pat_cols = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
+    labels   = [k.upper() for k in pat_cols]
+
+    mat  = flags_df[pat_cols].astype(int).values
+    cooc = mat.T @ mat
+
+    fig = go.Figure(go.Heatmap(
+        z=cooc, x=labels, y=labels,
+        colorscale="Blues",
+        text=cooc,
+        texttemplate="%{text}",
+        textfont=dict(size=11, color="#e2e8f0"),
+        hovertemplate="%{y} ∩ %{x}: %{z}<extra></extra>",
+        showscale=True,
+    ))
+    fig.update_layout(
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(color="#94a3b8", tickangle=-35),
+        yaxis=dict(color="#94a3b8", autorange="reversed"),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=420,
+    )
+    return fig
+
+
+@st.cache_data(ttl=3600)
+def load_arc_data(kfg_id: str) -> dict:
+    """Return cord-level arc data for the 5 pendant-level summation patterns.
+
+    Result shape:
+        { pattern_stem: [(sum_coord, [summand_coords]), ...] }
+    where each coord is (group_float, position_float).
+    """
+    arc_csvs = {
+        "pendant_pendant_sum":    "pendant_pendant_sum_relation.csv",
+        "indexed_pendant_sum":    "indexed_pendant_sum_relation.csv",
+        "colored_pendant_sum":    "colored_pendant_sum_relation.csv",
+        "subsidiary_pendant_sum": "subsidiary_pendant_sum_relation.csv",
+        "indexed_subsidiary_sum": "indexed_subsidiary_sum_relation.csv",
+    }
+    result: dict = {}
+    for pattern, csv_file in arc_csvs.items():
+        path = CHECKS_PATH / csv_file
+        if not path.exists():
+            continue
+        df = pd.read_csv(path)
+        if "kfg_name" not in df.columns:
+            continue
+        rows = df[df["kfg_name"] == kfg_id]
+        if rows.empty:
+            continue
+        arcs: list = []
+        for _, row in rows.iterrows():
+            sum_coord = _parse_coord_index(str(row.get("cord_index", "") or ""))
+            summand_coords = _parse_summand_grid_coords(
+                str(row.get("summand_string", "") or "")
+            )
+            if sum_coord and summand_coords:
+                arcs.append((sum_coord, summand_coords))
+        if arcs:
+            result[pattern] = arcs
+    return result
+
+
+def build_arc_traces(
+    arc_data: dict, enabled_patterns: set
+) -> list:
+    """Build one Plotly Scatter trace per enabled arc pattern."""
+    traces: list = []
+    for pattern, arcs in arc_data.items():
+        if pattern not in enabled_patterns:
+            continue
+        color, label = ARC_PATTERNS.get(pattern, ("#888888", pattern))
+        all_x: list = []
+        all_y: list = []
+        for sum_coord, summand_coords in arcs:
+            sx, sy = sum_coord
+            for tx, ty in summand_coords:
+                arc_xs, arc_ys = _bezier_arc(sx, sy, tx, ty)
+                all_x.extend(arc_xs)
+                all_y.extend(arc_ys)
+        if all_x:
+            traces.append(go.Scatter(
+                x=all_x, y=all_y,
+                mode="lines",
+                line=dict(color=color, width=1.5),
+                opacity=0.75,
+                name=label,
+                hoverinfo="skip",
+            ))
+    return traces
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -461,7 +674,7 @@ def main() -> None:
                 "museum_name": "Museum",
                 "cord_count": "Cords",
             }).drop(columns=["kfg_url"], errors="ignore"),
-            use_container_width=True,
+            width='stretch',
             hide_index=True,
             height=600,
         )
@@ -495,14 +708,14 @@ def main() -> None:
             with c1:
                 st.subheader("Pattern Prevalence")
                 st.caption("Khipus with ≥1 instance of each Ascher summation pattern type")
-                st.plotly_chart(build_prevalence_figure(flags_df), use_container_width=True)
+                st.plotly_chart(build_prevalence_figure(flags_df), width='stretch')
             with c2:
                 st.subheader("Pattern Co-occurrence")
                 st.caption(
                     "Number of khipus that exhibit both patterns simultaneously. "
                     "Diagonal = khipus with that single pattern."
                 )
-                st.plotly_chart(build_cooccurrence_figure(flags_df), use_container_width=True)
+                st.plotly_chart(build_cooccurrence_figure(flags_df), width='stretch')
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
         if not selected_id:
@@ -526,7 +739,7 @@ def main() -> None:
             fig = build_3d_figure(selected_id)
 
         if fig:
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
             with st.expander("Raw cord data"):
                 cords_df = load_cords(selected_id)
                 st.dataframe(
@@ -535,7 +748,7 @@ def main() -> None:
                         "color", "value", "length", "knots",
                         "group_idx", "position_in_group",
                     ]],
-                    use_container_width=True,
+                    width='stretch',
                     hide_index=True,
                 )
         else:
@@ -605,7 +818,7 @@ def main() -> None:
             xray_fig.add_trace(trace)
         if arc_traces:
             xray_fig.update_layout(showlegend=True)
-        st.plotly_chart(xray_fig, use_container_width=True)
+        st.plotly_chart(xray_fig, width='stretch')
 
         # Group summary table
         st.subheader("Group summary")
@@ -628,7 +841,7 @@ def main() -> None:
                               "numeric_count": "With values",
                               "total_value": "Sum of values"})
         )
-        st.dataframe(groups_df, use_container_width=True, hide_index=True)
+        st.dataframe(groups_df, width='stretch', hide_index=True)
 
 
 
