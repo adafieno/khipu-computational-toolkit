@@ -3,16 +3,21 @@ Khipu Explorer — Standalone Local Browser
 ==========================================
 Interactive Streamlit app for exploring the KFG khipu database.
 
-Three views:
+Views:
     - Corpus Browser  : filterable / sortable table of all 709 khipus
+    - Analytics       : 4-tab analytics dashboard
+                          Overview   — prevalence · co-occurrence · complexity
+                          Deep Dive  — handedness · counts · magnitudes · dual/multi
+                          Geography  — provenance × pattern heatmap
+                          Pattern Space — PCA scatter · detail table
     - 3D Viewer       : interactive Plotly 3D cord structure for a selected khipu
-    - X-Ray View      : cord group color map + summation preview (full arc view coming)
+    - X-Ray View      : cord group color map + summation arc overlays (PP/IP/CP/SP/IS)
 
 Usage:
     streamlit run scripts/browse.py
 
 Requirements (already in requirements.txt):
-    pip install streamlit plotly pandas
+    pip install streamlit plotly pandas numpy
 """
 
 import ast
@@ -444,6 +449,37 @@ def load_analytics_data() -> pd.DataFrame:
     return result.reset_index(drop=True)
 
 
+@st.cache_data(ttl=3600)
+def load_full_analytics() -> pd.DataFrame:
+    """Load ALL numeric columns from every summary CSV, plus provenance.
+
+    Returns one row per KFG khipu with columns like pp_num_sum_cords,
+    pp_num_left_sums, …, provenance, region.
+    """
+    if not CHECKS_PATH.exists():
+        return pd.DataFrame()
+
+    result: Optional[pd.DataFrame] = None
+    for key, _name, csv_file, _pos_col in PATTERN_CONFIG:
+        path = CHECKS_PATH / csv_file
+        if not path.exists():
+            continue
+        df = pd.read_csv(path)
+        renames = {c: f"{key}_{c}" for c in df.columns if c != "kfg_name"}
+        df = df.rename(columns={"kfg_name": "kfg_id", **renames})
+        for c in df.columns:
+            if c != "kfg_id":
+                df[c] = pd.to_numeric(df[c], errors="coerce")
+        result = df if result is None else result.merge(df, on="kfg_id", how="outer")
+
+    if result is None:
+        return pd.DataFrame()
+
+    corp = load_corpus()[["kfg_id", "provenance", "region"]]
+    result = result.merge(corp, on="kfg_id", how="left")
+    return result.reset_index(drop=True)
+
+
 def build_prevalence_figure(flags_df: pd.DataFrame) -> go.Figure:
     """Horizontal bar chart: # khipus with ≥1 of each summation pattern."""
     pat_cols = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
@@ -503,6 +539,303 @@ def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
         yaxis=dict(color="#94a3b8", autorange="reversed"),
         margin=dict(l=0, r=0, t=10, b=40),
         height=420,
+    )
+    return fig
+
+
+def build_complexity_figure(flags_df: pd.DataFrame) -> go.Figure:
+    """Histogram: how many distinct patterns does each khipu exhibit?"""
+    pat_cols = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
+    counts   = flags_df[pat_cols].astype(int).sum(axis=1)
+
+    bins  = list(range(0, int(counts.max()) + 2))
+    freqs = [int((counts == b).sum()) for b in bins[:-1]]
+
+    fig = go.Figure(go.Bar(
+        x=bins[:-1], y=freqs,
+        marker_color="#06b6d4",
+        text=freqs, textposition="outside",
+    ))
+    fig.update_layout(
+        xaxis_title="Distinct patterns per khipu",
+        yaxis_title="Khipus",
+        xaxis=dict(tickmode="linear", dtick=1, gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        margin=dict(l=0, r=30, t=10, b=40),
+        height=340,
+    )
+    return fig
+
+
+def build_handedness_figure(full_df: pd.DataFrame) -> go.Figure:
+    """Grouped bar: total left-sum vs right-sum cords per pattern type."""
+    HAND_PATTERNS = [
+        ("pp",  "PP"),
+        ("ip",  "IP"),
+        ("cp",  "CP"),
+        ("sp",  "SP"),
+        ("is",  "IS"),
+    ]
+    names, lefts, rights = [], [], []
+    for key, label in HAND_PATTERNS:
+        lc = f"{key}_num_left_sums"
+        rc = f"{key}_num_right_sums"
+        if lc in full_df.columns and rc in full_df.columns:
+            names.append(label)
+            lefts.append(int(full_df[lc].sum(skipna=True)))
+            rights.append(int(full_df[rc].sum(skipna=True)))
+
+    fig = go.Figure([
+        go.Bar(name="Left (←)", x=names, y=lefts,  marker_color="#3b82f6"),
+        go.Bar(name="Right (→)", x=names, y=rights, marker_color="#f97316"),
+    ])
+    fig.update_layout(
+        barmode="group",
+        xaxis_title="Pattern",
+        yaxis_title="Total sum-cord instances",
+        legend=dict(bgcolor="rgba(0,0,0,0)"),
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=340,
+    )
+    return fig
+
+
+def build_count_dist_figure(full_df: pd.DataFrame) -> go.Figure:
+    """Box plots: distribution of the summation-instance count per pattern."""
+    COUNT_COLS = [
+        ("pp",  "pp_num_sum_cords",         "PP"),
+        ("ip",  "ip_num_sum_cords",          "IP"),
+        ("cp",  "cp_num_sum_cords",          "CP"),
+        ("sp",  "sp_num_sum_cords",          "SP"),
+        ("is",  "is_num_sum_cords",          "IS"),
+        ("gg",  "gg_num_sum_groups",         "GG"),
+        ("gsb", "gsb_num_group_sum_bands",   "GSB"),
+        ("adg", "adg_num_decreasing_groups", "ADG"),
+        ("psn", "psn_num_pendant_sub_neighbor_groups", "PSN"),
+    ]
+    fig = go.Figure()
+    palette = ["#3b82f6","#f97316","#22c55e","#a855f7","#f43f5e",
+               "#eab308","#06b6d4","#ec4899","#10b981"]
+    for i, (_key, col, label) in enumerate(COUNT_COLS):
+        if col not in full_df.columns:
+            continue
+        vals = full_df[col].dropna()
+        vals = vals[vals > 0]
+        if vals.empty:
+            continue
+        fig.add_trace(go.Box(
+            y=vals, name=label,
+            marker_color=palette[i % len(palette)],
+            boxpoints="outliers",
+            line_color="#e2e8f0",
+        ))
+    fig.update_layout(
+        yaxis_title="Count per khipu (positive cases only)",
+        showlegend=False,
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=380,
+    )
+    return fig
+
+
+def build_magnitude_figure(full_df: pd.DataFrame) -> go.Figure:
+    """Box plots: distribution of the *mean sum value* per pattern."""
+    MAG_COLS = [
+        ("pp",  "pp_mean_sum",  "PP"),
+        ("ip",  "ip_mean_sum",  "IP"),
+        ("cp",  "cp_mean_sum",  "CP"),
+        ("sp",  "sp_mean_sum",  "SP"),
+        ("is",  "is_mean_sum",  "IS"),
+        ("gg",  "gg_mean_sum",  "GG"),
+    ]
+    fig = go.Figure()
+    palette = ["#3b82f6","#f97316","#22c55e","#a855f7","#f43f5e","#eab308"]
+    for i, (_key, col, label) in enumerate(MAG_COLS):
+        if col not in full_df.columns:
+            continue
+        vals = full_df[col].dropna()
+        vals = vals[vals > 0]
+        if vals.empty:
+            continue
+        fig.add_trace(go.Box(
+            y=vals, name=label,
+            marker_color=palette[i % len(palette)],
+            boxpoints="outliers",
+            line_color="#e2e8f0",
+        ))
+    fig.update_layout(
+        yaxis_title="Mean sum value (positive cases only)",
+        showlegend=False,
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=380,
+    )
+    return fig
+
+
+def build_dual_multi_figure(full_df: pd.DataFrame) -> go.Figure:
+    """Stacked bar: for PP/IP/CP — regular vs dual-summand vs multi-summand."""
+    DM_PATTERNS = [
+        ("pp", "PP", "pp_num_sum_cords", "pp_num_dual_sums", "pp_num_multisummands"),
+        ("ip", "IP", "ip_num_sum_cords", "ip_num_dual_sums", "ip_num_multisummands"),
+        ("cp", "CP", "cp_num_sum_cords", "cp_num_dual_sums", "cp_num_multisummands"),
+    ]
+    labels, regulars, duals, multis = [], [], [], []
+    for _key, label, total_col, dual_col, multi_col in DM_PATTERNS:
+        if total_col not in full_df.columns:
+            continue
+        total = float(full_df[total_col].sum(skipna=True))
+        dual  = float(full_df[dual_col].sum(skipna=True)) if dual_col in full_df.columns else 0.0
+        multi = float(full_df[multi_col].sum(skipna=True)) if multi_col in full_df.columns else 0.0
+        labels.append(label)
+        duals.append(dual)
+        multis.append(multi)
+        regulars.append(max(0.0, total - dual - multi))
+
+    fig = go.Figure([
+        go.Bar(name="Regular",        x=labels, y=regulars, marker_color="#3b82f6"),
+        go.Bar(name="Dual-summand",   x=labels, y=duals,    marker_color="#f97316"),
+        go.Bar(name="Multi-summand",  x=labels, y=multis,   marker_color="#a855f7"),
+    ])
+    fig.update_layout(
+        barmode="stack",
+        yaxis_title="Total cord instances",
+        legend=dict(bgcolor="rgba(0,0,0,0)"),
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8"),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=340,
+    )
+    return fig
+
+
+def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figure:
+    """Heatmap: provenance (rows) × pattern (cols) = % of khipus with that pattern."""
+    pat_cols  = [k for k, *_ in PATTERN_CONFIG]
+    short     = {k: k.upper() for k, *_ in PATTERN_CONFIG}
+
+    # join provenance into flags
+    if "provenance" in full_df.columns:
+        prov_map = full_df.set_index("kfg_id")["provenance"].dropna()
+        df = flags_df.copy()
+        df["provenance"] = df["kfg_id"].map(prov_map)
+    else:
+        return go.Figure()
+
+    df = df.dropna(subset=["provenance"])
+    top_provs = (
+        df.groupby("provenance").size()
+        .sort_values(ascending=False)
+        .head(25).index.tolist()
+    )
+    df = df[df["provenance"].isin(top_provs)]
+
+    available = [k for k in pat_cols if k in df.columns]
+    z_vals, text_vals = [], []
+    for prov in top_provs:
+        sub = df[df["provenance"] == prov]
+        n   = len(sub)
+        row_z, row_t = [], []
+        for k in available:
+            pct = sub[k].mean() * 100 if n > 0 else 0
+            row_z.append(round(pct, 1))
+            row_t.append(f"{pct:.0f}%<br>(n={n})")
+        z_vals.append(row_z)
+        text_vals.append(row_t)
+
+    col_labels = [short[k] for k in available]
+    fig = go.Figure(go.Heatmap(
+        z=z_vals, x=col_labels, y=top_provs,
+        colorscale="YlOrRd",
+        text=text_vals,
+        texttemplate="%{text}",
+        textfont=dict(size=9),
+        hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
+        showscale=True,
+        colorbar=dict(title="%", ticksuffix="%"),
+    ))
+    fig.update_layout(
+        xaxis_title="Pattern",
+        yaxis_title="Provenance",
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(color="#94a3b8"),
+        yaxis=dict(color="#94a3b8", dtick=1),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=max(400, len(top_provs) * 22 + 80),
+    )
+    return fig
+
+
+def build_pca_figure(flags_df: pd.DataFrame) -> go.Figure:
+    """2D PCA scatter of khipus in 9-dimensional pattern-flag space."""
+    pat_cols = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
+    X = flags_df[pat_cols].fillna(False).astype(float).values
+
+    # Center then SVD (= PCA)
+    Xc  = X - X.mean(axis=0)
+    _, _, Vt = np.linalg.svd(Xc, full_matrices=False)
+    proj = Xc @ Vt[:2].T  # (n, 2)
+
+    n_patterns = X.sum(axis=1).astype(int)
+    palette    = ["#475569","#3b82f6","#f97316","#22c55e","#a855f7",
+                  "#f43f5e","#eab308","#06b6d4","#ec4899","#10b981"]
+    colors_ = [palette[min(n, len(palette) - 1)] for n in n_patterns]
+
+    hover = [
+        f"<b>{row['kfg_id']}</b><br>{int(n_patterns[i])} pattern(s)"
+        for i, (_, row) in enumerate(flags_df.iterrows())
+    ]
+
+    fig = go.Figure(go.Scatter(
+        x=proj[:, 0], y=proj[:, 1],
+        mode="markers",
+        marker=dict(size=5, color=colors_, opacity=0.7,
+                    line=dict(width=0)),
+        text=hover,
+        hovertemplate="%{text}<extra></extra>",
+        showlegend=False,
+    ))
+    # Add invisible legend traces for colour meaning
+    for cnt, col in enumerate(palette[:5]):
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None], mode="markers",
+            marker=dict(size=8, color=col),
+            name=f"{cnt} pattern{'s' if cnt != 1 else ''}",
+            showlegend=True,
+        ))
+    fig.update_layout(
+        xaxis_title="PC 1",
+        yaxis_title="PC 2",
+        legend=dict(bgcolor="rgba(0,0,0,0)", title="# patterns"),
+        plot_bgcolor="#0f172a",
+        paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(gridcolor="#334155", color="#94a3b8", zeroline=False),
+        yaxis=dict(gridcolor="#334155", color="#94a3b8", zeroline=False),
+        margin=dict(l=0, r=0, t=10, b=40),
+        height=480,
     )
     return fig
 
@@ -687,41 +1020,159 @@ def main() -> None:
     # ── Analytics ───────────────────────────────────────────────────────────────────────
     elif view == "Analytics":
         flags_df = load_analytics_data()
+        full_df  = load_full_analytics()
         n        = len(flags_df)
-        st.header("Corpus Analytics")
-        st.caption(
-            f"Pattern prevalence and co-occurrence across {n:,} KFG khipus · "
-            "sourced from authoritative KFG checks/ ground-truth files"
-        )
 
+        st.header("Corpus Analytics")
         if flags_df.empty:
             st.warning(
                 "KFG checks/ directory not found. "
                 "Run `python scripts/build_kfg_database.py` and ensure the "
                 "checks/ directory is present."
             )
-        else:
-            pat_cols    = [k for k, *_ in PATTERN_CONFIG]
-            any_pattern = (flags_df[pat_cols].sum(axis=1) > 0)
-            m1, m2, m3  = st.columns(3)
-            m1.metric("KFG khipus", f"{n:,}")
-            m2.metric("With ≥1 pattern", f"{int(any_pattern.sum()):,}")
-            m3.metric("Pattern coverage", f"{any_pattern.mean() * 100:.1f}%")
+            return
 
-            st.divider()
+        pat_cols    = [k for k, *_ in PATTERN_CONFIG if k in flags_df.columns]
+        any_pattern = (flags_df[pat_cols].astype(int).sum(axis=1) > 0)
+        no_pattern  = (~any_pattern).sum()
 
+        m1, m2, m3, m4, m5 = st.columns(5)
+        m1.metric("KFG khipus", f"{n:,}")
+        m2.metric("With ≥1 pattern", f"{int(any_pattern.sum()):,}")
+        m3.metric("Pattern coverage", f"{any_pattern.mean() * 100:.1f}%")
+        m4.metric("No pattern", f"{int(no_pattern):,}")
+        # Most common pattern
+        best_k = max(pat_cols, key=lambda k: int(flags_df[k].sum()))
+        best_n = int(flags_df[best_k].sum())
+        best_label = best_k.upper()
+        m5.metric("Most common", f"{best_label} ({best_n:,})")
+
+        st.divider()
+
+        tab1, tab2, tab3, tab4 = st.tabs([
+            "📊 Overview",
+            "🔬 Deep Dive",
+            "🌍 Geography",
+            "🔭 Pattern Space",
+        ])
+
+        # ── Tab 1: Overview ────────────────────────────────────────────────────
+        with tab1:
             c1, c2 = st.columns(2)
             with c1:
                 st.subheader("Pattern Prevalence")
-                st.caption("Khipus with ≥1 instance of each Ascher summation pattern type")
-                st.plotly_chart(build_prevalence_figure(flags_df), width='stretch')
+                st.caption("Khipus exhibiting ≥1 instance of each summation pattern")
+                st.plotly_chart(build_prevalence_figure(flags_df), width="stretch")
             with c2:
                 st.subheader("Pattern Co-occurrence")
                 st.caption(
-                    "Number of khipus that exhibit both patterns simultaneously. "
-                    "Diagonal = khipus with that single pattern."
+                    "# khipus expressing both patterns simultaneously. "
+                    "Diagonal = single-pattern count."
                 )
-                st.plotly_chart(build_cooccurrence_figure(flags_df), width='stretch')
+                st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
+
+            st.subheader("Pattern Complexity")
+            st.caption(
+                "How many distinct summation patterns does a single khipu exhibit? "
+                "0 = no detected summation structure."
+            )
+            st.plotly_chart(build_complexity_figure(flags_df), width="stretch")
+
+        # ── Tab 2: Deep Dive ───────────────────────────────────────────────────
+        with tab2:
+            st.subheader("Handedness (Left vs Right Sums)")
+            st.caption(
+                "For cord-level patterns (PP/IP/CP/SP/IS): total left-handed vs "
+                "right-handed summation instances across the entire corpus."
+            )
+            st.plotly_chart(build_handedness_figure(full_df), width="stretch")
+
+            st.divider()
+            c3, c4 = st.columns(2)
+            with c3:
+                st.subheader("Instance-Count Distribution")
+                st.caption(
+                    "Box plots of *how many* summation instances a khipu has "
+                    "(positive cases only). Outliers shown individually."
+                )
+                st.plotly_chart(build_count_dist_figure(full_df), width="stretch")
+            with c4:
+                st.subheader("Sum Magnitude Distribution")
+                st.caption(
+                    "Box plots of the mean cord-value sum per khipu, "
+                    "for patterns that report numeric magnitudes."
+                )
+                st.plotly_chart(build_magnitude_figure(full_df), width="stretch")
+
+            st.divider()
+            st.subheader("Dual- & Multi-Summand Breakdown")
+            st.caption(
+                "For PP/IP/CP: total cord instances split into regular sums, "
+                "dual-summand (sum cord = sum of exactly 2), "
+                "and multi-summand (≥3 summands)."
+            )
+            st.plotly_chart(build_dual_multi_figure(full_df), width="stretch")
+
+        # ── Tab 3: Geography ───────────────────────────────────────────────────
+        with tab3:
+            st.subheader("Pattern Rate by Provenance")
+            st.caption(
+                "Percentage of khipus from each provenance (top 25 by count) "
+                "that exhibit each summation pattern. "
+                "Darker = higher rate."
+            )
+            st.plotly_chart(build_geo_heatmap(full_df, flags_df), width="stretch")
+
+        # ── Tab 4: Pattern Space ───────────────────────────────────────────────
+        with tab4:
+            st.subheader("Khipu Pattern-Space (PCA)")
+            st.caption(
+                "Principal Component Analysis of the 9-dimensional boolean pattern "
+                "vector. Each dot = one khipu; colour = number of patterns expressed. "
+                "Clusters suggest structural family relationships."
+            )
+            st.plotly_chart(build_pca_figure(flags_df), width="stretch")
+
+            st.divider()
+            st.subheader("Pattern Detail Table")
+            st.caption("Per-pattern corpus-wide statistics from the KFG checks/ ground truth.")
+
+            rows = []
+            for key, name, _csv, pos_col in PATTERN_CONFIG:
+                if key not in flags_df.columns:
+                    continue
+                n_pos  = int(flags_df[key].sum())
+                pct    = n_pos / n * 100
+                mean_col = f"{key}_mean_sum"
+                mean_val = (
+                    f"{full_df[mean_col].mean(skipna=True):.1f}"
+                    if not full_df.empty and mean_col in full_df.columns
+                    else "—"
+                )
+                count_col = next(
+                    (f"{key}_{c}" for c in ["num_sum_cords","num_sum_groups",
+                                             "num_group_sum_bands","num_decreasing_groups",
+                                             "num_pendant_sub_neighbor_groups"]
+                     if not full_df.empty and f"{key}_{c}" in full_df.columns),
+                    None,
+                )
+                mean_count = (
+                    f"{full_df[count_col].mean(skipna=True):.1f}"
+                    if count_col else "—"
+                )
+                rows.append({
+                    "Pattern": name,
+                    "Khipus": n_pos,
+                    "Coverage %": f"{pct:.1f}%",
+                    "Avg count/khipu": mean_count,
+                    "Avg mean-sum": mean_val,
+                })
+            st.dataframe(
+                pd.DataFrame(rows),
+                width="stretch",
+                hide_index=True,
+            )
+
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
         if not selected_id:
