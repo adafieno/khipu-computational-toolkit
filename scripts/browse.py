@@ -524,22 +524,28 @@ def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
     mat  = flags_df[pat_cols].astype(int).values
     cooc = mat.T @ mat
 
-    # Per-cell text colour: dark text on light cells, light text on dark cells.
-    threshold  = cooc.max() * 0.45
-    text_colors = [
-        ["#0f172a" if v < threshold else "#e2e8f0" for v in row]
-        for row in cooc
-    ]
-
     fig = go.Figure(go.Heatmap(
         z=cooc, x=labels, y=labels,
         colorscale="Blues",
-        text=cooc,
-        texttemplate="%{text}",
-        textfont=dict(size=11, color=text_colors),
         hovertemplate="%{y} ∩ %{x}: %{z}<extra></extra>",
         showscale=True,
     ))
+
+    # Per-cell annotations with adaptive text colour (Plotly textfont.color
+    # does not accept a 2-D array, so we annotate each cell individually).
+    threshold = cooc.max() * 0.45
+    n = len(labels)
+    for i in range(n):
+        for j in range(n):
+            v = int(cooc[i, j])
+            fc = "#0f172a" if v < threshold else "#e2e8f0"
+            fig.add_annotation(
+                x=labels[j], y=labels[i],
+                text=str(v),
+                showarrow=False,
+                font=dict(size=11, color=fc),
+            )
+
     fig.update_layout(
         plot_bgcolor="#0f172a",
         paper_bgcolor="#0f172a",
@@ -781,24 +787,28 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     col_labels = [short[k] for k in available]
 
-    # Per-cell text colour: dark on light cells, light on dark cells.
-    max_z = max(v for row in z_vals for v in row) or 1
-    threshold = max_z * 0.45
-    text_colors = [
-        ["#0f172a" if v < threshold else "#f8fafc" for v in row]
-        for row in z_vals
-    ]
-
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
         colorscale="YlOrRd",
-        text=text_vals,
-        texttemplate="%{text}",
-        textfont=dict(size=9, color=text_colors),
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
+        text=text_vals,
         showscale=True,
         colorbar=dict(title="%", ticksuffix="%"),
     ))
+
+    # Per-cell annotations with adaptive text colour.
+    max_z = max(v for row in z_vals for v in row) or 1
+    threshold = max_z * 0.45
+    for i, prov in enumerate(top_provs):
+        for j, col in enumerate(col_labels):
+            v = z_vals[i][j]
+            fc = "#0f172a" if v < threshold else "#f8fafc"
+            fig.add_annotation(
+                x=col, y=prov,
+                text=text_vals[i][j].replace("<br>", "\n"),
+                showarrow=False,
+                font=dict(size=8, color=fc),
+            )
     fig.update_layout(
         xaxis_title="Pattern",
         yaxis_title="Provenance",
