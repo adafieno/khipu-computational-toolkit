@@ -477,7 +477,9 @@ def load_full_analytics() -> pd.DataFrame:
 
     corp = load_corpus()[["kfg_id", "provenance", "region"]]
     result = result.merge(corp, on="kfg_id", how="left")
-    return result.reset_index(drop=True)
+    # outer-merging multiple CSVs can introduce duplicates; keep first occurrence
+    result = result.drop_duplicates(subset=["kfg_id"]).reset_index(drop=True)
+    return result
 
 
 def build_prevalence_figure(flags_df: pd.DataFrame) -> go.Figure:
@@ -736,7 +738,14 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     # join provenance into flags
     if "provenance" in full_df.columns:
-        prov_map = full_df.set_index("kfg_id")["provenance"].dropna()
+        # Drop duplicates before building the lookup to avoid non-unique index
+        prov_map = (
+            full_df[["kfg_id", "provenance"]]
+            .dropna(subset=["provenance"])
+            .drop_duplicates(subset=["kfg_id"])
+            .set_index("kfg_id")["provenance"]
+            .to_dict()
+        )
         df = flags_df.copy()
         df["provenance"] = df["kfg_id"].map(prov_map)
     else:
