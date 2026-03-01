@@ -107,6 +107,86 @@ _COLOR_MAP: dict[str, str] = {
 
 _FALLBACK = "#9B7B5A"
 
+# ── Friendly provenance labels ─────────────────────────────────────────────────
+# Maps the raw DB string → a short display label shown in dropdowns and charts.
+# Any raw value not listed falls back to the raw value itself (truncated if >50 chars).
+
+PROVENANCE_LABELS: dict[str, str] = {
+    # Chala group
+    'This quipu is associated with AS59-AS67 / found with a cloth bag at Chala.': 'Chala',
+    'This quipu is associated wtih AS59-AS67 / found with a cloth bag at Chala.': 'Chala',
+    'This quipu, along with AS60-AS67, was found with a cloth bag at Chala.':     'Chala',
+    # Long Ascher note
+    'Ascher notes "The museum card reads "From an Inca grave, Pachacamac, Peru. E. Nordenskiöld collection. By exchange 1925."': 'Pachacamac (Nordenskiöld)',
+    # Compound / verbose site names
+    'Armatambo, Huaca San Pedro':                                   'Armatambo / Huaca San Pedro',
+    'Armatambo, Lima, Central Coast':                               'Armatambo, Lima',
+    'Casa del Quipu, Pachacamac':                                   'Pachacamac (Casa del Quipu)',
+    'Centinela, Tambe de Mora':                                     'La Centinela / Tambo de Mora',
+    'Chancay, Central Coast':                                       'Chancay (Central Coast)',
+    'Cieneguilla, Valle de Lurin':                                  'Cieneguilla (Lurin Valley)',
+    'Costa Central, Huacho':                                        'Huacho (Central Coast)',
+    'Costa Sur':                                                    'South Coast',
+    'Donation from the collection Belli':                           'Belli Collection',
+    'Eduard Gaffron':                                               'Gaffron Collection',
+    'Eduard Gaffron Estate':                                        'Gaffron Estate',
+    'Grave K, road between Chulpaca and Tate (Site T), Ica Valley': 'Ica Valley (Site T, Grave K)',
+    'Grave M, Site T, Ica; excavated by Max Uhle':                  'Ica (Site T, Grave M — Uhle)',
+    'Grave M, road between Chulpaca and Tate (Site T), Ica valley': 'Ica Valley (Site T, Grave M)',
+    'Hacienda Copara, Nazca':                                       'Nazca (Hda. Copara)',
+    'Hacienda Ullujalla y Callengo':                                'Hda. Ullujalla / Callengo',
+    'Hda. Huando, Chancay':                                         'Chancay (Hda. Huando)',
+    'Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)':       'Lima (Huaca Pérez)',
+    'Huaca San Marco, possibly epoch 2 of the Middle Horizon period (AD 650–750)': 'Huaca San Marco',
+    'Huaca San Pedro, Armatambo':                                   'Armatambo (Huaca San Pedro)',
+    'Huacho u . Pachacamac':                                        'Huacho / Pachacamac',
+    'Huacho?':                                                      'Huacho (?)',
+    'Huando, Chancay, Peru (Gaffron Collection)':                    'Chancay / Huando (Gaffron)',
+    'Ica Valley, near Callango':                                    'Ica Valley (near Callango)',
+    'Ica or Cajamarquilla':                                         'Ica / Cajamarquilla',
+    'Ica, Coast of Peru':                                           'Ica (Coast)',
+    'Ica/Pisco':                                                    'Ica / Pisco',
+    'La Centinela,Tambo de Mora':                                   'La Centinela / Tambo de Mora',
+    'La puntilla, between Paracas and Pisco':                       'La Puntilla (Paracas/Pisco)',
+    'Likely near Lima':                                             'Near Lima (prob.)',
+    'Lluta Valley':                                                 'Lluta Valley',
+    'Maranga, Huaca 1':                                             'Lima (Maranga, Huaca 1)',
+    'Monte de Cacatilla, Valle de Nazca':                           'Nazca (Monte de Cacatilla)',
+    'Nazca Valley; Ancon, Central Coast':                           'Nazca / Ancon',
+    'Pachacamac (Casa de los quipus)':                              'Pachacamac (Casa de los Quipus)',
+    'Peru':                                                         'Peru (unknown)',
+    'Peru, Fundort: Pachacmac':                                     'Pachacamac (Fundort)',
+    'Playa Miller #6, Arica, Chile':                                'Arica, Chile (Playa Miller 6)',
+    'Probably collected by Jane Stanford and donated to the Stanford Museum before 1905': 'Stanford Collection (prob. 1905)',
+    'Pueblo Libre, Lima, Peru':                                     'Lima (Pueblo Libre)',
+    'Purported to have been discovered in a burial at the coastal site of Ancon, near Lima, Peru': 'Ancon (prob.)',
+    'Rancho San Juan, Ica Valley, Peru':                            'Ica Valley (Rancho San Juan)',
+    'Región Sur, Quillagua, Valle de Loa':                          'Quillagua, Valle de Loa',
+    'Santa Clara, Nazca':                                           'Nazca (Santa Clara)',
+    'South Peru':                                                   'South Peru',
+    'Southern Coast, Peru':                                         'Southern Coast',
+    'Thomas Harper Goodspeed':                                      'Goodspeed Collection',
+    'Ullujaya, Ocucaje, Ica':                                       'Ocucaje / Ullujaya (Ica)',
+    'Unknown (not from Gaffron collections)':                       'Unknown (non-Gaffron)',
+    'Valle de Ica Hacienda Callango Ocucaje':                       'Ica Valley (Hda. Callango / Ocucaje)',
+    'Valle de Pisco':                                               'Pisco Valley',
+    'foothills of Cerro Solar':                                     'Cerro Solar (foothills)',
+    'near Callengo, Ica Valley':                                    'Ica Valley (near Callengo)',
+    'near Lima':                                                    'Near Lima',
+    'probably Central Coast Late Period':                           'Central Coast (Late Period, prob.)',
+    'Between Ica and Pisco':                                        'Between Ica and Pisco',
+}
+
+
+def _fmt_prov(raw: str | None) -> str:
+    """Return a short display label for a raw provenance string."""
+    if not raw or str(raw).strip() in ("", "nan", "None"):
+        return "—"
+    cleaned = str(raw).strip()
+    label = PROVENANCE_LABELS.get(cleaned, cleaned)
+    # Fallback truncation for any unlisted long strings
+    return label if len(label) <= 50 else label[:47] + "…"
+
 
 def color_to_hex(code: str) -> str:
     """Resolve a potentially compound Ascher color code (e.g. 'MB:W') to hex."""
@@ -773,7 +853,9 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
             .to_dict()
         )
         df = flags_df.copy()
-        df["provenance"] = df["kfg_id"].map(prov_map)
+        df["provenance"] = df["kfg_id"].map(prov_map).map(
+            lambda v: _fmt_prov(v) if pd.notna(v) else None
+        )
     else:
         return go.Figure()
 
@@ -987,15 +1069,22 @@ def main() -> None:
         st.subheader("Select khipu")
 
         # Provenance filter
-        provenances = ["All"] + sorted(
-            str(p) for p in corpus["provenance"].dropna().unique()
-        )
-        prov = st.selectbox("Provenance", provenances, key="prov_filter")
-        pool = corpus if prov == "All" else corpus[corpus["provenance"] == prov]
+        provenances = sorted(corpus["provenance"].dropna().unique())
+        prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
+        # Build reverse map: friendly label -> list of raw values
+        _prov_raw_map: dict[str, list[str]] = {}
+        for p in provenances:
+            _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
+        prov_label = st.selectbox("Provenance", prov_options, key="prov_filter")
+        if prov_label == "All":
+            pool = corpus
+        else:
+            raw_vals = _prov_raw_map.get(prov_label, [])
+            pool = corpus[corpus["provenance"].isin(raw_vals)]
 
         khipu_ids = pool["kfg_id"].tolist()
         labels = {
-            row["kfg_id"]: f"{row['kfg_id']}  {row['kfg_name'] or ''}  [{row['provenance'] or '—'}]"
+            row["kfg_id"]: f"{row['kfg_id']}  {row['kfg_name'] or ''}  [{_fmt_prov(row['provenance'])}]"
             for _, row in pool.iterrows()
         }
 
