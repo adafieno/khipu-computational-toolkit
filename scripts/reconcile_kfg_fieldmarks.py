@@ -1,5 +1,5 @@
 ﻿"""
-Reconciliation: KFG Ascher Sum Ground-Truth vs KCAT detector output (v2).
+Reconciliation: KFG Ascher Sum Ground-Truth vs K-CAT detector output (v2).
 
 GROUND-TRUTH SOURCE: data/kfg/KFG/KFG/checks/*.csv
   These files contain one row per khipu (all 703), with per-pattern statistics
@@ -29,7 +29,7 @@ SIGNIFICANCE THRESHOLDS (from individual analysis pages)
   pendant_sub_neighbor   : > 1  (same reasoning)
   ascher_decreasing_group: any  (has_decreasing_groups == True)
 
-KCAT detector implements all 9 patterns.  The reconciler compares each one
+K-CAT detector implements all 9 patterns.  The reconciler compares each one
 against the KFG ground truth.
 
 Usage:
@@ -133,7 +133,7 @@ def load_kfg_ground_truth():
 
 
 # ---------------------------------------------------------------------------
-# Step 2: Run KCAT detector
+# Step 2: Run K-CAT detector
 # ---------------------------------------------------------------------------
 
 def run_kcat_detector(kfg_ids):
@@ -151,7 +151,7 @@ def run_kcat_detector(kfg_ids):
     )
     conn.close()
 
-    # Map KCAT detector pattern keys -> our short keys
+    # Map K-CAT detector pattern keys -> our short keys
     detector_key_map = {
         "pendant_pendant_sum":      "pp",
         "indexed_pendant_sum":      "ip",
@@ -164,7 +164,7 @@ def run_kcat_detector(kfg_ids):
         "ascher_decreasing_group":  "adg",
     }
 
-    # Significance thresholds for KCAT detector match counts
+    # Significance thresholds for K-CAT detector match counts
     kcat_thresholds = {
         "is":  1,   # > 1 occurrence
         "psn": 1,   # > 1 group
@@ -197,7 +197,7 @@ def run_kcat_detector(kfg_ids):
     n_valid = valid.sum()
     n_any = df.loc[valid, "kcat_any"].sum()
     print(f"\nKCAT detector run on {len(kfg_ids)} khipus.")
-    print(f"  KCAT 'has summation': {n_any} / {n_valid} "
+    print(f"  K-CAT 'has summation': {n_any} / {n_valid} "
           f"({n_any/n_valid*100:.1f}%)")
     return df
 
@@ -224,23 +224,23 @@ def print_summary(merged):
     kcat_only = (merged["_merge"] == "right_only").sum()
 
     print("\n" + "=" * 70)
-    print("RECONCILIATION SUMMARY  (KFG checks CSVs vs KCAT detector v2)")
+    print("RECONCILIATION SUMMARY  (KFG checks CSVs vs K-CAT detector v2)")
     print("=" * 70)
     print(f"Total rows merged                           : {len(merged)}")
-    print(f"  Khipus in both KFG checks + KCAT DB       : {total}")
-    print(f"  KFG checks only (not in KCAT DB)          : {kfg_only}")
-    print(f"  KCAT DB only    (not in KFG checks)       : {kcat_only}")
+    print(f"  Khipus in both KFG checks + K-CAT DB       : {total}")
+    print(f"  KFG checks only (not in K-CAT DB)          : {kfg_only}")
+    print(f"  K-CAT DB only    (not in KFG checks)       : {kcat_only}")
     print()
     print("Overall 'has summation' agreement:")
     print(f"  Both positive (agree +)                   : {agree_p}")
     print(f"  Both negative (agree -)                   : {agree_n}")
-    print(f"  KCAT positive, KFG negative (FP)          : {kcat_fp}")
-    print(f"  KFG positive,  KCAT negative (FN)         : {kfg_fn}")
+    print(f"  K-CAT positive, KFG negative (FP)          : {kcat_fp}")
+    print(f"  KFG positive,  K-CAT negative (FN)         : {kfg_fn}")
     print(f"\n  Agreement rate (in-both set)              : {agreement_rate:.1f}%")
 
     # Per-pattern breakdown
-    print("\nPer-pattern (KFG checks vs KCAT, in-both set):")
-    header = (f"  {'Pattern':<8}  {'Sig':>3}  {'KFG+':>5}  {'KCAT+':>5}  "
+    print("\nPer-pattern (KFG checks vs K-CAT, in-both set):")
+    header = (f"  {'Pattern':<8}  {'Sig':>3}  {'KFG+':>5}  {'K-CAT+':>5}  "
               f"{'Agree+':>6}  {'Agree-':>6}  {'FP':>4}  {'FN':>4}  {'Agr%':>6}")
     print(header)
     print("  " + "-" * 68)
@@ -276,7 +276,7 @@ def print_summary(merged):
 if __name__ == "__main__":
     print("Loading KFG ground truth from checks CSVs ...")
     kfg_df  = load_kfg_ground_truth()
-    print("\nRunning KCAT detector ...")
+    print("\nRunning K-CAT detector ...")
     kcat_df = run_kcat_detector(kfg_df["khipu_id"].tolist())
     merged  = reconcile(kfg_df, kcat_df)
     print_summary(merged)

@@ -1,6 +1,6 @@
-# Scripts Directory
+﻿# Scripts Directory
 
-This directory contains KFG-focused analysis and explorer scripts for the Khipu Computational Analysis Toolkit (KCAT). All scripts are designed to be run from the repository root directory.
+This directory contains KFG-focused analysis and explorer scripts for the Khipu Computational Analysis Toolkit (K-CAT). All scripts are designed to be run from the repository root directory.
 
 ---
 

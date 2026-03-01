@@ -1,7 +1,7 @@
-# Phase 1: Corpus Foundation
+﻿# Phase 1: Corpus Foundation
 
 **Generated:** 2026-02-28  
-**Database:** KCAT SQLite database (built from KFG source data)  
+**Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/corpus_statistics.py`  
 **Status:** ✅ Complete
 
@@ -46,7 +46,7 @@ This methodology is identical to the OKR baseline and is described fully in Asch
 | Numeric coverage (value > 0) | 68.2% | 69.7% |
 | Khipus with any decoded value | 95.8% | 98.2% |
 
-*OKR reference figures from KCAT Phase 0–1 reports, December 2025–January 2026.*
+*OKR reference figures from K-CAT Phase 0–1 reports, December 2025–January 2026.*
 
 ---
 
@@ -162,7 +162,7 @@ python scripts/corpus_statistics.py --db path/to/other.db --report  # any corpus
 
 ## Limitations
 
-- Statistics reflect the state of the KCAT database at time of generation. The KCAT database is rebuilt from KFG source XLS files by `scripts/build_kfg_database.py`; re-run that script first to incorporate any upstream KFG updates.
+- Statistics reflect the state of the K-CAT database at time of generation. The K-CAT database is rebuilt from KFG source XLS files by `scripts/build_kfg_database.py`; re-run that script first to incorporate any upstream KFG updates.
 - Numeric decoding uses the Ascher positional system. Alternative decoding proposals (e.g., Urton's binary system) would produce different value distributions.
 - Provenance data quality depends on KFG source records. The 236 unknown-provenance khipus represent a real gap in the archaeological record, not a data entry error.
 
@@ -202,7 +202,7 @@ Cross-corpus comparison figures in this report use the **Open Khipu Repository (
 
 ### About This Toolkit
 
-The Khipu Computational Analysis Toolkit (KCAT) is an independent computational companion to the KFG, providing reproducible Python scripts for corpus-scale methods research. It does not modify or redistribute the underlying KFG data. If you use these analyses, please cite the KFG primary source and the Ascher & Ascher reference for the decoding methodology.
+The Khipu Computational Analysis Toolkit (K-CAT) is an independent computational companion to the KFG, providing reproducible Python scripts for corpus-scale methods research. It does not modify or redistribute the underlying KFG data. If you use these analyses, please cite the KFG primary source and the Ascher & Ascher reference for the decoding methodology.
 
 ---
 

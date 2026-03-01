@@ -1,4 +1,4 @@
-"""
+﻿"""
 Calibration sweep: find the min_matches threshold + color normalization setting
 that best reproduces KFG fieldmarks summation judgments (488/702 = 69.5%).
 
@@ -7,7 +7,7 @@ Two knobs:
   normalize_color: strip color code suffixes before running colored_pendant_sum
                    e.g. "MB:W" -> "MB", "KB-DB" -> "KB"
 
-For each combination, reports KCAT positive rate, FP, FN, and agreement vs KFG.
+For each combination, reports K-CAT positive rate, FP, FN, and agreement vs KFG.
 
 Usage:
     python scripts/calibrate_detector_threshold.py
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         print(f"  Done.\n")
 
     hdr = (f"{'min_matches':>11}  {'color_norm':>10}  "
-           f"{'KCAT+':>6}  {'rate':>6}  {'FP':>5}  {'FN':>5}  {'Agr%':>6}")
+           f"{'K-CAT+':>6}  {'rate':>6}  {'FP':>5}  {'FN':>5}  {'Agr%':>6}")
     print(hdr)
     print("-" * len(hdr))
 
@@ -143,9 +143,9 @@ if __name__ == "__main__":
     print(f"Best match to KFG {kfg_rate:.1f}%:")
     print(f"  min_matches    = {best_m}")
     print(f"  color_norm     = {best_norm}")
-    print(f"  KCAT positive  : {best_ev['n_pos']}/702 ({best_ev['rate']:.1f}%)")
-    print(f"  FP (KCAT+/KFG-): {best_ev['fp']}")
-    print(f"  FN (KCAT-/KFG+): {best_ev['fn']}")
+    print(f"  K-CAT positive  : {best_ev['n_pos']}/702 ({best_ev['rate']:.1f}%)")
+    print(f"  FP (K-CAT+/KFG-): {best_ev['fp']}")
+    print(f"  FN (K-CAT-/KFG+): {best_ev['fn']}")
     print(f"  Agreement rate : {best_ev['agreement']:.1f}%")
     print(f"{'='*60}")
 

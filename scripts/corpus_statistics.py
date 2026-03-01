@@ -1,7 +1,7 @@
-"""
+﻿"""
 Phase 1 — Corpus Foundation: Corpus Statistics
 ===============================================
-Computes and reports baseline statistics for the KCAT khipu database
+Computes and reports baseline statistics for the K-CAT khipu database
 (built from KFG source data).
 
 This script is corpus-agnostic: it reads whatever SQLite database is
@@ -47,7 +47,7 @@ OKR_BASELINE: dict[str, Any] = {
     "color_records":  56_306,
     "numeric_pct":    68.2,
     "khipus_with_values_pct": 95.8,
-    "source":         "Phase 0–1 reports, KCAT OKR era (December 2025–January 2026)",
+    "source":         "Phase 0–1 reports, K-CAT OKR era (December 2025–January 2026)",
 }
 
 
@@ -214,7 +214,7 @@ This methodology is identical to the OKR baseline and is described fully in Asch
 | Numeric coverage (value > 0) | 68.2% | {s['numeric_pct']}% |
 | Khipus with any decoded value | 95.8% | {s['khipus_any_value'] / s['khipus'] * 100:.1f}% |
 
-*OKR reference figures from KCAT Phase 0–1 reports, December 2025–January 2026.*
+*OKR reference figures from K-CAT Phase 0–1 reports, December 2025–January 2026.*
 
 ---
 
