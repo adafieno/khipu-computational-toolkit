@@ -901,11 +901,46 @@ class KFGSummationDetector:
     # All patterns
     # ------------------------------------------------------------------
 
-    def detect_all_patterns(self, kfg_id: str,
-                            tolerance: int = 0) -> Dict[str, List[SummationMatch]]:
-        """Run every detector and return results keyed by pattern type."""
+    def detect_all_patterns(
+        self,
+        kfg_id: str,
+        tolerance: int = 0,
+        loader=None,
+        apply_exclusivity: bool = True,
+    ) -> Dict[str, List[SummationMatch]]:
+        """
+        Run every detector and return results keyed by pattern type.
+
+        Parameters
+        ----------
+        kfg_id            : khipu identifier
+        tolerance         : allowed off-by-one for algorithmic detection
+        loader            : optional KFGRelationLoader instance. When
+                            provided *and* the khipu is in the KFG corpus,
+                            ground-truth relation CSV data is used instead
+                            of the algorithmic detector — eliminating false
+                            positives from re-detection noise.
+        apply_exclusivity : when True (default), enforce mutual exclusivity
+                            at the cord level (IS > SP > IP > CP > PP).  Only
+                            applied when ground-truth data is used or when
+                            explicitly requested for algorithmic results.
+        """
         cords = self._load_all_cords(kfg_id)
-        return {
+
+        # ---------------------------------------------------------------
+        # Ground-truth path: use the relation CSVs for known KFG khipus.
+        # ---------------------------------------------------------------
+        if loader is not None and loader.in_kfg(kfg_id):
+            return loader.build_all_matches(
+                kfg_id, cords,
+                apply_excl=apply_exclusivity,
+                resolve_summands=True,
+            )
+
+        # ---------------------------------------------------------------
+        # Algorithmic path: used for non-KFG khipus (or when no loader).
+        # ---------------------------------------------------------------
+        results = {
             'pendant_pendant_sum':     self.detect_pendant_pendant_sum(kfg_id, cords, tolerance),
             'colored_pendant_sum':     self.detect_colored_pendant_sum(kfg_id, cords, tolerance),
             'indexed_pendant_sum':     self.detect_indexed_pendant_sum(kfg_id, cords, tolerance),
@@ -916,6 +951,10 @@ class KFGSummationDetector:
             'ascher_decreasing_group': self.detect_ascher_decreasing_group(kfg_id, cords),
             'pendant_sub_neighbor':    self.detect_pendant_sub_neighbor(kfg_id, cords, tolerance),
         }
+        if apply_exclusivity:
+            from src.analysis.kfg_relation_loader import apply_exclusivity as _excl
+            results = _excl(results)
+        return results
 
     def summarize(self, kfg_id: str, tolerance: int = 0) -> Dict:
         all_p = self.detect_all_patterns(kfg_id, tolerance)
