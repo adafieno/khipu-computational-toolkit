@@ -381,8 +381,8 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
         return None
 
     n_pend = len(pendants)
-    # Adaptive pendant spacing — mirrors OKR logic
-    spacing = 1.5 if n_pend > 100 else (1.3 if n_pend > 50 else 1.2)
+    # Adaptive spacing — wider gaps so cords don't crowd each other
+    spacing = 2.0 if n_pend > 100 else (2.5 if n_pend > 50 else 3.0)
 
     # Proportional length scaling — normalise to this khipu's own range
     all_lengths = df["length"].replace(0, None).dropna()
@@ -547,18 +547,26 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
                        title=dict(text="", font=dict(color="#94a3b8"))),
             zaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8",
                        title=dict(font=dict(color="#94a3b8"))),
-            camera=dict(eye=dict(x=1.3, y=-1.5, z=0.8)),
+            # Wide aspect: x (pendants) gets 4× the rendered space vs depth/y
+            aspectmode="manual",
+            aspectratio=dict(x=4, y=0.3, z=1),
+            # Low frontal camera — looks along the pendant row from slight angle
+            camera=dict(
+                eye=dict(x=1.5, y=-1.2, z=0.5),
+                up=dict(x=0, y=0, z=1),
+            ),
         ),
         paper_bgcolor="#0f172a",
         font_color="#e2e8f0",
         legend=dict(
-            x=1.02, y=0.98,
+            x=1.0, y=0.98,
             bgcolor="rgba(15,23,42,0.85)",
             bordercolor="#334155", borderwidth=1,
             font=dict(color="#e2e8f0", size=11),
         ),
-        margin=dict(l=0, r=0, t=0, b=0),
-        height=650,
+        margin=dict(l=0, r=120, t=10, b=0),
+        autosize=True,
+        height=700,
         showlegend=True,
     )
     return fig
