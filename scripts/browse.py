@@ -323,6 +323,22 @@ def load_meta(kfg_id: str) -> dict:
 
 # ── 3D figure builder ──────────────────────────────────────────────────────────
 
+def _load_knot_clusters(kfg_id: str) -> pd.DataFrame:
+    """Load per-cord knot cluster data from knot_clusters table."""
+    conn = _get_conn()
+    return pd.read_sql_query(
+        """
+        SELECT kc.cord_id, c.cord_name, kc.knot_type, kc.num_knots, kc.position_cm
+        FROM knot_clusters kc
+        JOIN cords c ON c.cord_id = kc.cord_id
+        WHERE c.kfg_id = ?
+        ORDER BY c.cord_id, kc.cluster_ordinal
+        """,
+        conn,
+        params=(kfg_id,),
+    )
+
+
 def _parse_knots(knot_str: str) -> list[dict]:
     """Parse a cord's knots column string into a list of knot dicts.
 
@@ -349,8 +365,8 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
       • Primary cord  — thick brown horizontal line along x-axis at z=0
       • Pendants      — thick colored lines hanging down (negative z)
       • Subsidiaries  — elbow-offset branches from their parent cord
-      • Knots         — shaped markers along each cord
-                        S=circle(brown), L=diamond(gold), E=square(blue)
+      • Knots         — shaped markers along each cord (all 8 types from knot_clusters)
+                        S/L/E/EE/SP/LL/TF/BL/U — each with distinct symbol + colour
     """
     df = load_cords(kfg_id)
     if df.empty:
@@ -368,13 +384,18 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
     # Adaptive pendant spacing — mirrors OKR logic
     spacing = 1.5 if n_pend > 100 else (1.3 if n_pend > 50 else 1.2)
 
+    # Proportional length scaling — normalise to this khipu's own range
+    all_lengths = df["length"].replace(0, None).dropna()
+    max_len = float(all_lengths.max()) if not all_lengths.empty else 50.0
+    depth_scale = 5.0 / max(max_len, 1.0)   # fill ~5 depth units
+
     # Assign each pendant a sequential x position
     # (group_idx can be 0..457 so we cannot use it directly as x)
     pos: dict[str, tuple[float, float, float]] = {}
     for i, row in pendants.iterrows():
         x = i * spacing
         cord_length = float(row["length"] or 30.0)
-        z = -min(cord_length / 30.0, 3.0)   # hang downward (negative z)
+        z = -(cord_length * depth_scale)   # hang downward (negative z); proportional
         pos[str(row["cord_name"])] = (x, 0.0, z)
 
     for _, row in subs.iterrows():
@@ -384,7 +405,7 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
         px, py, pz = pos[parent_name]
         depth  = float(row["hierarchy_level"])
         sub_len = float(row["length"] or 20.0)
-        sub_z   = pz - min(sub_len / 40.0, 2.0)
+        sub_z   = pz - (sub_len * depth_scale * 0.6)   # scale relative to parent
         off_x   = 0.5 * (1 if depth % 2 == 1 else -1)   # alternate elbow side
         pos[str(row["cord_name"])] = (px + off_x, py, sub_z)
 
@@ -453,55 +474,61 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
             showlegend=False,
         ))
 
-    # ── Knot markers ──────────────────────────────────────────────────────────
-    knot_buckets: dict[str, dict] = {
-        "S": {"x": [], "y": [], "z": [], "hover": [], "text": []},
-        "L": {"x": [], "y": [], "z": [], "hover": [], "text": []},
-        "E": {"x": [], "y": [], "z": [], "hover": [], "text": []},
+    # ── Knot markers (from knot_clusters — all 8 types) ─────────────────────
+    knot_styles = {
+        "S":  dict(symbol="circle",        color="#c2410c", size=8,  name="S – single"),
+        "L":  dict(symbol="diamond",       color="#ca8a04", size=10, name="L – long"),
+        "E":  dict(symbol="square",        color="#2563eb", size=8,  name="E – figure-8"),
+        "EE": dict(symbol="square-open",   color="#7c3aed", size=9,  name="EE – dbl figure-8"),
+        "SP": dict(symbol="circle-open",   color="#06b6d4", size=8,  name="SP – space"),
+        "LL": dict(symbol="diamond-open",  color="#f59e0b", size=9,  name="LL – dbl long"),
+        "TF": dict(symbol="cross",         color="#10b981", size=8,  name="TF – triple figure-8"),
+        "BL": dict(symbol="triangle-up",   color="#f43f5e", size=8,  name="BL – back long"),
+        "U":  dict(symbol="circle-open",   color="#94a3b8", size=7,  name="U – unknown"),
     }
-    for _, row in df.iterrows():
-        name = str(row["cord_name"])
+    knot_buckets: dict[str, dict] = {
+        kt: {"x": [], "y": [], "z": [], "hover": []}
+        for kt in knot_styles
+    }
+
+    knots_df = _load_knot_clusters(kfg_id)
+    # Build a fast lookup: cord_name → length
+    cord_len_map = {str(r["cord_name"]): float(r["length"] or 30.0) for _, r in df.iterrows()}
+
+    for _, krow in knots_df.iterrows():
+        name   = str(krow["cord_name"])
         if name not in pos:
             continue
+        ktype  = str(krow["knot_type"]).strip().upper()
+        if ktype not in knot_buckets:
+            continue
         cx, cy, cz = pos[name]
-        cord_len   = float(row["length"] or 30.0)
-        for kn in _parse_knots(str(row["knots"] or "")):
-            # position along cord as fraction of total length
-            t = max(0.1, min(0.9, kn["pos_cm"] / cord_len)) if cord_len > 0 else 0.5
-            # for pendants: interpolate between (cx,0,0) and (cx,cy,cz)
-            kx = cx
-            ky = cy * t
-            kz = cz * t
-            ktype = kn["type"]
-            if ktype not in knot_buckets:
-                continue
-            knot_buckets[ktype]["x"].append(kx)
-            knot_buckets[ktype]["y"].append(ky)
-            knot_buckets[ktype]["z"].append(kz)
-            hover = f"<b>Cord {name}</b><br>Knot: {ktype}"
-            if ktype == "L":
-                hover += f"  ({kn['turns']} turns)"
-            hover += f"<br>@ {kn['pos_cm']:.1f} cm"
-            knot_buckets[ktype]["hover"].append(hover)
-            knot_buckets[ktype]["text"].append(str(kn["turns"]) if ktype == "L" and kn["turns"] > 1 else "")
+        cord_len   = cord_len_map.get(name, 30.0)
+        pos_cm     = float(krow["position_cm"] or 0.0)
+        # fraction along cord (clamp 0.05–0.95 to stay visually on the line)
+        t = max(0.05, min(0.95, pos_cm / cord_len)) if cord_len > 0 else 0.5
+        kx = cx
+        ky = cy * t
+        kz = cz * t
+        knot_buckets[ktype]["x"].append(kx)
+        knot_buckets[ktype]["y"].append(ky)
+        knot_buckets[ktype]["z"].append(kz)
+        n_knots = int(krow["num_knots"] or 1)
+        knot_buckets[ktype]["hover"].append(
+            f"<b>Cord {name}</b><br>"
+            f"Type: {ktype}  ×{n_knots}<br>"
+            f"@ {pos_cm:.1f} cm"
+        )
 
-    knot_styles = {
-        "S": dict(symbol="circle",  color="#8B4513", size=8,  name="S knot (single)"),
-        "L": dict(symbol="diamond", color="#DAA520", size=10, name="L knot (long)"),
-        "E": dict(symbol="square",  color="#4169E1", size=8,  name="E knot (figure-8)"),
-    }
     for ktype, bkt in knot_buckets.items():
         if not bkt["x"]:
             continue
         sty = knot_styles[ktype]
         fig.add_trace(go.Scatter3d(
             x=bkt["x"], y=bkt["y"], z=bkt["z"],
-            mode="markers+text" if ktype == "L" else "markers",
+            mode="markers",
             marker=dict(size=sty["size"], symbol=sty["symbol"],
                         color=sty["color"], line=dict(width=1, color="white")),
-            text=bkt["text"],
-            textposition="middle right",
-            textfont=dict(size=8, color="#ffffff"),
             hovertext=bkt["hover"],
             hoverinfo="text",
             name=sty["name"],
