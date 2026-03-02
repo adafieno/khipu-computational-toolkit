@@ -991,95 +991,74 @@ def build_arc_traces(
 KCAT_GITHUB = "https://github.com/adafieno/khipu-computational-toolkit"
 
 _CUSTOM_CSS = """<style>
-/* ── hide Streamlit chrome ──────────────────────────────────────────────────  */
-header[data-testid="stHeader"]   { display: none !important; }
-[data-testid="stToolbar"]        { display: none !important; }
-[data-testid="stDecoration"]     { display: none !important; }
-[data-testid="stFooterDefault"]  { display: none !important; }
-#MainMenu                        { display: none !important; }
-/* hide the native Streamlit footer bar (matches any emotion class) */
-[data-testid="stBottom"]         { display: none !important; }
+/* ── hide ALL Streamlit chrome ──────────────────────────────────────────────  */
+header[data-testid="stHeader"]         { display: none !important; }
+[data-testid="stToolbar"]              { display: none !important; }
+[data-testid="stDecoration"]           { display: none !important; }
+[data-testid="stFooterDefault"]        { display: none !important; }
+[data-testid="stBottom"]               { display: none !important; }
+[data-testid="stSidebar"]              { display: none !important; }
+[data-testid="stSidebarCollapseButton"]{ display: none !important; }
+#MainMenu                              { display: none !important; }
 
-/* ── global layout ──────────────────────────────────────────────────────────  */
-[data-testid="stApp"]            { background: #0b1120; }
-/* push content below fixed header (64 px) and above fixed footer (32 px) */
+/* ── global background ────────────────────────────────────────────────────────  */
+[data-testid="stApp"]                  { background: #0b1120; }
+/* inset main content: 64px left (nav) 64px top (header) 36px bottom (footer) */
 [data-testid="stMainBlockContainer"],
-.main .block-container           { padding-top: 72px !important; padding-bottom: 44px !important; }
+.main .block-container {
+    padding-top: 72px !important;
+    padding-left: 72px !important;
+    padding-bottom: 44px !important;
+    max-width: 100% !important;
+}
 
-/* ── fixed header bar ───────────────────────────────────────────────────────  */
+/* ── fixed header bar ─────────────────────────────────────────────────────  */
 .kcat-header {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 999999;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
     display: flex; align-items: center; gap: 16px;
-    height: 64px; padding: 0 28px;
+    height: 64px; padding: 0 24px;
     background: #0f172a; border-bottom: 2px solid #1e3a5f;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.kcat-app-name { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; white-space: nowrap; }
+.kcat-app-name { font-size: 1.2rem; font-weight: 700; color: #e2e8f0; white-space: nowrap; }
 .kcat-badge {
     font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.1em; color: #64748b; background: #1e293b;
-    border: 1px solid #334155; border-radius: 20px;
-    padding: 3px 11px; white-space: nowrap;
+    border: 1px solid #334155; border-radius: 20px; padding: 3px 11px;
 }
-.kcat-stat    { font-size: 0.8rem; color: #475569; white-space: nowrap; }
-.kcat-spacer  { flex: 1; }
-.kcat-gh-link { font-size: 0.82rem; color: #3b82f6 !important; text-decoration: none; white-space: nowrap; }
+.kcat-stat   { font-size: 0.78rem; color: #475569; white-space: nowrap; }
+.kcat-spacer { flex: 1; }
+.kcat-gh-link { font-size: 0.8rem; color: #3b82f6 !important; text-decoration: none; }
 .kcat-gh-link:hover { color: #60a5fa !important; }
+
+/* ── fixed left nav bar ────────────────────────────────────────────────────  */
+.kcat-nav {
+    position: fixed; top: 64px; left: 0; bottom: 36px; width: 64px;
+    z-index: 8999;
+    background: #070f1c; border-right: 1px solid #1e293b;
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 12px; gap: 4px;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.kcat-nav a {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-size: 1.4rem;
+    text-decoration: none; color: #64748b;
+    transition: background 0.12s, color 0.12s;
+}
+.kcat-nav a:hover  { background: #1e293b; color: #e2e8f0; }
+.kcat-nav a.active { background: #1e3a5f; color: #3b82f6; }
 
 /* ── fixed footer ───────────────────────────────────────────────────────────  */
 .kcat-footer {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 999999;
-    padding: 6px 28px; background: #070f1c;
-    border-top: 1px solid #1e293b;
-    font-size: 0.72rem; color: #94a3b8; text-align: center;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9000;
+    height: 36px; padding: 0 24px;
+    background: #070f1c; border-top: 1px solid #1e293b;
+    display: flex; align-items: center;
+    font-size: 0.72rem; color: #475569;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    pointer-events: none;
 }
-
-/* ── sidebar ────────────────────────────────────────────────────────────────  */
-[data-testid="stSidebar"]          { background: #070f1c !important; }
-[data-testid="stSidebar"] section  { padding-top: 4px !important; }
-
-/* nav section header */
-.nav-section-label {
-    padding: 18px 16px 6px; font-size: 0.6rem; font-weight: 700;
-    letter-spacing: 0.14em; text-transform: uppercase; color: #475569;
-}
-/* sidebar stats chip */
-.sidebar-stats {
-    padding: 10px 16px 8px; font-size: 0.73rem; color: #475569;
-    border-top: 1px solid #111c2e; margin-top: 8px;
-}
-
-/* ── nav radio items ────────────────────────────────────────────────────────  */
-/* hide the auto-generated widget label */
-[data-testid="stSidebar"] .stRadio > label,
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"] { display: none !important; }
-
-/* each radio option row ── target data-baseweb="radio" (BaseWeb component) */
-[data-testid="stSidebar"] [data-baseweb="radio"] {
-    border-radius: 8px !important; padding: 10px 14px !important;
-    margin: 2px 6px !important; background: transparent !important;
-    transition: background 0.1s !important;
-}
-[data-testid="stSidebar"] [data-baseweb="radio"]:hover {
-    background: #111c2e !important;
-}
-[data-testid="stSidebar"] [data-baseweb="radio"]:has(input:checked) {
-    background: #1e3a5f !important;
-}
-/* the text inside each option */
-[data-testid="stSidebar"] [data-baseweb="radio"] [data-testid="stMarkdownContainer"] p,
-[data-testid="stSidebar"] [data-baseweb="radio"] span {
-    color: #94a3b8 !important; font-size: 0.93rem !important;
-}
-[data-testid="stSidebar"] [data-baseweb="radio"]:has(input:checked) [data-testid="stMarkdownContainer"] p,
-[data-testid="stSidebar"] [data-baseweb="radio"]:has(input:checked) span {
-    color: #3b82f6 !important; font-weight: 600 !important;
-}
-/* hide the radio circle indicator */
-[data-testid="stSidebar"] [data-baseweb="radio"] [data-testid="stRadioOptionLabel"] > span:first-child,
-[data-testid="stSidebar"] [data-baseweb="radio"] > div:first-child { display: none !important; }
 
 /* ── in-section khipu picker card ───────────────────────────────────────────  */
 .picker-card {
@@ -1117,23 +1096,30 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    # ── Sidebar nav ─────────────────────────────────────────────────────────────
-    with st.sidebar:
-        st.markdown('<div class="nav-section-label">Navigate</div>', unsafe_allow_html=True)
-        _view_raw = st.radio(
-            "navigation",
-            ["🗂  Corpus Browser", "📊  Analytics", "🧶  3D Viewer", "🔬  X-Ray View"],
-            index=0,
-            label_visibility="collapsed",
-        )
-        st.markdown(
-            f'<div class="sidebar-stats">{len(corpus):,} khipus'
-            f'<br>{corpus["cord_count"].sum():,} cords</div>',
-            unsafe_allow_html=True,
-        )
+    # ── Routing via query param (‘v’) ───────────────────────────────────────────
+    _VIEW_MAP = {
+        "corpus":    "Corpus Browser",
+        "analytics": "Analytics",
+        "3dviewer":  "3D Viewer",
+        "xray":      "X-Ray View",
+    }
+    _PARAM_MAP = {v: k for k, v in _VIEW_MAP.items()}
+    _NAV_ITEMS = [
+        ("corpus",    "🗂", "Corpus Browser"),
+        ("analytics", "📊", "Analytics"),
+        ("3dviewer",  "🧶", "3D Viewer"),
+        ("xray",      "🔬", "X-Ray View"),
+    ]
+    _vp = st.query_params.get("v", "corpus")
+    view: str = _VIEW_MAP.get(_vp, "Corpus Browser")
 
-    # Strip icon prefix to get the plain view name
-    view = _view_raw.split("  ", 1)[-1]
+    # ── Fixed left nav (pure HTML — never hidden by Streamlit JS) ───────────
+    _nav_links = "".join(
+        f'<a href="?v={_key}" class="{"active" if view == _name else ""}" '
+        f'title="{_name}">{_icon}</a>'
+        for _key, _icon, _name in _NAV_ITEMS
+    )
+    st.markdown(f'<div class="kcat-nav">{_nav_links}</div>', unsafe_allow_html=True)
 
     # ── Footer ────────────────────────────────────────────────────────────────
     st.markdown(
