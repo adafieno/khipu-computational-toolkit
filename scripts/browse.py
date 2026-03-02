@@ -108,74 +108,23 @@ _COLOR_MAP: dict[str, str] = {
 _FALLBACK = "#9B7B5A"
 
 # ── Friendly provenance labels ─────────────────────────────────────────────────
-# Maps the raw DB string → a short display label shown in dropdowns and charts.
-# Any raw value not listed falls back to the raw value itself (truncated if >50 chars).
+# ── Provenance label helpers ───────────────────────────────────────────────────
+# Friendly labels are stored in the provenance_labels table in the DB.
+# Run scripts/migrate_provenance_labels.py to (re-)seed the table.
+# To add or edit a label, update that script and the DB — not this file.
 
-PROVENANCE_LABELS: dict[str, str] = {
-    # Chala group
-    'This quipu is associated with AS59-AS67 / found with a cloth bag at Chala.': 'Chala',
-    'This quipu is associated wtih AS59-AS67 / found with a cloth bag at Chala.': 'Chala',
-    'This quipu, along with AS60-AS67, was found with a cloth bag at Chala.':     'Chala',
-    # Long Ascher note
-    'Ascher notes "The museum card reads "From an Inca grave, Pachacamac, Peru. E. Nordenskiöld collection. By exchange 1925."': 'Pachacamac (Nordenskiöld)',
-    # Compound / verbose site names
-    'Armatambo, Huaca San Pedro':                                   'Armatambo / Huaca San Pedro',
-    'Armatambo, Lima, Central Coast':                               'Armatambo, Lima',
-    'Casa del Quipu, Pachacamac':                                   'Pachacamac (Casa del Quipu)',
-    'Centinela, Tambe de Mora':                                     'La Centinela / Tambo de Mora',
-    'Chancay, Central Coast':                                       'Chancay (Central Coast)',
-    'Cieneguilla, Valle de Lurin':                                  'Cieneguilla (Lurin Valley)',
-    'Costa Central, Huacho':                                        'Huacho (Central Coast)',
-    'Costa Sur':                                                    'South Coast',
-    'Donation from the collection Belli':                           'Belli Collection',
-    'Eduard Gaffron':                                               'Gaffron Collection',
-    'Eduard Gaffron Estate':                                        'Gaffron Estate',
-    'Grave K, road between Chulpaca and Tate (Site T), Ica Valley': 'Ica Valley (Site T, Grave K)',
-    'Grave M, Site T, Ica; excavated by Max Uhle':                  'Ica (Site T, Grave M — Uhle)',
-    'Grave M, road between Chulpaca and Tate (Site T), Ica valley': 'Ica Valley (Site T, Grave M)',
-    'Hacienda Copara, Nazca':                                       'Nazca (Hda. Copara)',
-    'Hacienda Ullujalla y Callengo':                                'Hda. Ullujalla / Callengo',
-    'Hda. Huando, Chancay':                                         'Chancay (Hda. Huando)',
-    'Huaca Perez, Lima (a.k.a Hda. Infantas and Tambo Inca)':       'Lima (Huaca Pérez)',
-    'Huaca San Marco, possibly epoch 2 of the Middle Horizon period (AD 650–750)': 'Huaca San Marco',
-    'Huaca San Pedro, Armatambo':                                   'Armatambo (Huaca San Pedro)',
-    'Huacho u . Pachacamac':                                        'Huacho / Pachacamac',
-    'Huacho?':                                                      'Huacho (?)',
-    'Huando, Chancay, Peru (Gaffron Collection)':                    'Chancay / Huando (Gaffron)',
-    'Ica Valley, near Callango':                                    'Ica Valley (near Callango)',
-    'Ica or Cajamarquilla':                                         'Ica / Cajamarquilla',
-    'Ica, Coast of Peru':                                           'Ica (Coast)',
-    'Ica/Pisco':                                                    'Ica / Pisco',
-    'La Centinela,Tambo de Mora':                                   'La Centinela / Tambo de Mora',
-    'La puntilla, between Paracas and Pisco':                       'La Puntilla (Paracas/Pisco)',
-    'Likely near Lima':                                             'Near Lima (prob.)',
-    'Lluta Valley':                                                 'Lluta Valley',
-    'Maranga, Huaca 1':                                             'Lima (Maranga, Huaca 1)',
-    'Monte de Cacatilla, Valle de Nazca':                           'Nazca (Monte de Cacatilla)',
-    'Nazca Valley; Ancon, Central Coast':                           'Nazca / Ancon',
-    'Pachacamac (Casa de los quipus)':                              'Pachacamac (Casa de los Quipus)',
-    'Peru':                                                         'Peru (unknown)',
-    'Peru, Fundort: Pachacmac':                                     'Pachacamac (Fundort)',
-    'Playa Miller #6, Arica, Chile':                                'Arica, Chile (Playa Miller 6)',
-    'Probably collected by Jane Stanford and donated to the Stanford Museum before 1905': 'Stanford Collection (prob. 1905)',
-    'Pueblo Libre, Lima, Peru':                                     'Lima (Pueblo Libre)',
-    'Purported to have been discovered in a burial at the coastal site of Ancon, near Lima, Peru': 'Ancon (prob.)',
-    'Rancho San Juan, Ica Valley, Peru':                            'Ica Valley (Rancho San Juan)',
-    'Región Sur, Quillagua, Valle de Loa':                          'Quillagua, Valle de Loa',
-    'Santa Clara, Nazca':                                           'Nazca (Santa Clara)',
-    'South Peru':                                                   'South Peru',
-    'Southern Coast, Peru':                                         'Southern Coast',
-    'Thomas Harper Goodspeed':                                      'Goodspeed Collection',
-    'Ullujaya, Ocucaje, Ica':                                       'Ocucaje / Ullujaya (Ica)',
-    'Unknown (not from Gaffron collections)':                       'Unknown (non-Gaffron)',
-    'Valle de Ica Hacienda Callango Ocucaje':                       'Ica Valley (Hda. Callango / Ocucaje)',
-    'Valle de Pisco':                                               'Pisco Valley',
-    'foothills of Cerro Solar':                                     'Cerro Solar (foothills)',
-    'near Callengo, Ica Valley':                                    'Ica Valley (near Callengo)',
-    'near Lima':                                                    'Near Lima',
-    'probably Central Coast Late Period':                           'Central Coast (Late Period, prob.)',
-    'Between Ica and Pisco':                                        'Between Ica and Pisco',
-}
+
+@st.cache_data(ttl=3600)
+def _load_prov_labels() -> dict[str, str]:
+    """Load raw→display_name mapping from the provenance_labels DB table."""
+    try:
+        conn = _get_conn()
+        rows = conn.execute(
+            "SELECT raw, display_name FROM provenance_labels"
+        ).fetchall()
+        return {r[0]: r[1] for r in rows}
+    except Exception:
+        return {}
 
 
 def _fmt_prov(raw: str | None) -> str:
@@ -183,7 +132,7 @@ def _fmt_prov(raw: str | None) -> str:
     if not raw or str(raw).strip() in ("", "nan", "None"):
         return "—"
     cleaned = str(raw).strip()
-    label = PROVENANCE_LABELS.get(cleaned, cleaned)
+    label = _load_prov_labels().get(cleaned, cleaned)
     # Fallback truncation for any unlisted long strings
     return label if len(label) <= 50 else label[:47] + "…"
 
