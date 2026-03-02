@@ -307,7 +307,7 @@ ax.legend(fontsize=8)
 # Round-number affinity boxplot by cluster
 ax = axes[1]
 data_box = [feat_df[feat_df["beh_label"] == bl]["pct_round5"].values for bl in beh_labels]
-bp = ax.boxplot(data_box, labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(data_box, tick_labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color)
     patch.set_alpha(0.7)
@@ -386,26 +386,27 @@ ax.bar(x, cross_pct["T1"], label="T1 (Compact)", color="#7570b3", alpha=0.85)
 ax.bar(x, cross_pct["T2"], bottom=cross_pct["T1"], label="T2 (Extended)", color="#d95f02", alpha=0.85)
 ax.set_xticks(x); ax.set_xticklabels(cross.index)
 ax.set_ylabel("%"); ax.set_title("T1/T2 composition per behavioral cluster")
+ax.set_ylim(0, 115)
 ax.legend(fontsize=8)
 for xi, (t1v, t2v) in enumerate(zip(cross["T1"], cross["T2"])):
-    ax.text(xi, 103, f"n={t1v+t2v}", ha="center", fontsize=8)
+    ax.text(xi, 102, f"n={t1v+t2v}", ha="center", fontsize=8)
 
 # Middle: hierarchy depth boxplot
 ax = axes[1]
-bp = ax.boxplot(hier_box, labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(hier_box, tick_labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color); patch.set_alpha(0.7)
 ax.set_ylabel("Max hierarchy level")
 ax.set_title("Aggregation Depth per Behavioral Cluster")
 # Annotate deep-hierarchy khipus
-n_deep = feat_df.groupby("beh_label").apply(lambda d: (d["max_hier_level"] >= 3).sum())
+n_deep = feat_df[feat_df["max_hier_level"] >= 3].groupby("beh_label").size().reindex(beh_labels, fill_value=0)
 for xi, (bl, nd) in enumerate(n_deep.items()):
     ax.text(xi + 1, ax.get_ylim()[1] * 0.9, f"≥3: {nd}", ha="center", fontsize=8, color="darkred")
 
 # Right: entropy per cord boxplot
 entr_box = [feat_df[feat_df["beh_label"] == bl]["entropy_per_cord"].values for bl in beh_labels]
 ax = axes[2]
-bp = ax.boxplot(entr_box, labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(entr_box, tick_labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color); patch.set_alpha(0.7)
 ax.set_ylabel("Shannon entropy / n cords (bits)")
