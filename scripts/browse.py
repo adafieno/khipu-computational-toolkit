@@ -831,16 +831,18 @@ def build_summation_figure(
             hoverinfo="skip", showlegend=True, name="Sum cord",
         ))
 
-    # Layer 4: value labels (left of each node, on dark background)
-    if lbl_x:
-        fig.add_trace(go.Scatter(
-            x=lbl_x, y=lbl_y,
-            mode="text",
-            text=lbl_text,
-            textposition="middle left",
-            textfont=dict(size=11, color=lbl_color, family="monospace"),
-            hoverinfo="skip", showlegend=False,
-        ))
+    # Layer 4: value labels — pixel-offset annotations so they clear the ring edge
+    for xi, yi, txt, clr in zip(lbl_x, lbl_y, lbl_text, lbl_color):
+        fig.add_annotation(
+            x=xi, y=yi,
+            text=txt,
+            showarrow=False,
+            xshift=26,          # pixels right of the data point (clears size-36 ring)
+            xanchor="left",
+            yanchor="middle",
+            font=dict(size=11, color=clr, family="monospace"),
+            bgcolor="rgba(0,0,0,0)",
+        )
 
     # Layer 5: arc traces per pattern (bow upward) + arc equation annotations
     for pattern, arcs in arc_data.items():
@@ -865,21 +867,25 @@ def build_summation_figure(
                 all_ax.extend(ax)
                 all_ay.extend(ay)
                 summand_vals.append(_fmt_val(coord_map[sc]["value"]))
-            # Annotate arc group with equation at the apex of the first arc pair
+            # Annotate arc group with equation exactly at the Bezier apex (t=0.5)
             if summand_vals and summand_list and summand_list[0] in coord_map:
                 tx0 = coord_map[summand_list[0]]["x"]
                 ty0 = coord_map[summand_list[0]]["y"]
-                mid_x = (sx + tx0) / 2
-                mid_y = max(sy, ty0) + max(1.5, abs(tx0 - sx) * 0.45) + 0.35
+                # Replicate _bezier_arc_up control point then evaluate at t=0.5
+                _cx  = (sx + tx0) / 2
+                _cy  = max(sy, ty0) + max(1.5, abs(tx0 - sx) * 0.45)
+                mid_x = _cx                                   # t=0.5 x == midpoint
+                mid_y = 0.25 * sy + 0.5 * _cy + 0.25 * ty0  # t=0.5 y on quadratic
                 eq    = " + ".join(summand_vals)
                 if sval:
                     eq = f"{' + '.join(summand_vals)} = {sval}"
                 fig.add_annotation(
                     x=mid_x, y=mid_y, text=eq,
                     showarrow=False,
-                    font=dict(size=8, color=arc_color),
-                    xanchor="center", yanchor="bottom",
-                    bgcolor="rgba(15,23,42,0.75)",
+                    font=dict(size=9, color=arc_color),
+                    xanchor="center", yanchor="middle",
+                    bgcolor="rgba(15,23,42,0.82)",
+                    borderpad=3,
                 )
         if all_ax:
             fig.add_trace(go.Scatter(
@@ -909,7 +915,7 @@ def build_summation_figure(
             showgrid=False, showticklabels=False, zeroline=False,
             title=dict(text="← group index (numbers below) →",
                        font=dict(size=10, color="#64748b")),
-            range=[-1.2, x_max + 0.7],
+            range=[-0.7, x_max + 1.2],
         ),
         yaxis=dict(showgrid=False, showticklabels=False, zeroline=False, title=""),
         height=max(380, int(n_depth) * 58 + int(arc_space * 55) + 90),
@@ -1708,7 +1714,7 @@ hr { display: none !important; }
 def main() -> None:
     st.set_page_config(
         page_title="Khipu Explorer",
-        page_icon="🧶",
+        page_icon="�",
         layout="wide",
         initial_sidebar_state="expanded",
     )
@@ -1741,7 +1747,7 @@ def main() -> None:
     _NAV_ITEMS = [
         ("corpus",    "🗒️", "Corpus Browser"),
         ("analytics", "📊", "Analytics"),
-        ("3dviewer",  "🪢", "3D Viewer"),
+        ("3dviewer",  "🔭", "3D Viewer"),
         ("arcs",      "Σ", "Summation Arcs"),
     ]
     _vp = st.query_params.get("v", "corpus")
