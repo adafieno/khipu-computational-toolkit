@@ -1011,11 +1011,28 @@ header[data-testid="stHeader"]         { display: none !important; }
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
-/* Streamlit injects a large top-margin on every heading wrapper — zero it out */
-[data-testid="stHeadingWithActionElements"] {
+/* Streamlit injects a large top-margin on heading wrappers — pull h1 up only */
+[data-testid="stHeadingWithActionElements"]:has(h1) {
     margin-top: -48px !important;
     padding-top: 0 !important;
 }
+/* Section subheaders: readable size, muted colour, no border */
+[data-testid="stHeadingWithActionElements"] h3,
+[data-testid="stHeadingWithActionElements"]:has(h3) {
+    margin-top: 4px !important;
+    padding-top: 0 !important;
+    border-bottom: none !important;
+}
+[data-testid="stHeadingWithActionElements"] h3 {
+    font-size: 1.0rem !important;
+    font-weight: 600 !important;
+    color: #cbd5e1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+}
+/* Hide all horizontal divider lines */
+[data-testid="stDivider"] { display: none !important; }
+hr { display: none !important; }
 
 /* ── fixed header bar ─────────────────────────────────────────────────────  */
 .kcat-header {
@@ -1127,15 +1144,15 @@ header[data-testid="stHeader"]         { display: none !important; }
 
 /* ── Subheader section labels (st.subheader → h3) ───────────────────────  */
 [data-testid="stHeadingWithActionElements"] h3 {
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-    color: #475569 !important;
-    border-bottom: 1px solid #1e293b !important;
-    padding-bottom: 6px !important;
-    margin-top: 12px !important;
-    margin-bottom: 8px !important;
+    font-size: 1.0rem !important;
+    font-weight: 600 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    color: #cbd5e1 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
 }
 </style>"""
 
@@ -1250,8 +1267,6 @@ def main() -> None:
         m3.metric("Provenances", str(corpus["provenance"].nunique()))
         m4.metric("Countries", str(corpus["museum_country"].nunique()))
 
-        st.divider()
-
         # Filters
         f1, f2, f3 = st.columns([2, 1, 1])
         search = f1.text_input("Search (ID, name, provenance, museum)")
@@ -1324,8 +1339,6 @@ def main() -> None:
         best_n = int(flags_df[best_k].sum())
         best_label = best_k.upper()
         m5.metric("Most common", f"{best_label} ({best_n:,})")
-
-        st.divider()
 
         tab1, tab2, tab3, tab4 = st.tabs([
             "📊 Overview",
@@ -1404,7 +1417,6 @@ def main() -> None:
                 )
             st.plotly_chart(build_handedness_figure(full_df), width="stretch")
 
-            st.divider()
             c3, c4 = st.columns(2)
             with c3:
                 st.subheader("Instance-Count Distribution")
@@ -1434,7 +1446,6 @@ def main() -> None:
                     )
                 st.plotly_chart(build_magnitude_figure(full_df), width="stretch")
 
-            st.divider()
             st.subheader("Dual- & Multi-Summand Breakdown")
             st.caption("PP, IP, and CP cord instances split by summation complexity.")
             with st.expander("ℹ️ Summation complexity types", expanded=False):
@@ -1483,7 +1494,6 @@ def main() -> None:
                 )
             st.plotly_chart(build_pca_figure(flags_df), width="stretch")
 
-            st.divider()
             st.subheader("Pattern Detail Table")
             st.caption("Per-pattern corpus-wide statistics from the KFG checks/ ground truth.")
             with st.expander("ℹ️ Column definitions", expanded=False):
@@ -1559,8 +1569,6 @@ def main() -> None:
                 unsafe_allow_html=True,
             )
 
-        st.divider()
-
         with st.spinner("Building 3D visualization…"):
             fig = build_3d_figure(selected_id)
 
@@ -1616,8 +1624,6 @@ def main() -> None:
                 f'View on KFG ↗</a></div>',
                 unsafe_allow_html=True,
             )
-
-        st.divider()
 
         # ─ Arc overlay controls
         st.markdown("**Summation Arc Overlay**")
