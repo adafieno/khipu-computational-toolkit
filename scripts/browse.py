@@ -657,19 +657,20 @@ def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
 
     fig = go.Figure(go.Heatmap(
         z=cooc, x=labels, y=labels,
-        colorscale="Blues",
+        colorscale="Plasma",
         hovertemplate="%{y} ∩ %{x}: %{z}<extra></extra>",
         showscale=True,
     ))
 
     # Per-cell annotations with adaptive text colour (Plotly textfont.color
     # does not accept a 2-D array, so we annotate each cell individually).
-    threshold = cooc.max() * 0.45
+    # Plasma: low → dark purple, high → yellow; below threshold = dark bg → light text.
+    threshold = cooc.max() * 0.60
     n = len(labels)
     for i in range(n):
         for j in range(n):
             v = int(cooc[i, j])
-            fc = "#0f172a" if v < threshold else "#e2e8f0"
+            fc = "#e2e8f0" if v < threshold else "#0f172a"
             fig.add_annotation(
                 x=labels[j], y=labels[i],
                 text=str(v),
@@ -922,7 +923,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
-        colorscale="Blues_r",
+        colorscale="Plasma",
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
         text=text_vals,
         showscale=True,
@@ -930,9 +931,9 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
     ))
 
     # Per-cell annotations — two lines via <br>.
-    # Blues: low → pale, high → dark blue. Below threshold = light bg → dark text.
+    # Plasma: low → dark purple, high → yellow. Below threshold = dark bg → light text.
     max_z = max(v for row in z_vals for v in row) or 1
-    dark_thresh = max_z * 0.45
+    dark_thresh = max_z * 0.60
     for i, prov in enumerate(top_provs):
         for j, col in enumerate(col_labels):
             v = z_vals[i][j]
