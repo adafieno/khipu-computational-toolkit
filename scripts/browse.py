@@ -1359,9 +1359,25 @@ def main() -> None:
             lambda v: _fmt_prov(v) if pd.notna(v) else "—"
         )
 
-        st.caption(f"**{len(display):,}** khipus — click any row to view details")
+        cap_col, pick_col, btn_col = st.columns([3, 2, 1])
+        cap_col.caption(f"**{len(display):,}** khipus — pick a KFG ID to view details")
 
-        display.insert(0, "·", "🔍")
+        all_ids = display["kfg_id"].tolist()
+        id_labels = {
+            r["kfg_id"]: f"{r['kfg_id']}  —  {_fmt_prov(r['provenance'])}"
+            for _, r in display.iterrows()
+        }
+        chosen = pick_col.selectbox(
+            "View details for",
+            options=[""] + all_ids,
+            format_func=lambda k: "Select a khipu…" if k == "" else id_labels.get(k, k),
+            label_visibility="collapsed",
+            key="cb_detail_pick",
+        )
+        if btn_col.button("⤢ View", disabled=not chosen, use_container_width=True):
+            _khipu_detail_modal(chosen)
+
+        display.insert(0, "⤢", "⤢")
         display_table = display.rename(columns={
             "kfg_id": "KFG ID",
             "provenance": "Provenance",
@@ -1371,18 +1387,13 @@ def main() -> None:
             "cord_count": "Cords",
         }).drop(columns=["kfg_url", "kfg_name"], errors="ignore")
 
-        sel = st.dataframe(
+        st.dataframe(
             display_table,
             width="stretch",
             hide_index=True,
             height=600,
-            on_select="rerun",
-            selection_mode="single-row",
-            column_config={"·": st.column_config.TextColumn("·", width="small")},
+            column_config={"⤢": st.column_config.TextColumn("⤢", width="small")},
         )
-        rows = (sel.selection.rows if sel and hasattr(sel, "selection") else [])
-        if rows:
-            _khipu_detail_modal(display_table.iloc[rows[0]]["KFG ID"])
     # ── Analytics ───────────────────────────────────────────────────────────────────────
     elif view == "Analytics":
         flags_df = load_analytics_data()
