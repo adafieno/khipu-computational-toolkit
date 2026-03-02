@@ -1075,22 +1075,22 @@ header[data-testid="stHeader"]         { display: none !important; }
 [data-testid="stMetric"] {
     background: #0f172a;
     border: 1px solid #1e3a5f;
-    border-radius: 12px;
-    padding: 18px 22px 16px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    border-radius: 10px;
+    padding: 10px 14px 8px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 [data-testid="stMetricLabel"] > div {
-    font-size: 0.72rem !important;
+    font-size: 0.65rem !important;
     font-weight: 600 !important;
     text-transform: uppercase;
     letter-spacing: 0.07em;
     color: #64748b !important;
 }
 [data-testid="stMetricValue"] > div {
-    font-size: 1.9rem !important;
+    font-size: 1.35rem !important;
     font-weight: 700 !important;
     color: #e2e8f0 !important;
-    line-height: 1.15;
+    line-height: 1.2;
 }
 
 /* ── Analytics tabs ──────────────────────────────────────────────────────────  */
@@ -1201,18 +1201,32 @@ def main() -> None:
     )
 
     # ── Khipu picker helper — used by 3D Viewer and X-Ray View ─────────────────
-    def _khipu_picker(key_prefix: str) -> Optional[str]:
-        """Render a provenance filter + khipu selector styled as a card.
+    def _khipu_picker(key_prefix: str, page_title: str = "") -> Optional[str]:
+        """Render provenance filter + khipu selector.
+        If page_title given: renders title + selectors inline in one row (no card box).
         Returns the selected kfg_id, or None if no match."""
-        st.markdown('<div class="picker-card">', unsafe_allow_html=True)
         provenances = sorted(corpus["provenance"].dropna().unique())
         prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
         _prov_raw_map: dict[str, list[str]] = {}
         for p in provenances:
             _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
 
-        c1, c2 = st.columns([1, 2])
-        prov_label = c1.selectbox("Provenance", prov_options, key=f"{key_prefix}_prov")
+        if page_title:
+            t_col, p_col, k_col = st.columns([2.5, 1, 2])
+            t_col.markdown(
+                f'<h1 style="margin:0;padding:0;font-size:1.75rem;font-weight:700;'
+                f'color:#e2e8f0;line-height:2.4;">{page_title}</h1>',
+                unsafe_allow_html=True,
+            )
+            prov_label = p_col.selectbox(
+                "Provenance", prov_options,
+                key=f"{key_prefix}_prov", label_visibility="collapsed",
+            )
+        else:
+            st.markdown('<div class="picker-card">', unsafe_allow_html=True)
+            c1, c2 = st.columns([1, 2])
+            prov_label = c1.selectbox("Provenance", prov_options, key=f"{key_prefix}_prov")
+
         if prov_label == "All":
             pool = corpus
         else:
@@ -1229,15 +1243,25 @@ def main() -> None:
                 )
                 for _, row in pool.iterrows()
             }
-            sel = c2.selectbox(
-                "Khipu",
-                khipu_ids,
-                format_func=lambda k: k_labels.get(k, k),
-                key=f"{key_prefix}_khipu",
-            )
+            if page_title:
+                sel = k_col.selectbox(
+                    "Khipu", khipu_ids,
+                    format_func=lambda k: k_labels.get(k, k),
+                    key=f"{key_prefix}_khipu", label_visibility="collapsed",
+                )
+            else:
+                sel = c2.selectbox(
+                    "Khipu", khipu_ids,
+                    format_func=lambda k: k_labels.get(k, k),
+                    key=f"{key_prefix}_khipu",
+                )
         else:
-            c2.warning("No khipus match this filter.")
-        st.markdown("</div>", unsafe_allow_html=True)
+            if page_title:
+                k_col.warning("No khipus match this filter.")
+            else:
+                c2.warning("No khipus match this filter.")
+        if not page_title:
+            st.markdown("</div>", unsafe_allow_html=True)
         return sel
 
     # ── Corpus Browser ─────────────────────────────────────────────────────────
@@ -1534,8 +1558,7 @@ def main() -> None:
 
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
-        st.header("3D Viewer")
-        selected_id = _khipu_picker("3dv")
+        selected_id = _khipu_picker("3dv", page_title="3D Viewer")
         if not selected_id:
             st.info("Select a khipu above.")
             return
@@ -1575,8 +1598,7 @@ def main() -> None:
 
     # ── X-Ray View ─────────────────────────────────────────────────────────────
     elif view == "X-Ray View":
-        st.header("X-Ray View")
-        selected_id = _khipu_picker("xray")
+        selected_id = _khipu_picker("xray", page_title="X-Ray View")
         if not selected_id:
             st.info("Select a khipu above.")
             return
