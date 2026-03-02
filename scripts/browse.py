@@ -864,14 +864,18 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
                 font=dict(size=10, color=fc),
             )
     fig.update_layout(
-        xaxis_title="Pattern",
         yaxis_title="Provenance",
         plot_bgcolor="#0f172a",
         paper_bgcolor="#0f172a",
         font_color="#e2e8f0",
-        xaxis=dict(color="#94a3b8"),
+        xaxis=dict(
+            color="#94a3b8",
+            side="bottom",
+            mirror="allticks",   # repeat tick labels on the top edge
+            title=dict(text="Pattern", standoff=8),
+        ),
         yaxis=dict(color="#94a3b8", dtick=1),
-        margin=dict(l=0, r=0, t=10, b=40),
+        margin=dict(l=0, r=0, t=40, b=40),
         height=max(500, len(top_provs) * 44 + 80),
     )
     return fig
