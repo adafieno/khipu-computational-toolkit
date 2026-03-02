@@ -323,111 +323,216 @@ def load_meta(kfg_id: str) -> dict:
 
 # ── 3D figure builder ──────────────────────────────────────────────────────────
 
+def _parse_knots(knot_str: str) -> list[dict]:
+    """Parse a cord's knots column string into a list of knot dicts.
+
+    Format in DB: one or more tokens like  '1S(33.0,U)'  or  '2L(18.5,Z)'
+    separated by commas or semicolons.  Returns list of
+    {'type': 'S'|'L'|'E', 'pos_cm': float, 'turns': int}.
+    """
+    if not knot_str or knot_str in ("-", "None", ""):
+        return []
+    knots = []
+    # match patterns like  1S(33.0,U)  or  2L(18.5,Z)  or  E(12,U)
+    for m in re.finditer(r"(\d*)([SLE])\(([0-9.]+)", str(knot_str)):
+        turns = int(m.group(1)) if m.group(1) else 1
+        ktype = m.group(2)
+        pos   = float(m.group(3))
+        knots.append({"type": ktype, "turns": turns, "pos_cm": pos})
+    return knots
+
+
 def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
+    """Interactive 3D cord-structure viewer, modelled after the OKR implementation.
+
+    Layout:
+      • Primary cord  — thick brown horizontal line along x-axis at z=0
+      • Pendants      — thick colored lines hanging down (negative z)
+      • Subsidiaries  — elbow-offset branches from their parent cord
+      • Knots         — shaped markers along each cord
+                        S=circle(brown), L=diamond(gold), E=square(blue)
+    """
     df = load_cords(kfg_id)
     if df.empty:
         return None
 
-    # hierarchy_level: 0 = pendant, 1 = first sub, 2 = second sub, …
-    GROUP_SPACING = 10.0   # x-gap between groups
-    PEND_SPACING  = 1.6    # x-gap between pendants within a group
-    SUB_X_OFF     = 0.5    # x-offset per subsidiary level
+    pendants = df[df["hierarchy_level"] == 0].sort_values(
+        ["group_idx", "position_in_group"]
+    ).reset_index(drop=True)
+    subs = df[df["hierarchy_level"] > 0].sort_values("hierarchy_level").reset_index(drop=True)
 
-    pendants = df[df["hierarchy_level"] == 0].reset_index(drop=True)
-    subs     = df[df["hierarchy_level"] > 0].sort_values("hierarchy_level").reset_index(drop=True)
+    if pendants.empty:
+        return None
 
-    # position lookup: cord_name → (x, y, z)
+    n_pend = len(pendants)
+    # Adaptive pendant spacing — mirrors OKR logic
+    spacing = 1.5 if n_pend > 100 else (1.3 if n_pend > 50 else 1.2)
+
+    # Assign each pendant a sequential x position
+    # (group_idx can be 0..457 so we cannot use it directly as x)
     pos: dict[str, tuple[float, float, float]] = {}
-
-    xs, ys, zs, colors, texts = [], [], [], [], []
-    edge_x, edge_y, edge_z = [], [], []
-
-    # Pendants hang vertically from the primary cord (y=0 plane)
-    # x = group_idx * GROUP_SPACING + position_in_group * PEND_SPACING
     for i, row in pendants.iterrows():
-        g = float(row["group_idx"]) if pd.notna(row["group_idx"]) else float(i)
-        p = float(row["position_in_group"]) if pd.notna(row["position_in_group"]) else 0.0
-        x = g * GROUP_SPACING + p * PEND_SPACING
-        z = float(row["length"] or 10.0) * 0.3
-        xs.append(x); ys.append(0.0); zs.append(z)
-        colors.append(color_to_hex(str(row["color"] or "")))
-        texts.append(
-            f"<b>{row['cord_name']}</b><br>"
-            f"Color: {row['color']}<br>"
-            f"Value: {row['value']}<br>"
-            f"Length: {row['length']} cm<br>"
-            f"Knots: {row['knots']}"
-        )
+        x = i * spacing
+        cord_length = float(row["length"] or 30.0)
+        z = -min(cord_length / 30.0, 3.0)   # hang downward (negative z)
         pos[str(row["cord_name"])] = (x, 0.0, z)
-        # vertical line down from primary cord
-        edge_x += [x, x, None]; edge_y += [0.0, 0.0, None]; edge_z += [0.0, z, None]
 
-    # Subsidiaries branch off their parent
     for _, row in subs.iterrows():
         parent_name = str(row["parent_cord"] or "")
         if parent_name not in pos:
             continue
         px, py, pz = pos[parent_name]
-        depth = float(row["hierarchy_level"])   # level 1 = first sub
-        sx = px + SUB_X_OFF * depth
-        sy = py + depth * 0.5
-        sz = pz - float(row["length"] or 5.0) * 0.1
-
-        xs.append(sx); ys.append(sy); zs.append(sz)
-        colors.append(color_to_hex(str(row["color"] or "")))
-        texts.append(
-            f"<b>{row['cord_name']}</b> (sub L{row['hierarchy_level']})<br>"
-            f"Color: {row['color']}<br>"
-            f"Value: {row['value']}<br>"
-            f"Length: {row['length']} cm"
-        )
-        pos[str(row["cord_name"])] = (sx, sy, sz)
-        edge_x += [px, sx, None]; edge_y += [py, sy, None]; edge_z += [pz, sz, None]
-
-    n_pend = len(pendants)
+        depth  = float(row["hierarchy_level"])
+        sub_len = float(row["length"] or 20.0)
+        sub_z   = pz - min(sub_len / 40.0, 2.0)
+        off_x   = 0.5 * (1 if depth % 2 == 1 else -1)   # alternate elbow side
+        pos[str(row["cord_name"])] = (px + off_x, py, sub_z)
 
     fig = go.Figure()
 
-    # Structural edges
-    fig.add_trace(go.Scatter3d(
-        x=edge_x, y=edge_y, z=edge_z,
-        mode="lines",
-        line=dict(color="#94a3b8", width=1.5),
-        hoverinfo="none",
-        showlegend=False,
-        name="",
-    ))
+    # ── Primary cord ────────────────────────────────────────────────────────
+    px_all = [pos[str(r["cord_name"])][0] for _, r in pendants.iterrows()
+              if str(r["cord_name"]) in pos]
+    if px_all:
+        fig.add_trace(go.Scatter3d(
+            x=[min(px_all) - spacing, max(px_all) + spacing],
+            y=[0.0, 0.0], z=[0.0, 0.0],
+            mode="lines",
+            line=dict(color="#8B7355", width=12),
+            name="Primary cord",
+            hoverinfo="skip",
+            showlegend=False,
+        ))
 
-    # Cord nodes
-    fig.add_trace(go.Scatter3d(
-        x=xs, y=ys, z=zs,
-        mode="markers",
-        marker=dict(
-            size=[7 if i < n_pend else 5 for i in range(len(xs))],
-            color=colors,
-            line=dict(color="#1e293b", width=0.8),
-            opacity=0.92,
-        ),
-        text=texts,
-        hovertemplate="%{text}<extra></extra>",
-        showlegend=False,
-        name="",
-    ))
+    # ── Pendant cords ────────────────────────────────────────────────────────
+    for _, row in pendants.iterrows():
+        name = str(row["cord_name"])
+        if name not in pos:
+            continue
+        cx, cy, cz = pos[name]
+        cord_hex   = color_to_hex(str(row["color"] or ""))
+        cord_len   = float(row["length"] or 30.0)
+        fig.add_trace(go.Scatter3d(
+            x=[cx, cx], y=[0.0, cy], z=[0.0, cz],
+            mode="lines",
+            line=dict(color=cord_hex, width=8),
+            hovertext=(
+                f"<b>{name}</b><br>"
+                f"Color: {row['color']}<br>"
+                f"Value: {row['value']}<br>"
+                f"Length: {cord_len:.1f} cm<br>"
+                f"Knots: {row['knots'] or '—'}"
+            ),
+            hoverinfo="text",
+            showlegend=False,
+        ))
+
+    # ── Subsidiary cords ─────────────────────────────────────────────────────
+    for _, row in subs.iterrows():
+        name        = str(row["cord_name"])
+        parent_name = str(row["parent_cord"] or "")
+        if name not in pos or parent_name not in pos:
+            continue
+        px, py, pz   = pos[parent_name]
+        cx, cy, cz   = pos[name]
+        cord_hex     = color_to_hex(str(row["color"] or ""))
+        cord_len     = float(row["length"] or 20.0)
+        elbow_x      = cx
+        # Draw: parent → elbow (horizontal) → subsidiary end (vertical drop)
+        fig.add_trace(go.Scatter3d(
+            x=[px, elbow_x, cx], y=[py, py, cy], z=[pz, pz, cz],
+            mode="lines",
+            line=dict(color=cord_hex, width=6),
+            hovertext=(
+                f"<b>{name}</b> (sub L{row['hierarchy_level']})<br>"
+                f"Color: {row['color']}<br>"
+                f"Value: {row['value']}<br>"
+                f"Length: {cord_len:.1f} cm"
+            ),
+            hoverinfo="text",
+            showlegend=False,
+        ))
+
+    # ── Knot markers ──────────────────────────────────────────────────────────
+    knot_buckets: dict[str, dict] = {
+        "S": {"x": [], "y": [], "z": [], "hover": [], "text": []},
+        "L": {"x": [], "y": [], "z": [], "hover": [], "text": []},
+        "E": {"x": [], "y": [], "z": [], "hover": [], "text": []},
+    }
+    for _, row in df.iterrows():
+        name = str(row["cord_name"])
+        if name not in pos:
+            continue
+        cx, cy, cz = pos[name]
+        cord_len   = float(row["length"] or 30.0)
+        for kn in _parse_knots(str(row["knots"] or "")):
+            # position along cord as fraction of total length
+            t = max(0.1, min(0.9, kn["pos_cm"] / cord_len)) if cord_len > 0 else 0.5
+            # for pendants: interpolate between (cx,0,0) and (cx,cy,cz)
+            kx = cx
+            ky = cy * t
+            kz = cz * t
+            ktype = kn["type"]
+            if ktype not in knot_buckets:
+                continue
+            knot_buckets[ktype]["x"].append(kx)
+            knot_buckets[ktype]["y"].append(ky)
+            knot_buckets[ktype]["z"].append(kz)
+            hover = f"<b>Cord {name}</b><br>Knot: {ktype}"
+            if ktype == "L":
+                hover += f"  ({kn['turns']} turns)"
+            hover += f"<br>@ {kn['pos_cm']:.1f} cm"
+            knot_buckets[ktype]["hover"].append(hover)
+            knot_buckets[ktype]["text"].append(str(kn["turns"]) if ktype == "L" and kn["turns"] > 1 else "")
+
+    knot_styles = {
+        "S": dict(symbol="circle",  color="#8B4513", size=8,  name="S knot (single)"),
+        "L": dict(symbol="diamond", color="#DAA520", size=10, name="L knot (long)"),
+        "E": dict(symbol="square",  color="#4169E1", size=8,  name="E knot (figure-8)"),
+    }
+    for ktype, bkt in knot_buckets.items():
+        if not bkt["x"]:
+            continue
+        sty = knot_styles[ktype]
+        fig.add_trace(go.Scatter3d(
+            x=bkt["x"], y=bkt["y"], z=bkt["z"],
+            mode="markers+text" if ktype == "L" else "markers",
+            marker=dict(size=sty["size"], symbol=sty["symbol"],
+                        color=sty["color"], line=dict(width=1, color="white")),
+            text=bkt["text"],
+            textposition="middle right",
+            textfont=dict(size=8, color="#ffffff"),
+            hovertext=bkt["hover"],
+            hoverinfo="text",
+            name=sty["name"],
+            showlegend=True,
+        ))
 
     fig.update_layout(
         scene=dict(
-            xaxis_title="Position",
-            yaxis_title="Subsidiary depth",
-            zaxis_title="Cord length",
+            xaxis_title="Pendant position",
+            yaxis_title="",
+            zaxis_title="Cord depth",
             bgcolor="#0f172a",
-            xaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8"),
-            yaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8"),
-            zaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8"),
+            xaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8",
+                       title=dict(font=dict(color="#94a3b8"))),
+            yaxis=dict(showgrid=False, showticklabels=False,
+                       title=dict(text="", font=dict(color="#94a3b8"))),
+            zaxis=dict(showgrid=True, gridcolor="#334155", color="#94a3b8",
+                       title=dict(font=dict(color="#94a3b8"))),
+            camera=dict(eye=dict(x=1.3, y=-1.5, z=0.8)),
         ),
         paper_bgcolor="#0f172a",
         font_color="#e2e8f0",
+        legend=dict(
+            x=1.02, y=0.98,
+            bgcolor="rgba(15,23,42,0.85)",
+            bordercolor="#334155", borderwidth=1,
+            font=dict(color="#e2e8f0", size=11),
+        ),
         margin=dict(l=0, r=0, t=0, b=0),
-        height=620,
+        height=650,
+        showlegend=True,
     )
     return fig
 
@@ -1622,13 +1727,19 @@ def main() -> None:
             st.info("Select a khipu above.")
             return
 
-        meta = load_meta(selected_id)
+        meta     = load_meta(selected_id)
+        cords_df = load_cords(selected_id)
+        n_total  = len(cords_df)
+        n_pend   = int((cords_df["hierarchy_level"] == 0).sum())
+        n_subs   = int((cords_df["hierarchy_level"] > 0).sum())
+        n_knots  = sum(len(_parse_knots(str(k))) for k in cords_df["knots"] if k)
 
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("KFG ID", selected_id)
-        c2.metric("Provenance", _fmt_prov(meta.get("provenance")))
-        c3.metric("Museum", str(meta.get("museum_name") or "—")[:30])
-        c4.metric("Primary cord", f"{meta.get('primary_length') or '?'} cm")
+        c1, c2, c3, c4, c5 = st.columns(5)
+        c1.metric("KFG ID",       selected_id)
+        c2.metric("Pendants",     n_pend)
+        c3.metric("Subsidiaries", n_subs)
+        c4.metric("Knots",        n_knots)
+        c5.metric("Primary cord", f"{meta.get('primary_length') or '?'} cm")
 
         url = meta.get("kfg_url", "")
         if url:
@@ -1640,13 +1751,17 @@ def main() -> None:
                 unsafe_allow_html=True,
             )
 
+        st.caption(
+            "Cord colours reflect the Ascher colour code. "
+            "● S knot (brown circle) · ◆ L knot (gold diamond, label = turns) · ■ E knot (blue square)"
+        )
+
         with st.spinner("Building 3D visualization…"):
             fig = build_3d_figure(selected_id)
 
         if fig:
             st.plotly_chart(fig, width='stretch')
             with st.expander("Raw cord data"):
-                cords_df = load_cords(selected_id)
                 st.dataframe(
                     cords_df[[
                         "cord_name", "hierarchy_level", "parent_cord",
