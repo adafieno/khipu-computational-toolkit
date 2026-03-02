@@ -11,7 +11,7 @@ Views:
                           Geography  — provenance × pattern heatmap
                           Pattern Space — PCA scatter · detail table
     - 3D Viewer       : interactive Plotly 3D cord structure for a selected khipu
-    - X-Ray View      : cord group color map + summation arc overlays (PP/IP/CP/SP/IS)
+    - Summation Arcs  : cord group color map + summation arc overlays (PP/IP/CP/SP/IS)
 
 Usage:
     streamlit run scripts/browse.py
@@ -1417,14 +1417,14 @@ def main() -> None:
         "corpus":    "Corpus Browser",
         "analytics": "Analytics",
         "3dviewer":  "3D Viewer",
-        "xray":      "X-Ray View",
+        "arcs":      "Summation Arcs",
     }
     _PARAM_MAP = {v: k for k, v in _VIEW_MAP.items()}
     _NAV_ITEMS = [
         ("corpus",    "🗒️", "Corpus Browser"),
         ("analytics", "📊", "Analytics"),
         ("3dviewer",  "🪢", "3D Viewer"),
-        ("xray",      "🔬", "X-Ray View"),
+        ("arcs",      "Σ", "Summation Arcs"),
     ]
     _vp = st.query_params.get("v", "corpus")
     view: str = _VIEW_MAP.get(_vp, "Corpus Browser")
@@ -1443,7 +1443,7 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    # ── Khipu picker helper — used by 3D Viewer and X-Ray View ─────────────────
+    # ── Khipu picker helper — used by 3D Viewer and Summation Arcs ───────────────
     def _khipu_picker(key_prefix: str, page_title: str = "") -> Optional[str]:
         """Render provenance filter + khipu selector in a compact 2-column row.
         Returns the selected kfg_id, or None if no match."""
@@ -1857,72 +1857,138 @@ def main() -> None:
         else:
             st.warning("No cord data found for this khipu.")
 
-    # ── X-Ray View ─────────────────────────────────────────────────────────────
-    elif view == "X-Ray View":
-        _h_col, _link_col = st.columns([5, 1])
-        _h_col.header("X-Ray View")
-        selected_id = _khipu_picker("xray")
+    # ── Summation Arcs ─────────────────────────────────────────────────────────
+    elif view == "Summation Arcs":
+        # Top bar — same pattern as 3D Viewer
+        _h_col, _prov_col, _k_col = st.columns([3, 1, 2])
+        _h_col.header("Summation Arcs")
+
+        provenances = sorted(corpus["provenance"].dropna().unique())
+        prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
+        _prov_raw_map: dict[str, list[str]] = {}
+        for p in provenances:
+            _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
+        prov_label = _prov_col.selectbox(
+            "Provenance", prov_options,
+            key="arcs_prov", label_visibility="collapsed",
+        )
+        pool = corpus if prov_label == "All" else corpus[
+            corpus["provenance"].isin(_prov_raw_map.get(prov_label, []))
+        ]
+
+        khipu_ids = pool["kfg_id"].tolist()
+        selected_id: Optional[str] = None
+        if khipu_ids:
+            k_labels = {
+                row["kfg_id"]: (
+                    f"{row['kfg_id']}  {row['kfg_name'] or ''}  "
+                    f"[{_fmt_prov(row['provenance'])}]"
+                )
+                for _, row in pool.iterrows()
+            }
+            selected_id = _k_col.selectbox(
+                "Khipu", khipu_ids,
+                format_func=lambda k: k_labels.get(k, k),
+                key="arcs_khipu", label_visibility="collapsed",
+            )
+        else:
+            _k_col.warning("No khipus match this filter.")
+
         if not selected_id:
             st.info("Select a khipu above.")
             return
 
         meta = load_meta(selected_id)
-        url = meta.get("kfg_url", "")
+        url  = meta.get("kfg_url", "")
+        if url:
+            _h_col.markdown(
+                f'<a href="{url}" target="_blank" '
+                f'style="font-size:0.82rem;color:#3b82f6;text-decoration:none">'
+                f'View on KFG ↗</a>',
+                unsafe_allow_html=True,
+            )
 
         cords_df = load_cords(selected_id)
         if cords_df.empty:
             st.warning("No cord data found for this khipu.")
             return
 
-        pendants    = cords_df[cords_df["hierarchy_level"] == 0]
-        subs        = cords_df[cords_df["hierarchy_level"] > 0]
-        n_groups    = cords_df["group_idx"].nunique()
-        valued      = cords_df[pd.to_numeric(cords_df["value"], errors="coerce").notna()]
+        pendants = cords_df[cords_df["hierarchy_level"] == 0]
+        subs     = cords_df[cords_df["hierarchy_level"] > 0]
+        n_groups = cords_df["group_idx"].nunique()
 
-        m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Total cords", len(cords_df))
-        m2.metric("Pendants", len(pendants))
-        m3.metric("Subsidiaries", len(subs))
-        m4.metric("Cord groups", n_groups)
-
-        if url:
-            _link_col.markdown(
-                f'<div style="text-align:right;padding-top:10px">'
-                f'<a href="{url}" target="_blank" '
-                f'style="font-size:0.82rem;color:#3b82f6;text-decoration:none">'
-                f'View on KFG ↗</a></div>',
-                unsafe_allow_html=True,
+        # Compact stat cards
+        def _stat_card_arcs(label: str, value: str) -> str:
+            return (
+                f'<div style="background:#1e293b;border-radius:6px;'
+                f'padding:5px 12px;margin:0">'
+                f'<div style="font-size:0.6rem;color:#94a3b8;text-transform:uppercase;'
+                f'letter-spacing:0.06em;margin-bottom:2px">{label}</div>'
+                f'<div style="font-size:1.05rem;font-weight:600;color:#e2e8f0;'
+                f'line-height:1.2">{value}</div>'
+                f'</div>'
             )
+        c1, c2, c3, c4 = st.columns(4)
+        c1.markdown(_stat_card_arcs("KFG ID",       selected_id),        unsafe_allow_html=True)
+        c2.markdown(_stat_card_arcs("Pendants",     str(len(pendants))), unsafe_allow_html=True)
+        c3.markdown(_stat_card_arcs("Subsidiaries", str(len(subs))),     unsafe_allow_html=True)
+        c4.markdown(_stat_card_arcs("Cord groups",  str(n_groups)),      unsafe_allow_html=True)
 
-        # ─ Arc overlay controls
-        st.markdown("**Summation Arc Overlay**")
+        # ── Summation pattern toggles ─────────────────────────────────────────
+        _PATTERN_FULL = {
+            "pendant_pendant_sum":    "Pendant → Pendant",
+            "indexed_pendant_sum":    "Indexed Pendant",
+            "colored_pendant_sum":    "Color Grouped",
+            "subsidiary_pendant_sum": "Subsidiary → Pendant",
+            "indexed_subsidiary_sum": "Indexed Subsidiary",
+        }
+        st.markdown(
+            '<div style="margin-top:18px;margin-bottom:6px;font-size:0.7rem;'
+            'color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em">'
+            'Summation patterns — check to show arcs on the grid</div>',
+            unsafe_allow_html=True,
+        )
         loader_inst = _get_loader()
         arc_traces: list = []
         if loader_inst and loader_inst.in_kfg(selected_id):
             arc_data  = load_arc_data(selected_id)
             available = [p for p in ARC_PATTERNS if arc_data.get(p)]
             if available:
-                st.caption("Toggle pattern types to show/hide arcs on the color grid.")
-                toggle_cols     = st.columns(max(1, len(available)))
+                tog_cols = st.columns(max(1, len(available)))
                 enabled_patterns: set = set()
                 for i, p in enumerate(available):
-                    _arc_color, label = ARC_PATTERNS[p]
-                    if toggle_cols[i].checkbox(label, value=True, key=f"arc_{p}"):
+                    arc_color, abbr = ARC_PATTERNS[p]
+                    n_arcs = len(arc_data[p])
+                    full   = _PATTERN_FULL.get(p, abbr)
+                    tog_cols[i].markdown(
+                        f'<div style="padding:7px 10px;background:#1e293b;border-radius:6px;'
+                        f'border-left:3px solid {arc_color};margin-bottom:4px">'
+                        f'<span style="font-size:0.82rem;font-weight:700;color:{arc_color}">'
+                        f'{abbr}</span>'
+                        f'<span style="font-size:0.78rem;color:#cbd5e1"> {full}</span><br>'
+                        f'<span style="font-size:0.7rem;color:#64748b">'
+                        f'{n_arcs} relation{"s" if n_arcs != 1 else ""}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True,
+                    )
+                    if tog_cols[i].checkbox("Show", value=True, key=f"arc_{p}",
+                                            label_visibility="collapsed"):
                         enabled_patterns.add(p)
                 arc_traces = build_arc_traces(arc_data, enabled_patterns)
             else:
-                st.caption("No cord-level summation patterns found for this khipu.")
+                st.info("No summation patterns found for this khipu.")
         else:
-            if loader_inst:
-                st.caption("This khipu is not in the KFG corpus — arc overlays unavailable.")
-            else:
-                st.caption("KFG checks/ directory not found — arc overlays unavailable.")
+            msg = ("This khipu is not in the KFG corpus" if loader_inst
+                   else "KFG checks/ directory not found")
+            st.caption(f"{msg} — arc data unavailable.")
 
-        # ─ Color grid
-        st.markdown("**Color Grid** — pendants by group")
-        st.caption(
-            "Each square is one pendant cord, colored by Ascher color code. "
-            "Arcs connect sum cords to their summands; arc color = pattern type."
+        # ── Cord color grid with arc overlays ─────────────────────────────────
+        st.markdown(
+            '<div style="margin-top:18px;margin-bottom:4px;font-size:0.7rem;'
+            'color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em">'
+            'Cord color grid · x = group index · y = position in group · '
+            'arcs connect sum cord to summands</div>',
+            unsafe_allow_html=True,
         )
         xray_fig = build_xray_figure(cords_df)
         for trace in arc_traces:
@@ -1931,28 +1997,28 @@ def main() -> None:
             xray_fig.update_layout(showlegend=True)
         st.plotly_chart(xray_fig, width='stretch')
 
-        # Group summary table
-        _chart_title("Group summary")
-        groups_df = (
-            cords_df.groupby("group_idx")
-            .agg(
-                cords=("cord_id", "count"),
-                colors=("color", lambda x: " · ".join(sorted(set(
-                    str(v) for v in x if v and str(v).strip()
-                )))),
-                numeric_count=("value", lambda x: pd.to_numeric(x, errors="coerce").notna().sum()),
-                total_value=(
-                    "value",
-                    lambda x: round(pd.to_numeric(x, errors="coerce").sum(), 3),
-                ),
+        # ── Group summary ──────────────────────────────────────────────────────
+        with st.expander("Group summary table"):
+            groups_df = (
+                cords_df.groupby("group_idx")
+                .agg(
+                    cords=("cord_id", "count"),
+                    colors=("color", lambda x: " · ".join(sorted(set(
+                        str(v) for v in x if v and str(v).strip()
+                    )))),
+                    numeric_count=("value", lambda x: pd.to_numeric(x, errors="coerce").notna().sum()),
+                    total_value=(
+                        "value",
+                        lambda x: round(pd.to_numeric(x, errors="coerce").sum(), 3),
+                    ),
+                )
+                .reset_index()
+                .rename(columns={"group_idx": "Group", "cords": "Cords",
+                                  "colors": "Colors present",
+                                  "numeric_count": "With values",
+                                  "total_value": "Sum of values"})
             )
-            .reset_index()
-            .rename(columns={"group_idx": "Group", "cords": "Cords",
-                              "colors": "Colors present",
-                              "numeric_count": "With values",
-                              "total_value": "Sum of values"})
-        )
-        st.dataframe(groups_df, width='stretch', hide_index=True)
+            st.dataframe(groups_df, width='stretch', hide_index=True)
 
 
 
