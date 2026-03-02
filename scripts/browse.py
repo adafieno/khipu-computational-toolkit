@@ -1043,7 +1043,7 @@ header[data-testid="stHeader"]         { display: none !important; }
 .kcat-nav a {
     width: 44px; height: 44px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 10px; font-size: 1.4rem;
+    border-radius: 10px; font-size: 1.9rem;
     text-decoration: none; color: #64748b;
     transition: background 0.12s, color 0.12s;
 }
@@ -1105,9 +1105,9 @@ def main() -> None:
     }
     _PARAM_MAP = {v: k for k, v in _VIEW_MAP.items()}
     _NAV_ITEMS = [
-        ("corpus",    "🗂", "Corpus Browser"),
+        ("corpus",    "🗒️", "Corpus Browser"),
         ("analytics", "📊", "Analytics"),
-        ("3dviewer",  "🧶", "3D Viewer"),
+        ("3dviewer",  "🪢", "3D Viewer"),
         ("xray",      "🔬", "X-Ray View"),
     ]
     _vp = st.query_params.get("v", "corpus")
