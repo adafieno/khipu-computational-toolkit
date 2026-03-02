@@ -1755,8 +1755,8 @@ def main() -> None:
 
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
-        # Top bar: title on the left, compact filters on the right
-        _h_col, _prov_col, _k_col, _link_col = st.columns([3, 1, 2, 1])
+        # Top bar: title on the left (link sits below it), filters on the right
+        _h_col, _prov_col, _k_col = st.columns([3, 1, 2])
         _h_col.header("3D Viewer")
 
         # Provenance filter (no label shown)
@@ -1802,13 +1802,13 @@ def main() -> None:
         n_subs   = int((cords_df["hierarchy_level"] > 0).sum())
         n_knots  = sum(len(_parse_knots(str(k))) for k in cords_df["knots"] if k)
 
+        # "View on KFG" link sits below the title in the same left column
         url = meta.get("kfg_url", "")
         if url:
-            _link_col.markdown(
-                f'<div style="text-align:right;padding-top:10px">'
+            _h_col.markdown(
                 f'<a href="{url}" target="_blank" '
                 f'style="font-size:0.82rem;color:#3b82f6;text-decoration:none">'
-                f'View on KFG ↗</a></div>',
+                f'View on KFG ↗</a>',
                 unsafe_allow_html=True,
             )
 
@@ -1831,9 +1831,12 @@ def main() -> None:
         c4.markdown(_stat_card("Knots",        str(n_knots)),                                  unsafe_allow_html=True)
         c5.markdown(_stat_card("Primary cord", f"{meta.get('primary_length') or '?'} cm"),    unsafe_allow_html=True)
 
-        st.caption(
+        st.markdown(
+            '<div style="margin-top:14px;font-size:0.8rem;color:#94a3b8">'
             "Cord colours reflect the Ascher colour code. "
-            "● S knot (brown circle) · ◆ L knot (gold diamond, label = turns) · ■ E knot (blue square)"
+            "● S knot · ◆ L knot · ■ E knot"
+            "</div>",
+            unsafe_allow_html=True,
         )
 
         with st.spinner("Building 3D visualization…"):
