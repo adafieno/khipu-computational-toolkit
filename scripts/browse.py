@@ -131,8 +131,8 @@ def _fmt_prov(raw: str | None) -> str:
     """Return a short display label for a raw provenance string."""
     if not raw or str(raw).strip() in ("", "nan", "None"):
         return "—"
-    cleaned = str(raw).strip()
-    label = _load_prov_labels().get(cleaned, cleaned)
+    s = str(raw).strip()
+    label = _load_prov_labels().get(s, s)
     # Fallback truncation for any unlisted long strings
     return label if len(label) <= 50 else label[:47] + "…"
 

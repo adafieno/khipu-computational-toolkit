@@ -20,10 +20,14 @@ DB_PATH = ROOT / "data" / "kfg" / "khipu_database.db"
 # Full mapping of raw DB provenance strings → short display labels.
 # Edit this table (not browse.py) to update or add labels.
 LABELS: list[tuple[str, str]] = [
-    # Chala group (three near-identical strings in the DB)
-    ("This quipu is associated with AS59-AS67 / found with a cloth bag at Chala.",  "Chala"),
-    ("This quipu is associated wtih AS59-AS67 / found with a cloth bag at Chala.",  "Chala"),
-    ("This quipu, along with AS60-AS67, was found with a cloth bag at Chala.",      "Chala"),
+    # Chala group — DB stores these with surrounding double-quotes; both variants kept
+    ('"This quipu is associated with AS59-AS67 / found with a cloth bag at Chala."', "Chala"),
+    ('"This quipu is associated wtih AS59-AS67 / found with a cloth bag at Chala."', "Chala"),
+    ('"This quipu, along with AS60-AS67, was found with a cloth bag at Chala."',     "Chala"),
+    # Unquoted forms (belt-and-suspenders)
+    ("This quipu is associated with AS59-AS67 / found with a cloth bag at Chala.",   "Chala"),
+    ("This quipu is associated wtih AS59-AS67 / found with a cloth bag at Chala.",   "Chala"),
+    ("This quipu, along with AS60-AS67, was found with a cloth bag at Chala.",       "Chala"),
     # Long Ascher museum-note
     ('Ascher notes "The museum card reads "From an Inca grave, Pachacamac, Peru. '
      'E. Nordenski\u00f6ld collection. By exchange 1925."',
