@@ -771,12 +771,39 @@ def build_summation_figure(
             for sc in summand_list:
                 summand_keys.add(sc)
 
+    # Build value labels: Σ prefix for sum cords, plain for all others with a value
+    def _fmt_val(v) -> str:
+        if pd.isna(v):
+            return ""
+        try:
+            f = float(v)
+            return str(int(f)) if f == int(f) else f"{f:.2g}"
+        except (ValueError, TypeError):
+            return str(v)
+
+    lbl_x, lbl_y, lbl_text, lbl_color = [], [], [], []
+    for (g_f, p_f), info in coord_map.items():
+        raw_lbl = _fmt_val(info["value"])
+        if not raw_lbl:
+            continue
+        coord = (g_f, p_f)
+        if coord in sum_keys:
+            display = f"Σ{raw_lbl}"
+            lbl_c   = "#fbbf24"           # amber-300, bright gold for sum
+        else:
+            display = raw_lbl
+            lbl_c   = "#f1f5f9"           # near-white for all others
+        lbl_x.append(info["x"])
+        lbl_y.append(info["y"])
+        lbl_text.append(display)
+        lbl_color.append(lbl_c)
+
     fig = go.Figure()
 
     # Layer 1: all cord nodes
     fig.add_trace(go.Scatter(
         x=node_x, y=node_y, mode="markers",
-        marker=dict(size=20, color=node_color, symbol="circle",
+        marker=dict(size=22, color=node_color, symbol="circle",
                     line=dict(color="#334155", width=1.5)),
         text=node_hover, hovertemplate="%{text}<extra></extra>",
         showlegend=False, name="Cords",
@@ -788,7 +815,7 @@ def build_summation_figure(
     if sk_x:
         fig.add_trace(go.Scatter(
             x=sk_x, y=sk_y, mode="markers",
-            marker=dict(size=30, color="rgba(0,0,0,0)", symbol="circle",
+            marker=dict(size=32, color="rgba(0,0,0,0)", symbol="circle",
                         line=dict(color="#06b6d4", width=2.5)),
             hoverinfo="skip", showlegend=True, name="Summand cord",
         ))
@@ -799,12 +826,23 @@ def build_summation_figure(
     if sc_x:
         fig.add_trace(go.Scatter(
             x=sc_x, y=sc_y, mode="markers",
-            marker=dict(size=34, color="rgba(0,0,0,0)", symbol="circle",
+            marker=dict(size=36, color="rgba(0,0,0,0)", symbol="circle",
                         line=dict(color="#f59e0b", width=3)),
             hoverinfo="skip", showlegend=True, name="Sum cord",
         ))
 
-    # Layer 4: arc traces per pattern (bow upward)
+    # Layer 4: value labels (left of each node, on dark background)
+    if lbl_x:
+        fig.add_trace(go.Scatter(
+            x=lbl_x, y=lbl_y,
+            mode="text",
+            text=lbl_text,
+            textposition="middle left",
+            textfont=dict(size=11, color=lbl_color, family="monospace"),
+            hoverinfo="skip", showlegend=False,
+        ))
+
+    # Layer 5: arc traces per pattern (bow upward) + arc equation annotations
     for pattern, arcs in arc_data.items():
         if pattern not in enabled_patterns:
             continue
@@ -814,8 +852,10 @@ def build_summation_figure(
         for sum_coord, summand_list in arcs:
             if sum_coord not in coord_map:
                 continue
-            sx = coord_map[sum_coord]["x"]
-            sy = coord_map[sum_coord]["y"]
+            sx   = coord_map[sum_coord]["x"]
+            sy   = coord_map[sum_coord]["y"]
+            sval = _fmt_val(coord_map[sum_coord]["value"])
+            summand_vals = []
             for sc in summand_list:
                 if sc not in coord_map:
                     continue
@@ -824,6 +864,23 @@ def build_summation_figure(
                 ax, ay = _bezier_arc_up(sx, sy, tx, ty)
                 all_ax.extend(ax)
                 all_ay.extend(ay)
+                summand_vals.append(_fmt_val(coord_map[sc]["value"]))
+            # Annotate arc group with equation at the apex of the first arc pair
+            if summand_vals and summand_list and summand_list[0] in coord_map:
+                tx0 = coord_map[summand_list[0]]["x"]
+                ty0 = coord_map[summand_list[0]]["y"]
+                mid_x = (sx + tx0) / 2
+                mid_y = max(sy, ty0) + max(1.5, abs(tx0 - sx) * 0.45) + 0.35
+                eq    = " + ".join(summand_vals)
+                if sval:
+                    eq = f"{' + '.join(summand_vals)} = {sval}"
+                fig.add_annotation(
+                    x=mid_x, y=mid_y, text=eq,
+                    showarrow=False,
+                    font=dict(size=8, color=arc_color),
+                    xanchor="center", yanchor="bottom",
+                    bgcolor="rgba(15,23,42,0.75)",
+                )
         if all_ax:
             fig.add_trace(go.Scatter(
                 x=all_ax, y=all_ay, mode="lines",
@@ -852,7 +909,7 @@ def build_summation_figure(
             showgrid=False, showticklabels=False, zeroline=False,
             title=dict(text="← group index (numbers below) →",
                        font=dict(size=10, color="#64748b")),
-            range=[-0.7, x_max + 0.7],
+            range=[-1.2, x_max + 0.7],
         ),
         yaxis=dict(showgrid=False, showticklabels=False, zeroline=False, title=""),
         height=max(380, int(n_depth) * 58 + int(arc_space * 55) + 90),
