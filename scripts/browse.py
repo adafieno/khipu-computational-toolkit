@@ -137,6 +137,15 @@ def _fmt_prov(raw: str | None) -> str:
     return label if len(label) <= 50 else label[:47] + "…"
 
 
+def _chart_title(text: str) -> None:
+    """Render a chart section title without Streamlit's heading wrapper machinery."""
+    st.markdown(
+        f'<p style="font-size:1.2rem;font-weight:600;color:#cbd5e1;'
+        f'margin:8px 0 2px 0;padding:0;line-height:1.3">{text}</p>',
+        unsafe_allow_html=True,
+    )
+
+
 def color_to_hex(code: str) -> str:
     """Resolve a potentially compound Ascher color code (e.g. 'MB:W') to hex."""
     if not code or not code.strip():
@@ -1011,23 +1020,10 @@ header[data-testid="stHeader"]         { display: none !important; }
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
-/* Pull ALL heading wrappers up to clear Streamlit's injected top-gap (fixes h1) */
+/* Pull ALL heading wrappers up to clear Streamlit's injected top-gap */
 [data-testid="stHeadingWithActionElements"] {
     margin-top: -48px !important;
     padding-top: 0 !important;
-}
-/* h3 counteract: push the h3 element itself back down inside the wrapper
-   so net visual offset ≈ (-48 + 56) = +8px — normal reading position      */
-[data-testid="stHeadingWithActionElements"] h3 {
-    margin-top: 56px !important;
-    font-size: 1.2rem !important;
-    font-weight: 600 !important;
-    color: #cbd5e1 !important;
-    letter-spacing: normal !important;
-    text-transform: none !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 4px !important;
 }
 /* Hide all horizontal divider lines */
 [data-testid="stDivider"] { display: none !important; }
@@ -1364,7 +1360,7 @@ def main() -> None:
                 )
             c1, c2 = st.columns(2)
             with c1:
-                st.subheader("Pattern Prevalence")
+                _chart_title("Pattern Prevalence")
                 st.caption("Khipus exhibiting ≥1 instance of each summation pattern")
                 with st.expander("ℹ️ How to read this chart", expanded=False):
                     st.markdown(
@@ -1375,7 +1371,7 @@ def main() -> None:
                     )
                 st.plotly_chart(build_prevalence_figure(flags_df), width="stretch")
             with c2:
-                st.subheader("Pattern Co-occurrence")
+                _chart_title("Pattern Co-occurrence")
                 st.caption("Khipus that simultaneously exhibit both patterns (diagonal = single-pattern count).")
                 with st.expander("ℹ️ How to read this heatmap", expanded=False):
                     st.markdown(
@@ -1387,7 +1383,7 @@ def main() -> None:
                     )
                 st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
 
-            st.subheader("Pattern Complexity")
+            _chart_title("Pattern Complexity")
             st.caption(
                 "How many *distinct* summation patterns does a single khipu exhibit? "
                 "0 = no detected summation structure; higher = richer accounting system."
@@ -1404,7 +1400,7 @@ def main() -> None:
 
         # ── Tab 2: Deep Dive ───────────────────────────────────────────────────
         with tab2:
-            st.subheader("Handedness (Left vs Right Sums)")
+            _chart_title("Handedness (Left vs Right Sums)")
             st.caption("Total left- vs right-oriented summation instances across the corpus (cord-level patterns: PP · IP · CP · SP · IS).")
             with st.expander("ℹ️ How to read this chart", expanded=False):
                 st.markdown(
@@ -1418,7 +1414,7 @@ def main() -> None:
 
             c3, c4 = st.columns(2)
             with c3:
-                st.subheader("Instance-Count Distribution")
+                _chart_title("Instance-Count Distribution")
                 st.caption("Box plots of *how many* summation instances each khipu has (positive cases only).")
                 with st.expander("ℹ️ How to read this chart", expanded=False):
                     st.markdown(
@@ -1431,7 +1427,7 @@ def main() -> None:
                     )
                 st.plotly_chart(build_count_dist_figure(full_df), width="stretch")
             with c4:
-                st.subheader("Sum Magnitude Distribution")
+                _chart_title("Sum Magnitude Distribution")
                 st.caption("Box plots of the mean cord-value sum per khipu, for patterns that report numeric magnitudes.")
                 with st.expander("ℹ️ How to read this chart", expanded=False):
                     st.markdown(
@@ -1445,7 +1441,7 @@ def main() -> None:
                     )
                 st.plotly_chart(build_magnitude_figure(full_df), width="stretch")
 
-            st.subheader("Dual- & Multi-Summand Breakdown")
+            _chart_title("Dual- & Multi-Summand Breakdown")
             st.caption("PP, IP, and CP cord instances split by summation complexity.")
             with st.expander("ℹ️ Summation complexity types", expanded=False):
                 st.markdown(
@@ -1459,7 +1455,7 @@ def main() -> None:
 
         # ── Tab 3: Geography ───────────────────────────────────────────────────
         with tab3:
-            st.subheader("Pattern Rate by Provenance")
+            _chart_title("Pattern Rate by Provenance")
             st.caption("Percentage of khipus from each provenance (top 25 by count) that exhibit each summation pattern.")
             with st.expander("ℹ️ How to read this heatmap", expanded=False):
                 st.markdown(
@@ -1475,7 +1471,7 @@ def main() -> None:
 
         # ── Tab 4: Pattern Space ───────────────────────────────────────────────
         with tab4:
-            st.subheader("Khipu Pattern-Space (PCA)")
+            _chart_title("Khipu Pattern-Space (PCA)")
             st.caption(
                 "Each dot = one khipu, projected from a 9-dimensional boolean pattern-flag space "
                 "onto the first two principal components."
@@ -1493,7 +1489,7 @@ def main() -> None:
                 )
             st.plotly_chart(build_pca_figure(flags_df), width="stretch")
 
-            st.subheader("Pattern Detail Table")
+            _chart_title("Pattern Detail Table")
             st.caption("Per-pattern corpus-wide statistics from the KFG checks/ ground truth.")
             with st.expander("ℹ️ Column definitions", expanded=False):
                 st.markdown(
@@ -1662,7 +1658,7 @@ def main() -> None:
         st.plotly_chart(xray_fig, width='stretch')
 
         # Group summary table
-        st.subheader("Group summary")
+        _chart_title("Group summary")
         groups_df = (
             cords_df.groupby("group_idx")
             .agg(
