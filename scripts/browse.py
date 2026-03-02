@@ -1003,13 +1003,19 @@ header[data-testid="stHeader"]         { display: none !important; }
 
 /* ── global background ────────────────────────────────────────────────────────  */
 [data-testid="stApp"]                  { background: #0b1120; }
-/* inset main content: clear the 80px nav + 20px gap, 64px header + 6px gap, 36px footer */
+/* inset main content: clear 64px fixed header, 150px left nav, 44px footer */
 [data-testid="stMainBlockContainer"],
 .main .block-container {
-    padding-top: 66px !important;
+    padding-top: 68px !important;
     padding-left: 150px !important;
     padding-bottom: 44px !important;
     max-width: 100% !important;
+}
+/* Strip Streamlit's large default top-margin from the first heading on each page */
+[data-testid="stHeadingWithActionElements"]:first-child,
+[data-testid="stHeadingWithActionElements"]:first-of-type {
+    margin-top: -16px !important;
+    padding-top: 0 !important;
 }
 
 /* ── fixed header bar ─────────────────────────────────────────────────────  */
@@ -1087,6 +1093,38 @@ header[data-testid="stHeader"]         { display: none !important; }
     color: #e2e8f0 !important;
     line-height: 1.15;
 }
+
+/* ── Analytics tabs ──────────────────────────────────────────────────────────  */
+[data-baseweb="tab-list"] {
+    background: #0b1120 !important;
+    border-bottom: 2px solid #1e293b !important;
+    gap: 4px !important;
+    padding-bottom: 0 !important;
+}
+[data-baseweb="tab"] {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-bottom: none !important;
+    border-radius: 8px 8px 0 0 !important;
+    color: #64748b !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    padding: 10px 22px !important;
+    transition: background 0.15s, color 0.15s, border-color 0.15s !important;
+}
+[data-baseweb="tab"]:hover {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border-color: #334155 !important;
+}
+[aria-selected="true"][data-baseweb="tab"] {
+    background: #1e3a5f !important;
+    color: #e2e8f0 !important;
+    border-color: #3b82f6 !important;
+}
+[data-baseweb="tab-highlight"] { background: transparent !important; }
+[data-baseweb="tab-border"]    { background: transparent !important; }
 </style>"""
 
 
