@@ -1124,6 +1124,19 @@ header[data-testid="stHeader"]         { display: none !important; }
 }
 [data-baseweb="tab-highlight"] { background: transparent !important; }
 [data-baseweb="tab-border"]    { background: transparent !important; }
+
+/* ── Subheader section labels (st.subheader → h3) ───────────────────────  */
+[data-testid="stHeadingWithActionElements"] h3 {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #475569 !important;
+    border-bottom: 1px solid #1e293b !important;
+    padding-bottom: 6px !important;
+    margin-top: 12px !important;
+    margin-bottom: 8px !important;
+}
 </style>"""
 
 
@@ -1528,7 +1541,6 @@ def main() -> None:
             return
 
         meta = load_meta(selected_id)
-        st.subheader(meta.get('kfg_name') or selected_id)
 
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("KFG ID", selected_id)
@@ -1539,6 +1551,8 @@ def main() -> None:
         url = meta.get("kfg_url", "")
         if url:
             st.markdown(f"[View on KFG ↗]({url})")
+
+        st.divider()
 
         with st.spinner("Building 3D visualization…"):
             fig = build_3d_figure(selected_id)
@@ -1568,11 +1582,7 @@ def main() -> None:
             return
 
         meta = load_meta(selected_id)
-        st.subheader(meta.get('kfg_name') or selected_id)
-
         url = meta.get("kfg_url", "")
-        if url:
-            st.markdown(f"[View on KFG ↗]({url})")
 
         cords_df = load_cords(selected_id)
         if cords_df.empty:
@@ -1590,8 +1600,13 @@ def main() -> None:
         m3.metric("Subsidiaries", len(subs))
         m4.metric("Cord groups", n_groups)
 
+        if url:
+            st.markdown(f"[View on KFG ↗]({url})")
+
+        st.divider()
+
         # ─ Arc overlay controls
-        st.subheader("Summation Arc Overlay")
+        st.markdown("**Summation Arc Overlay**")
         loader_inst = _get_loader()
         arc_traces: list = []
         if loader_inst and loader_inst.in_kfg(selected_id):
@@ -1615,7 +1630,7 @@ def main() -> None:
                 st.caption("KFG checks/ directory not found — arc overlays unavailable.")
 
         # ─ Color grid
-        st.subheader("Color grid (pendants by group)")
+        st.markdown("**Color Grid** — pendants by group")
         st.caption(
             "Each square is one pendant cord, colored by Ascher color code. "
             "Arcs connect sum cords to their summands; arc color = pattern type."
