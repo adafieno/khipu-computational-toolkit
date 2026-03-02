@@ -625,6 +625,158 @@ def build_xray_figure(cords_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def build_summation_figure(
+    cords_df: pd.DataFrame,
+    arc_data: dict,
+    enabled_patterns: set,
+) -> go.Figure:
+    """Cord-node layout with summation arcs bowing above the grid.
+
+    x  = evenly spaced group position (0, 1, 2 …)
+    y  = −position_in_group  (pos 0 at top = y = 0; deeper positions go down)
+    Arcs bow upward (positive y, above the cord grid), coloured by pattern.
+    Sum cords get a gold outer ring; summand cords get a cyan outer ring.
+    """
+    pendants = cords_df[cords_df["hierarchy_level"] == 0].copy()
+    if pendants.empty:
+        pendants = cords_df.copy()
+
+    groups = sorted(pendants["group_idx"].dropna().unique())
+    group_x: dict[float, float] = {float(g): float(i) for i, g in enumerate(groups)}
+
+    # Build per-cord lookup: (group_float, pos_float) → {x, y, color, name, value}
+    coord_map: dict[tuple, dict] = {}
+    node_x, node_y, node_color, node_hover = [], [], [], []
+
+    for _, row in pendants.sort_values(["group_idx", "position_in_group"]).iterrows():
+        g = row["group_idx"]
+        if pd.isna(g):
+            continue
+        g_f = float(g)
+        p_f = float(row["position_in_group"] or 0)
+        x   = group_x.get(g_f, g_f)
+        y   = -p_f                        # pos 0 at top; deeper positions below
+        hex_c = color_to_hex(str(row["color"] or ""))
+        val   = row["value"]
+        name  = str(row["cord_name"])
+        coord_map[(g_f, p_f)] = dict(x=x, y=y, color=hex_c, name=name, value=val)
+        node_x.append(x)
+        node_y.append(y)
+        node_color.append(hex_c)
+        node_hover.append(
+            f"<b>{name}</b><br>"
+            f"Group {int(g)} · pos {int(p_f)}<br>"
+            f"Color: {row['color']}<br>"
+            f"Value: {val if pd.notna(val) else '—'}"
+        )
+
+    # Identify which nodes participate in enabled arcs
+    sum_keys:     set = set()
+    summand_keys: set = set()
+    for pattern, arcs in arc_data.items():
+        if pattern not in enabled_patterns:
+            continue
+        for sum_coord, summand_list in arcs:
+            sum_keys.add(sum_coord)
+            for sc in summand_list:
+                summand_keys.add(sc)
+
+    fig = go.Figure()
+
+    # Layer 1: all cord nodes
+    fig.add_trace(go.Scatter(
+        x=node_x, y=node_y, mode="markers",
+        marker=dict(size=20, color=node_color, symbol="circle",
+                    line=dict(color="#334155", width=1.5)),
+        text=node_hover, hovertemplate="%{text}<extra></extra>",
+        showlegend=False, name="Cords",
+    ))
+
+    # Layer 2: summand ring (cyan)
+    sk_x = [coord_map[k]["x"] for k in summand_keys if k in coord_map]
+    sk_y = [coord_map[k]["y"] for k in summand_keys if k in coord_map]
+    if sk_x:
+        fig.add_trace(go.Scatter(
+            x=sk_x, y=sk_y, mode="markers",
+            marker=dict(size=30, color="rgba(0,0,0,0)", symbol="circle",
+                        line=dict(color="#06b6d4", width=2.5)),
+            hoverinfo="skip", showlegend=True, name="Summand cord",
+        ))
+
+    # Layer 3: sum cord ring (gold)
+    sc_x = [coord_map[k]["x"] for k in sum_keys if k in coord_map]
+    sc_y = [coord_map[k]["y"] for k in sum_keys if k in coord_map]
+    if sc_x:
+        fig.add_trace(go.Scatter(
+            x=sc_x, y=sc_y, mode="markers",
+            marker=dict(size=34, color="rgba(0,0,0,0)", symbol="circle",
+                        line=dict(color="#f59e0b", width=3)),
+            hoverinfo="skip", showlegend=True, name="Sum cord",
+        ))
+
+    # Layer 4: arc traces per pattern (bow upward)
+    for pattern, arcs in arc_data.items():
+        if pattern not in enabled_patterns:
+            continue
+        arc_color, abbr = ARC_PATTERNS.get(pattern, ("#888888", pattern))
+        all_ax: list = []
+        all_ay: list = []
+        for sum_coord, summand_list in arcs:
+            if sum_coord not in coord_map:
+                continue
+            sx = coord_map[sum_coord]["x"]
+            sy = coord_map[sum_coord]["y"]
+            for sc in summand_list:
+                if sc not in coord_map:
+                    continue
+                tx = coord_map[sc]["x"]
+                ty = coord_map[sc]["y"]
+                ax, ay = _bezier_arc_up(sx, sy, tx, ty)
+                all_ax.extend(ax)
+                all_ay.extend(ay)
+        if all_ax:
+            fig.add_trace(go.Scatter(
+                x=all_ax, y=all_ay, mode="lines",
+                line=dict(color=arc_color, width=2.5),
+                opacity=0.85, name=abbr,
+                hoverinfo="skip", showlegend=True,
+            ))
+
+    # Group index labels below the cord grid
+    min_y = min(node_y) if node_y else 0
+    for g, xi in group_x.items():
+        fig.add_annotation(
+            x=xi, y=min_y - 0.6, text=str(int(g)),
+            showarrow=False, font=dict(size=9, color="#64748b"),
+            xanchor="center",
+        )
+
+    n_depth   = max(abs(min_y) + 1, 1) if node_y else 1
+    arc_space = 3.5 if (arc_data and enabled_patterns) else 0
+    x_max     = max(group_x.values(), default=0)
+
+    fig.update_layout(
+        plot_bgcolor="#0f172a", paper_bgcolor="#0f172a",
+        font_color="#e2e8f0",
+        xaxis=dict(
+            showgrid=False, showticklabels=False, zeroline=False,
+            title=dict(text="← group index (numbers below) →",
+                       font=dict(size=10, color="#64748b")),
+            range=[-0.7, x_max + 0.7],
+        ),
+        yaxis=dict(showgrid=False, showticklabels=False, zeroline=False, title=""),
+        height=max(380, int(n_depth) * 58 + int(arc_space * 55) + 90),
+        margin=dict(l=10, r=12, t=20, b=50),
+        legend=dict(
+            x=1.01, y=0.5, yanchor="middle",
+            bgcolor="rgba(15,23,42,0.85)",
+            bordercolor="#334155", borderwidth=1,
+            font=dict(color="#e2e8f0", size=11),
+        ),
+    )
+    return fig
+
+
 # ── Analytics helpers ──────────────────────────────────────────────────────────
 
 def _parse_coord_index(s: str) -> Optional[tuple[float, float]]:
@@ -664,6 +816,25 @@ def _bezier_arc(
     """
     cx = (x1 + x2) / 2
     cy = min(y1, y2) - max(1.0, abs(x2 - x1) * 0.35)
+    xs: list = []
+    ys: list = []
+    for i in range(n + 1):
+        t = i / n
+        xs.append((1 - t) ** 2 * x1 + 2 * (1 - t) * t * cx + t ** 2 * x2)
+        ys.append((1 - t) ** 2 * y1 + 2 * (1 - t) * t * cy + t ** 2 * y2)
+    return xs + [None], ys + [None]
+
+
+def _bezier_arc_up(
+    x1: float, y1: float, x2: float, y2: float, n: int = 22
+) -> tuple[list, list]:
+    """Quadratic Bézier arc that bows *upward* (positive y direction).
+
+    Used by build_summation_figure where y=0 is the top of the grid and arcs
+    arch above it into positive-y space.
+    """
+    cx = (x1 + x2) / 2
+    cy = max(y1, y2) + max(1.5, abs(x2 - x1) * 0.45)
     xs: list = []
     ys: list = []
     for i in range(n + 1):
@@ -1936,37 +2107,37 @@ def main() -> None:
 
         # ── Summation pattern toggles ─────────────────────────────────────────
         _PATTERN_FULL = {
-            "pendant_pendant_sum":    "Pendant → Pendant",
-            "indexed_pendant_sum":    "Indexed Pendant",
-            "colored_pendant_sum":    "Color Grouped",
-            "subsidiary_pendant_sum": "Subsidiary → Pendant",
-            "indexed_subsidiary_sum": "Indexed Subsidiary",
+            "pendant_pendant_sum":    "Pendant → Pendant (PP)",
+            "indexed_pendant_sum":    "Indexed Pendant (IP)",
+            "colored_pendant_sum":    "Color-Grouped Pendant (CP)",
+            "subsidiary_pendant_sum": "Subsidiary → Pendant (SP)",
+            "indexed_subsidiary_sum": "Indexed Subsidiary (IS)",
         }
         st.markdown(
-            '<div style="margin-top:18px;margin-bottom:6px;font-size:0.7rem;'
-            'color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em">'
-            'Summation patterns — check to show arcs on the grid</div>',
+            '<div style="margin-top:18px;margin-bottom:8px;font-size:0.95rem;'
+            'font-weight:600;color:#e2e8f0">Summation patterns</div>',
             unsafe_allow_html=True,
         )
-        loader_inst = _get_loader()
-        arc_traces: list = []
+        loader_inst  = _get_loader()
+        arc_data:         dict = {}
+        enabled_patterns: set  = set()
+
         if loader_inst and loader_inst.in_kfg(selected_id):
             arc_data  = load_arc_data(selected_id)
             available = [p for p in ARC_PATTERNS if arc_data.get(p)]
             if available:
                 tog_cols = st.columns(max(1, len(available)))
-                enabled_patterns: set = set()
                 for i, p in enumerate(available):
                     arc_color, abbr = ARC_PATTERNS[p]
                     n_arcs = len(arc_data[p])
                     full   = _PATTERN_FULL.get(p, abbr)
                     tog_cols[i].markdown(
-                        f'<div style="padding:7px 10px;background:#1e293b;border-radius:6px;'
+                        f'<div style="padding:8px 12px;background:#1e293b;border-radius:6px;'
                         f'border-left:3px solid {arc_color};margin-bottom:4px">'
-                        f'<span style="font-size:0.82rem;font-weight:700;color:{arc_color}">'
-                        f'{abbr}</span>'
-                        f'<span style="font-size:0.78rem;color:#cbd5e1"> {full}</span><br>'
-                        f'<span style="font-size:0.7rem;color:#64748b">'
+                        f'<span style="font-size:0.88rem;font-weight:700;color:{arc_color}">'
+                        f'{abbr.split(" ")[-1]}</span>'
+                        f'<br><span style="font-size:0.82rem;color:#cbd5e1">{full}</span><br>'
+                        f'<span style="font-size:0.78rem;color:#64748b">'
                         f'{n_arcs} relation{"s" if n_arcs != 1 else ""}</span>'
                         f'</div>',
                         unsafe_allow_html=True,
@@ -1974,28 +2145,68 @@ def main() -> None:
                     if tog_cols[i].checkbox("Show", value=True, key=f"arc_{p}",
                                             label_visibility="collapsed"):
                         enabled_patterns.add(p)
-                arc_traces = build_arc_traces(arc_data, enabled_patterns)
             else:
-                st.info("No summation patterns found for this khipu.")
+                st.info("🔍 No summation patterns found for this khipu.")
         else:
-            msg = ("This khipu is not in the KFG corpus" if loader_inst
-                   else "KFG checks/ directory not found")
-            st.caption(f"{msg} — arc data unavailable.")
+            msg = ("This khipu is not in the KFG corpus"
+                   if loader_inst else "KFG data not available in this environment")
+            st.warning(f"⚠️ {msg} — summation arc data unavailable.")
 
-        # ── Cord color grid with arc overlays ─────────────────────────────────
+        # ── Cord layout + arc figure ──────────────────────────────────────────────
         st.markdown(
-            '<div style="margin-top:18px;margin-bottom:4px;font-size:0.7rem;'
-            'color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em">'
-            'Cord color grid · x = group index · y = position in group · '
-            'arcs connect sum cord to summands</div>',
+            '<div style="margin-top:20px;margin-bottom:6px;font-size:0.95rem;'
+            'font-weight:600;color:#e2e8f0">Cord map</div>'
+            '<div style="font-size:0.82rem;color:#94a3b8;margin-bottom:6px">'
+            'Each circle is a cord, coloured by Ascher code. '
+            'Gold ring = sum cord &nbsp;·&nbsp; Cyan ring = summand cord. '
+            'Arcs bow above the grid and connect each sum cord to its summands.</div>',
             unsafe_allow_html=True,
         )
-        xray_fig = build_xray_figure(cords_df)
-        for trace in arc_traces:
-            xray_fig.add_trace(trace)
-        if arc_traces:
-            xray_fig.update_layout(showlegend=True)
-        st.plotly_chart(xray_fig, width='stretch')
+        st.plotly_chart(
+            build_summation_figure(cords_df, arc_data, enabled_patterns),
+            width='stretch',
+        )
+
+        # ── Summation relations table ────────────────────────────────────────────
+        if arc_data and enabled_patterns:
+            # Build a fast lookup: (group_float, pos_float) → row
+            _pos_lookup: dict[tuple, pd.Series] = {}
+            for _, _r in cords_df.iterrows():
+                _g = _r["group_idx"]
+                _p = float(_r["position_in_group"] or 0)
+                if not pd.isna(_g):
+                    _pos_lookup[(float(_g), _p)] = _r
+
+            rel_rows: list[dict] = []
+            for pattern, arcs in arc_data.items():
+                if pattern not in enabled_patterns:
+                    continue
+                arc_color, abbr = ARC_PATTERNS[pattern]
+                for sum_coord, summand_list in arcs:
+                    s_row = _pos_lookup.get(sum_coord)
+                    s_name  = s_row["cord_name"] if s_row is not None else str(sum_coord)
+                    s_val   = s_row["value"]     if s_row is not None else "—"
+                    summand_parts = []
+                    for sc in summand_list:
+                        sc_row = _pos_lookup.get(sc)
+                        sc_n   = sc_row["cord_name"] if sc_row is not None else str(sc)
+                        sc_v   = sc_row["value"]     if sc_row is not None else "—"
+                        summand_parts.append(f"{sc_n} ({sc_v})")
+                    rel_rows.append({
+                        "Pattern":  abbr,
+                        "Sum cord": f"{s_name} ( {s_val} )",
+                        "Summands": " + ".join(summand_parts),
+                    })
+
+            if rel_rows:
+                st.markdown(
+                    '<div style="margin-top:20px;margin-bottom:8px;font-size:0.95rem;'
+                    'font-weight:600;color:#e2e8f0">Summation relations</div>',
+                    unsafe_allow_html=True,
+                )
+                st.dataframe(
+                    pd.DataFrame(rel_rows), width='stretch', hide_index=True,
+                )
 
         # ── Group summary ──────────────────────────────────────────────────────
         with st.expander("Group summary table"):
