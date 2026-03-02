@@ -625,6 +625,96 @@ def build_xray_figure(cords_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+@st.cache_data(ttl=3600)
+def compute_summation_arcs(kfg_id: str) -> dict:
+    """Compute PP / IP / CP / SP summation relations directly from the cord DB.
+
+    Returns: { pattern_key: [(sum_coord, [summand_coords]), ...] }
+    where each coord is (group_float, position_in_group_float).
+
+    Patterns:
+      PP  - pendant == sum of other pendants in the same cord group
+      IP  - pendant == sum of same-index pendants across groups
+      CP  - pendant == sum of same-color pendants across the whole khipu
+      SP  - pendant == sum of its direct subsidiary cord values
+             (summand_coords is empty; the pendant itself is the annotated node)
+    """
+    df = load_cords(kfg_id)
+    if df.empty:
+        return {}
+
+    df["_v"] = pd.to_numeric(df["value"], errors="coerce")
+    pendants = df[df["hierarchy_level"] == 0].copy()
+    subs     = df[df["hierarchy_level"] > 0].copy()
+    tol      = 0.001
+
+    def _coord(row) -> tuple:
+        return (float(row["group_idx"]), float(row["position_in_group"] or 0))
+
+    result: dict = {}
+
+    # ── PP: pendant == sum of other pendants in the same group ──────────────
+    pp_arcs: list = []
+    for _g, grp in pendants.groupby("group_idx"):
+        vals = {str(r["cord_name"]): (r["_v"], _coord(r))
+                for _, r in grp.iterrows() if pd.notna(r["_v"])}
+        if len(vals) < 2:
+            continue
+        total = sum(v for v, _ in vals.values())
+        for name, (val, coord) in vals.items():
+            if val > 0 and abs(val - (total - val)) < tol:
+                pp_arcs.append((coord, [c for n, (_, c) in vals.items() if n != name]))
+    if pp_arcs:
+        result["pendant_pendant_sum"] = pp_arcs
+
+    # ── IP: pendant == sum of same-position pendants in other groups ─────────
+    ip_arcs: list = []
+    for _pos, grp in pendants.groupby("position_in_group"):
+        vals = {str(r["cord_name"]): (r["_v"], _coord(r))
+                for _, r in grp.iterrows() if pd.notna(r["_v"])}
+        if len(vals) < 2:
+            continue
+        total = sum(v for v, _ in vals.values())
+        for name, (val, coord) in vals.items():
+            if val > 0 and abs(val - (total - val)) < tol:
+                ip_arcs.append((coord, [c for n, (_, c) in vals.items() if n != name]))
+    if ip_arcs:
+        result["indexed_pendant_sum"] = ip_arcs
+
+    # ── CP: pendant == sum of same-color pendants across the full khipu ──────
+    cp_arcs: list = []
+    for _color, grp in pendants.groupby("color"):
+        vals = {str(r["cord_name"]): (r["_v"], _coord(r))
+                for _, r in grp.iterrows() if pd.notna(r["_v"])}
+        if len(vals) < 2:
+            continue
+        total = sum(v for v, _ in vals.values())
+        for name, (val, coord) in vals.items():
+            if val > 0 and abs(val - (total - val)) < tol:
+                cp_arcs.append((coord, [c for n, (_, c) in vals.items() if n != name]))
+    if cp_arcs:
+        result["colored_pendant_sum"] = cp_arcs
+
+    # ── SP: pendant == sum of its direct subsidiary cord values ──────────────
+    if not subs.empty:
+        sub_by_parent = subs.groupby("parent_cord")
+        sp_arcs: list = []
+        for _, prow in pendants.iterrows():
+            pname = str(prow["cord_name"])
+            pval  = prow["_v"]
+            if pd.isna(pval) or pval <= 0:
+                continue
+            if pname not in sub_by_parent.groups:
+                continue
+            child_sum = sub_by_parent.get_group(pname)["_v"].dropna().sum()
+            if abs(pval - child_sum) < tol:
+                sp_arcs.append((_coord(prow), []))
+        if sp_arcs:
+            result["subsidiary_pendant_sum"] = sp_arcs
+
+    return result
+
+
 def build_summation_figure(
     cords_df: pd.DataFrame,
     arc_data: dict,
@@ -2105,52 +2195,44 @@ def main() -> None:
         c3.markdown(_stat_card_arcs("Subsidiaries", str(len(subs))),     unsafe_allow_html=True)
         c4.markdown(_stat_card_arcs("Cord groups",  str(n_groups)),      unsafe_allow_html=True)
 
-        # ── Summation pattern toggles ─────────────────────────────────────────
+        # ── Compute summation patterns directly from DB ─────────────────────────
         _PATTERN_FULL = {
-            "pendant_pendant_sum":    "Pendant → Pendant (PP)",
-            "indexed_pendant_sum":    "Indexed Pendant (IP)",
-            "colored_pendant_sum":    "Color-Grouped Pendant (CP)",
-            "subsidiary_pendant_sum": "Subsidiary → Pendant (SP)",
-            "indexed_subsidiary_sum": "Indexed Subsidiary (IS)",
+            "pendant_pendant_sum":    "Pendant → Pendant (PP): same group",
+            "indexed_pendant_sum":    "Indexed Pendant (IP): same position across groups",
+            "colored_pendant_sum":    "Color-Grouped (CP): same Ascher color",
+            "subsidiary_pendant_sum": "Subsidiary → Pendant (SP): pendant = sum of its subs",
         }
         st.markdown(
             '<div style="margin-top:18px;margin-bottom:8px;font-size:0.95rem;'
             'font-weight:600;color:#e2e8f0">Summation patterns</div>',
             unsafe_allow_html=True,
         )
-        loader_inst  = _get_loader()
-        arc_data:         dict = {}
-        enabled_patterns: set  = set()
+        arc_data         = compute_summation_arcs(selected_id)
+        enabled_patterns: set = set()
+        available = [p for p in ARC_PATTERNS if arc_data.get(p)]
 
-        if loader_inst and loader_inst.in_kfg(selected_id):
-            arc_data  = load_arc_data(selected_id)
-            available = [p for p in ARC_PATTERNS if arc_data.get(p)]
-            if available:
-                tog_cols = st.columns(max(1, len(available)))
-                for i, p in enumerate(available):
-                    arc_color, abbr = ARC_PATTERNS[p]
-                    n_arcs = len(arc_data[p])
-                    full   = _PATTERN_FULL.get(p, abbr)
-                    tog_cols[i].markdown(
-                        f'<div style="padding:8px 12px;background:#1e293b;border-radius:6px;'
-                        f'border-left:3px solid {arc_color};margin-bottom:4px">'
-                        f'<span style="font-size:0.88rem;font-weight:700;color:{arc_color}">'
-                        f'{abbr.split(" ")[-1]}</span>'
-                        f'<br><span style="font-size:0.82rem;color:#cbd5e1">{full}</span><br>'
-                        f'<span style="font-size:0.78rem;color:#64748b">'
-                        f'{n_arcs} relation{"s" if n_arcs != 1 else ""}</span>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
-                    if tog_cols[i].checkbox("Show", value=True, key=f"arc_{p}",
-                                            label_visibility="collapsed"):
-                        enabled_patterns.add(p)
-            else:
-                st.info("🔍 No summation patterns found for this khipu.")
+        if available:
+            tog_cols = st.columns(max(1, len(available)))
+            for i, p in enumerate(available):
+                arc_color, abbr = ARC_PATTERNS[p]
+                n_arcs = len(arc_data[p])
+                full   = _PATTERN_FULL.get(p, abbr)
+                tog_cols[i].markdown(
+                    f'<div style="padding:8px 12px;background:#1e293b;border-radius:6px;'
+                    f'border-left:3px solid {arc_color};margin-bottom:4px">'
+                    f'<span style="font-size:0.88rem;font-weight:700;color:{arc_color}">'
+                    f'{abbr}</span>'
+                    f'<br><span style="font-size:0.82rem;color:#cbd5e1">{full}</span><br>'
+                    f'<span style="font-size:0.78rem;color:#64748b">'
+                    f'{n_arcs} relation{"s" if n_arcs != 1 else ""}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+                if tog_cols[i].checkbox("Show", value=True, key=f"arc_{p}",
+                                        label_visibility="collapsed"):
+                    enabled_patterns.add(p)
         else:
-            msg = ("This khipu is not in the KFG corpus"
-                   if loader_inst else "KFG data not available in this environment")
-            st.warning(f"⚠️ {msg} — summation arc data unavailable.")
+            st.info("🔍 No summation patterns detected for this khipu.")
 
         # ── Cord layout + arc figure ──────────────────────────────────────────────
         st.markdown(
