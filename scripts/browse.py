@@ -841,12 +841,11 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
     col_labels = [short[k] for k in available]
 
     _colorscale = [
-        [0.00, "#0f172a"],   #   0 % — bg (invisible)
-        [0.05, "#2d1515"],   #   5 % — barely-visible dark maroon
-        [0.30, "#6b2020"],   #  30 % — dark red
-        [0.55, "#b03535"],   #  55 % — medium red
-        [0.75, "#d46060"],   #  75 % — light-red / rose
-        [1.00, "#f2a8a8"],   # 100 % — pale pink
+        [0.00, "#fff7bc"],  #   0 % — pale yellow
+        [0.25, "#fec44f"],  #  25 % — golden yellow
+        [0.50, "#fe9929"],  #  50 % — amber-orange
+        [0.75, "#e05030"],  #  75 % — light brick-red
+        [1.00, "#b01515"],  # 100 % — medium red (not the deep #800026 of YlOrRd)
     ]
 
     fig = go.Figure(go.Heatmap(
@@ -859,13 +858,14 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
     ))
 
     # Per-cell annotations — two lines via <br>.
-    # Scale brightens toward 100 %, so switch to dark text above ~62 % of max.
+    # Low values → pale yellow bg → need dark text.
+    # High values → brick/red bg → need light text.
     max_z = max(v for row in z_vals for v in row) or 1
-    light_thresh = max_z * 0.62   # cells above this are pale → need dark text
+    dark_thresh = max_z * 0.45   # below this = light cell → dark text
     for i, prov in enumerate(top_provs):
         for j, col in enumerate(col_labels):
             v = z_vals[i][j]
-            fc = "#1e293b" if v >= light_thresh else "#e2e8f0"
+            fc = "#1e293b" if v < dark_thresh else "#f8fafc"
             fig.add_annotation(
                 x=col, y=prov,
                 text=text_vals[i][j],   # already contains <br>
