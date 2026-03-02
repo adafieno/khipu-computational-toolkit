@@ -1,0 +1,266 @@
+kfg_id,provenance_display,n_cords,n_pattern_types,cluster,nn_top_zone,nn_top_weight,nn_zones,nn_dists
+KH0002,Unknown,31,1,0,Central Coast,0.82,Central Coast|Central Coast|Cañete–Pisco|Central Coast|Central Coast,0.116|0.142|0.181|0.203|0.217
+KH0003,Unknown,15,1,0,Ica & Paracas,1.0,Ica & Paracas|Ica & Paracas|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.108|0.154|0.209|0.219|0.254
+KH0004,Unknown,9,3,0,Ica & Paracas,0.602,Ica & Paracas|Central Coast|Ica & Paracas|Chachapoyas|Ica & Paracas,1.001|1.002|1.004|1.087|1.104
+KH0005,Unknown,22,1,0,Central Coast,0.876,Central Coast|Central Coast|Central Coast|Cañete–Pisco|Central Coast,0.066|0.200|0.202|0.245|0.255
+KH0006,Unknown,59,4,0,Ica & Paracas,0.62,Ica & Paracas|Ica & Paracas|Ica & Paracas|Cañete–Pisco|Central Coast,1.144|1.415|1.429|1.430|1.433
+KH0007,Unknown,92,6,0,Ica & Paracas,0.411,Ica & Paracas|Nazca & Far South|Central Coast|Ica & Paracas|Central Coast,1.107|1.198|1.296|1.425|1.432
+KH0008,Unknown,171,7,1,Chachapoyas,0.426,Chachapoyas|Ica & Paracas|Chachapoyas|Central Coast|Central Coast,1.038|1.125|1.161|1.268|1.284
+KH0009,Unknown,250,7,1,Ica & Paracas,0.386,Central Coast|Ica & Paracas|Chachapoyas|Nazca & Far South|Ica & Paracas,1.198|1.360|1.367|1.444|1.465
+KH0011,Unknown,28,4,0,Central Coast,0.844,Central Coast|Central Coast|Central Coast|Central Coast|North Peru Coast,0.444|0.770|0.853|0.915|0.932
+KH0012,Unknown,24,1,0,Cañete–Pisco,0.613,Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas|Central Coast,0.071|0.278|0.301|1.001|1.005
+KH0013,Unknown,106,3,0,Central Coast,0.609,Central Coast|Central Coast|Ica & Paracas|Central Coast|Cañete–Pisco,1.462|1.518|1.561|1.564|1.585
+KH0014,Unknown,90,6,0,Central Coast,0.782,Central Coast|Cañete–Pisco|Central Coast|Central Coast|Central Coast,1.200|1.356|1.481|1.752|1.782
+KH0015,Unknown,75,2,0,Ica & Paracas,0.664,Ica & Paracas|Ica & Paracas|Central Coast|Ica & Paracas|Chachapoyas,0.246|0.412|0.420|0.507|0.524
+KH0016,Unknown,23,0,0,Central Coast,0.546,Central Coast|Central Coast|Cañete–Pisco|Nazca & Far South|Ica & Paracas,0.199|0.280|0.384|0.392|0.501
+KH0017,Unknown,11,1,0,Cañete–Pisco,0.705,Cañete–Pisco|Central Coast|Central Coast|Ica & Paracas|Ica & Paracas,0.007|0.033|0.041|0.236|0.245
+KH0018,Unknown,39,3,0,Nazca & Far South,0.404,Nazca & Far South|Cañete–Pisco|North Peru Coast|Ica & Paracas|Nazca & Far South,1.070|1.093|1.170|1.192|1.199
+KH0019,Unknown,10,0,0,Cañete–Pisco,1.0,Cañete–Pisco|Ica & Paracas|Central Coast|Cañete–Pisco|Central Coast,0.000|0.007|0.007|0.013|0.013
+KH0020,Unknown,9,1,0,Central Coast,0.874,Central Coast|Central Coast|Central Coast|Chachapoyas|Central Coast,0.402|0.495|0.622|0.973|1.001
+KH0021,Unknown,10,2,0,Ica & Paracas,0.791,Ica & Paracas|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.051|0.417|0.444|0.535|0.591
+KH0022,Unknown,75,2,0,Central Coast,0.761,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.184|0.267|0.352|0.537|0.553
+KH0023,Unknown,3,0,0,Cañete–Pisco,0.5,Cañete–Pisco|Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco,0.000|0.000|0.007|0.007|0.013
+KH0024,Unknown,8,1,0,Central Coast,0.428,Central Coast|Central Coast|Ica & Paracas|Cañete–Pisco|Ica & Paracas,0.651|0.781|0.788|0.791|0.815
+KH0025,Unknown,3,0,0,Central Coast,0.883,Central Coast|Central Coast|Central Coast|Ica & Paracas|Cañete–Pisco,0.020|0.107|0.146|0.219|0.237
+KH0026,Unknown,37,2,0,Central Coast,0.728,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.733|0.885|1.143|1.174|1.243
+KH0027,Unknown,77,5,0,Central Coast,0.351,Cañete–Pisco|North Peru Coast|Chachapoyas|Central Coast|Central Coast,1.057|1.177|1.338|1.426|1.484
+KH0028,Unknown,260,4,1,Cañete–Pisco,0.382,Central Coast|Nazca & Far South|Cañete–Pisco|Ica & Paracas|Cañete–Pisco,1.120|1.207|1.213|1.225|1.339
+KH0029,Unknown,28,1,0,Central Coast,0.661,Central Coast|Ica & Paracas|Central Coast|Central Coast|Cañete–Pisco,0.483|0.916|1.004|1.005|1.007
+KH0030,Unknown,56,5,0,Ica & Paracas,0.405,Ica & Paracas|Arica & N. Chile|Central Coast|Ica & Paracas|Central Coast,1.024|1.074|1.105|1.346|1.450
+KH0031,Aankoop,144,5,0,Chachapoyas,0.448,Chachapoyas|Chachapoyas|Arica & N. Chile|Cañete–Pisco|Central Coast,1.112|1.116|1.300|1.327|1.441
+KH0035,Unknown,12,0,0,Central Coast,0.596,Central Coast|Cañete–Pisco|Ica & Paracas|Central Coast|Central Coast,0.080|0.139|0.217|0.375|0.445
+KH0036,Unknown,18,2,0,Central Coast,0.6,Central Coast|Central Coast|Ica & Paracas|Nazca & Far South|Central Coast,1.000|1.002|1.002|1.003|1.003
+KH0037,Unknown,15,0,0,Central Coast,0.585,Central Coast|Ica & Paracas|Central Coast|Ica & Paracas|Central Coast,0.154|0.156|0.162|0.169|0.212
+KH0038,Unknown,25,3,0,Central Coast,0.654,Central Coast|Central Coast|Ica & Paracas|Ica & Paracas|Central Coast,0.245|0.349|0.372|0.524|0.574
+KH0039,Unknown,10,0,0,Nazca & Far South,0.459,Nazca & Far South|Cañete–Pisco|Nazca & Far South|Central Coast|Cañete–Pisco,0.039|0.051|0.051|0.051|0.070
+KH0040,Unknown,21,1,0,Ica & Paracas,0.902,Ica & Paracas|Ica & Paracas|Ica & Paracas|Ica & Paracas|Cañete–Pisco,0.040|0.045|0.105|0.114|0.140
+KH0041,Unknown,11,2,0,Ica & Paracas,0.577,Central Coast|Ica & Paracas|Nazca & Far South|Ica & Paracas|Ica & Paracas,1.003|1.009|1.031|1.159|1.203
+KH0043,Unknown,16,0,0,Ica & Paracas,0.484,Ica & Paracas|Central Coast|Ica & Paracas|Cañete–Pisco|Central Coast,0.247|0.305|0.461|0.543|0.659
+KH0044,Unknown,4,0,0,Cañete–Pisco,0.5,Cañete–Pisco|Central Coast|Cañete–Pisco|Cañete–Pisco|Central Coast,0.000|0.000|0.007|0.007|0.007
+KH0045,Unknown,12,0,0,Central Coast,0.545,Central Coast|Ica & Paracas|Central Coast|Cañete–Pisco|Ica & Paracas,0.020|0.033|0.060|0.077|0.078
+KH0046,Unknown,38,2,0,Central Coast,0.851,Central Coast|Central Coast|Central Coast|Central Coast|Ica & Paracas,0.190|0.216|0.331|0.361|0.364
+KH0050,Unknown,36,4,0,Central Coast,0.808,Central Coast|Central Coast|Central Coast|Ica & Paracas|Central Coast,0.351|0.366|0.427|0.429|0.538
+KH0051,Unknown,45,1,0,Ica & Paracas,0.785,Ica & Paracas|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.146|0.158|0.162|0.178|0.223
+KH0052,Unknown,56,4,0,Cañete–Pisco,0.396,Central Coast|Nazca & Far South|Cañete–Pisco|Ica & Paracas|Cañete–Pisco,1.004|1.012|1.022|1.037|1.046
+KH0053,Unknown,14,1,0,Central Coast,0.738,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Ica & Paracas,0.154|0.181|0.218|0.301|0.389
+KH0054,Unknown,29,1,0,Central Coast,0.739,Central Coast|Ica & Paracas|Ica & Paracas|Ica & Paracas|Central Coast,0.112|0.658|1.002|1.004|1.005
+KH0055,Unknown,159,7,1,Ica & Paracas,0.389,Nazca & Far South|Ica & Paracas|Central Coast|Cañete–Pisco|Ica & Paracas,0.893|1.033|1.291|1.488|1.500
+KH0056,Unknown,53,6,0,Central Coast,0.755,Chachapoyas|Central Coast|Central Coast|Central Coast|Central Coast,0.801|1.015|1.039|1.049|1.050
+KH0057,Unknown,126,6,1,Cañete–Pisco,0.42,Cañete–Pisco|Cañete–Pisco|Chachapoyas|Arica & N. Chile|Ica & Paracas,1.120|1.205|1.219|1.279|1.282
+KH0058,Unknown,189,8,1,Central Coast,0.577,Nazca & Far South|Central Coast|Central Coast|Central Coast|Chachapoyas,1.189|1.434|1.435|1.449|1.454
+KH0061,Unknown,370,6,1,Ica & Paracas,0.339,Ica & Paracas|Cañete–Pisco|Nazca & Far South|Central Coast|Arica & N. Chile,0.624|1.065|1.273|1.384|1.473
+KH0068,Unknown,589,7,1,Chachapoyas,0.555,Nazca & Far South|Chachapoyas|Chachapoyas|Cañete–Pisco|Chachapoyas,1.930|2.715|2.715|2.945|3.007
+KH0069,Unknown,38,1,0,Ica & Paracas,0.548,Ica & Paracas|Central Coast|Nazca & Far South|Ica & Paracas|Ica & Paracas,0.280|0.301|0.569|0.757|0.792
+KH0087,Nazca / Ancon,96,5,0,Nazca & Far South,0.222,Nazca & Far South|Cañete–Pisco|Chachapoyas|Central Coast|Ica & Paracas,1.346|1.411|1.460|1.651|1.652
+KH0088,Nazca / Ancon,186,3,1,Central Coast,0.402,Ica & Paracas|Central Coast|Cañete–Pisco|Nazca & Far South|Central Coast,0.774|0.865|1.310|1.393|1.416
+KH0089,Nazca / Ancon,16,0,0,Cañete–Pisco,0.58,Ica & Paracas|Cañete–Pisco|Cañete–Pisco|Cañete–Pisco|Cañete–Pisco,0.013|0.027|0.039|0.047|0.051
+KH0090,Nazca / Ancon,33,4,0,Central Coast,0.504,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.135|0.365|0.525|0.692|0.692
+KH0092,Nazca / Ancon,74,1,0,Central Coast,0.815,Central Coast|Central Coast|Central Coast|Southern Highlands|Central Coast,0.885|1.066|1.122|1.153|1.164
+KH0093,Nazca / Ancon,40,2,0,Central Coast,0.593,Central Coast|Ica & Paracas|Ica & Paracas|Central Coast|Central Coast,0.190|0.233|0.282|0.295|0.362
+KH0094,Unknown,8,0,0,Central Coast,0.687,Central Coast|Central Coast|Ica & Paracas|Central Coast|Arica & N. Chile,0.039|0.060|0.071|0.095|0.101
+KH0095,Unknown,20,0,0,Cañete–Pisco,0.449,Cañete–Pisco|Ica & Paracas|Central Coast|Central Coast|Ica & Paracas,0.058|0.133|0.167|0.244|0.283
+KH0096,Unknown,3,0,0,Cañete–Pisco,0.5,Cañete–Pisco|Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco,0.000|0.000|0.007|0.007|0.013
+KH0097,Unknown,319,4,1,Central Coast,0.397,Cañete–Pisco|Central Coast|Central Coast|Nazca & Far South|Nazca & Far South,1.091|1.293|1.351|1.400|1.506
+KH0098,Unknown,45,2,0,Ica & Paracas,0.625,Ica & Paracas|Ica & Paracas|Ica & Paracas|Central Coast|Central Coast,1.185|1.400|1.426|1.468|1.486
+KH0100,Peru (unknown),97,2,0,Ica & Paracas,0.578,Ica & Paracas|Central Coast|North Peru Coast|Ica & Paracas|Ica & Paracas,0.253|0.276|0.530|0.547|0.562
+KH0102,Peru (unknown),35,1,0,Ica & Paracas,0.849,Ica & Paracas|Ica & Paracas|Nazca & Far South|Ica & Paracas|Central Coast,0.084|0.115|0.449|0.516|0.560
+KH0103,Peru (unknown),58,4,0,Central Coast,0.654,Central Coast|North Peru Coast|Central Coast|Central Coast|Cañete–Pisco,0.350|0.579|0.808|0.980|1.023
+KH0104,Unknown,89,5,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.687|1.008|1.035|1.080|1.120
+KH0105,Peru (unknown),56,4,0,Central Coast,0.726,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.277|0.284|0.416|0.580|0.623
+KH0106,Peru (unknown),70,4,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.726|1.020|1.043|1.051|1.056
+KH0107,Peru (unknown),51,0,0,Central Coast,0.58,Ica & Paracas|Central Coast|Arica & N. Chile|Central Coast|Central Coast,0.246|0.260|0.270|0.289|0.289
+KH0169,Unknown,40,3,0,Central Coast,0.55,Central Coast|Central Coast|Ica & Paracas|Ica & Paracas|Cañete–Pisco,0.389|1.010|1.025|1.027|1.038
+KH0173,Unknown,34,2,0,Cañete–Pisco,0.481,Cañete–Pisco|Central Coast|Cañete–Pisco|Central Coast|Ica & Paracas,0.553|0.942|1.016|1.022|1.027
+KH0185,Unknown,18,1,0,Ica & Paracas,0.471,Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.132|0.183|0.233|0.272|0.273
+KH0186,Unknown,30,2,0,Ica & Paracas,0.402,Ica & Paracas|Ica & Paracas|Central Coast|Central Coast|Cañete–Pisco,1.014|1.022|1.023|1.024|1.034
+KH0198,Unknown,149,6,1,Cañete–Pisco,0.415,Ica & Paracas|Cañete–Pisco|Cañete–Pisco|Chachapoyas|Central Coast,1.036|1.057|1.080|1.167|1.226
+KH0199,Unknown,5,0,0,Cañete–Pisco,1.0,Cañete–Pisco|Cañete–Pisco|Central Coast|Ica & Paracas|Cañete–Pisco,0.000|0.007|0.007|0.007|0.007
+KH0200,Unknown,22,0,0,Central Coast,0.619,Central Coast|Arica & N. Chile|Central Coast|Central Coast|Ica & Paracas,0.522|0.618|0.620|0.695|0.696
+KH0201,Unknown,7,1,0,Central Coast,0.718,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Ica & Paracas,0.183|0.221|0.242|0.339|0.386
+KH0202,Unknown,9,1,0,Ica & Paracas,0.762,Ica & Paracas|Ica & Paracas|Central Coast|Cañete–Pisco|Nazca & Far South,0.041|0.106|0.153|0.393|0.678
+KH0203,Unknown,30,4,0,Chachapoyas,0.648,Chachapoyas|Central Coast|Central Coast|Chachapoyas|Chachapoyas,0.604|1.044|1.088|1.088|1.140
+KH0204,Unknown,64,3,0,Central Coast,0.636,Central Coast|Ica & Paracas|Central Coast|Central Coast|Ica & Paracas,0.679|1.002|1.024|1.036|1.046
+KH0208,Unknown,101,0,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.425|0.512|0.523|0.550|0.552
+KH0216,Unknown,19,1,0,Cañete–Pisco,0.706,Cañete–Pisco|Ica & Paracas|Central Coast|Ica & Paracas|Cañete–Pisco,0.107|0.569|0.645|1.001|1.001
+KH0217,Unknown,86,4,0,Ica & Paracas,0.524,Ica & Paracas|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.217|0.351|0.597|0.697|0.703
+KH0220,Unknown,30,2,0,Central Coast,0.461,Central Coast|Ica & Paracas|Central Coast|Nazca & Far South|Ica & Paracas,0.746|1.051|1.075|1.154|1.190
+KH0221,Unknown,37,2,0,Ica & Paracas,0.622,Ica & Paracas|Ica & Paracas|Nazca & Far South|Ica & Paracas|Central Coast,1.000|1.008|1.121|1.165|1.186
+KH0224,Unknown,32,1,0,Central Coast,0.725,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Chachapoyas,0.122|0.156|0.213|0.263|0.286
+KH0225,Unknown,253,6,1,Chachapoyas,0.417,Central Coast|Chachapoyas|Chachapoyas|Nazca & Far South|Central Coast,0.980|1.078|1.358|1.494|1.579
+KH0226,Unknown,28,1,0,Ica & Paracas,0.794,Ica & Paracas|Ica & Paracas|Nazca & Far South|Ica & Paracas|Ica & Paracas,0.137|0.158|0.199|0.331|0.360
+KH0227,Unknown,14,0,0,Ica & Paracas,0.598,Ica & Paracas|Central Coast|Ica & Paracas|Cañete–Pisco|Ica & Paracas,0.047|0.060|0.060|0.060|0.090
+KH0228,Unknown,218,6,1,Central Coast,0.504,Central Coast|Cañete–Pisco|Central Coast|Chachapoyas|Ica & Paracas,0.449|0.637|0.720|0.901|1.146
+KH0229,Unknown,143,1,0,Ica & Paracas,0.511,Ica & Paracas|Ica & Paracas|Chachapoyas|Central Coast|Cañete–Pisco,0.375|0.542|0.605|0.731|0.770
+KH0230,Unknown,39,3,0,Central Coast,0.56,Ica & Paracas|Central Coast|Central Coast|Ica & Paracas|Central Coast,0.729|0.980|1.001|1.010|1.014
+KH0231,Unknown,68,4,0,Ica & Paracas,0.387,North Peru Coast|Ica & Paracas|Ica & Paracas|Central Coast|Central Coast,0.400|0.641|0.807|1.015|1.050
+KH0232,Unknown,100,8,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,1.453|1.594|1.796|1.816|1.820
+KH0233,Unknown,36,1,0,Ica & Paracas,0.598,Nazca & Far South|Ica & Paracas|Ica & Paracas|Chachapoyas|Ica & Paracas,0.159|0.179|0.190|0.384|0.418
+KH0234,Unknown,20,2,0,Central Coast,0.565,Central Coast|Ica & Paracas|Central Coast|Nazca & Far South|Central Coast,0.155|0.155|0.385|0.771|1.004
+KH0261,Unknown,46,4,0,Central Coast,0.814,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.674|0.782|0.927|1.007|1.045
+KH0267,Unknown,188,8,1,Central Coast,0.444,Central Coast|Central Coast|Nazca & Far South|Chachapoyas|Chachapoyas,1.200|1.205|1.364|1.457|1.506
+KH0269,Unknown,171,6,1,Cañete–Pisco,0.426,Cañete–Pisco|Central Coast|Nazca & Far South|Cañete–Pisco|Nazca & Far South,0.857|0.916|1.118|1.144|1.307
+KH0270,Unknown,39,1,0,Nazca & Far South,0.588,Nazca & Far South|Ica & Paracas|Ica & Paracas|Chachapoyas|Central Coast,0.045|0.195|0.209|0.359|0.372
+KH0273,Unknown,43,4,0,Central Coast,0.787,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.367|0.390|0.397|0.447|0.561
+KH0274,Unknown,25,4,0,Central Coast,0.814,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.732|1.003|1.005|1.006|1.017
+KH0275,Unknown,160,7,1,Central Coast,0.788,Chachapoyas|Central Coast|Central Coast|Central Coast|Central Coast,1.460|1.464|1.525|1.651|1.651
+KH0279,Unknown,327,7,1,Cañete–Pisco,0.377,Chachapoyas|Cañete–Pisco|Central Coast|Ica & Paracas|Cañete–Pisco,1.062|1.152|1.189|1.420|1.563
+KH0280,Unknown,164,3,1,Cañete–Pisco,0.441,Cañete–Pisco|Southern Highlands|Cañete–Pisco|Ica & Paracas|Nazca & Far South,3.017|3.030|3.376|4.244|4.347
+KH0281,Unknown,98,4,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,1.044|1.123|1.140|1.187|1.239
+KH0282,Unknown,98,6,0,Central Coast,0.492,Central Coast|Cañete–Pisco|Cañete–Pisco|Central Coast|Nazca & Far South,0.597|1.129|1.140|1.296|1.317
+KH0283,Unknown,55,1,0,Central Coast,0.611,Central Coast|Central Coast|Ica & Paracas|Ica & Paracas|Central Coast,0.232|0.268|0.273|0.276|0.293
+KH0284,Unknown,54,1,0,Central Coast,0.615,Central Coast|Central Coast|Cañete–Pisco|Central Coast|Ica & Paracas,0.274|0.275|0.292|0.319|0.321
+KH0285,Unknown,61,1,0,Central Coast,0.43,Central Coast|Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas,0.301|0.321|0.339|0.356|0.362
+KH0286,Unknown,72,1,0,Central Coast,0.624,Central Coast|Central Coast|Central Coast|Ica & Paracas|Cañete–Pisco,0.329|0.392|0.410|0.412|0.414
+KH0287,Unknown,105,4,0,Cañete–Pisco,0.498,Cañete–Pisco|Central Coast|Central Coast|Cañete–Pisco|Nazca & Far South,0.549|1.055|1.059|1.088|1.156
+KH0288,Unknown,115,4,1,Cañete–Pisco,0.397,Southern Highlands|Cañete–Pisco|Cañete–Pisco|Nazca & Far South|Ica & Paracas,0.941|1.247|2.520|2.558|2.697
+KH0289,Unknown,180,4,1,Cañete–Pisco,0.445,Cañete–Pisco|Southern Highlands|Cañete–Pisco|Ica & Paracas|Nazca & Far South,3.442|3.489|3.603|4.646|4.811
+KH0290,Unknown,42,3,0,Cañete–Pisco,0.508,Cañete–Pisco|Cañete–Pisco|Nazca & Far South|Chachapoyas|Central Coast,0.318|0.459|0.463|0.616|0.725
+KH0291,Unknown,38,2,0,Central Coast,0.744,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.249|0.254|0.321|0.431|0.438
+KH0292,Unknown,24,1,0,Central Coast,0.782,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Chachapoyas,0.087|0.147|0.228|0.270|0.382
+KH0295,Unknown,256,2,0,Ica & Paracas,0.802,Ica & Paracas|Ica & Paracas|Arica & N. Chile|Ica & Paracas|Ica & Paracas,1.269|1.384|1.384|1.407|1.410
+KH0296,Unknown,136,5,0,Central Coast,0.527,Ica & Paracas|Central Coast|Central Coast|Central Coast|Chachapoyas,0.619|1.087|1.118|1.150|1.253
+KH0300,Unknown,111,4,0,Central Coast,0.765,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.899|1.019|1.072|1.155|1.189
+KH0305,Unknown,73,4,0,Central Coast,0.818,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.342|0.430|0.603|0.909|0.924
+KH0310,Unknown,74,1,0,Central Coast,0.866,Central Coast|Central Coast|Central Coast|Central Coast|Chachapoyas,0.284|0.687|0.700|0.843|0.855
+KH0314,Unknown,25,0,0,Nazca & Far South,0.29,Nazca & Far South|Cañete–Pisco|Central Coast|Chachapoyas|Ica & Paracas,0.184|0.241|0.272|0.352|0.375
+KH0321,Unknown,273,5,1,Central Coast,0.61,Central Coast|Central Coast|Chachapoyas|Ica & Paracas|Central Coast,1.105|1.234|1.237|1.356|1.423
+KH0322,Unknown,107,5,0,Cañete–Pisco,0.49,Cañete–Pisco|Nazca & Far South|Central Coast|Ica & Paracas|Central Coast,0.265|0.911|1.032|1.062|1.080
+KH0329,Unknown,1227,8,1,Chachapoyas,0.571,Ica & Paracas|Chachapoyas|Nazca & Far South|Chachapoyas|Chachapoyas,3.521|3.592|3.692|4.008|4.741
+KH0330,Unknown,69,1,0,Central Coast,0.395,Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Central Coast,0.534|0.631|0.675|0.735|0.976
+KH0331,Unknown,26,1,0,Cañete–Pisco,0.446,Cañete–Pisco|Ica & Paracas|Central Coast|Ica & Paracas|Ica & Paracas,0.048|0.126|0.152|0.172|0.177
+KH0332,Unknown,57,0,0,Central Coast,0.587,Central Coast|Ica & Paracas|North Peru Coast|Central Coast|Central Coast,0.131|0.151|0.271|0.277|0.296
+KH0333,Unknown,230,5,1,Cañete–Pisco,0.534,Cañete–Pisco|Central Coast|Cañete–Pisco|Central Coast|Central Coast,0.382|0.752|1.079|1.129|1.135
+KH0334,Unknown,9,0,0,Ica & Paracas,0.428,Ica & Paracas|Nazca & Far South|Chachapoyas|Southern Highlands|Cañete–Pisco,0.039|0.073|0.098|0.174|0.204
+KH0335,Unknown,4,0,0,Central Coast,0.727,Central Coast|Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas,0.007|0.007|0.027|0.027|0.027
+KH0336,Unknown,5,0,0,Nazca & Far South,0.475,Central Coast|Nazca & Far South|Nazca & Far South|Cañete–Pisco|Cañete–Pisco,0.039|0.039|0.051|0.077|0.088
+KH0337,Unknown,3,0,0,Cañete–Pisco,0.5,Cañete–Pisco|Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco,0.000|0.000|0.007|0.007|0.013
+KH0338,Unknown,75,3,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.293|0.354|0.436|0.670|0.676
+KH0339,Unknown,55,0,0,Cañete–Pisco,0.607,Cañete–Pisco|Central Coast|Cañete–Pisco|Cañete–Pisco|Nazca & Far South,0.212|0.225|0.250|0.281|0.285
+KH0340,Unknown,31,2,0,Ica & Paracas,0.691,Ica & Paracas|Chachapoyas|Ica & Paracas|Ica & Paracas|North Peru Coast,0.200|0.309|0.314|0.323|0.550
+KH0341,Unknown,4,0,0,Central Coast,0.444,Central Coast|Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas,0.039|0.039|0.047|0.047|0.047
+KH0342,Unknown,10,1,0,Central Coast,0.781,Central Coast|Cañete–Pisco|Central Coast|Central Coast|Central Coast,0.080|0.116|0.119|0.187|0.227
+KH0343,Unknown,28,3,0,Central Coast,0.628,Central Coast|Ica & Paracas|Central Coast|Ica & Paracas|Central Coast,0.282|0.351|0.378|0.556|0.610
+KH0344,Unknown,7,0,0,Ica & Paracas,0.444,Ica & Paracas|Cañete–Pisco|Central Coast|Ica & Paracas|Central Coast,0.007|0.007|0.007|0.007|0.013
+KH0345,Unknown,33,0,0,Central Coast,0.484,Central Coast|Cañete–Pisco|Central Coast|Ica & Paracas|Nazca & Far South,0.213|0.287|0.348|0.393|0.494
+KH0346,Unknown,89,6,0,Central Coast,0.548,Central Coast|Cañete–Pisco|Cañete–Pisco|Central Coast|Nazca & Far South,0.434|1.037|1.115|1.207|1.380
+KH0347,Unknown,149,1,0,Central Coast,0.819,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.748|0.805|1.016|1.028|1.098
+KH0348,Unknown,76,6,0,Central Coast,0.7,Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco|Central Coast,0.459|1.168|1.238|1.265|1.431
+KH0352,Unknown,157,5,0,Central Coast,0.611,Cañete–Pisco|Central Coast|Central Coast|Central Coast|Central Coast,0.339|0.686|0.740|1.098|1.104
+KH0353,Unknown,43,1,0,Ica & Paracas,0.397,Nazca & Far South|Ica & Paracas|Ica & Paracas|Central Coast|Chachapoyas,0.125|0.223|0.240|0.381|0.398
+KH0366,Unknown,24,2,0,Ica & Paracas,0.736,Ica & Paracas|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.147|0.704|1.003|1.016|1.031
+KH0367,Unknown,45,3,0,Central Coast,0.429,Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco|Ica & Paracas,0.931|1.068|1.093|1.132|1.141
+KH0368,Unknown,14,1,0,Central Coast,0.401,Central Coast|Cañete–Pisco|Nazca & Far South|Central Coast|Cañete–Pisco,1.001|1.003|1.003|1.004|1.009
+KH0381,Unknown,33,2,0,Ica & Paracas,0.639,Ica & Paracas|Central Coast|Ica & Paracas|Ica & Paracas|Central Coast,0.325|0.446|0.566|0.650|0.736
+KH0386,Belli Collection,91,5,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,1.051|1.124|1.262|1.271|1.298
+KH0387,Unknown,59,4,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,1.041|1.098|1.105|1.139|1.347
+KH0388,Unknown,11,3,0,Central Coast,0.587,Ica & Paracas|Central Coast|Cañete–Pisco|Central Coast|Central Coast,0.948|1.012|1.050|1.068|1.083
+KH0390,Unknown,25,2,0,Ica & Paracas,0.66,Ica & Paracas|Central Coast|Central Coast|Nazca & Far South|Central Coast,0.020|0.047|0.490|0.761|1.003
+KH0393,Unknown,66,2,0,Cañete–Pisco,0.368,Cañete–Pisco|Central Coast|Ica & Paracas|Ica & Paracas|Central Coast,0.337|0.507|0.819|1.050|1.055
+KH0400,Unknown,25,3,0,Central Coast,0.397,Ica & Paracas|Nazca & Far South|Central Coast|Central Coast|Chachapoyas,1.014|1.030|1.049|1.051|1.064
+KH0401,Unknown,15,0,0,Central Coast,0.877,Central Coast|Central Coast|Central Coast|Cañete–Pisco|Nazca & Far South,0.020|0.071|0.144|0.197|0.206
+KH0403,Unknown,7,0,0,Ica & Paracas,0.444,Ica & Paracas|Cañete–Pisco|Central Coast|Ica & Paracas|Central Coast,0.007|0.007|0.007|0.007|0.013
+KH0409,Unknown,68,1,0,Cañete–Pisco,0.414,Cañete–Pisco|Central Coast|Ica & Paracas|Cañete–Pisco|Ica & Paracas,0.616|0.695|0.780|1.020|1.027
+KH0410,Unknown,40,0,0,Ica & Paracas,0.448,Ica & Paracas|Cañete–Pisco|Central Coast|Ica & Paracas|Central Coast,0.268|0.356|0.410|0.414|0.429
+KH0411,Unknown,28,4,0,Central Coast,0.87,Central Coast|Cañete–Pisco|Central Coast|Central Coast|Central Coast,0.179|0.806|1.047|1.059|1.227
+KH0412,Unknown,7,1,0,Central Coast,0.775,Central Coast|Central Coast|Cañete–Pisco|Central Coast|Central Coast,0.087|0.116|0.118|0.203|0.236
+KH0413,Unknown,9,1,0,Cañete–Pisco,0.654,Cañete–Pisco|Central Coast|Central Coast|Ica & Paracas|Ica & Paracas,0.007|0.020|0.047|0.240|0.249
+KH0414,Unknown,12,2,0,Central Coast,0.799,Central Coast|Central Coast|Central Coast|Ica & Paracas|Ica & Paracas,0.152|0.329|0.356|0.579|0.717
+KH0422,Unknown,39,4,0,Ica & Paracas,0.628,Ica & Paracas|Cañete–Pisco|Ica & Paracas|Central Coast|Central Coast,0.191|0.394|0.414|1.003|1.009
+KH0423,Unknown,16,0,0,Central Coast,0.786,Central Coast|Central Coast|Arica & N. Chile|Central Coast|Central Coast,0.094|0.094|0.103|0.119|0.166
+KH0426,Unknown,78,5,0,Central Coast,0.527,Central Coast|Ica & Paracas|Central Coast|Cañete–Pisco|Cañete–Pisco,0.281|0.466|0.712|0.817|0.914
+KH0427,Unknown,88,4,0,Cañete–Pisco,0.717,Cañete–Pisco|Central Coast|Cañete–Pisco|Nazca & Far South|Cañete–Pisco,0.338|1.020|1.037|1.073|1.088
+KH0462,Unknown,23,1,0,Ica & Paracas,1.0,Ica & Paracas|Ica & Paracas|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.127|0.138|0.199|0.225|0.250
+KH0471,Unknown,98,2,0,Ica & Paracas,0.713,Ica & Paracas|Ica & Paracas|Central Coast|Central Coast|Ica & Paracas,0.282|0.541|0.743|0.744|0.778
+KH0472,Unknown,194,8,1,Central Coast,0.598,Central Coast|Ica & Paracas|Central Coast|Chachapoyas|Central Coast,1.054|1.138|1.434|1.446|1.448
+KH0473,Unknown,30,2,0,Central Coast,0.648,Central Coast|Central Coast|Ica & Paracas|Central Coast|Ica & Paracas,0.235|0.276|0.301|0.326|0.383
+KH0475,Unknown,52,1,0,Central Coast,0.749,Central Coast|Central Coast|Central Coast|Ica & Paracas|Ica & Paracas,0.292|0.584|0.717|0.821|1.032
+KH0476,Unknown,76,4,0,Central Coast,0.755,North Peru Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.459|0.491|0.571|0.634|0.738
+KH0477,Unknown,71,5,0,Nazca & Far South,0.227,Nazca & Far South|Cañete–Pisco|Arica & N. Chile|Central Coast|Ica & Paracas,1.035|1.160|1.189|1.229|1.300
+KH0487,Unknown,49,3,0,Central Coast,0.387,Nazca & Far South|North Peru Coast|Central Coast|Cañete–Pisco|Central Coast,1.278|1.379|1.433|1.440|1.448
+KH0488,Unknown,75,4,0,Ica & Paracas,0.391,North Peru Coast|Ica & Paracas|Ica & Paracas|Central Coast|Central Coast,0.380|0.607|0.766|1.004|1.038
+KH0568,Unknown,225,2,1,Central Coast,0.409,Central Coast|Chachapoyas|Ica & Paracas|Ica & Paracas|Central Coast,1.904|2.093|2.107|2.168|2.210
+KH0570,Unknown,24,1,0,Ica & Paracas,0.567,Chachapoyas|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.264|0.310|0.320|0.330|0.331
+KH0571,Unknown,55,0,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.335|0.423|0.437|0.454|0.478
+KH0572,Unknown,11,2,0,Central Coast,0.508,Ica & Paracas|Central Coast|Central Coast|Central Coast|Ica & Paracas,0.083|0.151|0.211|0.234|0.327
+KH0573,Unknown,39,4,0,Central Coast,0.723,Cañete–Pisco|Central Coast|Central Coast|Central Coast|Central Coast,0.687|1.013|1.036|1.049|1.125
+KH0575,Unknown,66,4,0,Central Coast,0.825,Central Coast|Cañete–Pisco|Central Coast|Central Coast|Central Coast,0.423|0.886|1.003|1.007|1.031
+KH0576,Unknown,86,4,0,Cañete–Pisco,0.817,Cañete–Pisco|Cañete–Pisco|Cañete–Pisco|Central Coast|Cañete–Pisco,0.968|0.984|1.032|1.178|1.286
+KH0578,Unknown,9,0,0,Central Coast,0.599,Central Coast|Ica & Paracas|Cañete–Pisco|Central Coast|Central Coast,0.502|0.502|0.504|0.505|0.509
+KH0579,Unknown,7,0,0,Ica & Paracas,0.413,Ica & Paracas|Central Coast|Ica & Paracas|Central Coast|Cañete–Pisco,0.479|0.483|0.643|0.643|0.644
+KH0581,Unknown,32,3,0,Central Coast,0.897,Central Coast|Central Coast|Central Coast|Central Coast|Ica & Paracas,0.275|0.415|0.748|0.838|1.016
+KH0582,Unknown,34,4,0,Central Coast,0.71,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.446|0.511|0.627|1.016|1.056
+KH0583,Unknown,46,4,0,Central Coast,0.798,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,1.438|1.514|1.535|1.591|1.597
+KH0584,Unknown,54,1,0,Central Coast,0.822,Central Coast|Central Coast|Chachapoyas|Central Coast|Central Coast,0.326|0.348|0.513|0.642|0.679
+KH0585,Unknown,34,2,0,Central Coast,0.783,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.427|0.605|0.754|0.757|1.015
+KH0586,Unknown,189,4,1,Central Coast,0.598,Central Coast|Ica & Paracas|Cañete–Pisco|Central Coast|Central Coast,0.562|0.691|0.880|0.903|1.051
+KH0587,Unknown,180,4,0,Central Coast,0.502,Ica & Paracas|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.527|0.793|0.917|0.937|0.969
+KH0588,Unknown,41,3,0,Ica & Paracas,0.423,Ica & Paracas|Ica & Paracas|Cañete–Pisco|Nazca & Far South|Central Coast,0.970|1.025|1.046|1.120|1.132
+KH0589,Unknown,33,0,0,Central Coast,0.752,Cañete–Pisco|Central Coast|Central Coast|Central Coast|Central Coast,0.127|0.129|0.146|0.199|0.243
+KH0590,Unknown,91,5,0,Central Coast,0.832,Central Coast|Central Coast|Central Coast|Ica & Paracas|Central Coast,0.602|1.132|1.136|1.158|1.182
+KH0591,Unknown,45,2,0,Central Coast,0.635,Central Coast|Ica & Paracas|Cañete–Pisco|Ica & Paracas|Central Coast,0.124|0.483|0.599|0.664|0.902
+KH0592,Unknown,65,3,0,Central Coast,0.804,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.694|0.943|1.019|1.043|1.044
+KH0593,Unknown,82,1,0,Ica & Paracas,0.613,Ica & Paracas|Cañete–Pisco|Ica & Paracas|Central Coast|Ica & Paracas,0.348|0.408|0.417|0.418|0.418
+KH0594,Unknown,41,0,0,Ica & Paracas,0.558,Ica & Paracas|Central Coast|Ica & Paracas|Cañete–Pisco|Central Coast,0.141|0.283|0.405|0.445|0.560
+KH0595,Unknown,157,8,1,Central Coast,0.411,Chachapoyas|Central Coast|Central Coast|Nazca & Far South|Ica & Paracas,1.251|1.289|1.311|1.404|1.451
+KH0596,Unknown,62,1,0,Central Coast,0.804,Central Coast|Central Coast|Chachapoyas|Central Coast|Central Coast,0.312|0.506|0.514|0.681|0.742
+KH0597,Unknown,207,6,1,Ica & Paracas,0.501,Ica & Paracas|Ica & Paracas|Nazca & Far South|North Peru Coast|Cañete–Pisco,0.669|1.075|1.191|1.203|1.341
+KH0598,Unknown,50,1,0,Central Coast,0.54,Arica & N. Chile|Central Coast|Chachapoyas|Central Coast|Central Coast,0.133|0.151|0.180|0.217|0.243
+KH0599,Unknown,150,7,1,Cañete–Pisco,0.615,Cañete–Pisco|Ica & Paracas|Cañete–Pisco|Cañete–Pisco|Ica & Paracas,1.232|1.436|1.498|1.517|1.557
+KH0600,Unknown,282,4,1,Central Coast,0.418,Central Coast|Cañete–Pisco|Ica & Paracas|Central Coast|Cañete–Pisco,1.125|1.183|1.314|1.314|1.453
+KH0601,Unknown,367,6,1,Nazca & Far South,0.393,Central Coast|Chachapoyas|Nazca & Far South|Cañete–Pisco|Nazca & Far South,1.830|1.831|1.893|1.893|1.917
+KH0602,Unknown,249,5,1,Cañete–Pisco,0.419,Cañete–Pisco|Cañete–Pisco|Ica & Paracas|Central Coast|Ica & Paracas,1.098|1.167|1.220|1.224|1.225
+KH0603,Unknown,153,6,1,Chachapoyas,0.468,Chachapoyas|Cañete–Pisco|Cañete–Pisco|Central Coast|Ica & Paracas,0.297|1.015|1.024|1.073|1.083
+KH0604,Unknown,90,4,0,Ica & Paracas,0.571,North Peru Coast|Ica & Paracas|Ica & Paracas|Central Coast|Ica & Paracas,0.604|0.746|0.827|1.035|1.056
+KH0604A,Unknown,43,2,0,Central Coast,0.577,Ica & Paracas|Central Coast|Central Coast|Central Coast|Central Coast,0.158|0.344|0.441|0.532|0.639
+KH0604B,Unknown,47,3,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.213|0.231|0.432|0.660|0.737
+KH0605,Unknown,52,2,0,Central Coast,0.501,Cañete–Pisco|Central Coast|Central Coast|Central Coast|Ica & Paracas,0.518|1.030|1.034|1.044|1.055
+KH0605A,Unknown,24,0,0,Ica & Paracas,0.508,Ica & Paracas|Central Coast|Ica & Paracas|Cañete–Pisco|Central Coast,0.162|0.218|0.374|0.453|0.571
+KH0605B,Unknown,15,0,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.078|0.083|0.106|0.193|0.194
+KH0605C,Unknown,15,1,0,Central Coast,0.72,Central Coast|Central Coast|Nazca & Far South|Central Coast|Cañete–Pisco,0.109|0.218|0.300|0.300|0.303
+KH0606,Unknown,39,2,0,Ica & Paracas,0.712,Ica & Paracas|Ica & Paracas|Central Coast|Ica & Paracas|Central Coast,0.217|0.319|0.468|0.469|0.541
+KH0606A,Unknown,25,2,0,Central Coast,0.592,Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.114|0.576|0.583|0.674|0.910
+KH0606B,Unknown,11,0,0,Central Coast,0.397,Nazca & Far South|Central Coast|Ica & Paracas|Central Coast|Cañete–Pisco,0.091|0.108|0.113|0.116|0.138
+KH0606C,Unknown,8,2,0,Central Coast,0.5,Central Coast|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Ica & Paracas,0.184|0.571|0.726|0.783|0.987
+KH0607,Unknown,211,7,1,Central Coast,0.64,Central Coast|Central Coast|Nazca & Far South|Central Coast|Nazca & Far South,1.139|1.231|1.423|1.516|1.611
+KH0607A,Unknown,80,4,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.270|1.061|1.079|1.086|1.098
+KH0607B,Unknown,43,3,0,Ica & Paracas,0.413,Ica & Paracas|Cañete–Pisco|Cañete–Pisco|Ica & Paracas|Central Coast,0.932|1.020|1.042|1.062|1.078
+KH0607C,Unknown,73,3,0,Cañete–Pisco,0.607,Cañete–Pisco|Cañete–Pisco|Cañete–Pisco|Ica & Paracas|Central Coast,1.028|1.031|1.032|1.051|1.071
+KH0607D,Unknown,23,2,0,Central Coast,0.722,Central Coast|Central Coast|Nazca & Far South|Central Coast|Ica & Paracas,0.163|0.184|0.341|0.394|0.401
+KH0631,Unknown,22,1,0,Central Coast,0.432,Central Coast|Ica & Paracas|Central Coast|Nazca & Far South|Cañete–Pisco,0.614|0.639|0.808|0.870|0.945
+KH0632,Unknown,14,0,0,Central Coast,0.505,Ica & Paracas|Central Coast|Central Coast|Ica & Paracas|Central Coast,0.020|0.033|0.047|0.077|0.078
+KH0633,Unknown,67,5,0,Chachapoyas,0.388,Cañete–Pisco|Chachapoyas|Arica & N. Chile|Ica & Paracas|Chachapoyas,1.073|1.174|1.262|1.316|1.387
+KH0634,Unknown,42,2,0,Ica & Paracas,0.768,Ica & Paracas|Chachapoyas|Ica & Paracas|Central Coast|Central Coast,0.041|0.277|0.316|0.409|0.424
+KH0635,Unknown,166,6,1,Cañete–Pisco,0.426,Cañete–Pisco|Central Coast|Central Coast|Ica & Paracas|Cañete–Pisco,0.838|1.039|1.112|1.120|1.178
+KH0664,Unknown,46,1,0,Central Coast,0.547,Central Coast|Nazca & Far South|Cañete–Pisco|Central Coast|Arica & N. Chile,0.262|0.545|0.858|1.017|1.030
+KH0665,Unknown,354,3,1,Ica & Paracas,0.396,Arica & N. Chile|Cañete–Pisco|Ica & Paracas|Ica & Paracas|Nazca & Far South,1.835|1.951|1.997|1.998|2.130
+KH0666,Unknown,17,2,0,Central Coast,0.895,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.020|0.142|0.229|0.309|0.542
+KH0667,Unknown,189,5,1,Central Coast,0.422,Central Coast|Central Coast|Ica & Paracas|North Peru Coast|Cañete–Pisco,1.153|1.215|1.240|1.324|1.325
+KH0669,Unknown,32,3,0,Central Coast,1.0,Central Coast|Central Coast|Central Coast|Central Coast|Central Coast,0.248|0.607|0.607|0.835|0.907
+KH0670,Unknown,228,3,1,Cañete–Pisco,1.0,Cañete–Pisco|Cañete–Pisco|Cañete–Pisco|Cañete–Pisco|Cañete–Pisco,1.593|1.741|1.816|1.827|1.832
+KH0671,Unknown,1,0,0,Cañete–Pisco,0.565,Cañete–Pisco|Central Coast|Central Coast|Cañete–Pisco|Cañete–Pisco,0.013|0.013|0.020|0.020|0.027
+KH0674,Unknown,623,8,1,Chachapoyas,0.65,Chachapoyas|Chachapoyas|Nazca & Far South|Nazca & Far South|Chachapoyas,1.280|1.685|1.990|1.994|2.027
+KH0675,Unknown,285,5,1,Central Coast,0.395,Ica & Paracas|Cañete–Pisco|Central Coast|Arica & N. Chile|Central Coast,1.527|1.553|1.574|1.594|1.612
+KH0678,Gaffron Estate,63,3,0,Central Coast,0.634,Central Coast|Central Coast|Nazca & Far South|Central Coast|Ica & Paracas,0.389|0.413|0.433|0.449|0.539
+KH0679,Gaffron Estate,44,1,0,Central Coast,0.835,Central Coast|Central Coast|Ica & Paracas|Central Coast|Ica & Paracas,0.116|0.574|0.759|0.833|1.044
+KH0680,Unknown (non-Gaffron),75,5,0,Arica & N. Chile,0.525,Arica & N. Chile|Central Coast|Cañete–Pisco|Arica & N. Chile|Central Coast,0.302|0.558|0.901|1.014|1.026
+KH0681,Unknown,54,1,0,Ica & Paracas,0.66,Ica & Paracas|Central Coast|Ica & Paracas|Central Coast|Ica & Paracas,0.441|0.849|1.073|1.107|1.179
+KH0682,Gaffron Collection,59,2,0,Central Coast,0.747,Central Coast|Central Coast|Central Coast|Ica & Paracas|North Peru Coast,0.137|0.256|0.318|0.382|0.447
+KH0683,Gaffron Collection,16,1,0,Central Coast,0.798,Arica & N. Chile|Central Coast|Central Coast|Central Coast|Central Coast,1.002|1.013|1.013|1.019|1.020
+KH0684,Gaffron Collection,8,0,0,Cañete–Pisco,0.378,Cañete–Pisco|Ica & Paracas|Chachapoyas|Nazca & Far South|Central Coast,0.116|0.253|0.259|0.305|0.322
+KH0685,Gaffron Collection,4,0,0,Central Coast,0.695,Central Coast|Central Coast|Central Coast|Cañete–Pisco|Ica & Paracas,0.033|0.078|0.078|0.082|0.082
+KH0686,Gaffron Collection,4,0,0,Central Coast,0.855,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Central Coast,0.082|0.082|0.127|0.156|0.178
+KH0687,Gaffron Collection,3,1,0,Ica & Paracas,0.483,Central Coast|Ica & Paracas|Ica & Paracas|Cañete–Pisco|Nazca & Far South,0.160|0.163|0.293|0.396|0.703
+KH0688,Gaffron Collection,4,1,0,Central Coast,0.801,Central Coast|Central Coast|Central Coast|Arica & N. Chile|Central Coast,1.003|1.003|1.008|1.012|1.016
+KH0689,Gaffron Collection,41,2,0,Ica & Paracas,0.514,Central Coast|Ica & Paracas|Ica & Paracas|Central Coast|Ica & Paracas,0.251|0.404|0.543|0.730|0.740
+KH0690,Gaffron Collection,23,4,0,Central Coast,0.928,Central Coast|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.073|0.579|0.718|0.768|0.907
+KH0691,Gaffron Collection,18,0,0,Central Coast,0.6,Central Coast|Ica & Paracas|Ica & Paracas|Central Coast|Central Coast,0.154|0.194|0.196|0.200|0.253
+KH0692,Unknown,265,8,1,Central Coast,0.497,Central Coast|Chachapoyas|Central Coast|Nazca & Far South|Cañete–Pisco,0.554|0.862|1.215|1.280|1.387
+KH0693,Unknown,89,4,0,Central Coast,0.761,Central Coast|Ica & Paracas|Central Coast|Central Coast|Central Coast,0.431|0.510|0.568|0.912|0.954
+KH0694,Unknown,175,7,1,Central Coast,0.381,North Peru Coast|Chachapoyas|Central Coast|Nazca & Far South|Central Coast,1.042|1.066|1.106|1.114|1.228
+KH0695,Unknown,268,5,1,Cañete–Pisco,0.411,Central Coast|Cañete–Pisco|Cañete–Pisco|Chachapoyas|Ica & Paracas,1.026|1.034|1.143|1.184|1.217
+KH0696,Unknown,39,2,0,Central Coast,0.515,Ica & Paracas|Central Coast|Ica & Paracas|Central Coast|Central Coast,0.211|0.299|0.335|0.375|0.460
+KH0697,Unknown,83,3,0,Ica & Paracas,0.599,Ica & Paracas|Central Coast|Central Coast|Ica & Paracas|Ica & Paracas,1.000|1.064|1.076|1.114|1.119
+KH0698,Unknown,556,7,1,Chachapoyas,0.42,Chachapoyas|Central Coast|Chachapoyas|North Peru Coast|Central Coast,1.844|1.881|1.948|2.132|2.191
+KH0700,Stanford Collection (prob. 1905),162,5,1,Cañete–Pisco,0.443,Cañete–Pisco|Cañete–Pisco|Arica & N. Chile|Central Coast|Ica & Paracas,0.752|0.777|0.777|0.974|1.019
+KH0701,Goodspeed Collection,136,6,1,Central Coast,0.578,Chachapoyas|Central Coast|Arica & N. Chile|Central Coast|Central Coast,0.900|1.008|1.035|1.049|1.111
+KH0702,Unknown,147,6,1,Central Coast,0.777,Cañete–Pisco|Central Coast|Central Coast|Central Coast|Central Coast,1.538|1.668|1.776|1.777|1.865
