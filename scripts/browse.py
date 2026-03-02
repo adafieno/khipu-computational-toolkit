@@ -146,6 +146,86 @@ def _chart_title(text: str) -> None:
     )
 
 
+@st.dialog("Khipu Details", width="large")
+def _khipu_detail_modal(kfg_id: str) -> None:
+    """Full-detail modal for a single khipu."""
+    meta     = load_meta(kfg_id)
+    cords_df = load_cords(kfg_id)
+    url      = meta.get("kfg_url", "")
+
+    # ── Header ────────────────────────────────────────────────────────────────
+    h_col, link_col = st.columns([4, 1])
+    h_col.markdown(
+        f'<p style="font-size:1.4rem;font-weight:700;color:#e2e8f0;margin:0">{kfg_id}</p>',
+        unsafe_allow_html=True,
+    )
+    if url:
+        link_col.markdown(
+            f'<div style="text-align:right;padding-top:4px">'
+            f'<a href="{url}" target="_blank" '
+            f'style="font-size:0.85rem;color:#3b82f6;text-decoration:none">'
+            f'View on KFG ↗</a></div>',
+            unsafe_allow_html=True,
+        )
+    name = meta.get("kfg_name") or ""
+    if name and str(name).strip() not in ("", "nan", "None"):
+        st.caption(str(name))
+
+    st.markdown("---")
+
+    # ── Key metrics ───────────────────────────────────────────────────────────
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Provenance",    _fmt_prov(meta.get("provenance")))
+    c2.metric("Region",        str(meta.get("region")        or "—"))
+    c3.metric("Country",       str(meta.get("museum_country") or "—"))
+
+    c4, c5, c6 = st.columns(3)
+    c4.metric("Museum",        str(meta.get("museum_name")   or "—")[:40])
+    c5.metric("Primary cord",  f"{meta.get('primary_length') or '?'} cm")
+    c6.metric("Primary color", str(meta.get("primary_color") or "—"))
+
+    # ── Cord summary ─────────────────────────────────────────────────────────
+    if not cords_df.empty:
+        st.markdown("---")
+        pendants = cords_df[cords_df["hierarchy_level"] == 0]
+        subs     = cords_df[cords_df["hierarchy_level"] > 0]
+        d1, d2, d3, d4 = st.columns(4)
+        d1.metric("Total cords",   len(cords_df))
+        d2.metric("Pendants",      len(pendants))
+        d3.metric("Subsidiaries",  len(subs))
+        d4.metric("Cord groups",   cords_df["group_idx"].nunique())
+
+        with st.expander("Cord data", expanded=False):
+            st.dataframe(
+                cords_df[[
+                    "cord_name", "hierarchy_level", "parent_cord",
+                    "color", "value", "length",
+                ]],
+                hide_index=True,
+                width="stretch",
+            )
+
+    # ── Remaining metadata fields ─────────────────────────────────────────────
+    skip = {
+        "kfg_id", "kfg_name", "kfg_url", "provenance", "region",
+        "museum_name", "museum_country", "primary_length",
+        "primary_color", "primary_structure",
+    }
+    extra = {
+        k: v for k, v in meta.items()
+        if k not in skip and v is not None and str(v).strip() not in ("", "nan", "None")
+    }
+    if extra:
+        st.markdown("---")
+        st.caption("Additional metadata")
+        rows_extra = [[k.replace("_", " ").title(), str(v)] for k, v in extra.items()]
+        st.dataframe(
+            pd.DataFrame(rows_extra, columns=["Field", "Value"]),
+            hide_index=True,
+            width="stretch",
+        )
+
+
 def color_to_hex(code: str) -> str:
     """Resolve a potentially compound Ascher color code (e.g. 'MB:W') to hex."""
     if not code or not code.strip():
@@ -1279,21 +1359,30 @@ def main() -> None:
             lambda v: _fmt_prov(v) if pd.notna(v) else "—"
         )
 
-        st.caption(f"**{len(display):,}** khipus — use the table's built-in search & sort to filter")
+        st.caption(f"**{len(display):,}** khipus — click any row to view details")
 
-        st.dataframe(
-            display.rename(columns={
-                "kfg_id": "KFG ID",
-                "provenance": "Provenance",
-                "region": "Region",
-                "museum_country": "Country",
-                "museum_name": "Museum",
-                "cord_count": "Cords",
-            }).drop(columns=["kfg_url", "kfg_name"], errors="ignore"),
-            width='stretch',
+        display.insert(0, "·", "🔍")
+        display_table = display.rename(columns={
+            "kfg_id": "KFG ID",
+            "provenance": "Provenance",
+            "region": "Region",
+            "museum_country": "Country",
+            "museum_name": "Museum",
+            "cord_count": "Cords",
+        }).drop(columns=["kfg_url", "kfg_name"], errors="ignore")
+
+        sel = st.dataframe(
+            display_table,
+            width="stretch",
             hide_index=True,
             height=600,
+            on_select="rerun",
+            selection_mode="single-row",
+            column_config={"·": st.column_config.TextColumn("·", width="small")},
         )
+        rows = (sel.selection.rows if sel and hasattr(sel, "selection") else [])
+        if rows:
+            _khipu_detail_modal(display_table.iloc[rows[0]]["KFG ID"])
     # ── Analytics ───────────────────────────────────────────────────────────────────────
     elif view == "Analytics":
         flags_df = load_analytics_data()
