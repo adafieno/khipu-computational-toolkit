@@ -559,7 +559,7 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
         paper_bgcolor="#0f172a",
         font_color="#e2e8f0",
         legend=dict(
-            x=1.0, y=0.98,
+            x=1.0, y=0.5, yanchor="middle",
             bgcolor="rgba(15,23,42,0.85)",
             bordercolor="#334155", borderwidth=1,
             font=dict(color="#e2e8f0", size=11),
@@ -1755,26 +1755,52 @@ def main() -> None:
 
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
-        _h_col, _link_col = st.columns([5, 1])
+        # Top bar: title on the left, compact filters on the right
+        _h_col, _prov_col, _k_col, _link_col = st.columns([3, 1, 2, 1])
         _h_col.header("3D Viewer")
-        selected_id = _khipu_picker("3dv")
+
+        # Provenance filter (no label shown)
+        provenances = sorted(corpus["provenance"].dropna().unique())
+        prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
+        _prov_raw_map: dict[str, list[str]] = {}
+        for p in provenances:
+            _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
+        prov_label = _prov_col.selectbox(
+            "Provenance", prov_options,
+            key="3dv_prov", label_visibility="collapsed",
+        )
+        pool = corpus if prov_label == "All" else corpus[
+            corpus["provenance"].isin(_prov_raw_map.get(prov_label, []))
+        ]
+
+        # Khipu selector (no label shown)
+        khipu_ids = pool["kfg_id"].tolist()
+        selected_id: Optional[str] = None
+        if khipu_ids:
+            k_labels = {
+                row["kfg_id"]: (
+                    f"{row['kfg_id']}  {row['kfg_name'] or ''}  "
+                    f"[{_fmt_prov(row['provenance'])}]"
+                )
+                for _, row in pool.iterrows()
+            }
+            selected_id = _k_col.selectbox(
+                "Khipu", khipu_ids,
+                format_func=lambda k: k_labels.get(k, k),
+                key="3dv_khipu", label_visibility="collapsed",
+            )
+        else:
+            _k_col.warning("No khipus match this filter.")
+
         if not selected_id:
             st.info("Select a khipu above.")
             return
 
         meta     = load_meta(selected_id)
         cords_df = load_cords(selected_id)
-        n_total  = len(cords_df)
         n_pend   = int((cords_df["hierarchy_level"] == 0).sum())
         n_subs   = int((cords_df["hierarchy_level"] > 0).sum())
         n_knots  = sum(len(_parse_knots(str(k))) for k in cords_df["knots"] if k)
-
-        c1, c2, c3, c4, c5 = st.columns(5)
-        c1.metric("KFG ID",       selected_id)
-        c2.metric("Pendants",     n_pend)
-        c3.metric("Subsidiaries", n_subs)
-        c4.metric("Knots",        n_knots)
-        c5.metric("Primary cord", f"{meta.get('primary_length') or '?'} cm")
 
         url = meta.get("kfg_url", "")
         if url:
@@ -1785,6 +1811,25 @@ def main() -> None:
                 f'View on KFG ↗</a></div>',
                 unsafe_allow_html=True,
             )
+
+        # Compact stat cards (shorter than st.metric)
+        def _stat_card(label: str, value: str) -> str:
+            return (
+                f'<div style="background:#1e293b;border-radius:6px;'
+                f'padding:5px 12px;margin:0">'
+                f'<div style="font-size:0.6rem;color:#94a3b8;text-transform:uppercase;'
+                f'letter-spacing:0.06em;margin-bottom:2px">{label}</div>'
+                f'<div style="font-size:1.05rem;font-weight:600;color:#e2e8f0;'
+                f'line-height:1.2">{value}</div>'
+                f'</div>'
+            )
+
+        c1, c2, c3, c4, c5 = st.columns(5)
+        c1.markdown(_stat_card("KFG ID",       selected_id),                                   unsafe_allow_html=True)
+        c2.markdown(_stat_card("Pendants",     str(n_pend)),                                   unsafe_allow_html=True)
+        c3.markdown(_stat_card("Subsidiaries", str(n_subs)),                                   unsafe_allow_html=True)
+        c4.markdown(_stat_card("Knots",        str(n_knots)),                                  unsafe_allow_html=True)
+        c5.markdown(_stat_card("Primary cord", f"{meta.get('primary_length') or '?'} cm"),    unsafe_allow_html=True)
 
         st.caption(
             "Cord colours reflect the Ascher colour code. "
