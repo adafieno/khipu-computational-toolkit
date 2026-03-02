@@ -30,8 +30,8 @@ class KFGConfig(Config):
         super().__init__(root_dir)
         self.data_source = 'kfg'
         
-        # KFG-specific directories (separate from OKR processed data)
-        self.kfg_processed_dir = self.data_dir / "processed_kfg"
+        # KFG-specific directories
+        self.kfg_processed_dir = self.data_dir / "processed"
         self.kfg_phase_dirs = {
             phase: self.kfg_processed_dir / f"phase{phase}"
             for phase in [0, 1, 2, 3, 4, 5, 7, 8, 9]
@@ -56,8 +56,7 @@ class KFGConfig(Config):
         """
         Get path to KFG processed data file.
         
-        Files are stored in data/processed_kfg/ to avoid overwriting
-        OKR-derived results during migration.
+        Files are stored in data/processed/.
         
         Args:
             filename: Name of the file (e.g., 'cord_hierarchy.csv')
@@ -126,7 +125,7 @@ class KFGConfig(Config):
             results['errors'].append(f"src/ directory not found at: {self.src_dir}")
             results['valid'] = False
         
-        # Note that processed_kfg will be created by scripts
+        # processed/ dir is pre-existing; phase subdirs created by scripts on demand
         if not self.kfg_processed_dir.exists():
             results['info']['kfg_processed'] = 'Will be created on first run'
         else:
