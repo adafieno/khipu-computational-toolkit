@@ -1714,7 +1714,7 @@ hr { display: none !important; }
 def main() -> None:
     st.set_page_config(
         page_title="Khipu Explorer",
-        page_icon="�",
+        page_icon="🪢",
         layout="wide",
         initial_sidebar_state="expanded",
     )
