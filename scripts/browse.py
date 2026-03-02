@@ -1003,11 +1003,11 @@ header[data-testid="stHeader"]         { display: none !important; }
 
 /* ── global background ────────────────────────────────────────────────────────  */
 [data-testid="stApp"]                  { background: #0b1120; }
-/* inset main content: 64px left (nav) 64px top (header) 36px bottom (footer) */
+/* inset main content: clear the 80px nav + 20px gap, 64px header + 6px gap, 36px footer */
 [data-testid="stMainBlockContainer"],
 .main .block-container {
-    padding-top: 72px !important;
-    padding-left: 72px !important;
+    padding-top: 70px !important;
+    padding-left: 100px !important;
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
@@ -1033,17 +1033,17 @@ header[data-testid="stHeader"]         { display: none !important; }
 
 /* ── fixed left nav bar ────────────────────────────────────────────────────  */
 .kcat-nav {
-    position: fixed; top: 64px; left: 0; bottom: 36px; width: 64px;
+    position: fixed; top: 64px; left: 0; bottom: 36px; width: 80px;
     z-index: 8999;
     background: #070f1c; border-right: 1px solid #1e293b;
     display: flex; flex-direction: column; align-items: center;
-    padding-top: 12px; gap: 4px;
+    padding-top: 16px; gap: 6px;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 .kcat-nav a {
-    width: 44px; height: 44px;
+    width: 54px; height: 54px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 10px; font-size: 1.9rem;
+    border-radius: 12px; font-size: 1.9rem;
     text-decoration: none; color: #64748b;
     transition: background 0.12s, color 0.12s;
 }
@@ -1082,7 +1082,8 @@ def main() -> None:
 
     st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
 
-    corpus = load_corpus()
+    with st.spinner("Loading corpus…"):
+        corpus = load_corpus()
 
     # ── Header bar ─────────────────────────────────────────────────────────────
     st.markdown(
