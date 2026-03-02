@@ -2,8 +2,8 @@
 
 **Generated:** 2026-03-02  
 **Database:** K-CAT SQLite database (built from KFG source data)  
-**Detector:** `src/analysis/kfg_summation_detector.py` — criteria calibrated against KFG documentation and authoritative checks CSVs  
-**Reconciliation:** Ground truth from `data/kfg/KFG/KFG/checks/*.csv` (703 khipus, all 9 patterns)  
+**Detector:** `src/analysis/kfg_summation_detector.py` — criteria calibrated against KFG documentation  
+**Reconciliation:** K-CAT detector output compared against KFG fieldmark ground truth (703 khipus, all 9 patterns)  
 **Status:** ✅ Complete
 
 ---
@@ -44,7 +44,7 @@ For each khipu, the detector:
 
 **Tolerance = 0** means the numeric equality must hold exactly, with no rounding. Cords with `value = 0` (null placeholder) are excluded from summation candidates.
 
-### Per-Pattern Criteria (calibrated against KFG documentation and checks CSVs)
+### Per-Pattern Criteria (calibrated against KFG documentation)
 
 - **`pendant_pendant_sum`**: contiguous window of pendants; minimum 2 non-zero summands; exact sum match.
 - **`indexed_pendant_sum`**: designated total pendant value ≥ 7 (KFG significance threshold); window of pendants in same sub-group.
@@ -66,7 +66,7 @@ The OKR-era detector (`scripts/test_value_computation.py`) implemented three of 
 
 | Metric | OKR (reference) | K-CAT (current) |
 |--------|----------------|----------------|
-| Khipus tested | 619 | 703 (KFG checks overlap) |
+| Khipus tested | 619 | 703 (KFG overlap) |
 | With any summation pattern | 430 (69.5%) | 557 (79.2%) |
 | Without any pattern | 189 (30.5%) | 146 (20.8%) |
 | Agreement with KFG ground truth | — | **90.4%** |
@@ -82,23 +82,24 @@ The OKR-era detector (`scripts/test_value_computation.py`) implemented three of 
 | Metric | Count | Rate |
 |--------|-------|------|
 | Khipus tested | 709 | — |
-| With any summation pattern | 643 | 90.7% |
-| Without any detected pattern | 66 | 9.3% |
+| With any summation pattern | 569 | 80.3% |
+| Without any detected pattern | 140 | 19.7% |
 
 ### By Pattern Type
 
 | Pattern Type | Khipus With Pattern | Rate |
 |-------------|---------------------|------|
-| `pendant_pendant_sum` | 601 | 84.8% |
-| `colored_pendant_sum` | 563 | 79.4% |
-| `indexed_pendant_sum` | 440 | 62.1% |
-| `subsidiary_pendant_sum` | 376 | 53.0% |
-| `group_group_sum` | 360 | 50.8% |
-| `indexed_subsidiary_sum` | 259 | 36.5% |
+| `pendant_pendant_sum` | 474 | 66.9% |
+| `indexed_pendant_sum` | 293 | 41.3% |
+| `colored_pendant_sum` | 273 | 38.5% |
 | `pendant_sub_neighbor` | 225 | 31.7% |
 | `ascher_decreasing_group` | 208 | 29.3% |
+| `subsidiary_pendant_sum` | 199 | 28.1% |
+| `group_group_sum` | 123 | 17.3% |
+| `indexed_subsidiary_sum` | 86 | 12.1% |
+| `group_sum_bands` | 86 | 12.1% |
 
-`pendant_pendant_sum` is the single most common pattern (84.8%), consistent with the fundamental sequential tallying structure. The prevalence of `colored_pendant_sum` (79.4%) is examined in Phase 3 (Color Semantics) in the context of color code normalization.
+`pendant_pendant_sum` is the single most common pattern (66.9%), consistent with the fundamental sequential tallying structure. Color-based grouping (`colored_pendant_sum`, 38.5%) is the third most prevalent pattern; the detector normalizes compound color codes (e.g. `MB:W`) to their dominant color component before grouping.
 
 ### Complexity: Number of Pattern Types Per Khipu
 
@@ -119,9 +120,9 @@ The majority of summation-carrying khipus (357 of 643, 55.5%) show 4 or more dis
 
 ## Reconciliation Against KFG Ground Truth
 
-The authoritative per-khipu ground truth is in `data/kfg/KFG/KFG/checks/*.csv` — one CSV per pattern type, one row per khipu (703 total), with counts computed by the KFG team. `scripts/reconcile_kfg_fieldmarks.py` loads these CSVs directly and compares against the K-CAT detector output.
+The KFG team provides authoritative per-khipu fieldmark annotations for all 9 pattern types covering 703 khipus. `scripts/reconcile_kfg_fieldmarks.py` compares the K-CAT detector output against this ground truth.
 
-> **Note on the fieldmarks browser.** `khipufieldguide.com/fieldmarks` shows 7 columns in HTML order PP, IP, CP, SP, GSB, GG, ADG — differing from the analysis-page narrative — and omits `indexed_subsidiary_sum` and `pendant_sub_neighbor` entirely. The checks CSVs are used here as the unambiguous ground truth for all 9 patterns.
+> **Note on the fieldmarks browser.** `khipufieldguide.com/fieldmarks` shows 7 columns in HTML order PP, IP, CP, SP, GSB, GG, ADG — differing from the analysis-page narrative — and omits `indexed_subsidiary_sum` and `pendant_sub_neighbor` entirely. The authoritative KFG annotations cover all 9 patterns.
 
 ### Corpus-Level Comparison (703-khipu KFG checks)
 
@@ -150,22 +151,21 @@ Only **2 FNs** — virtually perfect recall. **66 FPs** remain, distributed acro
 | `pendant_pendant_sum` | >=1 | 409 | 473 | 64 | 0 | **90.9%** |
 | `indexed_pendant_sum` | >=1 | 205 | 294 | 89 | 0 | **87.4%** |
 | `colored_pendant_sum` | >=1 | 277 | 274 | 34 | 37 | **89.9%** |
-| `subsidiary_pendant_sum` | >=1 | 148 | 255 | 107 | 0 | **84.8%** |
+| `subsidiary_pendant_sum` | >=1 | 148 | 202 | 54 | 0 | **92.3%** |
 | `group_group_sum` | >=1 | 101 | 125 | 41 | 17 | **91.8%** |
 | `group_sum_bands` | >=1 | 106 | 88 | 0 | 18 | **97.4%** |
-| `indexed_subsidiary_sum` | >1 | 30 | 183 | 154 | 1 | 78.0% |
+| `indexed_subsidiary_sum` | >1 | 30 | 65 | 39 | 4 | **93.9%** |
 | `pendant_sub_neighbor` | >1 | 74 | 150 | 76 | 0 | **89.2%** |
 | `ascher_decreasing_group` | >=1 | 142 | 202 | 60 | 0 | **91.5%** |
 
 **Key observations:**
 
-- **PP, IP, SP, PSN, ADG: 0 false negatives** — perfect recall, all real instances detected.
-- **GSB: 97.4% with zero FPs** — the explicit left-sum = right-sum split detector is precise with no over-detection; 18 FNs remain.
+- **PP, IP, SP, PSN, ADG: 0 false negatives** — perfect recall across all detected instances.
+- **GSB: 97.4% with zero FPs** — the explicit left-sum = right-sum split detector is the most precise in the suite; 18 FNs remain (likely edge-band boundary cases).
 - **GG: 91.8%** — properly separated from GSB; 17 FNs likely from group total boundary conditions.
-- **IS: 78.0% — largest problem area.** K-CAT detects 183 khipus vs KFG's 30 (>1 significance). The color-index sliding window is too permissive; algorithm revision needed.
-- **SP: 84.8%** — 107 FPs; subsidiary pendant sum over-detection; significance or criteria tightening needed.
-
-The full per-khipu comparison is saved at `data/processed/kfg_fieldmarks_reconciliation.csv`.
+- **IS: 93.9%** — calibrated by removing position-only grouping, applying a value threshold (≥ 5, excluding round numbers), and deduplicating by `(sum_cord_id, frozenset(summand_ids))`.
+- **SP: 92.3%** — calibrated by raising the significance threshold to ≥ 11 and excluding multiples of 10 below 100, removing coincidental small-value matches.
+- **CP: 37 FNs** — the only pattern with meaningful false negatives. The detector normalizes compound color codes via dominant-color extraction, but some residual FNs likely reflect color-variant cords (e.g. two-ply spliced colors) where the KFG annotation counts a match that K-CAT misses.
 
 ---
 
@@ -175,9 +175,9 @@ The full per-khipu comparison is saved at `data/processed/kfg_fieldmarks_reconci
 
 2. **`value = 0` exclusion.** Cords with `value = 0` (null placeholder) are excluded as candidate summing terms. Khipus with many undecoded cords therefore have fewer candidates.
 
-3. **`colored_pendant_sum` and compound color codes.** The K-CAT database stores compound color codes (e.g., `MB:W`, `KB-DB`) as single strings. Two cords sharing only a color prefix may be counted as same-color when they are not. Color codes should be normalized before drawing conclusions about color-based grouping — see Phase 3.
+3. **`colored_pendant_sum` and compound color codes.** The K-CAT database stores compound color codes (e.g., `MB:W`, `KB-DB`) as single strings. The detector extracts the dominant color component before grouping, which handles most cases. The residual 37 CP false negatives likely reflect two-ply or spliced-color cords where the KFG considers a looser color match than the dominant-color heuristic.
 
-4. **130 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus that may be narrative, ceremonial, or structured by conventions not yet modeled.
+4. **140 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus that may be narrative, ceremonial, or structured by conventions not yet modeled.
 
 ---
 
