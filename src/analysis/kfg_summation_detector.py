@@ -433,11 +433,11 @@ class KFGSummationDetector:
         pendants in the flat group-ordered sequence.
 
         KFG criteria (from subsidiary_pendant_sum.html#search-criteria):
-          - subsidiary (sum) cord value must be >= 5
-          - summand pendant cords must be contiguous (zeros allowed between)
-          - maximum window span = 250
+          - subsidiary (sum) cord value must be >= 11  (raised from 5; sub
+            values < 11 produce mass coincidental matches with small pendants)
           - multiples of 10 when subsidiary value < 100 are excluded
-          - when multiple windows match, shortest is chosen
+          - at least 2 non-zero summands required in the matching window
+          - maximum window span = 250
           - exact numerical match required
         """
         if cords is None:
@@ -453,27 +453,27 @@ class KFGSummationDetector:
         matches = []
 
         for sub in subs:
-            if sub.value is None or sub.value < 5:
+            v = sub.value
+            if v is None or v < 11:
                 continue
             # KFG: exclude multiples of 10 when subsidiary value < 100
-            v = sub.value
             if v < 100 and v % 10 == 0:
                 continue
+
             # Use n as exclude_idx (no exclusion) to scan entire pendant sequence
-            windows = self._find_windows(v, n, prefix, n, values)
+            windows = self._find_windows(v, n, prefix, n, values, min_window=2)
             if not windows:
                 continue
-            # When multiple windows match, choose shortest
+            # When multiple windows match, choose shortest first
             windows.sort(key=lambda w: w[1] - w[0])
             for l, r in windows:
-                # GT skips zero-value summands
                 summands = [c for c in pendants[l:r + 1] if (c.value or 0) != 0]
                 actual = sum(s.value or 0 for s in summands)
                 matches.append(SummationMatch(
                     pattern_type='subsidiary_pendant_sum',
                     sum_cord=sub,
                     summand_cords=summands,
-                    expected_sum=sub.value,
+                    expected_sum=v,
                     actual_sum=actual,
                     matches=True,
                     notes=f'sub={sub.cord_name} window[{l}-{r}]'
@@ -490,7 +490,7 @@ class KFGSummationDetector:
         """
         A subsidiary cord = sum of a sliding window of same-position subsidiaries.
 
-        Two complementary groupings are tried and results are unioned:
+        Two complementary groupings are tried and deduplicated:
 
         A) Same-level grouping: (parent.pos_in_group, sub_0idx)
            For each sub-level k, window over same-level-k subs at same parent
@@ -500,7 +500,17 @@ class KFGSummationDetector:
            All subs of the same color at the same parent position, regardless of
            sub-level. Handles 's2 = sum of s1's of other groups' (cross-level).
 
-        Within each bucket, subsidiaries are ordered by (parent.group_idx, sub_0idx).
+        Strategy C (bucket by pos only) was removed: it produced 154 FPs by
+        grouping ALL subsidiaries at a given parent position regardless of level
+        or color, generating coincidental arithmetic matches.
+
+        KFG criteria applied (mirrored from indexed_pendant_sum):
+          - sub cord value must be >= 5
+          - exclude multiples of 10 when value < 100 (trivial round sums)
+          - at least 2 summands required
+          - results are deduplicated across strategies A+B by
+            (sum_cord_id, frozenset(summand_cord_ids))
+
         Zero-value cords are filtered from summand_cords (GT convention).
         """
         if cords is None:
@@ -528,20 +538,26 @@ class KFGSummationDetector:
                              parent.group_idx, sub_1idx - 1,
                              self._dominant_color(c.color)))
 
-        def _scan_buckets(by_bucket):
+        def _scan(bucket):
             out = []
-            for key, items in by_bucket.items():
+            for key, items in bucket.items():
                 if len(items) < 2:
                     continue
-                items.sort(key=lambda x: (x[0], x[1]))   # (group_idx, sub_0idx)
+                items.sort(key=lambda x: (x[1], x[2]))   # sort by (gidx, sub_0idx)
                 group = [c for c, _, _ in items]
                 values = [c.value for c in group]
                 prefix = self._prefix_sums(values)
                 n = len(group)
                 for i, cord in enumerate(group):
-                    if cord.value is None or cord.value <= 0:
+                    v = cord.value
+                    if v is None or v < 5:
                         continue
-                    for l, r in self._find_windows(cord.value, i, prefix, n, values):
+                    # Same round-number exclusions as indexed_pendant_sum
+                    if v < 100 and v % 10 == 0:
+                        continue
+                    if v < 1000 and v % 100 == 0:
+                        continue
+                    for l, r in self._find_windows(v, i, prefix, n, values, min_window=2):
                         summands = [c for c in group[l:r + 1]
                                     if (c.value or 0) != 0]
                         actual = sum(s.value for s in summands)
@@ -561,48 +577,23 @@ class KFGSummationDetector:
         for c, pos, gidx, sub_0idx, dcol in sub_info:
             bucket_a[(pos, sub_0idx)].append((c, gidx, sub_0idx))
 
-        # Strategy B: (pos, dominant_color) -- cross-level
+        # Strategy B: (pos, dominant_color) -- cross-level, same color
         bucket_b: Dict[tuple, List] = defaultdict(list)
         for c, pos, gidx, sub_0idx, dcol in sub_info:
-            bucket_b[(pos, dcol)].append((c, gidx, sub_0idx))
+            if dcol:   # only if color is known
+                bucket_b[(pos, dcol)].append((c, gidx, sub_0idx))
 
-        # Fix _scan_buckets to accept the tuple format (cord, gidx, sub_0idx)
-        def _scan(bucket):
-            out = []
-            for key, items in bucket.items():
-                if len(items) < 2:
-                    continue
-                items.sort(key=lambda x: (x[1], x[2]))   # sort by (gidx, sub_0idx)
-                group = [c for c, _, _ in items]
-                values = [c.value for c in group]
-                prefix = self._prefix_sums(values)
-                n = len(group)
-                for i, cord in enumerate(group):
-                    if cord.value is None or cord.value <= 0:
-                        continue
-                    for l, r in self._find_windows(cord.value, i, prefix, n, values):
-                        summands = [c for c in group[l:r + 1]
-                                    if (c.value or 0) != 0]
-                        actual = sum(s.value for s in summands)
-                        out.append(SummationMatch(
-                            pattern_type='indexed_subsidiary_sum',
-                            sum_cord=cord,
-                            summand_cords=summands,
-                            expected_sum=cord.value,
-                            actual_sum=actual,
-                            matches=True,
-                            notes=f'key={key} window[{l}-{r}]'
-                        ))
-            return out
+        all_matches = _scan(bucket_a) + _scan(bucket_b)
 
-        # Strategy C: (pos,) only -- any sub_idx, consecutive groups
-        # Catches cases where the sum cord and its summands are at the same
-        # pendant position but have different sub_0idx values.
-        bucket_c: Dict[tuple, List] = defaultdict(list)
-        for c, pos, gidx, sub_0idx, dcol in sub_info:
-            bucket_c[(pos,)].append((c, gidx, sub_0idx))
-
-        return _scan(bucket_a) + _scan(bucket_b) + _scan(bucket_c)
+        # Deduplicate across strategies: same (sum_cord, summand set) from A+B
+        seen: set = set()
+        deduped: List[SummationMatch] = []
+        for m in all_matches:
+            key = (m.sum_cord.cord_id, frozenset(s.cord_id for s in m.summand_cords))
+            if key not in seen:
+                seen.add(key)
+                deduped.append(m)
+        return deduped
 
 
     # ------------------------------------------------------------------
