@@ -863,19 +863,26 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
                 showarrow=False,
                 font=dict(size=10, color=fc),
             )
+    # Column labels pinned to the top of the plot area so they're visible
+    # when the chart is scrolled — more reliable than axis mirroring.
+    for col in col_labels:
+        fig.add_annotation(
+            x=col, xref="x",
+            y=1.0, yref="paper",
+            text=f"<b>{col}</b>",
+            showarrow=False,
+            yanchor="bottom",
+            font=dict(size=11, color="#94a3b8"),
+        )
     fig.update_layout(
+        xaxis_title="Pattern",
         yaxis_title="Provenance",
         plot_bgcolor="#0f172a",
         paper_bgcolor="#0f172a",
         font_color="#e2e8f0",
-        xaxis=dict(
-            color="#94a3b8",
-            side="bottom",
-            mirror="allticks",   # repeat tick labels on the top edge
-            title=dict(text="Pattern", standoff=8),
-        ),
+        xaxis=dict(color="#94a3b8", side="bottom"),
         yaxis=dict(color="#94a3b8", dtick=1),
-        margin=dict(l=0, r=0, t=40, b=40),
+        margin=dict(l=0, r=0, t=30, b=40),
         height=max(500, len(top_provs) * 44 + 80),
     )
     return fig
