@@ -134,6 +134,8 @@ The KFG team provides per-khipu fieldmark annotation files for all 9 pattern typ
 
 ### Corpus-Level Comparison (702-khipu KFG intersection)
 
+> **Scope note.** All figures in this section and the tables below — counts, rates, FP/FN tallies, and agreement percentages — refer to the **702-khipu intersection** between the KFG annotation files and the K-CAT corpus. The full KFG corpus contains **709 khipus**; the remaining 7 have no corresponding GT entry and are excluded from every comparison figure.
+
 | Metric | KFG ground truth | K-CAT detector |
 |--------|-----------------|----------------|
 | Khipus evaluated | 702 | 702 |
