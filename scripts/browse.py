@@ -657,20 +657,21 @@ def build_cooccurrence_figure(flags_df: pd.DataFrame) -> go.Figure:
 
     fig = go.Figure(go.Heatmap(
         z=cooc, x=labels, y=labels,
-        colorscale="Plasma",
+        colorscale="Turbo",
         hovertemplate="%{y} ∩ %{x}: %{z}<extra></extra>",
         showscale=True,
     ))
 
-    # Per-cell annotations with adaptive text colour (Plotly textfont.color
-    # does not accept a 2-D array, so we annotate each cell individually).
-    # Plasma: low → dark purple, high → yellow; below threshold = dark bg → light text.
-    threshold = cooc.max() * 0.60
+    # Per-cell annotations with adaptive text colour.
+    # Turbo peaks in brightness at ~40-80% of range (yellow-green zone);
+    # low end (deep blue) and high end (dark red) are both dark → need light text.
+    max_v = int(cooc.max()) or 1
     n = len(labels)
     for i in range(n):
         for j in range(n):
             v = int(cooc[i, j])
-            fc = "#e2e8f0" if v < threshold else "#0f172a"
+            ratio = v / max_v
+            fc = "#0f172a" if 0.25 < ratio < 0.82 else "#e2e8f0"
             fig.add_annotation(
                 x=labels[j], y=labels[i],
                 text=str(v),
@@ -915,7 +916,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
         for k in available:
             pct = sub[k].mean() * 100 if n > 0 else 0
             row_z.append(round(pct, 1))
-            row_t.append(f"{pct:.0f}%<br>(n={n})")
+            row_t.append(f"{pct:.0f}%")
         z_vals.append(row_z)
         text_vals.append(row_t)
 
@@ -923,24 +924,24 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
-        colorscale="Plasma",
+        colorscale="Turbo",
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
         text=text_vals,
         showscale=True,
         colorbar=dict(title="%", ticksuffix="%"),
     ))
 
-    # Per-cell annotations — two lines via <br>.
-    # Plasma: low → dark purple, high → yellow. Below threshold = dark bg → light text.
+    # Per-cell annotations — single line.
+    # Turbo peaks in brightness ~40-80% of range; use dark text there, light elsewhere.
     max_z = max(v for row in z_vals for v in row) or 1
-    dark_thresh = max_z * 0.60
     for i, prov in enumerate(top_provs):
         for j, col in enumerate(col_labels):
             v = z_vals[i][j]
-            fc = "#e2e8f0" if v < dark_thresh else "#0f172a"
+            ratio = v / max_z
+            fc = "#0f172a" if 0.25 < ratio < 0.82 else "#e2e8f0"
             fig.add_annotation(
                 x=col, y=prov,
-                text=text_vals[i][j],   # already contains <br>
+                text=text_vals[i][j],
                 showarrow=False,
                 font=dict(size=10, color=fc),
             )
@@ -964,7 +965,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
         xaxis=dict(color="#94a3b8", side="bottom"),
         yaxis=dict(color="#94a3b8", dtick=1),
         margin=dict(l=0, r=0, t=30, b=40),
-        height=max(500, len(top_provs) * 44 + 80),
+        height=max(350, len(top_provs) * 28 + 80),
     )
     return fig
 
@@ -982,27 +983,24 @@ def build_pca_figure(flags_df: pd.DataFrame) -> go.Figure:
     n_patterns = X.sum(axis=1).astype(int)
     palette    = ["#475569","#3b82f6","#f97316","#22c55e","#a855f7",
                   "#f43f5e","#eab308","#06b6d4","#ec4899","#10b981"]
-    colors_ = [palette[min(n, len(palette) - 1)] for n in n_patterns]
 
-    hover = [
-        f"<b>{row['kfg_id']}</b><br>{int(n_patterns[i])} pattern(s)"
-        for i, (_, row) in enumerate(flags_df.iterrows())
-    ]
+    kfg_ids = flags_df["kfg_id"].values if "kfg_id" in flags_df.columns else [str(i) for i in range(len(flags_df))]
 
-    fig = go.Figure(go.Scatter(
-        x=proj[:, 0], y=proj[:, 1],
-        mode="markers",
-        marker=dict(size=9, color=colors_, opacity=0.75,
-                    line=dict(width=0)),
-        text=hover,
-        hovertemplate="%{text}<extra></extra>",
-        showlegend=False,
-    ))
-    # Add invisible legend traces for colour meaning
-    for cnt, col in enumerate(palette[:5]):
+    fig = go.Figure()
+    # One trace per pattern-count so legend click/double-click shows/hides points
+    for cnt in sorted(set(n_patterns.tolist())):
+        mask = n_patterns == cnt
+        col  = palette[min(cnt, len(palette) - 1)]
+        hover = [
+            f"<b>{kfg_ids[i]}</b><br>{cnt} pattern{'s' if cnt != 1 else ''}"
+            for i in range(len(flags_df)) if mask[i]
+        ]
         fig.add_trace(go.Scatter(
-            x=[None], y=[None], mode="markers",
-            marker=dict(size=8, color=col),
+            x=proj[mask, 0], y=proj[mask, 1],
+            mode="markers",
+            marker=dict(size=9, color=col, opacity=0.75, line=dict(width=0)),
+            text=hover,
+            hovertemplate="%{text}<extra></extra>",
             name=f"{cnt} pattern{'s' if cnt != 1 else ''}",
             showlegend=True,
         ))
@@ -1454,9 +1452,10 @@ def main() -> None:
                     st.markdown(
                         "**Cells** show how many khipus express *both* the row pattern and the column pattern simultaneously.  \n"
                         "**Diagonal** = khipus that have that single pattern (same as the prevalence bar chart).  \n"
-                        "**Darker off-diagonal** = the two patterns frequently co-occur — suggesting they belong to "
+                        "**Cell colour** uses the Turbo scale: deep blue = low count, cyan/yellow-green = mid, dark red = high. "
+                        "A bright or warm off-diagonal cell signals two patterns that frequently co-occur — suggesting they belong to "
                         "the same scribe tradition or accounting layer.  \n"
-                        "**White/blank cells** = the pair rarely or never co-occurs."
+                        "**Cool/dark off-diagonal cells** = the pair rarely or never co-occurs."
                     )
                 st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
 
@@ -1538,10 +1537,10 @@ def main() -> None:
                 st.markdown(
                     "**Columns** = pattern codes (PP, IP, CP, SP, IS, GG, GSB, ADG, PSN).  \n"
                     "**Rows** = archaeological find sites, sorted by total khipu count.  \n"
-                    "**Cell colour** — darker = higher rate; lighter = lower or absent.  \n"
-                    "**Cell label** — shows the percentage and sample size (n=…) for that site.  \n\n"
-                    "A consistently dark column across many sites indicates a corpus-wide pattern; "
-                    "a dark cell in just one row suggests a pattern that may be regionally specific "
+                    "**Cell colour** uses the Turbo scale: deep blue = low rate, cyan/yellow-green = mid, dark red = high rate.  \n"
+                    "**Cell label** — shows the percentage of khipus from that site that exhibit the pattern.  \n\n"
+                    "A consistently warm/bright column across many sites indicates a corpus-wide pattern; "
+                    "a warm cell in just one row suggests a pattern that may be regionally specific "
                     "or linked to a particular administrative tradition."
                 )
             st.plotly_chart(build_geo_heatmap(full_df, flags_df), width="stretch")
