@@ -987,6 +987,72 @@ def build_arc_traces(
     return traces
 
 
+# ── K-CAT metadata ─────────────────────────────────────────────────────────────
+KCAT_GITHUB = "https://github.com/adafieno/khipu-computational-toolkit"
+
+_CUSTOM_CSS = """<style>
+/* ── reset & global ────────────────────────────────────────────────────────── */
+.block-container { padding-top: 0 !important; padding-bottom: 3.5rem; }
+[data-testid="stToolbar"]    { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
+/* ── app header bar ─────────────────────────────────────────────────────────  */
+.kcat-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 11px 22px; background: #0f172a;
+    border-bottom: 1px solid #1e3a5f;
+}
+.kcat-app-name { font-size: 1.15rem; font-weight: 700; color: #e2e8f0; }
+.kcat-badge {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #64748b; background: #1e293b;
+    border: 1px solid #334155; border-radius: 20px; padding: 2px 10px;
+}
+.kcat-stat    { font-size: 0.78rem; color: #475569; }
+.kcat-gh-link { margin-left: auto; font-size: 0.8rem; color: #3b82f6 !important; text-decoration: none; }
+.kcat-gh-link:hover { color: #60a5fa !important; }
+/* ── sidebar ────────────────────────────────────────────────────────────────  */
+[data-testid="stSidebar"] { background: #070f1c !important; }
+[data-testid="stSidebarContent"] { padding: 6px 0 0 !important; }
+.nav-group-label {
+    padding: 14px 16px 6px;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase; color: #1e3a5f;
+}
+/* hide the auto-generated radio widget label */
+[data-testid="stSidebar"] .stRadio > label { display: none !important; }
+/* each radio option row */
+[data-testid="stSidebar"] div[data-baseweb="radio"] {
+    border-radius: 8px; padding: 9px 14px; cursor: pointer;
+    transition: background 0.12s;
+}
+[data-testid="stSidebar"] div[data-baseweb="radio"]:hover { background: #1e293b; }
+/* hide the circle dot */
+[data-testid="stSidebar"] div[data-baseweb="radio"] > div:first-child { display: none !important; }
+/* non-active label text */
+[data-testid="stSidebar"] div[data-baseweb="radio"] span { color: #94a3b8; font-size: 0.92rem; }
+/* active item */
+[data-testid="stSidebar"] div[data-baseweb="radio"]:has(input:checked) { background: #1e3a5f !important; }
+[data-testid="stSidebar"] div[data-baseweb="radio"]:has(input:checked) span { color: #3b82f6 !important; font-weight: 600; }
+/* sidebar corpus stats chip */
+.sidebar-stats {
+    padding: 14px 16px 10px; font-size: 0.76rem; color: #334155;
+    border-top: 1px solid #0f172a; margin-top: 12px;
+}
+/* ── footer ─────────────────────────────────────────────────────────────────  */
+.kcat-footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+    padding: 6px 20px; background: #070f1c;
+    border-top: 1px solid #1e293b;
+    font-size: 0.72rem; color: #475569; text-align: center;
+}
+/* ── in-section khipu picker card ───────────────────────────────────────────  */
+.picker-card {
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 18px;
+}
+</style>"""
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -996,35 +1062,59 @@ def main() -> None:
         layout="wide",
         initial_sidebar_state="expanded",
     )
-    st.markdown(
-        "<style>.block-container{padding-top:1.5rem}</style>",
-        unsafe_allow_html=True,
-    )
+
+    st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
 
     corpus = load_corpus()
 
-    # ── Sidebar ────────────────────────────────────────────────────────────────
-    with st.sidebar:
-        st.title("🧶 Khipu Explorer")
-        st.caption(f"KFG · {len(corpus):,} khipus · {corpus['cord_count'].sum():,} cords")
+    # ── Header bar ─────────────────────────────────────────────────────────────
+    st.markdown(
+        f"""<div class="kcat-header">
+          <span class="kcat-app-name">Khipu Explorer</span>
+          <span class="kcat-badge">Part of K-CAT</span>
+          <span class="kcat-stat">KFG &nbsp;·&nbsp; {len(corpus):,} khipus &nbsp;·&nbsp; {corpus['cord_count'].sum():,} cords</span>
+          <a class="kcat-gh-link" href="{KCAT_GITHUB}" target="_blank">K-CAT on GitHub ↗</a>
+        </div>""",
+        unsafe_allow_html=True,
+    )
 
-        view = st.radio(
-            "View",
-            ["Corpus Browser", "Analytics", "3D Viewer", "X-Ray View"],
+    # ── Sidebar nav ─────────────────────────────────────────────────────────────
+    with st.sidebar:
+        st.markdown('<div class="nav-group-label">Navigate</div>', unsafe_allow_html=True)
+        _view_raw = st.radio(
+            "navigation",
+            ["🗂  Corpus Browser", "📊  Analytics", "🧶  3D Viewer", "🔬  X-Ray View"],
             index=0,
+            label_visibility="collapsed",
+        )
+        st.markdown(
+            f'<div class="sidebar-stats">{len(corpus):,} khipus'
+            f'<br>{corpus["cord_count"].sum():,} cords</div>',
+            unsafe_allow_html=True,
         )
 
-        st.divider()
-        st.subheader("Select khipu")
+    # Strip icon prefix to get the plain view name
+    view = _view_raw.split("  ", 1)[-1]
 
-        # Provenance filter
+    # ── Footer (fixed, always visible) ─────────────────────────────────────────
+    st.markdown(
+        '<div class="kcat-footer">© 2026 Agustín Da Fieno Delucchi</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Khipu picker helper — used by 3D Viewer and X-Ray View ─────────────────
+    def _khipu_picker(key_prefix: str) -> Optional[str]:
+        """Render a provenance filter + khipu selector styled as a card.
+        Returns the selected kfg_id, or None if no match."""
+        st.markdown('<div class="picker-card">', unsafe_allow_html=True)
         provenances = sorted(corpus["provenance"].dropna().unique())
         prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
-        # Build reverse map: friendly label -> list of raw values
         _prov_raw_map: dict[str, list[str]] = {}
         for p in provenances:
             _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
-        prov_label = st.selectbox("Provenance", prov_options, key="prov_filter")
+
+        c1, c2 = st.columns([1, 2])
+        prov_label = c1.selectbox("Provenance", prov_options, key=f"{key_prefix}_prov")
         if prov_label == "All":
             pool = corpus
         else:
@@ -1032,21 +1122,25 @@ def main() -> None:
             pool = corpus[corpus["provenance"].isin(raw_vals)]
 
         khipu_ids = pool["kfg_id"].tolist()
-        labels = {
-            row["kfg_id"]: f"{row['kfg_id']}  {row['kfg_name'] or ''}  [{_fmt_prov(row['provenance'])}]"
-            for _, row in pool.iterrows()
-        }
-
-        selected_id: Optional[str] = None
+        sel: Optional[str] = None
         if khipu_ids:
-            selected_id = st.selectbox(
+            k_labels = {
+                row["kfg_id"]: (
+                    f"{row['kfg_id']}  {row['kfg_name'] or ''}  "
+                    f"[{_fmt_prov(row['provenance'])}]"
+                )
+                for _, row in pool.iterrows()
+            }
+            sel = c2.selectbox(
                 "Khipu",
                 khipu_ids,
-                format_func=lambda k: labels.get(k, k),
-                key="khipu_select",
+                format_func=lambda k: k_labels.get(k, k),
+                key=f"{key_prefix}_khipu",
             )
         else:
-            st.warning("No khipus for this filter.")
+            c2.warning("No khipus match this filter.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        return sel
 
     # ── Corpus Browser ─────────────────────────────────────────────────────────
     if view == "Corpus Browser":
@@ -1342,16 +1436,18 @@ def main() -> None:
 
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
+        st.header("3D Viewer")
+        selected_id = _khipu_picker("3dv")
         if not selected_id:
-            st.info("Select a khipu in the sidebar.")
+            st.info("Select a khipu above.")
             return
 
         meta = load_meta(selected_id)
-        st.header(f"3D Viewer — {meta.get('kfg_name') or selected_id}")
+        st.subheader(meta.get('kfg_name') or selected_id)
 
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("KFG ID", selected_id)
-        c2.metric("Provenance", str(meta.get("provenance") or "—"))
+        c2.metric("Provenance", _fmt_prov(meta.get("provenance")))
         c3.metric("Museum", str(meta.get("museum_name") or "—")[:30])
         c4.metric("Primary cord", f"{meta.get('primary_length') or '?'} cm")
 
@@ -1380,12 +1476,14 @@ def main() -> None:
 
     # ── X-Ray View ─────────────────────────────────────────────────────────────
     elif view == "X-Ray View":
+        st.header("X-Ray View")
+        selected_id = _khipu_picker("xray")
         if not selected_id:
-            st.info("Select a khipu in the sidebar.")
+            st.info("Select a khipu above.")
             return
 
         meta = load_meta(selected_id)
-        st.header(f"X-Ray View — {meta.get('kfg_name') or selected_id}")
+        st.subheader(meta.get('kfg_name') or selected_id)
 
         url = meta.get("kfg_url", "")
         if url:
