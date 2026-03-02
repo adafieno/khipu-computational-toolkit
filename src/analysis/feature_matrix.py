@@ -52,7 +52,7 @@ from src.analysis.kfg_summation_detector import KFGSummationDetector
 PATTERN_KEYS = ["pp", "ip", "cp", "sp", "gg", "gsb", "is", "psn", "adg"]
 BINARY_COLS  = [f"has_{k}" for k in PATTERN_KEYS]
 
-# Map from pattern key → detector ptype string
+# Map from pattern key -> detector ptype string
 _PTYPE = {
     "pp":  "pendant_pendant_sum",
     "ip":  "indexed_pendant_sum",
@@ -212,4 +212,4 @@ if __name__ == "__main__":
     out = Path("data/processed/phase3_feature_matrix.csv")
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False)
-    print(f"\nSaved → {out}")
+    print(f"\nSaved -> {out}")

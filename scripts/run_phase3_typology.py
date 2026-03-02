@@ -88,13 +88,13 @@ NTYPE_CMAP = "viridis"
 
 def load_or_build_matrix(db: str, force: bool) -> pd.DataFrame:
     if not force and MATRIX_CSV.exists():
-        print(f"Loading cached feature matrix → {MATRIX_CSV}")
+        print(f"Loading cached feature matrix -> {MATRIX_CSV}")
         return pd.read_csv(MATRIX_CSV)
     print("Building feature matrix (this takes ~2 min first time) …")
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     df = build_feature_matrix(db, verbose=True)
     df.to_csv(MATRIX_CSV, index=False)
-    print(f"Saved → {MATRIX_CSV}")
+    print(f"Saved -> {MATRIX_CSV}")
     return df
 
 
@@ -144,7 +144,7 @@ def _savefig(name: str):
     path = VIZ_DIR / name
     plt.savefig(path, dpi=150, bbox_inches="tight")
     plt.close()
-    print(f"  saved → {path.relative_to(_REPO)}")
+    print(f"  saved -> {path.relative_to(_REPO)}")
 
 
 def plot_embedding_by_cluster(emb: np.ndarray, labels: np.ndarray, k: int, method: str):
@@ -176,7 +176,7 @@ def plot_embedding_by_country(emb: np.ndarray, countries: pd.Series, method: str
     top = countries.value_counts().head(6).index.tolist()
     cats = [c if c in top else "Other / unknown" for c in countries.fillna("Unknown")]
     unique_cats = sorted(set(cats))
-    cmap = plt.cm.get_cmap("tab10", len(unique_cats))
+    cmap = matplotlib.colormaps.get_cmap("tab10").resampled(len(unique_cats))
     cat_to_color = {c: cmap(i) for i, c in enumerate(unique_cats)}
 
     fig, ax = plt.subplots(figsize=(9, 7))
@@ -297,7 +297,7 @@ def main():
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     sil_df.to_csv(SILHOUETTE_CSV, index=False)
-    print(f"Saved silhouette scores → {SILHOUETTE_CSV.relative_to(_REPO)}")
+    print(f"Saved silhouette scores -> {SILHOUETTE_CSV.relative_to(_REPO)}")
 
     # 4. Final clustering
     print(f"\nRunning k-means with k={best_k} …")
@@ -305,7 +305,7 @@ def main():
     df["cluster"] = labels
 
     df.to_csv(CLUSTERS_CSV, index=False)
-    print(f"Saved cluster assignments → {CLUSTERS_CSV.relative_to(_REPO)}")
+    print(f"Saved cluster assignments -> {CLUSTERS_CSV.relative_to(_REPO)}")
 
     # 5. Embedding
     emb = run_embedding(X)

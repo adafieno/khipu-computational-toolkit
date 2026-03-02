@@ -1,11 +1,11 @@
 ````markdown
 # Phase 3: Structural Typology
 
-**Generated:** [TBD — run `scripts/run_phase3_typology.py` to populate]  
+**Generated:** 2026-03-02  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase3_typology.py`  
 **Feature matrix:** `src/analysis/feature_matrix.py`  
-**Status:** 🔄 Pending (awaiting KFG team responses before publishing — see open questions in Phase 2)
+**Status:** Results complete — not yet for publication (awaiting KFG team responses, see Phase 2 open questions)
 
 ---
 
@@ -75,65 +75,102 @@ The pattern flags used here are identical to Phase 2 K-CAT detections. Two open 
 
 | Metric | Count |
 |--------|-------|
-| Khipus in matrix | [TBD] |
-| Columns | [TBD] |
-| With any pattern (`n_pattern_types` > 0) | [TBD] ([TBD]%) |
+| Khipus in matrix | 709 |
+| Columns | 25 |
+| With any pattern (`n_pattern_types` > 0) | 561 (79.1%) |
+| With 0 patterns | 148 (20.9%) |
+| With exactly 1 pattern | 126 (17.8%) |
+| With 4+ patterns | 238 (33.6%) |
+| With all 9 patterns | 4 (0.6%) |
 
 ### Silhouette Analysis
 
-| Best k | Silhouette score |
-|--------|-----------------|
-| [TBD] | [TBD] |
+| k | Silhouette score |
+|---|-----------------|
+| 2 | **0.3698** |
+| 3 | 0.3139 |
+| 4 | 0.2813 |
+| 5 | 0.2463 |
+| 6 | 0.2323 |
+| 7 | 0.2400 |
+| 8 | 0.2037 |
+| 9 | 0.1982 |
+| 10 | 0.2009 |
 
-Full curve saved to `visualizations/phase3/silhouette_curve.png`.
+**Best k = 2** (silhouette = 0.3698). The score drops monotonically from k=2, indicating no strong evidence for more than two discrete structural types in this corpus. The binary nature of the pattern vector favours two-cluster solutions in Euclidean k-means.
 
-### Cluster Summary (k = [TBD])
+Full curve: `visualizations/phase3/silhouette_curve.png`.
 
-| Cluster | Size | Top patterns | Mean n_cords | Top countries |
-|---------|------|--------------|--------------|---------------|
-| 1 | [TBD] | [TBD] | [TBD] | [TBD] |
-| 2 | [TBD] | [TBD] | [TBD] | [TBD] |
-| … | | | | |
+### Cluster Summary (k = 2)
+
+| Cluster | Size | Mean pattern types | Mean n_cords | Character |
+|---------|------|--------------------|--------------|-----------|
+| **0** (Simple) | 591 (83.4%) | 1.99 | 45 | Low-complexity; 1–3 patterns; small cordage |
+| **1** (Complex) | 118 (16.6%) | 5.87 | 304 | High-complexity; 5–7 patterns; large cordage |
+
+The dominant axis of variation is **size / complexity**: Cluster 1 khipus average 6.75x more cords and 2.95x more pattern types than Cluster 0. This reflects a structural continuum compressed into two groups rather than two qualitatively distinct khipu genres.
+
+**Pattern prevalence per cluster:**
+
+| Pattern | Cluster 0 (Simple) | Cluster 1 (Complex) |
+|---------|-------------------|---------------------|
+| `has_pp` | 60.9% | **96.6%** |
+| `has_ip` | 30.8% | **94.1%** |
+| `has_cp` | 28.6% | **88.1%** |
+| `has_sp` | 19.1% | **72.9%** |
+| `has_gg` | 10.7% | **50.8%** |
+| `has_gsb` | 8.3% | **31.4%** |
+| `has_is` | 1.9% | **45.8%** |
+| `has_psn` | 12.9% | **61.9%** |
+| `has_adg` | 26.1% | **45.8%** |
+
+Every pattern is dramatically more prevalent in Cluster 1. The largest gaps are in `has_is` (+43.9 pp), `has_ip` (+63.3 pp), and `has_cp` (+59.5 pp) — patterns requiring multi-cord indexed or colour-grouped structures only possible in larger khipus.
 
 ### Pattern Prevalence Heatmap
 
 `visualizations/phase3/heatmap_cluster_patterns.png`
 
-*[Insert findings — e.g. whether any cluster is defined primarily by the absence of PP, or by the combination of CP+IP, etc.]*
+Cluster 1 shows near-uniform high prevalence across all patterns except GSB (31.4%); Cluster 0 has moderate PP (60.9%) and ADG (26.1%) presence with near-zero IS (1.9%). The heatmap makes the Simple/Complex split immediately visible.
 
-### 2-D Embedding
+### 2-D Embedding (UMAP)
 
 `visualizations/phase3/umap_by_cluster.png` / `umap_by_n_types.png` / `umap_by_country.png`
 
-*[Insert findings — does the embedding show a continuum or discrete islands? Does provenance separate?]*
+The UMAP projection shows a broad main mass (Cluster 0) with a satellite island of large, complex khipus (Cluster 1). The n_pattern_types view confirms the island is the 4–9 pattern zone. Country colouring shows no strong geographic segregation — both clusters draw from Peru, Switzerland, Germany, and USA institutions, with unknown-provenance objects distributed across both.
 
 ### Structural Extremes
 
-**Khipus with all [TBD] pattern types (n = [TBD]):**
+**Khipus with all 9 pattern types (n = 4):**
 
 | kfg_id | cluster | n_cords | region |
 |--------|---------|---------|--------|
-| [TBD] | | | |
+| KH0242 | 1 (Complex) | 874 | Chachapoyas |
+| KH0349 | 1 (Complex) | 866 | Unknown |
+| KH0433 | 1 (Complex) | 167 | Central Coast, Peru |
+| KH0509 | 1 (Complex) | 362 | Unknown |
 
-*[Are these structurally exceptional — e.g. unusually large cordage, specific provenance?]*
+Three of the four carry over 350 cords; KH0433 (167 cords) is notable for achieving maximum pattern density in a relatively small object. KH0242 and KH0349 are among the largest khipus in the entire corpus.
 
-**Khipus with exactly 1 pattern type (n = [TBD]):**
+**Khipus with exactly 1 pattern type (n = 126, all in Cluster 0):**
 
-| kfg_id | cluster | pattern | n_cords |
-|--------|---------|---------|---------|
-| [TBD] | | | |
-
-*[Which pattern is most common as a singleton? Does single-pattern correlate with small cord count?]*
+The dominant singleton is `has_pp` (~55 khipus), followed by `has_adg` (~35), `has_ip`, `has_sp`, and `has_psn`. Most single-pattern khipus are small (typical range 5–50 cords). The 6 PSN-only khipus warrant caution: given the KFG author's assessment of PSN as likely coincidental, these may not reflect deliberate structure.
 
 ---
 
-## Cross-tabulation: Clusters vs. Provenance
+## Cross-tabulation: Clusters vs. Museum Country
 
-*[Fill from `print_crosstabs()` console output.]*
+| museum_country | Cluster 0 (Simple) | Cluster 1 (Complex) |
+|---|---|---|
+| Unknown / no record | 353 | 92 |
+| Switzerland | 93 | 12 |
+| Germany | 66 | 4 |
+| USA | 57 | 7 |
+| France | 8 | 0 |
+| Great Britain | 4 | 0 |
+| Peru | 2 | 2 |
+| Other | 8 | 1 |
 
-| museum_country | Cluster 1 | Cluster 2 | … |
-|---------------|-----------|-----------|---|
-| [TBD] | | | |
+Provenance does not cleanly separate the clusters. Both groups are dominated by unknown-provenance objects. Switzerland (primarily the Ethnographic Collections, Basel) and Germany (Ethnologisches Museum, Berlin) account for most known-provenance Cluster 0 objects. Cluster 1 is also predominantly unknown-provenance.
 
 ---
 
@@ -183,5 +220,5 @@ Feature matrix built from K-CAT Phase 2 detector output. Clustering approach fol
 
 ---
 
-*Run `scripts/run_phase3_typology.py` to populate all [TBD] values and regenerate visualisations.*
+*Corpus sweep run 2026-03-02 against K-CAT SQLite database. Re-run with `scripts/run_phase3_typology.py` (add `--force` to rebuild feature matrix from scratch).*
 ````
