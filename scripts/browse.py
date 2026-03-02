@@ -1202,8 +1202,7 @@ def main() -> None:
 
     # ── Khipu picker helper — used by 3D Viewer and X-Ray View ─────────────────
     def _khipu_picker(key_prefix: str, page_title: str = "") -> Optional[str]:
-        """Render provenance filter + khipu selector.
-        If page_title given: renders title + selectors inline in one row (no card box).
+        """Render provenance filter + khipu selector in a compact 2-column row.
         Returns the selected kfg_id, or None if no match."""
         provenances = sorted(corpus["provenance"].dropna().unique())
         prov_options = ["All"] + sorted(set(_fmt_prov(p) for p in provenances))
@@ -1211,22 +1210,11 @@ def main() -> None:
         for p in provenances:
             _prov_raw_map.setdefault(_fmt_prov(p), []).append(p)
 
-        if page_title:
-            t_col, p_col, k_col = st.columns([2.5, 1, 2])
-            t_col.markdown(
-                f'<h1 style="margin:0;padding:0;font-size:1.75rem;font-weight:700;'
-                f'color:#e2e8f0;line-height:2.4;">{page_title}</h1>',
-                unsafe_allow_html=True,
-            )
-            prov_label = p_col.selectbox(
-                "Provenance", prov_options,
-                key=f"{key_prefix}_prov", label_visibility="collapsed",
-            )
-        else:
-            st.markdown('<div class="picker-card">', unsafe_allow_html=True)
-            c1, c2 = st.columns([1, 2])
-            prov_label = c1.selectbox("Provenance", prov_options, key=f"{key_prefix}_prov")
-
+        p_col, k_col = st.columns([1, 2])
+        prov_label = p_col.selectbox(
+            "Provenance", prov_options,
+            key=f"{key_prefix}_prov", label_visibility="collapsed",
+        )
         if prov_label == "All":
             pool = corpus
         else:
@@ -1243,25 +1231,13 @@ def main() -> None:
                 )
                 for _, row in pool.iterrows()
             }
-            if page_title:
-                sel = k_col.selectbox(
-                    "Khipu", khipu_ids,
-                    format_func=lambda k: k_labels.get(k, k),
-                    key=f"{key_prefix}_khipu", label_visibility="collapsed",
-                )
-            else:
-                sel = c2.selectbox(
-                    "Khipu", khipu_ids,
-                    format_func=lambda k: k_labels.get(k, k),
-                    key=f"{key_prefix}_khipu",
-                )
+            sel = k_col.selectbox(
+                "Khipu", khipu_ids,
+                format_func=lambda k: k_labels.get(k, k),
+                key=f"{key_prefix}_khipu", label_visibility="collapsed",
+            )
         else:
-            if page_title:
-                k_col.warning("No khipus match this filter.")
-            else:
-                c2.warning("No khipus match this filter.")
-        if not page_title:
-            st.markdown("</div>", unsafe_allow_html=True)
+            k_col.warning("No khipus match this filter.")
         return sel
 
     # ── Corpus Browser ─────────────────────────────────────────────────────────
@@ -1558,7 +1534,9 @@ def main() -> None:
 
     # ── 3D Viewer ──────────────────────────────────────────────────────────────
     elif view == "3D Viewer":
-        selected_id = _khipu_picker("3dv", page_title="3D Viewer")
+        _h_col, _link_col = st.columns([5, 1])
+        _h_col.header("3D Viewer")
+        selected_id = _khipu_picker("3dv")
         if not selected_id:
             st.info("Select a khipu above.")
             return
@@ -1573,7 +1551,13 @@ def main() -> None:
 
         url = meta.get("kfg_url", "")
         if url:
-            st.markdown(f"[View on KFG ↗]({url})")
+            _link_col.markdown(
+                f'<div style="text-align:right;padding-top:10px">'
+                f'<a href="{url}" target="_blank" '
+                f'style="font-size:0.82rem;color:#3b82f6;text-decoration:none">'
+                f'View on KFG ↗</a></div>',
+                unsafe_allow_html=True,
+            )
 
         st.divider()
 
@@ -1598,7 +1582,9 @@ def main() -> None:
 
     # ── X-Ray View ─────────────────────────────────────────────────────────────
     elif view == "X-Ray View":
-        selected_id = _khipu_picker("xray", page_title="X-Ray View")
+        _h_col, _link_col = st.columns([5, 1])
+        _h_col.header("X-Ray View")
+        selected_id = _khipu_picker("xray")
         if not selected_id:
             st.info("Select a khipu above.")
             return
@@ -1623,7 +1609,13 @@ def main() -> None:
         m4.metric("Cord groups", n_groups)
 
         if url:
-            st.markdown(f"[View on KFG ↗]({url})")
+            _link_col.markdown(
+                f'<div style="text-align:right;padding-top:10px">'
+                f'<a href="{url}" target="_blank" '
+                f'style="font-size:0.82rem;color:#3b82f6;text-decoration:none">'
+                f'View on KFG ↗</a></div>',
+                unsafe_allow_html=True,
+            )
 
         st.divider()
 
