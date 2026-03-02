@@ -842,7 +842,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
-        colorscale="Blues",
+        colorscale="Blues_r",
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
         text=text_vals,
         showscale=True,
@@ -856,7 +856,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
     for i, prov in enumerate(top_provs):
         for j, col in enumerate(col_labels):
             v = z_vals[i][j]
-            fc = "#0f172a" if v < dark_thresh else "#e2e8f0"
+            fc = "#e2e8f0" if v < dark_thresh else "#0f172a"
             fig.add_annotation(
                 x=col, y=prov,
                 text=text_vals[i][j],   # already contains <br>
