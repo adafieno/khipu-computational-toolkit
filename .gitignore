@@ -1,3 +1,6 @@
+# Frozen legacy archive — content committed; ignore any future additions
+legacy/
+
 # Python
 *.pyc
 __pycache__/
