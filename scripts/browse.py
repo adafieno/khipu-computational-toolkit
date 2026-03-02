@@ -1745,9 +1745,9 @@ def main() -> None:
     }
     _PARAM_MAP = {v: k for k, v in _VIEW_MAP.items()}
     _NAV_ITEMS = [
-        ("corpus",    "🗒️", "Corpus Browser"),
-        ("analytics", "📊", "Analytics"),
-        ("3dviewer",  "🔭", "3D Viewer"),
+        ("corpus",    "🔎", "Corpus Browser"),
+        ("analytics", "💡", "Analytics"),
+        ("3dviewer",  "🧊", "3D Viewer"),
         ("arcs",      "Σ", "Summation Arcs"),
     ]
     _vp = st.query_params.get("v", "corpus")
