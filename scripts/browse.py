@@ -991,66 +991,129 @@ def build_arc_traces(
 KCAT_GITHUB = "https://github.com/adafieno/khipu-computational-toolkit"
 
 _CUSTOM_CSS = """<style>
-/* ── reset & global ────────────────────────────────────────────────────────── */
-.block-container { padding-top: 0 !important; padding-bottom: 3.5rem; }
-[data-testid="stToolbar"]    { display: none !important; }
-[data-testid="stDecoration"] { display: none !important; }
-/* ── app header bar ─────────────────────────────────────────────────────────  */
+/* ── hide Streamlit chrome ──────────────────────────────────────────────────  */
+header[data-testid="stHeader"]          { display: none !important; }
+[data-testid="stToolbar"]               { display: none !important; }
+[data-testid="stDecoration"]            { display: none !important; }
+[data-testid="stFooterDefault"]         { display: none !important; }
+#MainMenu                               { display: none !important; }
+
+/* ── global layout ──────────────────────────────────────────────────────────  */
+[data-testid="stApp"]                   { background: #0b1120; }
+/* push content below fixed header (64 px) and clear footer (32 px) */
+[data-testid="stMainBlockContainer"],
+.main .block-container  { padding-top: 72px !important; padding-bottom: 42px !important; }
+
+/* ── fixed header bar ───────────────────────────────────────────────────────  */
 .kcat-header {
-    display: flex; align-items: center; gap: 14px;
-    padding: 11px 22px; background: #0f172a;
-    border-bottom: 1px solid #1e3a5f;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999999;
+    display: flex; align-items: center; gap: 16px;
+    height: 64px; padding: 0 28px;
+    background: #0f172a; border-bottom: 2px solid #1e3a5f;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.kcat-app-name { font-size: 1.15rem; font-weight: 700; color: #e2e8f0; }
+.kcat-app-name { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; white-space: nowrap; }
 .kcat-badge {
-    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.08em; color: #64748b; background: #1e293b;
-    border: 1px solid #334155; border-radius: 20px; padding: 2px 10px;
+    font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #64748b; background: #1e293b;
+    border: 1px solid #334155; border-radius: 20px;
+    padding: 3px 11px; white-space: nowrap;
 }
-.kcat-stat    { font-size: 0.78rem; color: #475569; }
-.kcat-gh-link { margin-left: auto; font-size: 0.8rem; color: #3b82f6 !important; text-decoration: none; }
+.kcat-stat    { font-size: 0.8rem; color: #475569; white-space: nowrap; }
+.kcat-spacer  { flex: 1; }
+.kcat-gh-link { font-size: 0.82rem; color: #3b82f6 !important; text-decoration: none; white-space: nowrap; }
 .kcat-gh-link:hover { color: #60a5fa !important; }
+
 /* ── sidebar ────────────────────────────────────────────────────────────────  */
-[data-testid="stSidebar"] { background: #070f1c !important; }
-[data-testid="stSidebarContent"] { padding: 6px 0 0 !important; }
-.nav-group-label {
-    padding: 14px 16px 6px;
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.10em;
-    text-transform: uppercase; color: #1e3a5f;
+[data-testid="stSidebar"]                             { background: #070f1c !important; }
+[data-testid="stSidebar"] section                     { padding-top: 4px !important; }
+
+/* nav section header */
+.nav-section-label {
+    padding: 18px 16px 6px; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: #334155;
 }
-/* hide the auto-generated radio widget label */
-[data-testid="stSidebar"] .stRadio > label { display: none !important; }
-/* each radio option row */
-[data-testid="stSidebar"] div[data-baseweb="radio"] {
-    border-radius: 8px; padding: 9px 14px; cursor: pointer;
-    transition: background 0.12s;
-}
-[data-testid="stSidebar"] div[data-baseweb="radio"]:hover { background: #1e293b; }
-/* hide the circle dot */
-[data-testid="stSidebar"] div[data-baseweb="radio"] > div:first-child { display: none !important; }
-/* non-active label text */
-[data-testid="stSidebar"] div[data-baseweb="radio"] span { color: #94a3b8; font-size: 0.92rem; }
-/* active item */
-[data-testid="stSidebar"] div[data-baseweb="radio"]:has(input:checked) { background: #1e3a5f !important; }
-[data-testid="stSidebar"] div[data-baseweb="radio"]:has(input:checked) span { color: #3b82f6 !important; font-weight: 600; }
-/* sidebar corpus stats chip */
+/* sidebar stats chip */
 .sidebar-stats {
-    padding: 14px 16px 10px; font-size: 0.76rem; color: #334155;
-    border-top: 1px solid #0f172a; margin-top: 12px;
+    padding: 10px 16px 8px; font-size: 0.73rem; color: #475569;
+    border-top: 1px solid #111c2e; margin-top: 8px;
 }
-/* ── footer ─────────────────────────────────────────────────────────────────  */
-.kcat-footer {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
-    padding: 6px 20px; background: #070f1c;
+
+/* ── nav radio items (Streamlit 1.x — covers both DOM variants) ─────────────  */
+/* hide the widget-level label ("navigation") */
+[data-testid="stSidebar"] [data-testid="stRadio"] > div > label { display: none !important; }
+/* style each option label */
+[data-testid="stSidebar"] [data-testid="stRadio"] label,
+[data-testid="stSidebar"] div[role="radiogroup"] label,
+[data-testid="stSidebar"] [data-baseweb="radio-group"] label {
+    display: flex !important; align-items: center !important;
+    border-radius: 8px !important; padding: 10px 14px !important;
+    margin: 2px 6px !important; cursor: pointer !important;
+    color: #94a3b8 !important; font-size: 0.93rem !important;
+    transition: background 0.1s !important; background: transparent !important;
+}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover,
+[data-testid="stSidebar"] div[role="radiogroup"] label:hover,
+[data-testid="stSidebar"] [data-baseweb="radio-group"] label:hover {
+    background: #111c2e !important;
+}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked),
+[data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked),
+[data-testid="stSidebar"] [data-baseweb="radio-group"] label:has(input:checked) {
+    background: #1e3a5f !important; color: #3b82f6 !important;
+    font-weight: 600 !important;
+}
+/* hide the radio circle dot */
+[data-testid="stSidebar"] [data-testid="stRadio"] label > div:first-child,
+[data-testid="stSidebar"] div[role="radiogroup"] label > div:first-child,
+[data-testid="stSidebar"] [data-baseweb="radio-group"] label > div:first-child {
+    display: none !important;
+}
+
+/* ── fixed footer (via JS teleport — see _inject_chrome) ───────────────────  */
+#kcat-footer-root {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 999999;
+    padding: 6px 28px; background: #070f1c;
     border-top: 1px solid #1e293b;
-    font-size: 0.72rem; color: #475569; text-align: center;
+    font-size: 0.72rem; color: #64748b; text-align: center;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+
 /* ── in-section khipu picker card ───────────────────────────────────────────  */
 .picker-card {
     background: #1e293b; border: 1px solid #334155;
     border-radius: 10px; padding: 12px 16px; margin-bottom: 18px;
 }
 </style>"""
+
+# JavaScript injected once to teleport the footer (and ensure header) to
+# document.body — bypasses any Streamlit overflow/stacking-context container.
+def _inject_chrome(corpus_len: int, cord_count: int) -> None:
+    """Inject fixed header & footer into document.body via JS."""
+    st.markdown(
+        f"""<script>
+(function() {{
+    function go() {{
+        // ── footer ──────────────────────────────────────────────────────────
+        if (!document.getElementById('kcat-footer-root')) {{
+            var f = document.createElement('div');
+            f.id = 'kcat-footer-root';
+            f.textContent = '\\u00a9 2026 Agust\\u00edn Da Fieno Delucchi';
+            document.body.appendChild(f);
+        }}
+    }}
+    if (document.readyState === 'loading') {{
+        document.addEventListener('DOMContentLoaded', go);
+    }} else {{
+        go();
+    }}
+    // also try after a short delay in case React hasn't mounted yet
+    setTimeout(go, 400);
+    setTimeout(go, 1200);
+}})();
+</script>""",
+        unsafe_allow_html=True,
+    )
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
@@ -1073,6 +1136,7 @@ def main() -> None:
           <span class="kcat-app-name">Khipu Explorer</span>
           <span class="kcat-badge">Part of K-CAT</span>
           <span class="kcat-stat">KFG &nbsp;·&nbsp; {len(corpus):,} khipus &nbsp;·&nbsp; {corpus['cord_count'].sum():,} cords</span>
+          <span class="kcat-spacer"></span>
           <a class="kcat-gh-link" href="{KCAT_GITHUB}" target="_blank">K-CAT on GitHub ↗</a>
         </div>""",
         unsafe_allow_html=True,
@@ -1080,7 +1144,7 @@ def main() -> None:
 
     # ── Sidebar nav ─────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.markdown('<div class="nav-group-label">Navigate</div>', unsafe_allow_html=True)
+        st.markdown('<div class="nav-section-label">Navigate</div>', unsafe_allow_html=True)
         _view_raw = st.radio(
             "navigation",
             ["🗂  Corpus Browser", "📊  Analytics", "🧶  3D Viewer", "🔬  X-Ray View"],
@@ -1096,11 +1160,8 @@ def main() -> None:
     # Strip icon prefix to get the plain view name
     view = _view_raw.split("  ", 1)[-1]
 
-    # ── Footer (fixed, always visible) ─────────────────────────────────────────
-    st.markdown(
-        '<div class="kcat-footer">© 2026 Agustín Da Fieno Delucchi</div>',
-        unsafe_allow_html=True,
-    )
+    # ── Footer (teleported to document.body via JS to bypass Streamlit containers)
+    _inject_chrome(len(corpus), int(corpus["cord_count"].sum()))
 
     # ── Khipu picker helper — used by 3D Viewer and X-Ray View ─────────────────
     def _khipu_picker(key_prefix: str) -> Optional[str]:
