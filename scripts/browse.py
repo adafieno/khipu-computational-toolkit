@@ -1011,10 +1011,9 @@ header[data-testid="stHeader"]         { display: none !important; }
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
-/* Strip Streamlit's large default top-margin from the first heading on each page */
-[data-testid="stHeadingWithActionElements"]:first-child,
-[data-testid="stHeadingWithActionElements"]:first-of-type {
-    margin-top: -16px !important;
+/* Streamlit injects a large top-margin on every heading wrapper — zero it out */
+[data-testid="stHeadingWithActionElements"] {
+    margin-top: -48px !important;
     padding-top: 0 !important;
 }
 
