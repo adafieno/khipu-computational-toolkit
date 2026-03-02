@@ -1006,8 +1006,8 @@ header[data-testid="stHeader"]         { display: none !important; }
 /* inset main content: clear the 80px nav + 20px gap, 64px header + 6px gap, 36px footer */
 [data-testid="stMainBlockContainer"],
 .main .block-container {
-    padding-top: 70px !important;
-    padding-left: 100px !important;
+    padding-top: 66px !important;
+    padding-left: 150px !important;
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
@@ -1065,6 +1065,28 @@ header[data-testid="stHeader"]         { display: none !important; }
     background: #1e293b; border: 1px solid #334155;
     border-radius: 10px; padding: 12px 16px; margin-bottom: 18px;
 }
+
+/* ── KPI metric cards ────────────────────────────────────────────────────────  */
+[data-testid="stMetric"] {
+    background: #0f172a;
+    border: 1px solid #1e3a5f;
+    border-radius: 12px;
+    padding: 18px 22px 16px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+[data-testid="stMetricLabel"] > div {
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b !important;
+}
+[data-testid="stMetricValue"] > div {
+    font-size: 1.9rem !important;
+    font-weight: 700 !important;
+    color: #e2e8f0 !important;
+    line-height: 1.15;
+}
 </style>"""
 
 
@@ -1116,7 +1138,7 @@ def main() -> None:
 
     # ── Fixed left nav (pure HTML — never hidden by Streamlit JS) ───────────
     _nav_links = "".join(
-        f'<a href="?v={_key}" class="{"active" if view == _name else ""}" '
+        f'<a href="?v={_key}" target="_self" class="{"active" if view == _name else ""}" '
         f'title="{_name}">{_icon}</a>'
         for _key, _icon, _name in _NAV_ITEMS
     )
