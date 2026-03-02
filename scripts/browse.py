@@ -1011,24 +1011,23 @@ header[data-testid="stHeader"]         { display: none !important; }
     padding-bottom: 44px !important;
     max-width: 100% !important;
 }
-/* Streamlit injects a large top-margin on heading wrappers — pull h1 up only */
-[data-testid="stHeadingWithActionElements"]:has(h1) {
+/* Pull ALL heading wrappers up to clear Streamlit's injected top-gap (fixes h1) */
+[data-testid="stHeadingWithActionElements"] {
     margin-top: -48px !important;
     padding-top: 0 !important;
 }
-/* Section subheaders: readable size, muted colour, no border */
-[data-testid="stHeadingWithActionElements"] h3,
-[data-testid="stHeadingWithActionElements"]:has(h3) {
-    margin-top: 4px !important;
-    padding-top: 0 !important;
-    border-bottom: none !important;
-}
+/* h3 counteract: push the h3 element itself back down inside the wrapper
+   so net visual offset ≈ (-48 + 56) = +8px — normal reading position      */
 [data-testid="stHeadingWithActionElements"] h3 {
-    font-size: 1.0rem !important;
+    margin-top: 56px !important;
+    font-size: 1.2rem !important;
     font-weight: 600 !important;
     color: #cbd5e1 !important;
     letter-spacing: normal !important;
     text-transform: none !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 4px !important;
 }
 /* Hide all horizontal divider lines */
 [data-testid="stDivider"] { display: none !important; }
