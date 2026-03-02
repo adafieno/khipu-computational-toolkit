@@ -5,7 +5,7 @@
 Phase 7 confirmed that the corpus divides robustly into two structural types (T1/T2)
 across any combination of morphological features. This phase takes a different
 starting point: instead of asking *what does a khipu look like*, it asks *what
-recording behaviour does it exhibit*?
+recording behavior does it exhibit*?
 
 Seven behavioral signals are derived directly from the knot values and structural
 hierarchy rather than from cord counts or color vocabulary:
@@ -21,7 +21,7 @@ hierarchy rather than from cord counts or color vocabulary:
 | `knot_E_ratio` | Fraction of figure-eight knots (encode the unit digit / terminal digit) |
 
 The core claim: **two khipus can be structurally identical (same cord count, same T1/T2
-classification) while exhibiting completely different recording behaviours**.
+classification) while exhibiting completely different recording behaviors**.
 This phase tests that claim directly.
 
 ---
@@ -45,7 +45,7 @@ partitioning:
 The 48.1% round-five affinity is a major behavioral signal at corpus level: nearly
 half of all encoded values are multiples of five. This is far above the random
 expectation of 20% and is consistent with Andean base-ten positional counting where
-standardised quota units (mit'a levy, tribute allotments, storage quantities) were
+standardized quota units (mit'a levy, tribute allotments, storage quantities) were
 commonly expressed in round units.
 
 ---
@@ -90,8 +90,8 @@ indicate no positional-notation knots are present. Maximum hierarchy level of 0 
 they consist only of a primary cord with no pendant structure, or that the cord
 structure is unregistered.
 
-**Possible interpretations**: Narrative / non-quantitative khipus; severely incomplete
-records; cord bundles that served as mnemonic or signalling objects without positional
+**Data signals suggest:** Narrative / non-quantitative khipus; severely incomplete
+records; cord bundles that served as mnemonic or signaling objects without positional
 encoding.
 
 ---
@@ -114,7 +114,7 @@ small values (median = 2) means these khipus primarily record single-digit quant
 where almost every cord terminates with a unit marker. The very low round-5 affinity
 (7.4%) indicates quantities are not being rounded — these are specific small counts.
 
-**Possible interpretations**: Household-level or individual-level tallies where
+**Data signals suggest:** Household-level or individual-level tallies where
 discrete objects (people, animals, containers) are counted without rounding; fine-
 grained census registers or inspection records.
 
@@ -137,7 +137,7 @@ non-unit digits (2-9) in the positional system, so their prevalence here indicat
 that most values fall in the 2–9 range. Round-number affinity is moderate (21.3%),
 suggesting a mix of rounded and specific quantities.
 
-**Possible interpretations**: The workhorse accounting cluster — general-purpose
+**Data signals suggest:** The workhorse accounting cluster — general-purpose
 records covering commodities, labour units, or population counts in the sub-ten range.
 The breadth of this group (35% of corpus) is consistent with it being the default
 administrative recording style for routine local or decimal-unit bookkeeping.
@@ -162,7 +162,7 @@ Two-tier hierarchy means pendant cords bear subsidiary cords — values encoded 
 subsidiary level are typically partial quantities that sum to pendant values, or
 parallel attribute channels for the same item.
 
-**Possible interpretations**: District or decimal-group-level records where subsidiary
+**Data signals suggest:** District or decimal-group-level records where subsidiary
 cords break out component contributions. The co-occurrence with T2 suggests that the
 extended-register structural type serves primarily this hierarchical aggregation
 function.
@@ -186,8 +186,8 @@ flat hierarchy (median depth 0), and exclusively T1 structural type. Despite bei
 structurally compact, these khipus pack significantly more distinct values per cord
 than any other group. Low round-number affinity (20.2%) reinforces specificity.
 
-**Possible interpretations**: Multi-commodity inventories where each cord records a
-distinct item type with a specific (non-standardised) quantity. The word "inventory"
+**Data signals suggest:** Multi-commodity inventories where each cord records a
+distinct item type with a specific (non-standardized) quantity. The word “inventory”
 is appropriate: flat structure = one level = one cord per commodity = no hierarchical
 aggregation needed. High entropy = many different quantities recorded.
 
@@ -211,8 +211,8 @@ complexity. Low L-ratio and E-ratio despite large values may appear paradoxical 
 is consistent with values that are systematically expressed in multiples of 5/10/100,
 requiring fewer distinct digit knots. Almost exclusively T1 structural type.
 
-**Possible interpretations**: Tribute/mit'a quota records at district or province
-level. Round numbers of 50, 100, 200, 500 characterise standardised labour or
+**Data signals suggest:** Tribute/mit’a quota records at district or province
+level. Round numbers of 50, 100, 200, 500 characterize standardized labor or
 commodity assessments — the Inka tribute system assigned fixed quotas in round units.
 The structural simplicity (T1) of these records is expected: a tribute tally does not
 need hierarchical breakdown, just a list of quota amounts per category.
@@ -228,7 +228,7 @@ need hierarchical breakdown, just a list of quota amounts per category.
 Round-number affinity is distributed uniformly across geographic zones. This is
 counter-intuitive: if zones specialised in tribute vs. census accounting, we would
 expect zonal differences. The absence of signal may indicate either that quota
-recording was standardised empire-wide, or that geographic attribution is too sparse
+recording was standardized empire-wide, or that geographic attribution is too sparse
 to detect zonal patterns (35% of corpus lacks provenance).
 
 ### H2: Multi-tier hierarchy (depth ≥ 3) is geographically concentrated
@@ -260,7 +260,7 @@ hierarchical group has 30% T2, but the remaining 70% are T1. B1 and B5 are 100% 
 despite being behaviorally opposite (unrecorded vs. high-variety).
 
 This confirms the central claim: **a khipu's size and complexity tell you its form,
-not its function**. Different accounting behaviours are implemented in structurally
+not its function**. Different accounting behaviors are implemented in structurally
 similar packages.
 
 ### Bonus: Round-number affinity varies by summation pattern type
@@ -269,9 +269,9 @@ similar packages.
 
 | Pattern type | Mean % round-5 | Interpretation |
 |-------------|---------------|----------------|
-| has_is | 37.6% | Inter-segment: highly standardised quotas |
+| has_is | 37.6% | Inter-segment: highly standardized quotas |
 | has_sp | 37.5% | Standard pendant summation: quota-linked |
-| has_gg | 36.7% | Group-to-group: moderately standardised |
+| has_gg | 36.7% | Group-to-group: moderately standardized |
 | has_pp | 28.1% | Pendant-to-pendant: mixed |
 | has_psn | 25.3% | Pendant-subset: mixed |
 | has_cp | 6.3% | Cross-pendant: low standardisation |
@@ -279,7 +279,7 @@ similar packages.
 
 Summation patterns that operate *across groups or segments* (IS, SP, GG) are
 associated with higher round-number affinity, suggesting these pattern types served
-to aggregate standardised quota streams. Intra-pendant patterns (CP, GSB) are
+to aggregate standardized quota streams. Intra-pendant patterns (CP, GSB) are
 associated with non-rounded, specific values — more census-like recording.
 
 ---
@@ -293,7 +293,7 @@ associated with non-rounded, specific values — more census-like recording.
 | Primary axis of variation | Scale / complexity | Accounting style |
 | T2 concentration | By definition T2 = extended-register | B4 is 30% T2; B1, B5, B6 are <1% T2 |
 | Geographic signal | Leymebamba drives T2 | Coastal zones drive multi-tier depth |
-| Actionable hypothesis | Leymebamba = archival depot | Coastal valleys = tribute quota centres |
+| Actionable hypothesis | Leymebamba = archival depot | Coastal valleys = tribute quota centers |
 
 The two analyses are complementary, not competitive. T1/T2 tells you what class of
 physical object a khipu is. B1–B6 tells you what accounting task it was performing.
@@ -308,7 +308,7 @@ physical object a khipu is. B1–B6 tells you what accounting task it was perfor
 | `data/processed/phase8_behavioral_clusters.csv` | Per-khipu cluster assignment B1–B6 |
 | `data/processed/phase8_behavioral_profiles.csv` | Per-cluster feature means |
 | `visualizations/phase8/silhouette_curve.png` | K-sweep silhouette and inertia |
-| `visualizations/phase8/behavioral_heatmap.png` | Row-normalised feature heatmap for B1–B6 |
+| `visualizations/phase8/behavioral_heatmap.png` | Row-normalized feature heatmap for B1–B6 |
 | `visualizations/phase8/value_register.png` | Value register distributions and round-number affinity boxplots |
 | `visualizations/phase8/round_number_zone.png` | Round-number affinity and accounting scale by geographic zone |
 | `visualizations/phase8/cross_structural.png` | T1/T2 composition, hierarchy depth, and entropy per behavioral cluster |
@@ -328,23 +328,10 @@ physical object a khipu is. B1–B6 tells you what accounting task it was perfor
    deterministic.
 
 3. **Silhouette 0.212**: Behavioral clusters overlap more than structural ones.
-   Treat B1–B6 as *modal behavioural signatures* rather than discrete categories.
+   Treat B1–B6 as *modal behavioral signatures* rather than discrete categories.
    A given khipu may show characteristics of more than one group.
 
 4. **Provenance sparsity**: H1 (round-number affinity × zone) returned non-significant
    results; 35% missing provenance limits geographic analysis power.
 
----
 
-## Next Steps
-
-- **Phase 9 (Graph analysis)**: Compare B4 (hierarchical medium-scale) khipus as
-  NetworkX trees against B5 (flat high-variety) — topological differences may
-  correlate with different accounting architectures.
-- **Expert validation**: B6 (quota records) and B2 (unit-count records) are strong
-  candidates for comparison against archaeologically documented tribute lists from
-  coastal valleys to test whether the khipu values match known tribute units.
-- **Joint typology**: Combining T1/T2 × B1–B6 gives a 2×6 = 12-cell taxonomy.
-  Most cells will be sparse, but the populated combinations (e.g., T1+B6 = compact
-  quota register, T2+B4 = extended hierarchical summary) represent the corpus's
-  dominant administrative artifact types.

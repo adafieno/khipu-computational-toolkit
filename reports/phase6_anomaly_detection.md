@@ -30,18 +30,18 @@ Three complementary anomaly detection methods applied to an 11-feature structura
 | `frac_broken` | Fraction of cords marked as broken/damaged |
 | `n_colors` | Simple color count (Phase 3) |
 | `n_pattern_types` | Count of distinct summation pattern types present |
-| `n_unique_colors` | Normalised color code count (Phase 5) |
+| `n_unique_colors` | Normalized color code count (Phase 5) |
 | `sub_ratio` | Subsidiaries / pendants |
 | `group_size` | Pendants / groups |
 
-All features StandardScaler-normalised before model fitting.
+All features StandardScaler-normalized before model fitting.
 
 **Methods:**
 
 | Method | Parameters | Flagging threshold |
 |---|---|---|
 | **Isolation Forest** | 200 trees, contamination=5%, random_state=42 | Predicted −1 (outlier class) |
-| **Local Outlier Factor** | k=20 neighbours, contamination=5% | Predicted −1 (outlier class) |
+| **Local Outlier Factor** | k=20 neighbors, contamination=5% | Predicted −1 (outlier class) |
 | **Z-score** | Per-feature, all features | Any feature \|z\| > 3.0 SD |
 
 **Consensus classification:**
@@ -153,9 +153,9 @@ High-confidence anomalies are visually separated from the normal corpus on `n_co
 
 ---
 
-## Interpretation Notes
+## Notable Corpus Observations
 
-**KH0082 and KH0083** (Leymebamba paired khipus) are consistent "star" anomalies across every phase. In Phase 3 they dominate the Complex cluster's color diversity; in Phase 5 they have the two highest unique color counts (236, 151); here they score highest on Isolation Forest. These are genuinely extraordinary objects — the largest, most colourful, best-preserved khipus in the corpus — and likely functioned as high-level administrative summaries for the Leymebamba region.
+**KH0082 and KH0083** (Leymebamba paired khipus) are consistent "star" anomalies across every phase. In Phase 3 they dominate the Complex cluster's color diversity; in Phase 5 they have the two highest unique color counts (236, 151); here they score highest on Isolation Forest. These are genuinely extraordinary objects — the largest, most colorful, best-preserved khipus in the corpus — with structural features that set them apart from the rest of the KFG collection regardless of any functional interpretation.
 
 **KH0349** (Nazca, 866 cords, 9 pattern types, 83% numeric coverage) is the most complete non-Leymebamba khipu. All 9 summation pattern types are present and 83% of cords have decoded values — a combination not seen in any other provenanced khipu. It was flagged by all three methods.
 
@@ -189,7 +189,7 @@ Requires Phase 3 and Phase 5 outputs.
 | `visualizations/phase6/anomaly_scatter.png` | n_cords vs coverage and color diversity scatter |
 | `visualizations/phase6/anomaly_features.png` | Feature distribution: normal vs high-confidence |
 | `visualizations/phase6/anomaly_method_venn.png` | Consensus class distribution + method overlap counts |
-| `visualizations/phase6/anomaly_profiles.png` | Normalised feature profiles for top-20 anomalies |
+| `visualizations/phase6/anomaly_profiles.png` | Normalized feature profiles for top-20 anomalies |
 
 ---
 

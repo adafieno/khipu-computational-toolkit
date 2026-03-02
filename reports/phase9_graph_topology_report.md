@@ -7,9 +7,9 @@
 ## Overview
 
 Phase 9 interprets each khipu as a **rooted directed tree** and extracts structural
-topology metrics that are independent of the cord values analysed in Phase 8 and the
+topology metrics that are independent of the cord values analyzed in Phase 8 and the
 size-based structural features of Phase 7.  The goal is to test whether the
-hierarchical *shape* of a khipu encodes organisational information beyond what raw
+hierarchical *shape* of a khipu encodes organizational information beyond what raw
 cord counts or accounting signals reveal.
 
 **Data scope:** 709 khipus, 62,746 cords, 45,119 pendant nodes.
@@ -146,15 +146,15 @@ sub-accounts that T1 khipus may individually record.
 
 ---
 
-## Interpretations
+## Data Signals and Potential Avenues for Exploration
 
-### Hierarchical structure reflects administrative tiering
+### Hierarchical structure and administrative tiering
 
-The B4 topology profile (depth ≥ 2, branching_entropy > 1.0) matches what one
-would expect of an **aggregation ledger**: pendant totals are composed from
+The B4 topology profile (depth ≥ 2, branching_entropy > 1.0) is structurally consistent
+with what one would expect of an aggregation ledger: pendant totals composed from
 subsidiary partial counts beneath them.  The unbalanced balance scores (median 0.41)
-suggest the sub-groups were of unequal size — more compatible with real census or
-tribute registers than a regular grid structure.
+suggest sub-groups of unequal size.  Whether this reflects census or tribute accounting
+hierarchies is a question for archaeologically-informed interpretation.
 
 ### Flat topology does not imply simple content
 
@@ -164,24 +164,25 @@ multi-commodity inventory (B5).  Topology and value complexity are therefore
 **orthogonal information dimensions** — the shape of the tree tells you the
 accounting *depth* but not its *content diversity*.
 
-### The 8-subsidiary spike as a standardised unit
+### The 8-subsidiary spike and a potential standardized unit
 
 The unexpected peak at motif-8 (145 occurrences, vs. 42 at motif-7 and 60 at
-motif-9) is unlikely to be random.  One candidate explanation is a **decimal-
-fraction unit** — the Inca decimal system included divisions such as groups of 40
-(5 × 8) households under a pachaka (100-household officer).  If pendant totals
-represent sub-group entries, motif-8 may mark a standard reporting sub-unit.
-Further investigation should cross-reference motif-8 pendants with geographic zone
-and khipu provenance.
+motif-9) is unlikely to be random.  One candidate avenue for investigation is whether
+this corresponds to a decimal sub-unit — the Inca decimal system included divisions
+such as groups of 40 (5 × 8) households under a pachaka (100-household officer).  If
+pendant totals represent sub-group entries, motif-8 may mark a standard reporting
+sub-unit.  Cross-referencing motif-8 pendants with geographic zone and khipu provenance
+would be a productive step for specialists.
 
-### T2 as administrative apex nodes
+### T2 topology and a potential higher-tier accounting role
 
-The sharply elevated branching entropy and depth of T2 khipus (entropy median 1.45
-vs. T1's 0.42) supports the reading of T2 as **administrative integrators** — nodes
-in a bureaucratic network that aggregate records from multiple T1-level registers.
+The elevated branching entropy and depth of T2 khipus (entropy median 1.45
+vs. T1’s 0.42) is consistent with a reading of T2 as higher-tier aggregators —
+objects that bring together records from multiple T1-level registers.
 The low balance scores for T2 (0.354 median) further suggest that T2 khipus
-consolidated heterogeneous sub-accounts of varying sizes rather than uniform
-reporting pools.
+consolidated sub-accounts of heterogeneous sizes rather than uniform
+reporting pools.  Whether this constitutes a distinct administrative tier is a
+question for archaeologically-grounded investigation.
 
 ---
 
@@ -190,10 +191,10 @@ reporting pools.
 - **Parent-matching fidelity:** Some pendant attachments may reflect data entry
   inconsistencies in the KFG schema rather than true hierarchy gaps; orphaned
   subsidiaries are treated as pendants.
-- **Small behavioural clusters:** B1 (n = 15) is too small for robust topology
+- **Small behavioral clusters:** B1 (n = 15) is too small for robust topology
   comparison; its results are directional only.
-- **Cord colour not included:** Cord attachment hierarchy may co-vary with colour
-  coding practices (Phase 5); that interaction is not modelled here.
+- **Cord color not included:** Cord attachment hierarchy may co-vary with color
+  coding practices (Phase 5); that interaction is not modeled here.
 
 ---
 

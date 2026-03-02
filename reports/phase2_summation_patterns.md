@@ -12,7 +12,7 @@
 
 What fraction of khipus embed arithmetic summation relationships — cords whose numeric values sum to other cords? What pattern types appear, how often are they combined, and how does the K-CAT result compare with the OKR baseline?
 
-This phase tests the central hypothesis in khipu decipherment: that Inka khipus functioned as accounting devices, with pendant cords recording sub-totals that roll up into group or primary-cord totals.
+This phase tests the central hypothesis in khipu decipherment literature (Ascher & Ascher 1978, 1981; Urton 2003): that Inka khipus functioned as accounting devices, with pendant cords recording sub-totals that roll up into group or primary-cord totals. The toolkit applies this received hypothesis computationally against the KFG corpus to measure how frequently the arithmetic relationship holds and where the model breaks down.
 
 ---
 

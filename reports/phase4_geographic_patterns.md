@@ -25,7 +25,7 @@ Is structural complexity geographically patterned? Do specific summation pattern
 2. **Chi-square tests** — cluster × geo_zone (overall); each of 9 binary pattern flags × geo_zone (5 largest zones, n ≥ 10, excluding Southern Highlands and North Peru Coast).
 3. **Pattern prevalence heatmap** — mean `has_*` per zone for all 9 pattern types.
 4. **Structural distributions** — box plots of `n_cords` and `n_pattern_types` per zone.
-5. **Nearest-neighbour attribution** — for each unprovenanced khipu, find the 5 nearest neighbours in feature space among provenanced khipus (Euclidean distance over 9 binary pattern flags + scaled n_cords, n_groups, numeric_coverage); assign the plurality-vote zone weighted by 1/distance.
+5. **Nearest-neighbor attribution** — for each unprovenanced khipu, find the 5 nearest neighbors in feature space among provenanced khipus (Euclidean distance over 9 binary pattern flags + scaled n_cords, n_groups, numeric_coverage); assign the plurality-vote zone weighted by 1/distance.
 
 ---
 
@@ -113,12 +113,12 @@ Box plots show heavy right skew in all zones (log scale used). The IQR for Centr
 
 ---
 
-## Nearest-Neighbour Attribution (265 Unprovenanced Khipus)
+## Nearest-Neighbor Attribution (265 Unprovenanced Khipus)
 
 `visualizations/phase4/nn_attribution.png`  
 Data: `data/processed/phase4_nn_attribution.csv`
 
-Method: 5-nearest-neighbour vote in 12-dimensional feature space (9 pattern flags + scaled n_cords, n_groups, numeric_coverage), with inverse-distance weighting.
+Method: 5-nearest-neighbor vote in 12-dimensional feature space (9 pattern flags + scaled n_cords, n_groups, numeric_coverage), with inverse-distance weighting.
 
 | Attributed zone | Count | % of unprovenanced |
 |---|---|---|
@@ -129,7 +129,7 @@ Method: 5-nearest-neighbour vote in 12-dimensional feature space (9 pattern flag
 | Nazca & Far South | 8 | 3.0% |
 | Arica & N. Chile | 1 | 0.4% |
 
-**High-confidence attributions (top-zone weight ≥ 0.80): 48 khipus** — these have nearest neighbours concentrated strongly in one zone.
+**High-confidence attributions (top-zone weight ≥ 0.80): 48 khipus** — these have nearest neighbors concentrated strongly in one zone.
 
 **Key observations:**
 
@@ -141,15 +141,15 @@ Method: 5-nearest-neighbour vote in 12-dimensional feature space (9 pattern flag
 
 ---
 
-## Geographic Interpretation
+## Data Signals and Potential Avenues for Exploration
 
-The K-CAT results are consistent with a model where **khipu structural complexity reflects administrative function**, with function varying systematically by region:
+The K-CAT data show structural differences across geographic zones that are statistically significant and consistent across multiple analyses. Translating these patterns into functional or historical claims is a task for archaeologically-grounded expert interpretation; the following notes describe what the data show and flag directions that may be worth examining:
 
-- **Chachapoyas / Nazca** — high complexity rates, large khipus with deep subsidiary hierarchies. Consistent with regional administrative centers managing complex multi-level census or tribute records (Leymebamba cache context).
-- **Central Coast (Pachacamac dominant)** — predominantly simple khipus with 1–2 pattern types, small cord counts. May reflect a different recording function — possibly shrine-related tallies, labor quotas, or simpler commodity accounting.
-- **Cañete–Pisco** — intermediate; historically an important Inka road junction and textile production zone. Mixed profile may reflect both local administration and through-routes.
+- **Chachapoyas / Nazca** — the data show high complexity rates, large khipus, and deep subsidiary hierarchies concentrated in these zones. Whether this reflects administrative function, archival practice, or exceptional preservation conditions (Leymebamba cache context) is a question for specialists.
+- **Central Coast (Pachacamac dominant)** — the data show predominantly compact khipus with 1–2 pattern types and small cord counts. Why these khipus look structurally simpler than the Chachapoyas corpus is an open question; differences in recording function, object type, or preservation are all plausible avenues to explore.
+- **Cañete–Pisco** — intermediate structural profile. The zone's historically documented role as an Inka road junction and textile production center may or may not be connected to the mixed khipu profile; that link would need to be established independently.
 
-These interpretations require expert archaeological validation and should not be taken as conclusions.
+These are data observations, not conclusions. Expert archaeological evaluation is required before drawing inferences about administrative function or social context.
 
 > **Note on museum provenance:** `museum_country` is excluded from all analyses. It records current exhibition location, not origin. The Pachacamac corpus spans museums in Lima, Berlin, New York, and Berlin — using museum country as a geographic proxy would scramble all signals.
 
@@ -163,7 +163,7 @@ These interpretations require expert archaeological validation and should not be
 
 3. **PSN open question.** PSN appears geographically significant but the KFG author considers the pattern likely coincidental. If PSN is removed from the analysis, the IS and SP geographic signals strengthen further (they are not dependent on PSN).
 
-4. **NN attribution.** The nearest-neighbour model is not calibrated — no ground-truth test set is available. The 48 high-confidence (≥ 0.80 weight) attributions are a small fraction (18%) of total unprovenanced; the remaining 82% are attributed to zones with lower confidence.
+4. **NN attribution.** The nearest-neighbor model is not calibrated — no ground-truth test set is available. The 48 high-confidence (≥ 0.80 weight) attributions are a small fraction (18%) of total unprovenanced; the remaining 82% are attributed to zones with lower confidence.
 
 5. **Phase 2 open questions.** PP threshold and PSN status remain pending KFG response. These affect ~150 binary flags and could shift the per-pattern chi-square results for PP and PSN specifically. The SP and IS geographic signals are robust to this uncertainty.
 
@@ -191,7 +191,7 @@ Reads `data/processed/phase3_clusters.csv` (Phase 3 must have run first). All ou
 
 ## Citations and Acknowledgments
 
-Geographic zone construction based on KFG `provenance_display` field, consolidated from 82 site names. Statistical methods: chi-square contingency test (scipy), Wilson score interval, sklearn nearest-neighbours. Interpretation references Bray (2012) on Leymebamba cache function and Shimada et al. (2004) on Pachacamac administrative structure.
+Geographic zone construction based on KFG `provenance_display` field, consolidated from 82 site names. Statistical methods: chi-square contingency test (scipy), Wilson score interval, sklearn nearest-neighbors. Reference citations: Bray (2012) on Leymebamba cache function and Shimada et al. (2004) on Pachacamac administrative structure — cited as archaeological context, not as interpretive conclusions drawn by this toolkit.
 
 > Khosla, Ashok. *The Khipu Field Guide.* [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
 

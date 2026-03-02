@@ -132,10 +132,10 @@ cords recording half-units while the parent accumulates full-unit totals.
 
 **B3, B5, B6 show 0 % median compliance**.  Their median ratios (0.22–0.29)
 mean parent values are roughly four times their children sums.  These clusters
-appear to use the parent-subsidiary hierarchy as an *organisational device* (for
+appear to use the parent-subsidiary hierarchy as an *organizational device* (for
 grouping related counts) rather than an arithmetic one.
 
-### 4. T1 vs T2 summation behaviour
+### 4. T1 vs T2 summation behavior
 
 | Measure | T1 (n = 653) | T2 (n = 56) | p-value |
 |---------|------------:|------------:|--------:|
@@ -175,32 +175,36 @@ that more often comply.
 
 ---
 
-## Possible interpretations
+## Potential Avenues for Exploration
 
-### The parent cord records the administrative total, not the record total
+The following observations highlight patterns in the data that may be worth pursuing
+with domain expertise; they are computational findings, not interpretive conclusions.
 
-The prevailing model, that `parent = sum(children)`, seems calibrated to the small
-subset of khipus that serve as summation ledgers.  For the majority, the parent
-cord appears to record an independently-arrived-at total (e.g., a census figure
-from a higher administrative authority) while the subsidiary cords record the
-partial breakdown known at the local level.  The two figures do not match because
-they originate from different nodes in the bureaucratic network.
+### The parent cord and independent totals
+
+The prevailing model, that `parent = sum(children)`, applies to only 6.6 % of
+parent-child groups in this corpus. One possible reading is that the parent cord
+frequently records an independently-arrived-at total (e.g., a census figure compiled
+at a higher administrative level) while the subsidiary cords record the partial
+breakdown known at the local level. Testing this against historically documented
+accounting structures would require specialist input.
 
 ### Zero cords as structural placeholders
 
-The concentration of zeros at high rates in B1 and B2, and the positive
-relationship between zero rate and compliance, suggests that many zero-value cords
-are **reserved entries** — cord slots built into the template awaiting population
-in a future census cycle.  This would explain T2's higher zero rate (more
-pre-allocated slots for a larger administrative unit) without requiring that T2
-records were systematically incomplete.
+The concentration of zero-value cords at high rates in B1 and B2, and the positive
+relationship between zero rate and compliance, is consistent with a reading in which
+many zero-value cords are reserved entries — cord slots built into the template
+awaiting population in a future recording cycle. Whether this reflects a genuine
+template convention or a different phenomenon (e.g., cords for which values were
+never decoded) is an open question.
 
-### The 1/10 ratio peak as decimal sub-sampling
+### The 1/10 ratio peak and decimal structure
 
-382 groups (4.6 % of ratios) cluster near r = 0.10.  If this is a genuine decimal
-convention — subsidiaries recording one-tenth of the parent total — it would be
-consistent with the Inca pachaka (100-unit) / chunka (10-unit) hierarchy, where a
-parent cord records the full 100-unit total and each subsidiary records one chunka.
+382 groups (4.6 % of ratios) cluster near r = 0.10. This concentration is consistent
+with — but does not confirm — a decimal sub-sampling convention where subsidiaries
+record one-tenth of the parent total, which would align with the Inca pachaka /
+chunka administrative hierarchy. Archaeologically-grounded investigation would be
+needed to establish whether such a pattern is systematic.
 
 ---
 

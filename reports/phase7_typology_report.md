@@ -21,9 +21,9 @@ genuine and deep structural distinction in the corpus.
 |------|--------|
 | Input | 709 khipus; Phase 3 structural features + Phase 5 color diversity + Phase 6 anomaly scores |
 | Feature set | 10 variables: `n_cords`, `n_pendants`, `n_subsidiaries`, `n_groups`, `numeric_coverage`, `frac_broken`, `n_pattern_types`, `n_unique_colors`, `sub_ratio`, `group_size` |
-| Clustering | K-means (k = 2–8, 20–30 random initialisations) with StandardScaler pre-processing |
+| Clustering | K-means (k = 2–8, 20–30 random initializations) with StandardScaler pre-processing |
 | Selection | Maximum silhouette score |
-| UMAP | n_neighbors = 15, min_dist = 0.1 (2-D projection for visualisation only) |
+| UMAP | n_neighbors = 15, min_dist = 0.1 (2-D projection for visualization only) |
 | Labels | Clusters ordered by ascending median cord count; assigned labels **T1** and **T2** |
 
 > **Epistemological note**: T1 and T2 are computational labels derived from a
@@ -155,8 +155,8 @@ feature space than in structural features alone.
 | `data/processed/phase7_typology.csv` | Per-khipu cluster assignments (T1/T2) with all key features |
 | `data/processed/phase7_cluster_profiles.csv` | Per-cluster feature means for all 19 structural + pattern metrics |
 | `visualizations/phase7/silhouette_curve.png` | K-means sweep: silhouette score and inertia across k = 2–8 |
-| `visualizations/phase7/profile_heatmap.png` | Row-normalised heatmap of feature means for T1 vs T2 |
-| `visualizations/phase7/umap_typology.png` | UMAP projection coloured by typology group (left) and Phase-3 cluster + anomalies (right) |
+| `visualizations/phase7/profile_heatmap.png` | Row-normalized heatmap of feature means for T1 vs T2 |
+| `visualizations/phase7/umap_typology.png` | UMAP projection colored by typology group (left) and Phase-3 cluster + anomalies (right) |
 | `visualizations/phase7/cluster_zone.png` | Stacked bar: geographic zone composition by typology group |
 | `visualizations/phase7/cluster_complexity.png` | Simple/Complex composition and anomaly rate per typology group |
 
@@ -181,15 +181,4 @@ feature space than in structural features alone.
    than the overall corpus average, possibly reflecting differential preservation
    for smaller khipus from non-cache contexts.
 
----
 
-## Next Steps
-
-- **Phase 8: Missing value prediction** — Constraint propagation and sibling
-  interpolation on the KFG cord/knot tables to impute missing numeric values,
-  stratified by T1/T2 typology group.
-- **Phase 9: Graph-based structural analysis** — NetworkX hierarchy graphs and motif
-  mining, with topology metrics tested for T1 vs T2 differences.
-- **External validation** — The T1/T2 partition would benefit from comparison against
-  independent classifications (e.g., Urton's sign catalogue, Ascher & Ascher
-  typological codes) to assess convergence.

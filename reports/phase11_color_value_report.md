@@ -152,18 +152,20 @@ embedded in the color code.
 
 ---
 
-## Possible interpretations
+## Potential Avenues for Exploration
+
+The following observations highlight patterns in the data that may be worth pursuing
+with domain expertise; they are computational findings, not interpretive conclusions.
 
 ### Banded cords = high-magnitude registers
 
 The consistent elevation of composite/banded colors (`W%AB`, `W%MB`, `DB-CB`,
 `MB-KB`) to 5–10× the value of their monochrome counterparts is the strongest
-color-value signal in the dataset.  The most natural explanation within the Inca
-decimal system is that banded cords record entries in a different *place-value
-tier* — just as the knot position on a cord encodes units/tens/hundreds, the
-color pattern may redundantly mark the register's scale, ensuring readers
-navigating a complex khipu could quickly identify which cords hold large-magnitude
-totals.
+color-value signal in the dataset.  One possible reading within the Inca decimal
+system is that banded cords mark a different *place-value tier* — just as the knot
+position on a cord encodes units/tens/hundreds, the color pattern may redundantly
+mark the register's scale.  Expert validation would be needed to confirm whether
+this is a systematic coding convention.
 
 ### YB as a commodity color
 

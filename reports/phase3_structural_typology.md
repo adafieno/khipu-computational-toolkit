@@ -11,7 +11,7 @@
 
 ## Research Question
 
-Do the 9 summation pattern types cluster 709 khipus into recognisable structural *types*? Do those types correlate with known external variables — provenance, institutional origin, cord complexity, or the KFG's own use-category labels? Or does the pattern space form a continuum without clear discrete boundaries?
+Do the 9 summation pattern types cluster 709 khipus into recognizable structural *types*? Do those types correlate with known external variables — provenance, institutional origin, cord complexity, or the KFG's own use-category labels? Or does the pattern space form a continuum without clear discrete boundaries?
 
 Phase 2 established that 80.3% of K-CAT khipus carry at least one summation pattern, and that individual khipus often carry multiple types simultaneously (55.5% carry ≥ 4). Phase 3 asks whether those co-occurrence patterns are structured — i.e., whether certain combinations recur enough to constitute archetypal khipu types.
 
@@ -63,7 +63,7 @@ Phase 2 established that 80.3% of K-CAT khipus carry at least one summation patt
 The clustering input `X` combines the 9 binary pattern columns with 3 scaled structural columns (`n_cords`, `n_groups`, `numeric_coverage`). Structural columns are z-scored before concatenation so they do not dominate Euclidean distance over the categorical pattern flags.
 
 1. **K-means (k=2..10)** — silhouette score computed for each k; best k selected automatically.
-2. **2-D embedding** — UMAP (`umap-learn`) if installed, PCA fallback otherwise. Used for visualisation only — does not affect cluster assignments.
+2. **2-D embedding** — UMAP (`umap-learn`) if installed, PCA fallback otherwise. Used for visualization only — does not affect cluster assignments.
 
 ### Caveat on Pending KFG Questions
 
@@ -126,7 +126,7 @@ The dominant axis of variation is **size / complexity**: Cluster 1 khipus averag
 | `has_psn` | 12.9% | **61.9%** |
 | `has_adg` | 26.1% | **45.8%** |
 
-Every pattern is dramatically more prevalent in Cluster 1. The largest gaps are in `has_is` (+43.9 pp), `has_ip` (+63.3 pp), and `has_cp` (+59.5 pp) — patterns requiring multi-cord indexed or colour-grouped structures only possible in larger khipus.
+Every pattern is dramatically more prevalent in Cluster 1. The largest gaps are in `has_is` (+43.9 pp), `has_ip` (+63.3 pp), and `has_cp` (+59.5 pp) — patterns requiring multi-cord indexed or color-grouped structures only possible in larger khipus.
 
 ### Pattern Prevalence Heatmap
 
@@ -190,7 +190,7 @@ The corpus-average Complex rate among provenanced khipus is 16% (71/444). Two zo
 
 ## Limitations
 
-1. **Cluster stability.** K-means is sensitive to initialisation and distance metric. The binary pattern columns have equal weight in Euclidean distance; Hamming distance or Jaccard similarity may be more appropriate for binary vectors. Alternative clusterings (hierarchical Ward, DBSCAN) are left for follow-up.
+1. **Cluster stability.** K-means is sensitive to initialization and distance metric. The binary pattern columns have equal weight in Euclidean distance; Hamming distance or Jaccard similarity may be more appropriate for binary vectors. Alternative clusterings (hierarchical Ward, DBSCAN) are left for follow-up.
 
 2. **Pattern flag quality.** The flags inherit Phase 2 limitations: PSN is tentative (KFG author considers it likely coincidental); IP has the highest false-positive rate (89 FPs vs KFG). If those flags are noisy, the IP and PSN columns add noise to the clustering input. This is the primary motivation for the "not yet for publication" status.
 
