@@ -3,7 +3,7 @@
 **Generated:** 2026-03-02  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Detector:** `src/analysis/kfg_summation_detector.py` — criteria calibrated against KFG documentation  
-**Reconciliation:** K-CAT detector output compared against KFG fieldmark ground truth (703 khipus, all 9 patterns)  
+**Reconciliation:** K-CAT detector output compared against KFG fieldmark annotation files (702 khipus in the K-CAT/KFG intersection, all 9 patterns)  
 **Status:** ✅ Complete
 
 ---
@@ -66,7 +66,7 @@ The OKR-era detector (`scripts/test_value_computation.py`) implemented three of 
 
 | Metric | OKR (reference) | K-CAT (current) |
 |--------|----------------|----------------|
-| Khipus tested | 619 | 703 (KFG overlap) |
+| Khipus tested | 619 | 702 (KFG intersection) |
 | With any summation pattern | 430 (69.5%) | 557 (79.2%) |
 | Without any pattern | 189 (30.5%) | 146 (20.8%) |
 | Agreement with KFG ground truth | — | **90.4%** |
@@ -120,17 +120,25 @@ The majority of summation-carrying khipus (357 of 643, 55.5%) show 4 or more dis
 
 ## Reconciliation Against KFG Ground Truth
 
-The KFG team provides authoritative per-khipu fieldmark annotations for all 9 pattern types covering 703 khipus. `scripts/reconcile_kfg_fieldmarks.py` compares the K-CAT detector output against this ground truth.
+The KFG team provides per-khipu fieldmark annotation files for all 9 pattern types. These files record the output of the KFG's own detector (the same detector used on `khipufieldguide.com`), not a separate human annotation pass.
+
+### Reconciliation Methodology
+
+**Coverage gaps — not a full apples-to-apples comparison.** The K-CAT corpus contains **709 khipus**; the KFG annotation files cover **702 unique khipus** (703 CSV rows, one khipu appearing in two rows in the PP summary). Seven K-CAT khipus have no corresponding GT entry and are **silently excluded** from every reconciliation table. All agreement percentages are computed over the 702-khipu intersection only.
+
+**What "KFG negative" means.** When a khipu's count is 0 in a KFG annotation file, that means the KFG detector found no instance of that pattern for that khipu. It does not mean a human expert confirmed the pattern is absent. Both the KFG detector and the K-CAT detector may miss genuine patterns; the agreement metric measures cross-detector consistency, not human-validated accuracy.
+
+**Significance thresholds.** Two patterns (`indexed_subsidiary_sum` and `pendant_sub_neighbor`) apply a threshold of `count > 1` rather than `count ≥ 1`, per KFG documentation: a single isolated occurrence is considered coincidental. The KFG annotation files record raw counts; the threshold is applied here during comparison.
 
 > **Note on the fieldmarks browser.** `khipufieldguide.com/fieldmarks` shows 7 columns in HTML order PP, IP, CP, SP, GSB, GG, ADG — differing from the analysis-page narrative — and omits `indexed_subsidiary_sum` and `pendant_sub_neighbor` entirely. The authoritative KFG annotations cover all 9 patterns.
 
-### Corpus-Level Comparison (703-khipu KFG checks)
+### Corpus-Level Comparison (702-khipu KFG intersection)
 
 | Metric | KFG ground truth | K-CAT detector |
 |--------|-----------------|----------------|
-| Khipus evaluated | 703 | 703 |
-| With any summation pattern | 491 (69.8%) | 557 (79.2%) |
-| Without any pattern | 212 (30.2%) | 146 (20.8%) |
+| Khipus evaluated | 702 | 702 |
+| With any summation pattern | 491 (69.9%) | 557 (79.3%) |
+| Without any pattern | 211 (30.1%) | 145 (20.7%) |
 
 ### Per-Khipu Overall Agreement
 
@@ -161,6 +169,7 @@ Only **2 FNs** — virtually perfect recall. **66 FPs** remain, distributed acro
 **Key observations:**
 
 - **PP, IP, SP, PSN, ADG: 0 false negatives** — perfect recall across all detected instances.
+- **PSN: treat with caution.** The KFG author's own online assessment of `pendant_sub_neighbor` states: *"The pendant_subsidiary_neighbor relationship seems likely to be a fluke. Occurring 0.64% of the time… I'm inclined to write off this relationship as a statistical fluke."* The 76 PSN false positives in our results are therefore consistent with the KFG's own view that many PSN detections may be coincidental. The pattern is retained in the detector for completeness but its interpretation as deliberate accounting is uncertain.
 - **GSB: 97.4% with zero FPs** — the explicit left-sum = right-sum split detector is the most precise in the suite; 18 FNs remain (likely edge-band boundary cases).
 - **GG: 91.8%** — properly separated from GSB; 17 FNs likely from group total boundary conditions.
 - **IS: 93.9%** — calibrated by removing position-only grouping, applying a value threshold (≥ 5, excluding round numbers), and deduplicating by `(sum_cord_id, frozenset(summand_ids))`.
@@ -204,7 +213,7 @@ for kid in khipu_ids:
 
 ## Limitations
 
-- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as a deliberate accounting entry. The reconciliation shows 66 of 703 khipus (9.4%) are flagged by K-CAT but not by KFG. The largest concentrations are in `pendant_sub_neighbor` (76 FPs), `pendant_pendant_sum` (64 FPs), `indexed_pendant_sum` (89 FPs), and `ascher_decreasing_group` (60 FPs) — all patterns with zero FNs, suggesting the thresholds are appropriately inclusive at the cost of some over-detection.
+- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as a deliberate accounting entry. The reconciliation shows 66 of 702 khipus (9.4%) are flagged by K-CAT but not by KFG. The largest concentrations are in `pendant_sub_neighbor` (76 FPs), `pendant_pendant_sum` (64 FPs), `indexed_pendant_sum` (89 FPs), and `ascher_decreasing_group` (60 FPs) — all patterns with zero FNs, suggesting the thresholds are appropriately inclusive at the cost of some over-detection.
 - The corpus sweep uses `tolerance = 0`. A small tolerance (1–2 units) would be appropriate when cord values are subject to transcription uncertainty; such analysis is left for future work.
 - Pattern type taxonomy follows Ascher & Ascher (1978, 1981). Other researchers (Urton, Hyland) propose alternative non-numeric interpretations in which these "summation patterns" have a different significance.
 
