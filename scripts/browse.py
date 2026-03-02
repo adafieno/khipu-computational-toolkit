@@ -911,7 +911,7 @@ def build_pca_figure(flags_df: pd.DataFrame) -> go.Figure:
     fig = go.Figure(go.Scatter(
         x=proj[:, 0], y=proj[:, 1],
         mode="markers",
-        marker=dict(size=5, color=colors_, opacity=0.7,
+        marker=dict(size=9, color=colors_, opacity=0.75,
                     line=dict(width=0)),
         text=hover,
         hovertemplate="%{text}<extra></extra>",
@@ -1351,7 +1351,7 @@ def main() -> None:
             "📊 Overview",
             "🔬 Deep Dive",
             "🌍 Geography",
-            "🔭 Pattern Space",
+            "🧮 Pattern Space",
         ])
 
         # ── Tab 1: Overview ────────────────────────────────────────────────────
