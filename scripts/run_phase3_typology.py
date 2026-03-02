@@ -15,7 +15,7 @@ Visualizations (visualizations/phase3/)
 ---------------------------------------
 umap_by_cluster.png         — UMAP 2-D embedding coloured by k-means cluster
 umap_by_n_types.png         — UMAP coloured by n_pattern_types (0-9)
-umap_by_region.png          — UMAP coloured by origin region (provenance_display / region)
+umap_by_region.png          — UMAP coloured by geo_zone (8 consolidated geographic zones)
 heatmap_cluster_patterns.png— cluster × pattern heatmap (mean has_* per cluster)
 silhouette_curve.png        — silhouette score vs k
 
@@ -172,23 +172,42 @@ def plot_embedding_by_ntype(emb: np.ndarray, n_types: np.ndarray, method: str):
     _savefig(f"{'umap' if _HAS_UMAP else 'pca'}_by_n_types.png")
 
 
-def plot_embedding_by_region(emb: np.ndarray, regions: pd.Series, method: str):
-    """Colour UMAP/PCA by origin region (provenance_display, falling back to region)."""
-    top = regions.value_counts().head(6).index.tolist()
-    cats = [c if c in top else "Other / unknown" for c in regions.fillna("Unknown")]
-    unique_cats = sorted(set(cats))
-    cmap = matplotlib.colormaps.get_cmap("tab10").resampled(len(unique_cats))
-    cat_to_color = {c: cmap(i) for i, c in enumerate(unique_cats)}
+def plot_embedding_by_region(emb: np.ndarray, zones, method: str):
+    """Colour UMAP/PCA by geo_zone (8 consolidated zones + Unprovenanced)."""
+    if zones is None:
+        zones = pd.Series([None] * len(emb))
+    # All 8 zone labels in geographic order S→N for consistent colouring
+    ZONE_ORDER = [
+        "Southern Highlands",
+        "Arica & N. Chile",
+        "Nazca & Far South",
+        "Ica & Paracas",
+        "Cañete–Pisco",
+        "Central Coast",
+        "North Peru Coast",
+        "Chachapoyas",
+        "Unprovenanced",
+    ]
+    cats = zones.fillna("Unprovenanced").tolist()
+    present = [z for z in ZONE_ORDER if z in set(cats)]
+    cmap = matplotlib.colormaps.get_cmap("tab10").resampled(len(present))
+    cat_to_color = {c: cmap(i) for i, c in enumerate(present)}
+    # Unprovenanced always light grey regardless
+    cat_to_color["Unprovenanced"] = (0.75, 0.75, 0.75, 0.4)
 
-    fig, ax = plt.subplots(figsize=(9, 7))
-    for cat in unique_cats:
+    fig, ax = plt.subplots(figsize=(10, 7))
+    # Draw Unprovenanced first (background)
+    for cat in ["Unprovenanced"] + [z for z in present if z != "Unprovenanced"]:
         mask = np.array([c == cat for c in cats])
-        ax.scatter(emb[mask, 0], emb[mask, 1], s=14, alpha=0.7,
+        if not mask.any():
+            continue
+        ax.scatter(emb[mask, 0], emb[mask, 1], s=14 if cat != "Unprovenanced" else 8,
+                   alpha=0.85 if cat != "Unprovenanced" else 0.3,
                    color=cat_to_color[cat], label=f"{cat} ({mask.sum()})")
     ax.set_xlabel(f"{method} 1")
     ax.set_ylabel(f"{method} 2")
-    ax.set_title(f"K-CAT Khipus — {method} coloured by origin region")
-    ax.legend(markerscale=2, fontsize=8)
+    ax.set_title(f"K-CAT Khipus — {method} coloured by geographic zone")
+    ax.legend(markerscale=2, fontsize=8, loc="best")
     _savefig(f"{'umap' if _HAS_UMAP else 'pca'}_by_region.png")
 
 
@@ -244,10 +263,15 @@ def print_crosstabs(df: pd.DataFrame, k: int):
     print("\n=== Mean n_cords per cluster ===")
     print(df.groupby("cluster")["n_cords"].mean().round(0).to_string())
 
-    print("\n=== Origin region per cluster ===")
-    region_col = "provenance_display" if "provenance_display" in df.columns else "region"
-    ct = pd.crosstab(df["cluster"], df[region_col].fillna("Unknown"))
-    print(ct.to_string())
+    print("\n=== Geographic zone per cluster (provenanced only) ===")
+    if "geo_zone" in df.columns:
+        geo_df = df[df["geo_zone"].notna()]
+        ct = pd.crosstab(geo_df["cluster"], geo_df["geo_zone"])
+        ct["Total"] = ct.sum(axis=1)
+        print(ct.to_string())
+        print(f"  (Unprovenanced excluded: {df['geo_zone'].isna().sum()} rows)")
+    else:
+        print("  geo_zone column not present")
 
     print("\n=== Extremes: all 9 patterns ===")
     all9 = df[df["n_pattern_types"] == len(PATTERN_KEYS)]
@@ -320,8 +344,7 @@ def main():
     plot_silhouette_curve(sil_df)
     plot_embedding_by_cluster(emb, labels, best_k, method)
     plot_embedding_by_ntype(emb, df["n_pattern_types"].values, method)
-    region_col = "provenance_display" if "provenance_display" in df.columns else "region"
-    plot_embedding_by_region(emb, df[region_col], method)
+    plot_embedding_by_region(emb, df.get("geo_zone"), method)
     plot_cluster_pattern_heatmap(df, best_k)
 
     # 7. Console summaries

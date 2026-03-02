@@ -37,6 +37,11 @@ Metadata (string / nullable — geographic provenance only, NOT museum location)
     provenance_display — cleaned site name from provenance_labels table
                          (many are "Unknown"; do not use museum fields as provenance proxy)
     creation_date
+    geo_zone          — consolidated geographic zone derived from provenance_display:
+                         "Central Coast" | "Cañete–Pisco" | "Ica & Paracas" |
+                         "Nazca & Far South" | "Chachapoyas" | "North Peru Coast" |
+                         "Arica & N. Chile" | "Southern Highlands"
+                         None for Unknown, collection names, and unresolvable labels
 """
 
 import sqlite3
@@ -72,6 +77,110 @@ _PTYPE = {
 _THRESH = {k: 0 for k in PATTERN_KEYS}
 _THRESH["is"]  = 1
 _THRESH["psn"] = 1
+
+# ---------------------------------------------------------------------------
+# Geographic zone consolidation
+# ---------------------------------------------------------------------------
+# Maps provenance_display -> 8-zone label.  Entries not present in this dict
+# (collections, "Unknown", or ambiguous cross-site labels) receive None.
+GEO_ZONE_MAP: dict = {
+    # ── Central Coast (Lima + Huacho / Chancay merged) ──────────────────────
+    "Ancon (prob.)":                        "Central Coast",
+    "Armatambo (Huaca San Pedro)":           "Central Coast",
+    "Armatambo / Huaca San Pedro":           "Central Coast",
+    "Armatambo, Lima":                       "Central Coast",
+    "Cajamarquilla":                         "Central Coast",
+    "Central Coast (Late Period, prob.)":    "Central Coast",
+    "Cerro Solar (foothills)":               "Central Coast",
+    "Chancay":                               "Central Coast",
+    "Chancay (Central Coast)":               "Central Coast",
+    "Chancay (Hda. Huando)":                 "Central Coast",
+    "Chancay / Huando (Gaffron)":            "Central Coast",
+    "Chuquitanta":                           "Central Coast",
+    "Cieneguilla (Lurin Valley)":            "Central Coast",
+    "Huaca San Marco":                       "Central Coast",
+    "Huacho":                                "Central Coast",
+    "Huacho (?)":                            "Central Coast",
+    "Huacho (Central Coast)":                "Central Coast",
+    "Huacho / Pachacamac":                   "Central Coast",
+    "Huaquerones":                           "Central Coast",
+    "La Molina":                             "Central Coast",
+    "Lima":                                  "Central Coast",
+    "Lima (Huaca Pérez)":                    "Central Coast",
+    "Lima (Maranga, Huaca 1)":               "Central Coast",
+    "Lima (Pueblo Libre)":                   "Central Coast",
+    "Marquez":                               "Central Coast",
+    "Near Lima":                             "Central Coast",
+    "Near Lima (prob.)":                     "Central Coast",
+    "Pachacamac":                            "Central Coast",
+    "Pachacamac (Casa de los Quipus)":       "Central Coast",
+    "Pachacamac (Casa del Quipu)":           "Central Coast",
+    "Pachacamac (Fundort)":                  "Central Coast",
+    "Pachacamac (Nordenskiöld)":             "Central Coast",
+    "Purucucho":                             "Central Coast",
+    "Rimac Valley":                          "Central Coast",
+    # ── Cañete – Pisco (~150–350 km S of Lima) ──────────────────────────────
+    "Hda. Ullujalla / Callengo":             "Cañete–Pisco",
+    "Huacones":                              "Cañete–Pisco",
+    "Incahuasi":                             "Cañete–Pisco",
+    "La Centinela / Tambo de Mora":          "Cañete–Pisco",
+    "La Puntilla (Paracas/Pisco)":           "Cañete–Pisco",
+    "Pisco":                                 "Cañete–Pisco",
+    "Pisco Valley":                          "Cañete–Pisco",
+    "Tambo Colorado":                        "Cañete–Pisco",
+    # ── Ica Valley & Paracas (~300–400 km S of Lima) ─────────────────────────
+    "Atarco":                                "Ica & Paracas",
+    "Between Ica and Pisco":                 "Ica & Paracas",
+    "Ica":                                   "Ica & Paracas",
+    "Ica (Coast)":                           "Ica & Paracas",
+    "Ica (Site T, Grave M — Uhle)":          "Ica & Paracas",
+    "Ica / Cajamarquilla":                   "Ica & Paracas",
+    "Ica / Pisco":                           "Ica & Paracas",
+    "Ica Valley (Hda. Callango / Ocucaje)":  "Ica & Paracas",
+    "Ica Valley (Rancho San Juan)":          "Ica & Paracas",
+    "Ica Valley (Site T, Grave K)":          "Ica & Paracas",
+    "Ica Valley (Site T, Grave M)":          "Ica & Paracas",
+    "Ica Valley (near Callengo)":            "Ica & Paracas",
+    "Ica Valley (near Callango)":            "Ica & Paracas",
+    "Ocucaje":                               "Ica & Paracas",
+    "Ocucaje / Ullujaya (Ica)":              "Ica & Paracas",
+    "Paracas":                               "Ica & Paracas",
+    # ── Nazca & Far South (~400–600 km S of Lima) ────────────────────────────
+    "Acari":                                 "Nazca & Far South",
+    "Chala":                                 "Nazca & Far South",
+    "Nazca":                                 "Nazca & Far South",
+    "Nazca (Hda. Copara)":                   "Nazca & Far South",
+    "Nazca (Monte de Cacatilla)":            "Nazca & Far South",
+    "Nazca (Santa Clara)":                   "Nazca & Far South",
+    "South Coast":                           "Nazca & Far South",
+    "South Peru":                            "Nazca & Far South",
+    "Southern Coast":                        "Nazca & Far South",
+    # ── Chachapoyas (northern highlands, ~700 km N of Lima) ──────────────────
+    "Leymebamba":                            "Chachapoyas",
+    "Mollepampa":                            "Chachapoyas",
+    # ── North Peru Coast (~400–700 km N of Lima) ─────────────────────────────
+    "Pacasmayo":                             "North Peru Coast",
+    "Santa":                                 "North Peru Coast",
+    # ── Arica & Northern Chile (outside Peru) ────────────────────────────────
+    "Arica, Chile (Playa Miller 6)":         "Arica & N. Chile",
+    "Lluta Valley":                          "Arica & N. Chile",
+    "Quillagua, Valle de Loa":               "Arica & N. Chile",
+    # ── Southern Highlands (Cusco / Ayacucho) ────────────────────────────────
+    "Cuzco":                                 "Southern Highlands",
+    "Huari":                                 "Southern Highlands",
+    # Excluded from GEO_ZONE_MAP (→ None):
+    #   Gaffron Collection, Gaffron Estate, Belli Collection, Goodspeed Collection,
+    #   Stanford Collection (prob. 1905), Aankoop, Peru (unknown), Nazca / Ancon,
+    #   Unknown, Unknown (non-Gaffron)
+}
+
+
+def _apply_geo_zone(df: pd.DataFrame) -> pd.DataFrame:
+    """Adds a geo_zone column by mapping provenance_display through GEO_ZONE_MAP.
+    Rows not in the map (unknowns, collections, ambiguous) receive None."""
+    df = df.copy()
+    df["geo_zone"] = df["provenance_display"].map(GEO_ZONE_MAP)
+    return df
 
 
 def _primary_color(color_str: Optional[str]) -> Optional[str]:
@@ -217,6 +326,8 @@ def build_feature_matrix(
         .merge(structural_df, on="kfg_id", how="left")
         .merge(metadata_df,   on="kfg_id", how="left")
     )
+
+    df = _apply_geo_zone(df)
 
     if verbose:
         n = len(df)

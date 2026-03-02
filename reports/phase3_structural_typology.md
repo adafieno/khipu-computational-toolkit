@@ -52,9 +52,11 @@ Phase 2 established that 80.3% of K-CAT khipus carry at least one summation patt
 
 **Metadata for enrichment (not used as clustering inputs):**
 
-`region`, `provenance_display`, `creation_date`
+`region`, `provenance_display`, `geo_zone`, `creation_date`
 
 > `museum_country` / `museum_name` are intentionally excluded. They record the current exhibition location, not the object's place of origin — inappropriate as a geographic signal for a corpus where many khipus were displaced from Peru during the colonial period.
+>
+> `geo_zone` is a new derived field that consolidates ~82 `provenance_display` site names into 8 geographic zones (Central Coast · Cañete–Pisco · Ica & Paracas · Nazca & Far South · Chachapoyas · North Peru Coast · Arica & N. Chile · Southern Highlands). Collection names and unresolvable labels map to `null`.
 
 ### Clustering Approach
 
@@ -138,7 +140,7 @@ Cluster 1 shows near-uniform high prevalence across all patterns except GSB (31.
 
 `visualizations/phase3/umap_by_cluster.png` / `umap_by_n_types.png` / `umap_by_region.png`
 
-The UMAP projection shows a broad main mass (Cluster 0) with a satellite island of large, complex khipus (Cluster 1). The n_pattern_types view confirms the island is the 4–9 pattern zone. Region colouring shows limited geographic signal: only 142/709 khipus have a non-Unknown `region` value. Among those, Inka Late Horizon and Puruchuco objects appear in both clusters, consistent with site heterogeneity rather than site-specific structural types.
+The UMAP projection shows a broad main mass (Cluster 0) with a satellite island of large, complex khipus (Cluster 1). The n_pattern_types view confirms the island is the 4–9 pattern zone. The `umap_by_region.png` view uses 8 consolidated `geo_zone` labels (Unprovenanced shown in grey); 265/709 points are grey. Among labelled points, **Chachapoyas** (blue) appears distributed across both the main mass and the Complex island, consistent with the 52% Complex rate; **Central Coast** (Pachacamac-heavy) sits almost entirely in the Simple mass.
 
 ### Structural Extremes
 
@@ -159,23 +161,30 @@ The dominant singleton is `has_pp` (~55 khipus), followed by `has_adg` (~35), `h
 
 ---
 
-## Cross-tabulation: Clusters vs. Origin Region
+## Cross-tabulation: Clusters vs. Geographic Zone
 
-Only 142/709 khipus have a non-Unknown `region` value (20%); the remainder are unprovenanced.
+`geo_zone` consolidates ~82 `provenance_display` site labels into 8 geographic zones. Unprovenanced records (265/709 = 37%) are excluded from this table.
 
-| region | Cluster 0 (Simple) | Cluster 1 (Complex) | Total |
-|---|---|---|---|
-| Unknown | 482 | 87 | 569 |
-| Inka, Late Horizon | 23 | 8 | 31 |
-| Central Coast, Peru | 22 | 5 | 27 |
-| Puruchuco | 23 | 1 | 24 |
-| Chachapoyas | 11 | 11 | 22 |
-| South Coast, Peru | 15 | 4 | 19 |
-| Nazca | 6 | 0 | 6 |
-| Other (Ica, Ancon, etc.) | 9 | 2 | 11 |
-| **Total** | **591** | **118** | **709** |
+| geo_zone | Cluster 0 (Simple) | Cluster 1 (Complex) | Total | **% Complex** |
+|---|---|---|---|---|
+| Central Coast | 162 | 15 | 177 | 8% |
+| Cañete–Pisco | 65 | 17 | 82 | 21% |
+| Ica & Paracas | 99 | 10 | 109 | 9% |
+| Nazca & Far South | 22 | 11 | 33 | **33%** |
+| Chachapoyas | 11 | 12 | 23 | **52%** |
+| Arica & N. Chile | 8 | 3 | 11 | 27% |
+| North Peru Coast | 5 | 2 | 7 | 29% |
+| Southern Highlands | 1 | 1 | 2 | 50% |
+| **Provenanced total** | **373** | **71** | **444** | 16% |
 
-Most provenanced khipus (Inka Late Horizon, Central Coast, Puruchuco) fall predominantly in Cluster 0. The clearest exception is **Chachapoyas**, which splits evenly (11:11) between clusters — the large, complex khipus from that site are as common as the simple ones. South Coast Peru also shows a higher Complex fraction (4/19 = 21%).
+The corpus-average Complex rate among provenanced khipus is 16% (71/444). Two zones stand out as significantly elevated:
+
+- **Chachapoyas** (52%): khipus from the Leymebamba / Mollepampa cache split almost evenly between Simple and Complex. The famous cache at Laguna de los Cóndors contained khipus of dramatically varying size; the large, multi-pattern objects survive alongside much simpler ones.
+- **Nazca & Far South** (33%): elevated Complex rate across Nazca and Chala sites.
+
+**Central Coast** (8%) and **Ica & Paracas** (9%) are well below the average, despite being the two most densely sampled zones (177 and 109 khipus respectively). The Pachacamac-dominant Central Coast corpus is overwhelmingly Simple.
+
+**Zone construction note**: Zone labels were consolidated from 82 `provenance_display` values. Excluded from zoning (→ Unprovenanced): collection names (Gaffron, Belli, Goodspeed, Stanford), "Peru (unknown)", "Nazca / Ancon" (two sites 750 km apart), and all Unknown variants.
 
 > **Note**: museum exhibition country (`museum_country`) was dropped from this analysis. It records where a khipu is currently held, not where it was made — unsuitable as a geographic proxy for a corpus displaced from Peru over centuries.
 
@@ -187,7 +196,7 @@ Most provenanced khipus (Inka Late Horizon, Central Coast, Puruchuco) fall predo
 
 2. **Pattern flag quality.** The flags inherit Phase 2 limitations: PSN is tentative (KFG author considers it likely coincidental); IP has the highest false-positive rate (89 FPs vs KFG). If those flags are noisy, the IP and PSN columns add noise to the clustering input. This is the primary motivation for the "not yet for publication" status.
 
-3. **Provenance sparsity.** `region` is non-Unknown for only 142/709 khipus (20%); `provenance_display` (from `provenance_labels` join) covers a similar subset. Geographic cross-tabulation is therefore indicative, not comprehensive. `museum_country` is intentionally excluded — it records exhibition location, not origin.
+3. **Provenance sparsity.** 265/709 khipus (37%) have no mappable `geo_zone`; they are excluded from geographic cross-tabulation. Among the 444 provenanced khipus, zone sizes range from 2 (Southern Highlands) to 177 (Central Coast), so small-zone findings (Arica, North Peru Coast, Southern Highlands) are indicative at best. `museum_country` is intentionally excluded — it records exhibition location, not origin.
 
 4. **No consensus clustering.** A single k-means run is used. Ensemble clustering or stability analysis across multiple seeds and multiple k values would give stronger evidence for the identified cluster structure.
 
