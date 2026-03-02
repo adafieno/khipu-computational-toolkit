@@ -1274,45 +1274,22 @@ def main() -> None:
         m3.metric("Provenances", str(corpus["provenance"].nunique()))
         m4.metric("Countries", str(corpus["museum_country"].nunique()))
 
-        # Filters
-        f1, f2, f3 = st.columns([2, 1, 1])
-        search = f1.text_input("Search (ID, name, provenance, museum)")
-        countries = ["All"] + sorted(str(c) for c in corpus["museum_country"].dropna().unique())
-        sel_country = f2.selectbox("Country", countries, key="cb_country")
-        max_cords = int(corpus["cord_count"].max() or 1)
-        min_cords = f3.slider("Min cords", 0, max_cords, 0, key="cb_min_cords")
-
         display = corpus.copy()
-        if search:
-            mask = display.apply(
-                lambda r: search.lower() in " ".join(str(v) for v in r).lower(),
-                axis=1,
-            )
-            display = display[mask]
-        if sel_country != "All":
-            display = display[display["museum_country"] == sel_country]
-        display = display[display["cord_count"] >= min_cords]
+        display["provenance"] = display["provenance"].apply(
+            lambda v: _fmt_prov(v) if pd.notna(v) else "—"
+        )
 
-        st.caption(f"Showing **{len(display):,}** of {len(corpus):,} khipus")
-
-        # Clickable links in the KFG URL column
-        def make_link(row: pd.Series) -> str:
-            url = row.get("kfg_url", "")
-            kid = row.get("kfg_id", "")
-            if url:
-                return f'<a href="{url}" target="_blank">{kid}</a>'
-            return str(kid)
+        st.caption(f"**{len(display):,}** khipus — use the table's built-in search & sort to filter")
 
         st.dataframe(
             display.rename(columns={
                 "kfg_id": "KFG ID",
-                "kfg_name": "Name",
                 "provenance": "Provenance",
                 "region": "Region",
                 "museum_country": "Country",
                 "museum_name": "Museum",
                 "cord_count": "Cords",
-            }).drop(columns=["kfg_url"], errors="ignore"),
+            }).drop(columns=["kfg_url", "kfg_name"], errors="ignore"),
             width='stretch',
             hide_index=True,
             height=600,
