@@ -32,8 +32,11 @@ Structural:
     n_colors              — distinct primary color codes
     n_pattern_types       — count of has_* columns that equal 1
 
-Metadata (string / nullable):
-    region, provenance, museum_country, creation_date
+Metadata (string / nullable — geographic provenance only, NOT museum location):
+    region            — KFG region grouping (e.g. "Central Coast, Peru", "Chachapoyas")
+    provenance_display — cleaned site name from provenance_labels table
+                         (many are "Unknown"; do not use museum fields as provenance proxy)
+    creation_date
 """
 
 import sqlite3
@@ -113,17 +116,39 @@ def _load_structural_features(db_path: str) -> pd.DataFrame:
 
 
 def _load_metadata(db_path: str) -> pd.DataFrame:
-    """Load provenance / museum metadata for enrichment."""
+    """Load origin provenance for enrichment.
+
+    Uses region (KFG grouping) and provenance_labels (site-level display name).
+    museum_country / museum_name are deliberately excluded — they record where
+    an object is currently held, not where it was made or used.
+    """
     conn = sqlite3.connect(db_path)
     meta = pd.read_sql(
         """
-        SELECT kfg_id, region, provenance, museum_country, creation_date
+        SELECT kfg_id, region, provenance, creation_date
         FROM khipu_metadata
         """,
         conn,
     )
+    labels = pd.read_sql("SELECT raw, display_name FROM provenance_labels", conn)
     conn.close()
-    return meta
+
+    # Normalise join key: strip whitespace and collapse internal spaces
+    def _norm(s):
+        if not isinstance(s, str):
+            return ""
+        return " ".join(s.strip().split())
+
+    meta["_prov_key"]   = meta["provenance"].apply(_norm)
+    labels["_prov_key"] = labels["raw"].apply(_norm)
+    # Keep only first match per raw string (table may have duplicates for same site)
+    labels_dedup = labels.drop_duplicates("_prov_key")[["_prov_key", "display_name"]]
+
+    meta = meta.merge(labels_dedup, on="_prov_key", how="left")
+    meta["provenance_display"] = meta["display_name"].fillna(
+        meta["provenance"].apply(lambda v: v if isinstance(v, str) and v.strip() not in ("", "Unknown") else None)
+    )
+    return meta.drop(columns=["provenance", "_prov_key", "display_name"])
 
 
 def build_feature_matrix(

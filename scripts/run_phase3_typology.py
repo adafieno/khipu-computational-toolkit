@@ -15,7 +15,7 @@ Visualizations (visualizations/phase3/)
 ---------------------------------------
 umap_by_cluster.png         — UMAP 2-D embedding coloured by k-means cluster
 umap_by_n_types.png         — UMAP coloured by n_pattern_types (0-9)
-umap_by_country.png         — UMAP coloured by museum_country
+umap_by_region.png          — UMAP coloured by origin region (provenance_display / region)
 heatmap_cluster_patterns.png— cluster × pattern heatmap (mean has_* per cluster)
 silhouette_curve.png        — silhouette score vs k
 
@@ -172,9 +172,10 @@ def plot_embedding_by_ntype(emb: np.ndarray, n_types: np.ndarray, method: str):
     _savefig(f"{'umap' if _HAS_UMAP else 'pca'}_by_n_types.png")
 
 
-def plot_embedding_by_country(emb: np.ndarray, countries: pd.Series, method: str):
-    top = countries.value_counts().head(6).index.tolist()
-    cats = [c if c in top else "Other / unknown" for c in countries.fillna("Unknown")]
+def plot_embedding_by_region(emb: np.ndarray, regions: pd.Series, method: str):
+    """Colour UMAP/PCA by origin region (provenance_display, falling back to region)."""
+    top = regions.value_counts().head(6).index.tolist()
+    cats = [c if c in top else "Other / unknown" for c in regions.fillna("Unknown")]
     unique_cats = sorted(set(cats))
     cmap = matplotlib.colormaps.get_cmap("tab10").resampled(len(unique_cats))
     cat_to_color = {c: cmap(i) for i, c in enumerate(unique_cats)}
@@ -186,9 +187,9 @@ def plot_embedding_by_country(emb: np.ndarray, countries: pd.Series, method: str
                    color=cat_to_color[cat], label=f"{cat} ({mask.sum()})")
     ax.set_xlabel(f"{method} 1")
     ax.set_ylabel(f"{method} 2")
-    ax.set_title(f"K-CAT Khipus — {method} coloured by museum country")
+    ax.set_title(f"K-CAT Khipus — {method} coloured by origin region")
     ax.legend(markerscale=2, fontsize=8)
-    _savefig(f"{'umap' if _HAS_UMAP else 'pca'}_by_country.png")
+    _savefig(f"{'umap' if _HAS_UMAP else 'pca'}_by_region.png")
 
 
 def plot_cluster_pattern_heatmap(df: pd.DataFrame, k: int):
@@ -243,8 +244,9 @@ def print_crosstabs(df: pd.DataFrame, k: int):
     print("\n=== Mean n_cords per cluster ===")
     print(df.groupby("cluster")["n_cords"].mean().round(0).to_string())
 
-    print("\n=== Top museum countries per cluster ===")
-    ct = pd.crosstab(df["cluster"], df["museum_country"].fillna("Unknown"))
+    print("\n=== Origin region per cluster ===")
+    region_col = "provenance_display" if "provenance_display" in df.columns else "region"
+    ct = pd.crosstab(df["cluster"], df[region_col].fillna("Unknown"))
     print(ct.to_string())
 
     print("\n=== Extremes: all 9 patterns ===")
@@ -318,7 +320,8 @@ def main():
     plot_silhouette_curve(sil_df)
     plot_embedding_by_cluster(emb, labels, best_k, method)
     plot_embedding_by_ntype(emb, df["n_pattern_types"].values, method)
-    plot_embedding_by_country(emb, df["museum_country"], method)
+    region_col = "provenance_display" if "provenance_display" in df.columns else "region"
+    plot_embedding_by_region(emb, df[region_col], method)
     plot_cluster_pattern_heatmap(df, best_k)
 
     # 7. Console summaries

@@ -52,7 +52,9 @@ Phase 2 established that 80.3% of K-CAT khipus carry at least one summation patt
 
 **Metadata for enrichment (not used as clustering inputs):**
 
-`region`, `provenance`, `museum_country`, `creation_date`
+`region`, `provenance_display`, `creation_date`
+
+> `museum_country` / `museum_name` are intentionally excluded. They record the current exhibition location, not the object's place of origin — inappropriate as a geographic signal for a corpus where many khipus were displaced from Peru during the colonial period.
 
 ### Clustering Approach
 
@@ -134,9 +136,9 @@ Cluster 1 shows near-uniform high prevalence across all patterns except GSB (31.
 
 ### 2-D Embedding (UMAP)
 
-`visualizations/phase3/umap_by_cluster.png` / `umap_by_n_types.png` / `umap_by_country.png`
+`visualizations/phase3/umap_by_cluster.png` / `umap_by_n_types.png` / `umap_by_region.png`
 
-The UMAP projection shows a broad main mass (Cluster 0) with a satellite island of large, complex khipus (Cluster 1). The n_pattern_types view confirms the island is the 4–9 pattern zone. Country colouring shows no strong geographic segregation — both clusters draw from Peru, Switzerland, Germany, and USA institutions, with unknown-provenance objects distributed across both.
+The UMAP projection shows a broad main mass (Cluster 0) with a satellite island of large, complex khipus (Cluster 1). The n_pattern_types view confirms the island is the 4–9 pattern zone. Region colouring shows limited geographic signal: only 142/709 khipus have a non-Unknown `region` value. Among those, Inka Late Horizon and Puruchuco objects appear in both clusters, consistent with site heterogeneity rather than site-specific structural types.
 
 ### Structural Extremes
 
@@ -157,20 +159,25 @@ The dominant singleton is `has_pp` (~55 khipus), followed by `has_adg` (~35), `h
 
 ---
 
-## Cross-tabulation: Clusters vs. Museum Country
+## Cross-tabulation: Clusters vs. Origin Region
 
-| museum_country | Cluster 0 (Simple) | Cluster 1 (Complex) |
-|---|---|---|
-| Unknown / no record | 353 | 92 |
-| Switzerland | 93 | 12 |
-| Germany | 66 | 4 |
-| USA | 57 | 7 |
-| France | 8 | 0 |
-| Great Britain | 4 | 0 |
-| Peru | 2 | 2 |
-| Other | 8 | 1 |
+Only 142/709 khipus have a non-Unknown `region` value (20%); the remainder are unprovenanced.
 
-Provenance does not cleanly separate the clusters. Both groups are dominated by unknown-provenance objects. Switzerland (primarily the Ethnographic Collections, Basel) and Germany (Ethnologisches Museum, Berlin) account for most known-provenance Cluster 0 objects. Cluster 1 is also predominantly unknown-provenance.
+| region | Cluster 0 (Simple) | Cluster 1 (Complex) | Total |
+|---|---|---|---|
+| Unknown | 482 | 87 | 569 |
+| Inka, Late Horizon | 23 | 8 | 31 |
+| Central Coast, Peru | 22 | 5 | 27 |
+| Puruchuco | 23 | 1 | 24 |
+| Chachapoyas | 11 | 11 | 22 |
+| South Coast, Peru | 15 | 4 | 19 |
+| Nazca | 6 | 0 | 6 |
+| Other (Ica, Ancon, etc.) | 9 | 2 | 11 |
+| **Total** | **591** | **118** | **709** |
+
+Most provenanced khipus (Inka Late Horizon, Central Coast, Puruchuco) fall predominantly in Cluster 0. The clearest exception is **Chachapoyas**, which splits evenly (11:11) between clusters — the large, complex khipus from that site are as common as the simple ones. South Coast Peru also shows a higher Complex fraction (4/19 = 21%).
+
+> **Note**: museum exhibition country (`museum_country`) was dropped from this analysis. It records where a khipu is currently held, not where it was made — unsuitable as a geographic proxy for a corpus displaced from Peru over centuries.
 
 ---
 
@@ -180,7 +187,7 @@ Provenance does not cleanly separate the clusters. Both groups are dominated by 
 
 2. **Pattern flag quality.** The flags inherit Phase 2 limitations: PSN is tentative (KFG author considers it likely coincidental); IP has the highest false-positive rate (89 FPs vs KFG). If those flags are noisy, the IP and PSN columns add noise to the clustering input. This is the primary motivation for the "not yet for publication" status.
 
-3. **Metadata sparsity.** `provenance` and `region` are populated for a fraction of the 709 khipus; geographic cross-tabulation is therefore indicative, not comprehensive.
+3. **Provenance sparsity.** `region` is non-Unknown for only 142/709 khipus (20%); `provenance_display` (from `provenance_labels` join) covers a similar subset. Geographic cross-tabulation is therefore indicative, not comprehensive. `museum_country` is intentionally excluded — it records exhibition location, not origin.
 
 4. **No consensus clustering.** A single k-means run is used. Ensemble clustering or stability analysis across multiple seeds and multiple k values would give stronger evidence for the identified cluster structure.
 
