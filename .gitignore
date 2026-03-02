@@ -66,6 +66,8 @@ query_colors.py
 /*.csv
 
 data/kfg/
+# Exception: Allow checks/*.csv for validation (but these should NOT be used for rendering)
+!data/kfg/KFG/KFG/checks/
 docs/MIT_FEEDBACK_AND_CORRECTIONS.md
 scripts/investigate_kfg_format.py
 

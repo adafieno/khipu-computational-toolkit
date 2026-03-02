@@ -13,6 +13,8 @@ import sqlite3
 import pandas as pd
 from typing import Dict, Any, List
 import argparse
+import re
+import openpyxl
 
 # Add src to path
 src_path = Path(__file__).parent.parent / 'src'
@@ -26,6 +28,53 @@ from extraction.kfg_parsers import (
     parse_kfg_color,
     compute_cord_value
 )
+
+# CordGroups parsing patterns
+RE_GROUP_RANGE = re.compile(r'[\d.]+cm\s+group\s+of\s+\d+\s+pendants\s+\((\d+)-(\d+)\)', re.IGNORECASE)
+RE_GROUP_SINGLE = re.compile(r'[\d.]+cm\s+1\s+\((\d+)\)', re.IGNORECASE)
+
+def parse_cord_groups(excel_file: Path) -> Dict[int, tuple]:
+    """
+    Parse CordGroups sheet to get group assignments.
+    Returns: { pendant_num: (group_idx, position_in_group), ... }
+    """
+    try:
+        wb = openpyxl.load_workbook(excel_file, read_only=True, data_only=True)
+        if 'CordGroups' not in wb.sheetnames:
+            wb.close()
+            return {}
+        
+        ws = wb['CordGroups']
+        assignments = {}
+        group_idx = 0
+        
+        for row in ws.iter_rows(values_only=True):
+            cell = row[0]
+            if not cell:
+                continue
+            cell_str = str(cell).strip()
+            if cell_str.startswith('!'):
+                continue
+            
+            m_range = RE_GROUP_RANGE.match(cell_str)
+            if m_range:
+                start, end = int(m_range.group(1)), int(m_range.group(2))
+                for pos, p_num in enumerate(range(start, end + 1)):
+                    assignments[p_num] = (group_idx, pos)
+                group_idx += 1
+                continue
+            
+            m_single = RE_GROUP_SINGLE.match(cell_str)
+            if m_single:
+                p_num = int(m_single.group(1))
+                assignments[p_num] = (group_idx, 0)
+                group_idx += 1
+                continue
+        
+        wb.close()
+        return assignments
+    except Exception:
+        return {}
 
 
 def create_schema(conn: sqlite3.Connection):
@@ -83,6 +132,8 @@ def create_schema(conn: sqlite3.Connection):
             pendant_num INTEGER,
             hierarchy_level INTEGER,
             parent_cord TEXT,
+            group_idx INTEGER,
+            position_in_group INTEGER,
             twist TEXT,
             attachment TEXT,
             knots TEXT,
@@ -166,6 +217,9 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
         primary_cord_df = pd.read_excel(excel_file, sheet_name='PrimaryCord', header=None)
         cords_df = pd.read_excel(excel_file, sheet_name='Cords')
         
+        # Parse CordGroups sheet for group assignments
+        cord_groups = parse_cord_groups(excel_file)
+        
         # 1. Parse and insert metadata
         metadata = parse_kfg_metadata(khipu_df)
         cursor.execute("""
@@ -215,6 +269,12 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
             pendant_num = hierarchy['pendant_num'] if hierarchy else None
             level = hierarchy['level'] if hierarchy else None
             parent = hierarchy['parent'] if hierarchy else None
+            
+            # Get group assignment for pendants (level 0)
+            group_idx, pos_in_group = None, None
+            if level == 0 and pendant_num is not None:
+                if pendant_num in cord_groups:
+                    group_idx, pos_in_group = cord_groups[pendant_num]
 
             # Parse position string "(group:cm)" or "(group:cm)(group:cm_end)" -> typed columns
             pos_raw = cord_row.get('Position')
@@ -232,16 +292,19 @@ def import_khipu(excel_file: Path, conn: sqlite3.Connection) -> Dict[str, Any]:
             cursor.execute("""
                 INSERT INTO cords (
                     kfg_id, cord_name, pendant_num, hierarchy_level, parent_cord,
+                    group_idx, position_in_group,
                     twist, attachment, knots, length, termination, thickness,
                     color, value, alt_value, position, position_group, position_cm,
                     position_cm_end, notes
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 kfg_id,
                 cord_name,
                 pendant_num,
                 level,
                 parent,
+                group_idx,
+                pos_in_group,
                 cord_row.get('Twist'),
                 cord_row.get('Attachment'),
                 cord_row.get('Knots'),
@@ -332,6 +395,11 @@ def main():
         '--force',
         action='store_true',
         help='Overwrite existing database'
+    )
+    parser.add_argument(
+        '--skip-detection',
+        action='store_true',
+        help='Skip running the pattern detector after import (faster, no pattern_results table)'
     )
     
     args = parser.parse_args()
@@ -442,6 +510,21 @@ def main():
         print(f"    {row[0]}: {row[1]}")
     
     conn.close()
+
+    # ── Pattern detection ──────────────────────────────────────────────────────
+    if not args.skip_detection:
+        print()
+        print("=" * 80)
+        print("BUILDING PATTERN DETECTION RESULTS")
+        print("=" * 80)
+        print("(Run with --skip-detection to omit this step)")
+        print()
+        _scripts_dir = Path(__file__).parent
+        if str(_scripts_dir) not in sys.path:
+            sys.path.insert(0, str(_scripts_dir))
+        from build_detection_results import build_detection_results as _bdr
+        _bdr(args.output, verbose=False)
+
     print()
     print("✓ Database ready for analysis!")
     print()
