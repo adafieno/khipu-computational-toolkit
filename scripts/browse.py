@@ -840,27 +840,36 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
 
     col_labels = [short[k] for k in available]
 
+    _colorscale = [
+        [0.00, "#0f172a"],   # 0 % — matches plot bg (invisible baseline)
+        [0.10, "#1e3a5f"],   # ~10 % — dark slate-blue
+        [0.35, "#7c4a1e"],   # ~35 % — muted brown-amber
+        [0.60, "#b45309"],   # ~60 % — muted amber-orange
+        [0.80, "#b91c1c"],   # ~80 % — muted brick-red
+        [1.00, "#7f1d1d"],   # 100 % — deep dark-red
+    ]
+
     fig = go.Figure(go.Heatmap(
         z=z_vals, x=col_labels, y=top_provs,
-        colorscale="YlOrRd",
+        colorscale=_colorscale,
         hovertemplate="%{y} · %{x}: %{text}<extra></extra>",
         text=text_vals,
         showscale=True,
         colorbar=dict(title="%", ticksuffix="%"),
     ))
 
-    # Per-cell annotations with adaptive text colour.
+    # Per-cell annotations — two lines via <br>, adaptive text colour.
     max_z = max(v for row in z_vals for v in row) or 1
     threshold = max_z * 0.45
     for i, prov in enumerate(top_provs):
         for j, col in enumerate(col_labels):
             v = z_vals[i][j]
-            fc = "#0f172a" if v < threshold else "#f8fafc"
+            fc = "#94a3b8" if v < threshold else "#f8fafc"
             fig.add_annotation(
                 x=col, y=prov,
-                text=text_vals[i][j].replace("<br>", "\n"),
+                text=text_vals[i][j],   # already contains <br>
                 showarrow=False,
-                font=dict(size=8, color=fc),
+                font=dict(size=10, color=fc),
             )
     fig.update_layout(
         xaxis_title="Pattern",
@@ -871,7 +880,7 @@ def build_geo_heatmap(full_df: pd.DataFrame, flags_df: pd.DataFrame) -> go.Figur
         xaxis=dict(color="#94a3b8"),
         yaxis=dict(color="#94a3b8", dtick=1),
         margin=dict(l=0, r=0, t=10, b=40),
-        height=max(400, len(top_provs) * 22 + 80),
+        height=max(500, len(top_provs) * 44 + 80),
     )
     return fig
 
