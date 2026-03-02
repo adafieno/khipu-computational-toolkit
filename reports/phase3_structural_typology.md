@@ -73,8 +73,6 @@ The pattern flags used here are identical to Phase 2 K-CAT detections. Two open 
 
 ## Results
 
-*All figures below are placeholders — run `scripts/run_phase3_typology.py` and fill in.*
-
 ### Feature Matrix Summary
 
 | Metric | Count |
