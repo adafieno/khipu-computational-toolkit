@@ -9,11 +9,9 @@
 *.egg-info
 
 # Dev/test artifacts
-scripts/legacy_okr/
+legacy/
 visualizations/
 reports/
-outputs/
-models/
 notebooks/
 docs/
 
