@@ -997,12 +997,8 @@ header[data-testid="stHeader"]   { display: none !important; }
 [data-testid="stDecoration"]     { display: none !important; }
 [data-testid="stFooterDefault"]  { display: none !important; }
 #MainMenu                        { display: none !important; }
-footer.st-emotion-cache-1dp5vir  { display: none !important; }
-
-/* ── break the stacking context that clips position:fixed children ──────────  */
-/* Streamlit wraps everything in overflow:auto containers; this undoes that    */
-[data-testid="stApp"],
-[data-testid="stAppViewContainer"] { overflow: visible !important; }
+/* hide the native Streamlit footer bar (matches any emotion class) */
+[data-testid="stBottom"]         { display: none !important; }
 
 /* ── global layout ──────────────────────────────────────────────────────────  */
 [data-testid="stApp"]            { background: #0b1120; }
