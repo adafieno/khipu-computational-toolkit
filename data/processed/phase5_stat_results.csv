@@ -1,0 +1,5 @@
+test,statistic,p,significant,note
+White-first-cord × n_pattern_types (Mann-Whitney),72040.5,7.124413391752457e-06,True,With=2.92 vs Without=2.22 mean pattern types
+White-first-cord × cluster (chi-square),1.6566748232551214,0.1980528812296092,False,"Complex rate with=18.2%, without=14.3%"
+Color diversity Complex > Simple (Mann-Whitney),55594.0,6.82793680075114e-25,True,"Mean unique colors: Complex=23.6, Simple=7.3"
+Color code × cord value (Kruskal-Wallis),987.1825447052296,1.0997662336753018e-204,True,"Top 12 colors, non-zero values only"
