@@ -101,14 +101,21 @@ def _aggregate(matches: list) -> dict[str, Any]:
         sum_cord_hits[sc.cord_id] += 1
         total_val += float(m.expected_sum or 0)
 
-        # Handedness: compare flat position of sum cord vs summands
-        sc_ord = _flat_order(sc)
-        s_ords = [_flat_order(s) for s in m.summand_cords]
-        if s_ords:
-            if max(s_ords) < sc_ord:
+        # Handedness: use pre-computed value from detector if available,
+        # otherwise fall back to flat-order comparison.
+        if m.handedness is not None and m.handedness != 0:
+            if m.handedness < 0:
                 left += 1
-            elif min(s_ords) > sc_ord:
+            else:
                 right += 1
+        else:
+            sc_ord = _flat_order(sc)
+            s_ords = [_flat_order(s) for s in m.summand_cords]
+            if s_ords:
+                if max(s_ords) < sc_ord:
+                    left += 1
+                elif min(s_ords) > sc_ord:
+                    right += 1
 
         # Multi-summand: 3+ distinct non-zero summands in this relationship
         n_nonzero = sum(1 for s in m.summand_cords if (s.value or 0) != 0)

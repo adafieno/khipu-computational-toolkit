@@ -27,11 +27,13 @@ Pattern catalogue
 
 import sqlite3
 import re
+import time
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Set
-from dataclasses import dataclass
+from typing import Callable, Dict, List, Optional, Tuple, Set
+from dataclasses import dataclass, field
 from collections import defaultdict
 import sys
+from functools import wraps
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -52,11 +54,17 @@ class Cord:
     value: Optional[int]
     color: Optional[str]
     termination: Optional[str] = None
+    attachment: Optional[str] = None
 
     @property
     def is_broken(self) -> bool:
         """True when the cord is physically broken (termination='B')."""
         return self.termination == 'B'
+
+    @property
+    def is_top_cord(self) -> bool:
+        """True when the cord has top-cord attachment (attachment='T')."""
+        return self.attachment == 'T'
 
 
 
@@ -69,6 +77,9 @@ class SummationMatch:
     actual_sum: int
     matches: bool
     notes: str = ""
+    handedness: Optional[float] = None  # signed: negative=left, positive/zero=right (KFG convention)
+    is_dual_sum: bool = False  # True if sum cord has multiple summand windows
+    figure8_proximity: Optional[Dict] = None  # Figure-8 knot proximity info
 
     @property
     def broken_cords(self) -> List[str]:
@@ -83,6 +94,42 @@ class SummationMatch:
     def has_broken_cord(self) -> bool:
         """True if any cord in this summation relationship is physically broken."""
         return bool(self.broken_cords)
+    
+    @property
+    def summand_range(self) -> Optional[Tuple[int, int]]:
+        """Return (min_group_idx, max_group_idx) or (min_position, max_position) of summands."""
+        if not self.summand_cords:
+            return None
+        positions: list[int] = [c.group_idx if c.group_idx is not None else c.position_in_group 
+                     for c in self.summand_cords 
+                     if c.group_idx is not None or c.position_in_group is not None]  # type: ignore[misc]
+        if not positions:
+            return None
+        return (min(positions), max(positions))
+
+
+# ---------------------------------------------------------------------------
+# Timing decorator
+# ---------------------------------------------------------------------------
+
+def time_pattern_detection(func):
+    """Decorator to time pattern detection methods."""
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        if not hasattr(self, '_timing_enabled') or not self._timing_enabled:
+            return func(self, *args, **kwargs)
+        
+        start = time.perf_counter()
+        result = func(self, *args, **kwargs)
+        elapsed = time.perf_counter() - start
+        
+        pattern_name = func.__name__.replace('detect_', '')
+        if not hasattr(self, '_timing_data'):
+            self._timing_data = {}
+        self._timing_data[pattern_name] = elapsed
+        
+        return result
+    return wrapper
 
 
 # ---------------------------------------------------------------------------
@@ -98,11 +145,25 @@ class KFGSummationDetector:
     The cords table must have group_idx and position_in_group columns,
     populated by scripts/migrate_cord_groups.py.
     """
+    
+    PATTERN_TYPES = [
+        'pendant_pendant_sum',
+        'colored_pendant_sum',
+        'indexed_pendant_sum',
+        'subsidiary_pendant_sum',
+        'indexed_subsidiary_sum',
+        'pendant_sub_neighbor',
+        'group_group_sum',
+        'group_sum_bands',
+        'ascher_decreasing_group'
+    ]
 
-    def __init__(self, db_path):
+    def __init__(self, db_path, enable_timing=False):
         self.db_path = Path(db_path)
         if not self.db_path.exists():
             raise FileNotFoundError(f"Database not found: {self.db_path}")
+        self._timing_enabled = enable_timing
+        self._timing_data = {}
 
     # ------------------------------------------------------------------
     # Database helpers
@@ -117,7 +178,7 @@ class KFGSummationDetector:
             cur.execute("""
                 SELECT cord_id, cord_name, pendant_num, hierarchy_level,
                        parent_cord, group_idx, position_in_group, value, color,
-                       termination
+                       termination, attachment
                 FROM cords
                 WHERE kfg_id = ?
                 ORDER BY hierarchy_level, group_idx, position_in_group
@@ -133,17 +194,218 @@ class KFGSummationDetector:
 
     def _subsidiaries(self, cords: List[Cord]) -> List[Cord]:
         return [c for c in cords if c.hierarchy_level == 1]
+    
+    def _load_figure8_knots(self, kfg_id: str) -> Dict[str, List[float]]:
+        """Load figure-8 knot positions for each cord.
+        Returns: {cord_name: [position_cm, ...]} for cords with E/EE knots.
+        """
+        with self._connect() as conn:
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT c.cord_name, kc.position_cm
+                FROM cords c
+                JOIN knot_clusters kc ON c.cord_id = kc.cord_id
+                WHERE c.kfg_id = ? 
+                  AND kc.knot_type IN ('E', 'EE')
+                  AND kc.position_cm IS NOT NULL
+                ORDER BY c.cord_name, kc.position_cm
+            """, (kfg_id,))
+            
+            figure8_map = defaultdict(list)
+            for cord_name, pos_cm in cur.fetchall():
+                figure8_map[cord_name].append(float(pos_cm))
+            
+            return dict(figure8_map)
+    
+    def _build_eight_knot_cord_ids(self, kfg_id: str) -> Set[int]:
+        """Return the set of cord_ids that have at least one figure-8 knot (E/EE)."""
+        with self._connect() as conn:
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT DISTINCT kc.cord_id
+                FROM knot_clusters kc
+                JOIN cords c ON c.cord_id = kc.cord_id
+                WHERE c.kfg_id = ? AND kc.knot_type IN ('E', 'EE')
+            """, (kfg_id,))
+            return {row[0] for row in cur.fetchall()}
 
     # ------------------------------------------------------------------
     # Algorithm helpers
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _prefix_sums(values: List[Optional[int]]) -> List[int]:
+    def _prefix_sums(values: List[int] | List[Optional[int]]) -> List[int]:
         ps = [0] * (len(values) + 1)
         for i, v in enumerate(values):
             ps[i + 1] = ps[i] + (v if v is not None else 0)
         return ps
+
+    @staticmethod
+    def _find_windows_optimized(target: int,
+                                exclude_idx: int,
+                                values: List[int],
+                                min_window: int = 2,
+                                first_only: bool = True,
+                                filter_all_ones: bool = True) -> List[Tuple[int, int, str]]:
+        """Find contiguous windows that sum to target using hash-based lookup.
+        
+        Returns list of (start, end, side) tuples where:
+        - start, end: window bounds (inclusive)
+        - side: 'left' if window is left of exclude_idx, 'right' if right
+        
+        Parameters
+        ----------
+        first_only : bool
+            When True (default), return at most ONE window per side, matching
+            KFG CordSummer behavior where search_sum_at() returns the first
+            valid match and stops.
+        filter_all_ones : bool
+            When True (default), reject windows where every value is 1
+            (matching KFG filter_one_summands=True).
+        """
+        if target <= 0:
+            return []
+        
+        n = len(values)
+        prefix = [0] * (n + 1)
+        for i in range(n):
+            prefix[i + 1] = prefix[i] + values[i]
+        
+        results: List[Tuple[int, int, str]] = []
+        
+        # Scan left of exclude_idx
+        if exclude_idx > 0:
+            seen_prefix: Dict[int, int] = {0: -1}
+            for r in range(exclude_idx):
+                current_sum = prefix[r + 1]
+                need = current_sum - target
+                
+                if need in seen_prefix:
+                    l = seen_prefix[need] + 1
+                    if r - l + 1 >= min_window:
+                        # Trim leading/trailing zeros
+                        tl, tr = l, r
+                        while tl < tr and values[tl] == 0:
+                            tl += 1
+                        while tr > tl and values[tr] == 0:
+                            tr -= 1
+                        if tr - tl + 1 >= min_window:
+                            # Filter all-ones windows
+                            if filter_all_ones and all(values[k] == 1 for k in range(tl, tr + 1)):
+                                pass  # skip
+                            else:
+                                results.append((tl, tr, 'left'))
+                                if first_only:
+                                    break
+                
+                seen_prefix[current_sum] = r
+        
+        # Scan right of exclude_idx
+        if exclude_idx < n - 1:
+            seen_prefix = {prefix[exclude_idx + 1]: exclude_idx}
+            for r in range(exclude_idx + 1, n):
+                current_sum = prefix[r + 1]
+                need = current_sum - target
+                
+                if need in seen_prefix:
+                    l = seen_prefix[need] + 1
+                    if l > exclude_idx and r - l + 1 >= min_window:
+                        # Trim leading/trailing zeros
+                        tl, tr = l, r
+                        while tl < tr and values[tl] == 0:
+                            tl += 1
+                        while tr > tl and values[tr] == 0:
+                            tr -= 1
+                        if tr - tl + 1 >= min_window:
+                            # Filter all-ones windows
+                            if filter_all_ones and all(values[k] == 1 for k in range(tl, tr + 1)):
+                                pass  # skip
+                            else:
+                                results.append((tl, tr, 'right'))
+                                if first_only:
+                                    break
+                
+                seen_prefix[current_sum] = r
+        
+        return results
+
+    @staticmethod
+    def _find_first_window_nearest_start(
+        target: int,
+        exclude_idx: int,
+        values: List[int],
+        min_window: int = 2,
+        filter_all_ones: bool = True,
+    ) -> List[Tuple[int, int, str]]:
+        """Find at most one window per side using nearest-start-first ordering.
+
+        Matches KFG CordSummer.search_sum_at() behavior:
+        - Iterates start positions from nearest to sum cord outward
+        - Skips zero-value start positions
+        - For each start, finds the first (shortest) window ending there
+        - Returns immediately on first valid match (size >= min_window)
+        - If first cumsum match is too short (< min_window), stops entirely
+
+        Returns at most 2 tuples: one 'right', one 'left'.
+        """
+        if target <= 0:
+            return []
+
+        n = len(values)
+        prefix = [0] * (n + 1)
+        for i in range(n):
+            prefix[i + 1] = prefix[i] + values[i]
+
+        results: List[Tuple[int, int, str]] = []
+
+        # --- Right scan (start positions after exclude_idx) ---
+        for start in range(exclude_idx + 1, n):
+            if values[start] == 0:
+                continue
+            needed = prefix[start] + target
+            found_cumsum_hit = False
+            # Search for first end where cumsum matches target
+            for end in range(start, n):
+                if prefix[end + 1] == needed:
+                    found_cumsum_hit = True
+                    if end - start + 1 >= min_window:
+                        if not (filter_all_ones and all(values[k] == 1 for k in range(start, end + 1))):
+                            results.append((start, end, 'right'))
+                    break  # KFG: stop at first cumsum match regardless of window size
+                if prefix[end + 1] > needed:
+                    break  # prefix is non-decreasing
+            # KFG: if cumsum matched but window was too short, give up entirely
+            if found_cumsum_hit:
+                break
+
+        # --- Left scan (reverse order, then map indices back) ---
+        rev_values = values[:exclude_idx][::-1]
+        n_left = len(rev_values)
+        if n_left >= min_window:
+            rev_prefix = [0] * (n_left + 1)
+            for i in range(n_left):
+                rev_prefix[i + 1] = rev_prefix[i] + rev_values[i]
+
+            for start in range(0, n_left):
+                if rev_values[start] == 0:
+                    continue
+                needed = rev_prefix[start] + target
+                found_cumsum_hit = False
+                for end in range(start, n_left):
+                    if rev_prefix[end + 1] == needed:
+                        found_cumsum_hit = True
+                        if end - start + 1 >= min_window:
+                            orig_start = exclude_idx - 1 - end
+                            orig_end = exclude_idx - 1 - start
+                            if not (filter_all_ones and all(values[k] == 1 for k in range(orig_start, orig_end + 1))):
+                                results.append((orig_start, orig_end, 'left'))
+                        break
+                    if rev_prefix[end + 1] > needed:
+                        break
+                if found_cumsum_hit:
+                    break
+
+        return results
 
     @staticmethod
     def _find_windows(target: int,
@@ -152,18 +414,9 @@ class KFGSummationDetector:
                       n: int,
                       values: Optional[List[int]] = None,
                       min_window: int = 2) -> List[Tuple[int, int]]:
-        """
-        All [l, r] (inclusive) contiguous windows NOT containing exclude_idx
-        that sum exactly to target, with at least min_window elements.
-
-        min_window defaults to 2: a "sum" of a single element is not a
-        summation pattern — it is just two equal values coinciding.
-
-        The two-pointer finds the leftmost window per r-position.  Because
-        leading zero-value cords may be captured, each raw window is also
-        returned in a zero-trimmed form (leading/trailing zeros stripped).
-        Both raw and trimmed windows are included so we match both the KFG
-        canonical form and the minimal numeric form.
+        """Legacy two-pointer window finder (kept for backward compatibility).
+        
+        Used by CPS, IPS, ISS, SP pattern detectors.
         """
         if target <= 0:
             return []
@@ -196,6 +449,66 @@ class KFGSummationDetector:
                 seen.add((tl, tr))
                 results.append((tl, tr))
         return results
+
+    @staticmethod
+    def _dedup_shortest_per_cord(
+        matches: List['SummationMatch'],
+        is_trivial: Optional[Callable[['SummationMatch'], bool]] = None,
+    ) -> List['SummationMatch']:
+        """Keep only the shortest summand window per sum cord per side.
+
+        Mirrors KFG's ``filter_results`` + ``fix_handedness`` pipeline:
+        1. Split matches into left (handedness < 0) and right (handedness >= 0).
+        2. For each side, iterate matches in ascending summand-count order.
+        3. For each sum cord: if first (shortest) match is trivial, block the cord
+           entirely; otherwise keep the shortest match.
+        4. Merge left + right.
+
+        Parameters
+        ----------
+        matches : list of SummationMatch
+            Raw matches (multiple windows per cord allowed).
+        is_trivial : callable, optional
+            ``is_trivial(match) -> bool``.  When *None*, no triviality filter
+            is applied.
+        """
+        if not matches:
+            return []
+
+        from collections import defaultdict
+
+        def _filter_side(side_matches: List['SummationMatch']) -> List['SummationMatch']:
+            # Sort by (sum_cord_id, number of summands) — shortest first
+            side_matches.sort(key=lambda m: (m.sum_cord.cord_id, len(m.summand_cords)))
+            best: Dict[int, Optional['SummationMatch']] = {}  # cord_id → match or None (blocked)
+            for m in side_matches:
+                cid = m.sum_cord.cord_id
+                if cid in best:
+                    continue  # already resolved (kept or blocked)
+                if is_trivial and is_trivial(m):
+                    best[cid] = None  # block this cord
+                else:
+                    best[cid] = m
+            return [m for m in best.values() if m is not None]
+
+        left = [m for m in matches if m.handedness is not None and m.handedness < 0]
+        right = [m for m in matches if m.handedness is None or m.handedness >= 0]
+
+        return _filter_side(left) + _filter_side(right)
+
+    @staticmethod
+    def _obo_equal(a_value: int, test_value: int) -> bool:
+        """Off-by-one equality: exact for values < 100, else allow one digit off."""
+        if a_value < 100:
+            return a_value == test_value
+        digits = list(str(test_value))
+        for i, d in enumerate(digits):
+            di = int(d)
+            for near in range(max(0, di - 1), min(9, di + 1) + 1):
+                candidate = int(''.join(digits[:i]) + str(near) + ''.join(digits[i + 1:]))
+                if candidate == a_value:
+                    return True
+        return False
 
     @staticmethod
     def _primary_color(color: Optional[str]) -> str:
@@ -233,46 +546,148 @@ class KFGSummationDetector:
                 best_color = m.group(1)
         return best_color if best_color else color
 
+    @staticmethod
+    def _build_child_map(cords: List[Cord]) -> Dict[int, List[int]]:
+        """Map pendant cord_id -> list of subsidiary cord_ids."""
+        name_to_cord: Dict[str, Cord] = {c.cord_name: c for c in cords}
+        child_map: Dict[int, List[int]] = defaultdict(list)
+        for c in cords:
+            if c.hierarchy_level is not None and c.hierarchy_level >= 1 and c.parent_cord:
+                parent = name_to_cord.get(c.parent_cord)
+                if parent is not None and parent.hierarchy_level == 0:
+                    child_map[parent.cord_id].append(c.cord_id)
+        return dict(child_map)
+
+    @staticmethod
+    def _check_figure8_structural(
+        summand_cords: List[Cord],
+        flat_pendants: List[Cord],
+        flat_idx_map: Dict[int, int],
+        eight_knot_ids: Set[int],
+        child_map: Dict[int, List[int]],
+    ) -> Optional[Dict]:
+        """Check figure-8 knot markers using KFG structural adjacency rules.
+
+        KFG checks first and last summand cords for eight_knots in 4 categories:
+        - exact pendant: the summand cord itself has an eight_knot
+        - exact subsidiary: a subsidiary of the summand cord has an eight_knot
+        - close pendant: left/right neighbor pendant has an eight_knot
+        - close subsidiary: a subsidiary of the neighbor has an eight_knot
+        """
+        if not summand_cords or not eight_knot_ids:
+            return None
+
+        first = summand_cords[0]
+        last = summand_cords[-1]
+
+        def cord_has_8knot(c: 'Cord') -> bool:
+            return c.cord_id in eight_knot_ids
+
+        def subs_have_8knot(c: 'Cord') -> bool:
+            return any(sid in eight_knot_ids for sid in child_map.get(c.cord_id, []))
+
+        # Get neighbors in flat pendant list
+        first_idx = flat_idx_map.get(first.cord_id)
+        last_idx = flat_idx_map.get(last.cord_id)
+        left_neighbor = flat_pendants[first_idx - 1] if first_idx is not None and first_idx > 0 else None
+        right_neighbor = flat_pendants[last_idx + 1] if last_idx is not None and last_idx < len(flat_pendants) - 1 else None
+
+        left_exact = cord_has_8knot(first) or subs_have_8knot(first)
+        right_exact = cord_has_8knot(last) or subs_have_8knot(last)
+        left_close = False
+        right_close = False
+        if left_neighbor is not None:
+            left_close = cord_has_8knot(left_neighbor) or subs_have_8knot(left_neighbor)
+        if right_neighbor is not None:
+            right_close = cord_has_8knot(right_neighbor) or subs_have_8knot(right_neighbor)
+
+        has_indicator = left_exact or right_exact or left_close or right_close
+        if not has_indicator:
+            return None
+
+        return {
+            'has_figure8knot_indicator': True,
+            'has_left_exact': left_exact,
+            'has_right_exact': right_exact,
+            'has_left_close': left_close,
+            'has_right_close': right_close,
+        }
+
     # ------------------------------------------------------------------
     # Pattern 1: pendant_pendant_sum
     # ------------------------------------------------------------------
 
+    @time_pattern_detection
     def detect_pendant_pendant_sum(self, kfg_id: str,
                                    cords: Optional[List[Cord]] = None,
                                    tolerance: int = 0) -> List[SummationMatch]:
         """
         Sliding window on the group-ordered flat pendant sequence.
 
-        For each pendant with value V >= 11, finds every contiguous run of
-        OTHER pendants whose values sum to V.  Zero-value cords between non-zero
-        summands do not break contiguity (per KFG documentation).
+        For each pendant with value V >= 11, finds the first contiguous window
+        of OTHER pendants (per side) whose values sum to V.
 
-        KFG criteria (from pendant_pendant_sum.html#search-criteria):
-          - sum cord value must be >= 11
+        KFG constraints (matched for consistency):
+          - sum cord value must be >= 11  (CordSummer min_sum_val)
           - at least 2 non-zero summand cords required (min_window=2)
-          - 0-value cords in the physical span are allowed (contiguity is not
-            broken by zeros); the '3 cords' phrasing in the doc refers to the
-            physical span including zeros, confirmed by KFG ground truth
-          - exact numerical match required
-          - maximum window span = 250
+          - first match only per side per sum cord (CordSummer early termination)
+          - all-ones windows rejected (CordSummer filter_one_summands)
+          - top cords excluded (PPS is_trivial_match)
+          - at least one summand in a different cord group (PPS cross-group check)
+          - handedness as signed integer: -(sum_index - mean(summand_indices))
+          - figure-8 via structural adjacency (not distance)
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = self._pendants(cords)
-        if len(flat) < 3:  # need at least 2 summands + 1 sum cord
+        if len(flat) < 3:
             return []
 
         values = [c.value if c.value is not None else 0 for c in flat]
-        prefix = self._prefix_sums(values)
-        n = len(flat)
-        matches = []
+
+        # Build indices for figure-8 structural checks
+        eight_knot_ids = self._build_eight_knot_cord_ids(kfg_id)
+        child_map = self._build_child_map(cords)
+        flat_idx_map: Dict[int, int] = {c.cord_id: i for i, c in enumerate(flat)}
+
+        # Track windows per sum cord to detect dual sums
+        sum_cord_windows: Dict[int, int] = defaultdict(int)
+        matches: List[SummationMatch] = []
 
         for i, cord in enumerate(flat):
             if cord.value is None or cord.value < 11:
                 continue
-            for l, r in self._find_windows(cord.value, i, prefix, n, values, min_window=2):
+            # KFG: skip top cords
+            if cord.is_top_cord:
+                continue
+
+            windows = self._find_first_window_nearest_start(
+                cord.value, i, values,
+                min_window=2,
+                filter_all_ones=False,  # KFG has `or True` bug that disables this
+            )
+
+            # Filter: at least one summand in a different group than sum cord
+            valid_windows: List[Tuple[int, int, str]] = []
+            for l, r, side in windows:
+                summands = flat[l:r + 1]
+                if any(s.group_idx != cord.group_idx for s in summands):
+                    valid_windows.append((l, r, side))
+
+            sum_cord_windows[cord.cord_id] = len(valid_windows)
+
+            for l, r, side in valid_windows:
                 summands = flat[l:r + 1]
                 actual = sum(s.value or 0 for s in summands)
+
+                # KFG handedness: -(sum_index - mean(summand_indices))
+                summand_mean = sum(flat_idx_map.get(s.cord_id, 0) for s in summands) / len(summands)
+                handedness_val = -(i - summand_mean)
+
+                # Structural figure-8 check
+                f8 = self._check_figure8_structural(
+                    summands, flat, flat_idx_map, eight_knot_ids, child_map)
+
                 matches.append(SummationMatch(
                     pattern_type='pendant_pendant_sum',
                     sum_cord=cord,
@@ -280,27 +695,39 @@ class KFGSummationDetector:
                     expected_sum=cord.value,
                     actual_sum=actual,
                     matches=True,
-                    notes=f'window[{l}-{r}]'
+                    handedness=handedness_val,
+                    is_dual_sum=(len(valid_windows) > 1),
+                    figure8_proximity=f8,
+                    notes=f'window[{l}-{r}] {side}'
                 ))
+
         return matches
 
     # ------------------------------------------------------------------
     # Pattern 2: colored_pendant_sum
     # ------------------------------------------------------------------
 
+    @time_pattern_detection
     def detect_colored_pendant_sum(self, kfg_id: str,
                                    cords: Optional[List[Cord]] = None,
                                    tolerance: int = 0) -> List[SummationMatch]:
         """
         A pendant = sum of a contiguous window of same-color pendants.
 
-        Key insight: use FULL color string for grouping (W:KB != W).  The
-        GT summand_string never includes zero-value cords, so we filter them
-        out of the returned summand_cords to enable exact-recall matching.
+        KFG algorithm (fieldmark_ascher_colored_pendant_sum.py):
+        - Group pendants by main_color; for each sum cord (value > 10), split
+          same-color cords into left/right halves, remove zeros, find all
+          contiguous windows of size >= 3 that sum to cord value.
+        - filter_results: keep only shortest window per sum cord per side.
+        - is_trivial_match: value <= len(summands) OR value <= 10 OR len < 2.
+        - fix_handedness: recalculate from pendant indices.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = [c for c in self._pendants(cords) if c.value is not None]
+
+        # Assign flat-order index for handedness calculation
+        flat_order = {c.cord_id: idx for idx, c in enumerate(flat)}
 
         # Group by DOMINANT color string (handles spliced cords correctly)
         by_color: Dict[str, List[Cord]] = defaultdict(list)
@@ -309,62 +736,61 @@ class KFGSummationDetector:
             if col:
                 by_color[col].append(c)
 
-        matches = []
+        raw_matches: List[SummationMatch] = []
         for color, group in by_color.items():
-            if len(group) < 3:  # need ≥2 summands + 1 sum cord
+            if len(group) < 4:  # need >= 3 summands + 1 sum cord
                 continue
-            values = [c.value for c in group]
-            prefix = self._prefix_sums(values)
-            n = len(group)
             for i, cord in enumerate(group):
                 if cord.value is None or cord.value < 11:
                     continue
-                # (a) cord = sum of ALL others in color group
-                rest = sum(c.value for c in group) - cord.value
-                if abs(cord.value - rest) <= tolerance:
-                    # GT skips zero-value summands
-                    summands = [c for c in group
-                                if c.cord_id != cord.cord_id and (c.value or 0) != 0]
-                    # KFG criteria: cord value > number of summands, summands span >= 2 groups
-                    if cord.value <= len(summands):
+
+                # KFG: split into left/right, filter zeros, find combos >= 3
+                for side_label, side_cords in [
+                    ('left', group[:i]),
+                    ('right', group[i + 1:]),
+                ]:
+                    nz_cords = [c for c in side_cords if (c.value or 0) > 0]
+                    if len(nz_cords) < 3:
                         continue
-                    if len(set(c.group_idx for c in summands)) < 2:
-                        continue
-                    matches.append(SummationMatch(
-                        pattern_type='colored_pendant_sum',
-                        sum_cord=cord,
-                        summand_cords=summands,
-                        expected_sum=cord.value,
-                        actual_sum=rest,
-                        matches=True,
-                        notes=f'color={color} all-others'
-                    ))
-                    continue
-                # (b) sliding window within color group
-                for l, r in self._find_windows(cord.value, i, prefix, n, values):
-                    # GT skips zero-value summands
-                    summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
-                    actual = sum(s.value for s in summands)
-                    # KFG criteria: cord value > number of summands, summands span >= 2 groups
-                    if cord.value <= len(summands):
-                        continue
-                    if len(set(c.group_idx for c in summands)) < 2:
-                        continue
-                    matches.append(SummationMatch(
-                        pattern_type='colored_pendant_sum',
-                        sum_cord=cord,
-                        summand_cords=summands,
-                        expected_sum=cord.value,
-                        actual_sum=actual,
-                        matches=True,
-                        notes=f'color={color} window[{l}-{r}]'
-                    ))
-        return matches
+                    nz_values: List[int] = [c.value or 0 for c in nz_cords]
+                    nz_prefix = self._prefix_sums(nz_values)
+                    nz_n = len(nz_cords)
+                    # Scan all windows of size >= 3 (KFG contiguous_combinations range(3,...))
+                    for l, r in self._find_windows(
+                        cord.value, nz_n, nz_prefix, nz_n, nz_values, min_window=3
+                    ):
+                        summands = nz_cords[l:r + 1]
+                        actual = sum(s.value or 0 for s in summands)
+                        # Signed handedness from flat pendant indices
+                        sum_idx = flat_order.get(cord.cord_id, 0)
+                        summand_mean = round(sum(flat_order.get(s.cord_id, 0) for s in summands) / len(summands))
+                        handedness = -(sum_idx - summand_mean)
+                        raw_matches.append(SummationMatch(
+                            pattern_type='colored_pendant_sum',
+                            sum_cord=cord,
+                            summand_cords=summands,
+                            expected_sum=cord.value,
+                            actual_sum=actual,
+                            matches=True,
+                            handedness=float(handedness),
+                            notes=f'color={color} {side_label} window[{l}-{r}]'
+                        ))
+
+        def _cps_trivial(m: SummationMatch) -> bool:
+            v = m.sum_cord.value or 0
+            return (
+                v <= len(m.summand_cords)
+                or v <= 10
+                or len(m.summand_cords) < 2
+            )
+
+        return self._dedup_shortest_per_cord(raw_matches, is_trivial=_cps_trivial)
 
     # ------------------------------------------------------------------
     # Pattern 3: indexed_pendant_sum
     # ------------------------------------------------------------------
 
+    @time_pattern_detection
     def detect_indexed_pendant_sum(self, kfg_id: str,
                                    cords: Optional[List[Cord]] = None,
                                    tolerance: int = 0) -> List[SummationMatch]:
@@ -372,73 +798,106 @@ class KFGSummationDetector:
         cord[g][p] = sum of a sliding window of other cords at the same
         position_in_group p across different groups.
 
-        GT summand_string never lists zero-value cords, so zero-value cords
-        are filtered from returned summand_cords.
-
-        KFG criteria (from indexed_pendant_sum.html#search-criteria):
-          - sum cord value must be >= 5
-          - exclude multiples of 10 when cord value < 100 (trivial round sums)
-          - exclude multiples of 100 when cord value < 1000
-          - at least 2 summands required (no identity matches)
-          - summands must be in contiguous groups
+        KFG algorithm (fieldmark_ascher_indexed_pendant_sum.py):
+        - For each group's pendants with value > 5: skip top cords, get
+          same-position cords from left and right groups, filter zeros,
+          find all contiguous combos of size >= 2 that sum to cord value.
+        - find_sum_matches filter: value > 1, not tens (< 100), not hundreds
+          (100-999), and len > 1.
+        - filter_results: keep shortest per sum cord per side + is_trivial_match.
+        - is_trivial_match: value <= len OR value < 11 OR (2 summands w/ any
+          value=1) OR len < 2.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = [c for c in self._pendants(cords) if c.value is not None]
 
+        # Assign flat-order index for handedness calculation
+        flat_order = {c.cord_id: idx for idx, c in enumerate(flat)}
+
         by_pos: Dict[int, List[Cord]] = defaultdict(list)
         for c in flat:
-            by_pos[c.position_in_group].append(c)
+            if c.position_in_group is not None:
+                by_pos[c.position_in_group].append(c)
 
-        matches = []
+        raw_matches: List[SummationMatch] = []
         for pos, group in by_pos.items():
-            if len(group) < 3:  # need ≥2 summands + 1 sum cord
+            if len(group) < 3:  # need >= 2 summands + 1 sum cord
                 continue
-            values = [c.value for c in group]
-            prefix = self._prefix_sums(values)
-            n = len(group)
             for i, cord in enumerate(group):
                 v = cord.value
-                if v is None or v < 5:
+                if v is None or v < 6:  # KFG: > 5
                     continue
-                # KFG: exclude round-number trivial sums
+                # KFG: skip top cords
+                if cord.is_top_cord:
+                    continue
+                # KFG find_sum_matches: pre-filter on sum cord value
+                if v <= 1:
+                    continue
                 if v < 100 and v % 10 == 0:
                     continue
-                if v < 1000 and v % 100 == 0:
+                if v >= 100 and v < 1000 and v % 100 == 0:
                     continue
-                for l, r in self._find_windows(v, i, prefix, n, values):
-                    # GT skips zero-value summands
-                    summands = [c for c in group[l:r + 1] if (c.value or 0) != 0]
-                    actual = sum(s.value for s in summands)
-                    matches.append(SummationMatch(
-                        pattern_type='indexed_pendant_sum',
-                        sum_cord=cord,
-                        summand_cords=summands,
-                        expected_sum=v,
-                        actual_sum=actual,
-                        matches=True,
-                        notes=f'pos={pos} window[{l}-{r}]'
-                    ))
-        return matches
+
+                # KFG: split left/right from cord position, filter zeros
+                for side_label, side_cords in [
+                    ('left', group[:i]),
+                    ('right', group[i + 1:]),
+                ]:
+                    nz_cords = [c for c in side_cords if (c.value or 0) > 0]
+                    if len(nz_cords) < 2:
+                        continue
+                    nz_values: List[int] = [c.value or 0 for c in nz_cords]
+                    nz_prefix = self._prefix_sums(nz_values)
+                    nz_n = len(nz_cords)
+                    for l, r in self._find_windows(
+                        v, nz_n, nz_prefix, nz_n, nz_values, min_window=2
+                    ):
+                        summands = nz_cords[l:r + 1]
+                        actual = sum(s.value or 0 for s in summands)
+                        sum_idx = flat_order.get(cord.cord_id, 0)
+                        summand_mean = round(sum(flat_order.get(s.cord_id, 0) for s in summands) / len(summands))
+                        handedness = -(sum_idx - summand_mean)
+                        raw_matches.append(SummationMatch(
+                            pattern_type='indexed_pendant_sum',
+                            sum_cord=cord,
+                            summand_cords=summands,
+                            expected_sum=v,
+                            actual_sum=actual,
+                            matches=True,
+                            handedness=float(handedness),
+                            notes=f'pos={pos} {side_label} window[{l}-{r}]'
+                        ))
+
+        def _ips_trivial(m: SummationMatch) -> bool:
+            v = m.sum_cord.value or 0
+            return (
+                v <= len(m.summand_cords)
+                or v < 11
+                or (len(m.summand_cords) == 2 and any((s.value or 0) == 1 for s in m.summand_cords))
+                or len(m.summand_cords) < 2
+            )
+
+        return self._dedup_shortest_per_cord(raw_matches, is_trivial=_ips_trivial)
 
     # ------------------------------------------------------------------
     # Pattern 4: subsidiary_pendant_sum
     # ------------------------------------------------------------------
-
+    @time_pattern_detection
     def detect_subsidiary_pendant_sum(self, kfg_id: str,
                                       cords: Optional[List[Cord]] = None,
                                       tolerance: int = 0) -> List[SummationMatch]:
         """
         A subsidiary cord's value = sum of a contiguous window of top-level
-        pendants in the flat group-ordered sequence.
+        pendants.
 
-        KFG criteria (from subsidiary_pendant_sum.html#search-criteria):
-          - subsidiary (sum) cord value must be >= 11  (raised from 5; sub
-            values < 11 produce mass coincidental matches with small pendants)
-          - multiples of 10 when subsidiary value < 100 are excluded
-          - at least 2 non-zero summands required in the matching window
-          - maximum window span = 250
-          - exact numerical match required
+        KFG algorithm (fieldmark_ascher_subsidiary_pendant_sum.py):
+        - For each subsidiary with value > 10: find parent pendant, split
+          pendant list into left (up to and including parent) and right
+          (after parent). Zero-filter, find contiguous combos >= 3.
+        - filter_results: keep shortest per sum cord per side.
+        - is_trivial_match: value <= len OR value <= 10 OR (%10==0 when <100)
+          OR len < 2.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
@@ -447,157 +906,222 @@ class KFGSummationDetector:
         if not pendants or not subs:
             return []
 
-        values = [c.value if c.value is not None else 0 for c in pendants]
-        prefix = self._prefix_sums(values)
-        n = len(pendants)
-        matches = []
+        # Build parent name → pendant position lookup
+        pendant_by_name: Dict[str, int] = {}
+        for idx, p in enumerate(pendants):
+            pendant_by_name[p.cord_name] = idx
+
+        # Flat-order index for handedness
+        flat_order = {c.cord_id: idx for idx, c in enumerate(pendants)}
+
+        raw_matches: List[SummationMatch] = []
 
         for sub in subs:
             v = sub.value
             if v is None or v < 11:
                 continue
-            # KFG: exclude multiples of 10 when subsidiary value < 100
-            if v < 100 and v % 10 == 0:
+            # Find parent pendant position
+            parent_name = sub.parent_cord
+            if not parent_name or parent_name not in pendant_by_name:
                 continue
+            parent_pos = pendant_by_name[parent_name]
 
-            # Use n as exclude_idx (no exclusion) to scan entire pendant sequence
-            windows = self._find_windows(v, n, prefix, n, values, min_window=2)
-            if not windows:
-                continue
-            # When multiple windows match, choose shortest first
-            windows.sort(key=lambda w: w[1] - w[0])
-            for l, r in windows:
-                summands = [c for c in pendants[l:r + 1] if (c.value or 0) != 0]
-                actual = sum(s.value or 0 for s in summands)
-                matches.append(SummationMatch(
-                    pattern_type='subsidiary_pendant_sum',
-                    sum_cord=sub,
-                    summand_cords=summands,
-                    expected_sum=v,
-                    actual_sum=actual,
-                    matches=True,
-                    notes=f'sub={sub.cord_name} window[{l}-{r}]'
-                ))
-        return matches
+            # KFG: left includes parent (0..parent_pos+1), right is after parent
+            for side_label, side_pendants in [
+                ('left', pendants[:parent_pos + 1]),
+                ('right', pendants[parent_pos + 1:]),
+            ]:
+                nz_cords = [c for c in side_pendants if (c.value or 0) > 0]
+                if len(nz_cords) < 3:
+                    continue
+                nz_values: List[int] = [c.value or 0 for c in nz_cords]
+                nz_prefix = self._prefix_sums(nz_values)
+                nz_n = len(nz_cords)
+                for l, r in self._find_windows(
+                    v, nz_n, nz_prefix, nz_n, nz_values, min_window=3
+                ):
+                    summands = nz_cords[l:r + 1]
+                    actual = sum(s.value or 0 for s in summands)
+                    # Handedness: use pendant_index of parent and summands
+                    sum_idx = flat_order.get(sub.cord_id, parent_pos)
+                    summand_mean = round(sum(flat_order.get(s.cord_id, 0) for s in summands) / len(summands))
+                    handedness = -(sum_idx - summand_mean)
+                    raw_matches.append(SummationMatch(
+                        pattern_type='subsidiary_pendant_sum',
+                        sum_cord=sub,
+                        summand_cords=summands,
+                        expected_sum=v,
+                        actual_sum=actual,
+                        matches=True,
+                        handedness=float(handedness),
+                        notes=f'sub={sub.cord_name} {side_label} window[{l}-{r}]'
+                    ))
+
+        def _sp_trivial(m: SummationMatch) -> bool:
+            v = m.sum_cord.value or 0
+            return (
+                v <= len(m.summand_cords)
+                or v <= 10
+                or (v < 100 and v % 10 == 0)
+                or len(m.summand_cords) < 2
+            )
+
+        return self._dedup_shortest_per_cord(raw_matches, is_trivial=_sp_trivial)
 
     # ------------------------------------------------------------------
     # Pattern 5: indexed_subsidiary_sum
     # ------------------------------------------------------------------
-
+    @time_pattern_detection
     def detect_indexed_subsidiary_sum(self, kfg_id: str,
                                       cords: Optional[List[Cord]] = None,
                                       tolerance: int = 0) -> List[SummationMatch]:
         """
-        A subsidiary cord = sum of a sliding window of same-position subsidiaries.
+        A subsidiary cord = sum of similarly-indexed (by color) subsidiary
+        cords at the same pendant position in contiguous groups.
 
-        Two complementary groupings are tried and deduplicated:
-
-        A) Same-level grouping: (parent.pos_in_group, sub_0idx)
-           For each sub-level k, window over same-level-k subs at same parent
-           position across groups. Handles 's2 = sum of s2's of other groups'.
-
-        B) Cross-level + dominant-color grouping: (parent.pos_in_group, dominant_col)
-           All subs of the same color at the same parent position, regardless of
-           sub-level. Handles 's2 = sum of s1's of other groups' (cross-level).
-
-        Strategy C (bucket by pos only) was removed: it produced 154 FPs by
-        grouping ALL subsidiaries at a given parent position regardless of level
-        or color, generating coincidental arithmetic matches.
-
-        KFG criteria applied (mirrored from indexed_pendant_sum):
-          - sub cord value must be >= 5
-          - exclude multiples of 10 when value < 100 (trivial round sums)
-          - at least 2 summands required
-          - results are deduplicated across strategies A+B by
-            (sum_cord_id, frozenset(summand_cord_ids))
-
-        Zero-value cords are filtered from summand_cords (GT convention).
+        KFG algorithm (fieldmark_ascher_indexed_subsidiary_sum.py):
+        - For each pendant P with value > 5, for each subsidiary S of P:
+          find S's main color and position among P's same-color subsidiaries.
+          In left/right groups at the same pendant position, find subsidiaries
+          with same color at same position-in-color-group.
+        - Use contiguous_combinations (min size 2, no cap) over left/right
+          indexed cords.  Equality test uses off-by-one for values >= 100.
+        - remove_duplicates: keep shortest per sum cord; block if value <= len
+          or value < 5 or len < 2.
+        - fix_handedness from pendant_index.
         """
         if cords is None:
             cords = self._load_all_cords(kfg_id)
 
+        pendants = self._pendants(cords)
+        subs = self._subsidiaries(cords)
+        if not pendants or not subs:
+            return []
+
         SUB_IDX = re.compile(r's(\d+)$')
 
-        # Build parent lookup
-        parent_map: Dict[str, Cord] = {c.cord_name: c
-                                       for c in cords if c.hierarchy_level == 0}
+        # pendant lookup: (group_idx, position_in_group) → Cord
+        pendant_by_gp: Dict[tuple, Cord] = {}
+        for c in pendants:
+            if c.group_idx is not None and c.position_in_group is not None:
+                pendant_by_gp[(c.group_idx, c.position_in_group)] = c
 
-        # Collect subsidiary info
-        sub_info = []  # (sub_cord, parent.position_in_group, parent.group_idx, sub_0idx, dom_color)
-        for c in self._subsidiaries(cords):
-            if c.value is None:
+        # Flat-order index for handedness (pendant cord_id → idx)
+        flat_order = {c.cord_id: idx for idx, c in enumerate(pendants)}
+        # Map subsidiary cord_id → parent pendant's flat index (for handedness)
+        pendant_name_to_id: Dict[str, int] = {c.cord_name: c.cord_id for c in pendants}
+        sub_flat_order: Dict[int, int] = {}
+        for c in subs:
+            if c.parent_cord and c.parent_cord in pendant_name_to_id:
+                parent_cid = pendant_name_to_id[c.parent_cord]
+                if parent_cid in flat_order:
+                    sub_flat_order[c.cord_id] = flat_order[parent_cid]
+
+        # Group subsidiaries by parent name → {color → [(sub_idx, Cord)]}
+        sub_by_parent_color: Dict[str, Dict[str, List[Tuple[int, Cord]]]] = defaultdict(lambda: defaultdict(list))
+        for c in subs:
+            if c.value is None or c.parent_cord is None:
                 continue
             m = SUB_IDX.search(c.cord_name)
-            if not m:
+            sub_idx = int(m.group(1)) if m else 0
+            dcol = self._dominant_color(c.color)
+            if dcol:
+                sub_by_parent_color[c.parent_cord][dcol].append((sub_idx, c))
+        # Sort each color group by sub_idx
+        for parent_name in sub_by_parent_color:
+            for color in sub_by_parent_color[parent_name]:
+                sub_by_parent_color[parent_name][color].sort(key=lambda x: x[0])
+
+        all_group_idxs = sorted(set(c.group_idx for c in pendants
+                                     if c.group_idx is not None))
+
+        raw_matches: List[SummationMatch] = []
+
+        for pendant in pendants:
+            if (pendant.value or 0) <= 5:
                 continue
-            sub_1idx = int(m.group(1))
-            parent = parent_map.get(c.parent_cord)
-            if parent is None or parent.position_in_group is None:
+            if pendant.group_idx is None or pendant.position_in_group is None:
                 continue
-            sub_info.append((c, parent.position_in_group,
-                             parent.group_idx, sub_1idx - 1,
-                             self._dominant_color(c.color)))
+            gidx = pendant.group_idx
+            pos = pendant.position_in_group
 
-        def _scan(bucket):
-            out = []
-            for key, items in bucket.items():
-                if len(items) < 2:
-                    continue
-                items.sort(key=lambda x: (x[1], x[2]))   # sort by (gidx, sub_0idx)
-                group = [c for c, _, _ in items]
-                values = [c.value for c in group]
-                prefix = self._prefix_sums(values)
-                n = len(group)
-                for i, cord in enumerate(group):
-                    v = cord.value
-                    if v is None or v < 5:
+            color_groups = sub_by_parent_color.get(pendant.cord_name, {})
+            for color, sub_list in color_groups.items():
+                for pos_in_color, (_, sub_cord) in enumerate(sub_list):
+                    if sub_cord.value is None:
                         continue
-                    # Same round-number exclusions as indexed_pendant_sum
-                    if v < 100 and v % 10 == 0:
-                        continue
-                    if v < 1000 and v % 100 == 0:
-                        continue
-                    for l, r in self._find_windows(v, i, prefix, n, values, min_window=2):
-                        summands = [c for c in group[l:r + 1]
-                                    if (c.value or 0) != 0]
-                        actual = sum(s.value for s in summands)
-                        out.append(SummationMatch(
-                            pattern_type='indexed_subsidiary_sum',
-                            sum_cord=cord,
-                            summand_cords=summands,
-                            expected_sum=cord.value,
-                            actual_sum=actual,
-                            matches=True,
-                            notes=f'key={key} window[{l}-{r}]'
-                        ))
-            return out
+                    v = sub_cord.value
 
-        # Strategy A: (pos, sub_0idx) -- same level
-        bucket_a: Dict[tuple, List] = defaultdict(list)
-        for c, pos, gidx, sub_0idx, dcol in sub_info:
-            bucket_a[(pos, sub_0idx)].append((c, gidx, sub_0idx))
+                    # Gather indexed cords from left/right groups
+                    left_subs: List[Cord] = []
+                    right_subs: List[Cord] = []
+                    for other_gidx in all_group_idxs:
+                        if other_gidx == gidx:
+                            continue
+                        other_pendant = pendant_by_gp.get((other_gidx, pos))
+                        if other_pendant is None:
+                            continue
+                        other_color_subs = sub_by_parent_color.get(
+                            other_pendant.cord_name, {}).get(color, [])
+                        if not other_color_subs:
+                            continue
+                        # KFG: if >1 same-color → pick by position index; if 1 → take it
+                        target: Optional[Cord] = None
+                        if len(other_color_subs) > 1:
+                            if pos_in_color < len(other_color_subs):
+                                target = other_color_subs[pos_in_color][1]
+                        elif len(other_color_subs) == 1:
+                            target = other_color_subs[0][1]
+                        if target is not None:
+                            if other_gidx < gidx:
+                                left_subs.append(target)
+                            else:
+                                right_subs.append(target)
 
-        # Strategy B: (pos, dominant_color) -- cross-level, same color
-        bucket_b: Dict[tuple, List] = defaultdict(list)
-        for c, pos, gidx, sub_0idx, dcol in sub_info:
-            if dcol:   # only if color is known
-                bucket_b[(pos, dcol)].append((c, gidx, sub_0idx))
+                    # Test contiguous combinations on each side
+                    for side_label, side_cords in [('left', left_subs),
+                                                    ('right', right_subs)]:
+                        if len(side_cords) < 2:
+                            continue
+                        for size in range(2, len(side_cords) + 1):
+                            for start in range(len(side_cords) - size + 1):
+                                combo = side_cords[start:start + size]
+                                test_sum = sum(c.value or 0 for c in combo)
+                                if not self._obo_equal(v, test_sum):
+                                    continue
+                                # Inline trivial filter from find_sum_matches
+                                if v <= 1 and len(combo) <= 1:
+                                    continue
+                                sum_idx = sub_flat_order.get(sub_cord.cord_id, 0)
+                                summand_mean = round(
+                                    sum(sub_flat_order.get(s.cord_id, 0)
+                                        for s in combo) / len(combo))
+                                handedness = -(sum_idx - summand_mean)
+                                raw_matches.append(SummationMatch(
+                                    pattern_type='indexed_subsidiary_sum',
+                                    sum_cord=sub_cord,
+                                    summand_cords=list(combo),
+                                    expected_sum=v,
+                                    actual_sum=test_sum,
+                                    matches=True,
+                                    handedness=float(handedness),
+                                    notes=f'color={color} pos={pos} {side_label}'
+                                ))
 
-        all_matches = _scan(bucket_a) + _scan(bucket_b)
+        def _iss_trivial(m: SummationMatch) -> bool:
+            v = m.sum_cord.value or 0
+            return (
+                v <= len(m.summand_cords)
+                or v < 5
+                or len(m.summand_cords) < 2
+            )
 
-        # Deduplicate across strategies: same (sum_cord, summand set) from A+B
-        seen: set = set()
-        deduped: List[SummationMatch] = []
-        for m in all_matches:
-            key = (m.sum_cord.cord_id, frozenset(s.cord_id for s in m.summand_cords))
-            if key not in seen:
-                seen.add(key)
-                deduped.append(m)
-        return deduped
+        return self._dedup_shortest_per_cord(raw_matches, is_trivial=_iss_trivial)
 
 
     # ------------------------------------------------------------------
     # Pattern X: pendant_sub_neighbor
+    @time_pattern_detection
     # ------------------------------------------------------------------
 
     def detect_pendant_sub_neighbor(self, kfg_id: str,
@@ -676,6 +1200,7 @@ class KFGSummationDetector:
 
     # ------------------------------------------------------------------
     # Pattern 6 & 7: group_group_sum / group_sum_bands
+    @time_pattern_detection
     # ------------------------------------------------------------------
 
     def detect_group_group_sum(self, kfg_id: str,
@@ -705,6 +1230,8 @@ class KFGSummationDetector:
         # Strategy 1: pendant-only group totals
         group_totals_pend: Dict[int, int] = defaultdict(int)
         for c in flat:
+            if c.group_idx is None or c.value is None:
+                continue
             group_totals_pend[c.group_idx] += c.value
             group_members[c.group_idx].append(c)
             cord_to_group[c.cord_name] = c.group_idx
@@ -716,7 +1243,7 @@ class KFGSummationDetector:
                 continue
             if c.value is None or c.value == 0:
                 continue
-            current = c.parent_cord
+            current: Optional[str] = c.parent_cord
             visited: set = set()
             while current and current not in visited:
                 visited.add(current)
@@ -724,7 +1251,7 @@ class KFGSummationDetector:
                 if ancestor is None or getattr(ancestor, 'hierarchy_level', 0) == 0:
                     break
                 current = ancestor.parent_cord
-            parent_grp = cord_to_group.get(current)
+            parent_grp = cord_to_group.get(current) if current else None
             if parent_grp is not None:
                 group_totals_subs[parent_grp] += c.value
 
@@ -761,6 +1288,7 @@ class KFGSummationDetector:
         return matches
 
     # ------------------------------------------------------------------
+    @time_pattern_detection
     # Pattern 7: group_sum_bands
     # ------------------------------------------------------------------
 
@@ -793,8 +1321,8 @@ class KFGSummationDetector:
         for gidx, members in sorted(by_group.items()):
             if len(members) < 4:  # need >= 2 cords each side
                 continue
-            ordered = sorted(members, key=lambda c: c.position_in_group)
-            vals = [c.value for c in ordered]
+            ordered = sorted(members, key=lambda c: c.position_in_group or 0)
+            vals: list[int] = [c.value or 0 for c in ordered]
             total = sum(vals)
 
             # KFG: group total >= 5
@@ -825,6 +1353,7 @@ class KFGSummationDetector:
         return matches
 
     # ------------------------------------------------------------------
+    @time_pattern_detection
     # Pattern 8: ascher_decreasing_group
     # ------------------------------------------------------------------
 
@@ -858,8 +1387,8 @@ class KFGSummationDetector:
         for gidx, members in sorted(by_group.items()):
             if len(members) < min_size:
                 continue
-            ordered = sorted(members, key=lambda c: c.position_in_group)
-            vals = [c.value for c in ordered]
+            ordered = sorted(members, key=lambda c: c.position_in_group or 0)
+            vals: list[int] = [c.value or 0 for c in ordered]
             x = np.arange(len(vals), dtype=float)
             y = np.array(vals, dtype=float)
 
@@ -974,6 +1503,120 @@ class KFGSummationDetector:
             'pattern_stats': pstats,
             'num_types':     len([p for p in pstats if pstats[p]['total'] > 0])
         }
+    
+    def get_timing_stats(self) -> Dict[str, float]:
+        """Return timing data for pattern detection methods.
+        
+        Returns dict mapping pattern name to elapsed seconds.
+        Only available when enable_timing=True in constructor.
+        """
+        if not hasattr(self, '_timing_data'):
+            return {}
+        return dict(self._timing_data)
+    
+    def reset_timing(self):
+        """Clear accumulated timing data."""
+        self._timing_data = {}
+    
+    def analyze_handedness(self, results: Dict[str, List[SummationMatch]]) -> Dict[str, Dict]:
+        """Analyze handedness distribution for patterns that support it.
+        
+        Uses KFG convention: handedness < 0 = left, handedness >= 0 = right.
+        
+        Returns dict mapping pattern_type to:
+            - num_left: count of left-handed relationships
+            - num_right: count of right-handed relationships
+            - handedness_ratio: (right - left) / total
+            - is_asymmetric: True if |ratio| > 0.2
+        """
+        handedness_stats = {}
+        
+        for pattern_type, matches in results.items():
+            if not matches:
+                continue
+            
+            left_count = sum(1 for m in matches if m.handedness is not None and m.handedness < 0)
+            right_count = sum(1 for m in matches if m.handedness is not None and m.handedness >= 0)
+            total = left_count + right_count
+            
+            if total == 0:
+                continue
+            
+            ratio = (right_count - left_count) / total
+            
+            handedness_stats[pattern_type] = {
+                'num_left': left_count,
+                'num_right': right_count,
+                'total': total,
+                'handedness_ratio': ratio,
+                'is_asymmetric': abs(ratio) > 0.2
+            }
+        
+        return handedness_stats
+    
+    def analyze_dual_sums(self, results: Dict[str, List[SummationMatch]]) -> Dict[str, Dict]:
+        """Analyze dual sum patterns (cords with multiple summand windows).
+        
+        Returns dict mapping pattern_type to:
+            - num_dual_sums: count of sum cords with multiple windows
+            - dual_sum_cords: list of cord names
+            - total_sum_cords: total unique sum cords
+            - dual_sum_rate: fraction of sum cords that are dual
+        """
+        dual_sum_stats = {}
+        
+        for pattern_type, matches in results.items():
+            if not matches:
+                continue
+            
+            # Group by sum cord using cord_id (globally unique DB row id)
+            sum_cord_matches: Dict[int, List[SummationMatch]] = defaultdict(list)
+            for m in matches:
+                sum_cord_matches[m.sum_cord.cord_id].append(m)
+            
+            dual_sum_ids = [cid for cid, ms in sum_cord_matches.items() 
+                           if ms[0].is_dual_sum]
+            
+            if dual_sum_ids:
+                dual_sum_stats[pattern_type] = {
+                    'num_dual_sums': len(dual_sum_ids),
+                    'dual_sum_cord_ids': sorted(dual_sum_ids),
+                    'total_sum_cords': len(sum_cord_matches),
+                    'dual_sum_rate': len(dual_sum_ids) / len(sum_cord_matches)
+                }
+        
+        return dual_sum_stats
+    
+    def analyze_figure8_markers(self, results: Dict[str, List[SummationMatch]]) -> Dict[str, Dict]:
+        """Analyze figure-8 knot proximity to summation relationships.
+        
+        Returns dict mapping pattern_type to:
+            - num_with_figure8: count of relationships near figure-8 knots
+            - figure8_rate: fraction with figure-8 markers
+            - locations: distribution of where figure-8s appear
+        """
+        figure8_stats = {}
+        
+        for pattern_type, matches in results.items():
+            if not matches:
+                continue
+            
+            with_figure8 = [m for m in matches if m.figure8_proximity is not None]
+            
+            if with_figure8:
+                location_counts = defaultdict(int)
+                for m in with_figure8:
+                    if m.figure8_proximity:
+                        location_counts[m.figure8_proximity['location']] += 1
+                
+                figure8_stats[pattern_type] = {
+                    'num_with_figure8': len(with_figure8),
+                    'total_relationships': len(matches),
+                    'figure8_rate': len(with_figure8) / len(matches),
+                    'locations': dict(location_counts)
+                }
+        
+        return figure8_stats
 
     def summarize_khipu(self, kfg_id: str, tolerance: int = 0) -> Dict:
         """Alias for summarize() using the key names expected by test scripts."""

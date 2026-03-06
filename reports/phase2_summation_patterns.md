@@ -56,6 +56,34 @@ For each khipu, the detector:
 - **`group_sum_bands`**: khipu split at midpoint; left-half group totals equal right-half group totals (explicit band detector, not aliased to GG).
 - **`ascher_decreasing_group`**: groups form a monotonically decreasing sequence of totals.
 
+### Enhanced Detection Features (Phase 2 Extension)
+
+**Handedness Tracking**
+
+For each summation relationship, the detector now records **handedness** — whether the sum cord appears to the left or right of its summand window in the pendant sequence:
+- **Left-handed**: Sum cord's `cord_index` < min(`summand_cord_index`) — summands are to the right
+- **Right-handed**: Sum cord's `cord_index` > max(`summand_cord_index`) — summands are to the left
+- **Undefined**: For patterns where position is not linear (e.g., `colored_pendant_sum`, `group_group_sum`)
+
+Handedness analysis enables investigation of reading-direction conventions and potential semantic encoding through spatial arrangement (Urton 2003, 2017).
+
+**Dual Sum Detection**
+
+The detector identifies **dual sums** — cords whose value matches multiple distinct summand windows. This is computed by grouping relationships by `sum_cord_id` and checking for multiple unique `summand_window_hashes`.
+
+Dual sums indicate:
+- Structural redundancy (error-checking through multiple arithmetic paths)
+- Multi-level accounting (same total appearing in different contexts)
+- Coincidental overlap in highly regular numeric sequences
+
+**Figure-8 Knot Proximity Analysis**
+
+Figure-8 knots (`E`, `EE` in `knot_clusters.knot_type`) do not encode numeric value and may function as structural markers. For each summation relationship, the detector checks whether a figure-8 knot appears:
+1. On the sum cord itself
+2. On the first 2 or last 2 summands in the window (adjacent to the relationship)
+
+Proximity threshold: **5 cm** along the cord from the summation point. This analysis tests Ascher & Ascher's (1978:75) hypothesis that figure-8 knots mark totals.
+
 ### OKR Baseline
 
 The OKR-era detector (`scripts/test_value_computation.py`) implemented three of these pattern types — `contiguous_sums` (equivalent to `pendant_pendant_sum`), `group_totals` (equivalent to `group_group_sum`), and `hierarchical` (which had a known implementation bug and reported 0%). The OKR comparison therefore best maps to the two working OKR types.
@@ -100,6 +128,71 @@ The OKR-era detector (`scripts/test_value_computation.py`) implemented three of 
 | `group_sum_bands` | 86 | 12.1% |
 
 `pendant_pendant_sum` is the single most common pattern (66.9%), consistent with the fundamental sequential tallying structure. Color-based grouping (`colored_pendant_sum`, 38.5%) is the third most prevalent pattern; the detector normalizes compound color codes (e.g. `MB:W`) to their dominant color component before grouping.
+
+### Handedness Analysis
+
+Summation relationships can be **directional**: summands may appear to the left or right of the sum cord in the sequence. Handedness analysis tests whether khipus exhibit systematic reading-direction preferences — potentially reflecting regional scribal conventions or semantic structure (Urton 2003, 2017).
+
+**Pendant-pendant sum handedness** (459 khipus with PPS patterns):
+
+| Direction | Count | Rate |
+|-----------|-------|------|
+| Left-handed (sum cord right of summands) | 38,094 | 38.6% |
+| Right-handed (sum cord left of summands) | 60,691 | 61.4% |
+| **Total relationships** | **98,785** | — |
+
+The corpus-wide handedness ratio is **+0.23** (right-biased), indicating a systematic preference for sum cords to appear left of their summands across the corpus.
+
+**Interpretation:** The right-handed bias (+0.23) suggests a dominant reading-direction convention in which totals precede their components — consistent with a "top-down" accounting structure where a category total is recorded first, followed by its breakdowns. This aligns with Urton's (2003, 2017) hypothesis that directionality conveys administrative metadata.
+
+### Dual Sum Detection
+
+A **dual sum** occurs when a single cord value matches multiple distinct summand windows. For example, `p12 = 36` might equal both `p1+p2+p3 = 36` AND `p7+p8 = 36`. Dual sums indicate **structural redundancy** — arithmetic encoded multiple ways within the same khipu.
+
+**Dual sum prevalence:**
+
+| Pattern Type | Sum Cords With Multiple Windows | Dual Sum Rate |
+|--------------|--------------------------------|---------------|
+| `pendant_pendant_sum` | 6,724 | 75.7% of PPS sum cords |
+
+Only `pendant_pendant_sum` produced dual sums in this run. The high rate reflects the combinatorial nature of contiguous-window summation: when many adjacent pendant values exist, a given total can often be decomposed by multiple distinct subsequences.
+
+**Top khipus with extensive dual sums:**
+- **KH0082**: 11,423 cords with dual summation paths
+- **KH0240**: 6,496 cords with dual summation paths
+- **KH0428**: 5,213 cords with dual summation paths
+- **KH0349**: 4,339 cords with dual summation paths
+- **KH0068**: 4,310 cords with dual summation paths
+
+**Interpretation:** Dual sums may represent:
+1. **Multi-level accounting** — the same total appears in different summation contexts (e.g., by color group AND by position index)
+2. **Combinatorial inevitability** — khipus with many small pendant values naturally produce multiple windows summing to the same target; the large numbers above reflect this combinatorial effect rather than deliberate redundancy
+3. **Error-checking redundancy** — in some cases, multiple arithmetic paths to the same value may be an intentional design feature
+
+### Figure-8 Knot Proximity Analysis
+
+**Figure-8 knots** (encoded as `E` or `EE` in the `knot_type` field) are anomalous knots that do not encode numeric value. Ascher & Ascher (1978:75) noted that figure-8 knots often appear adjacent to sum cords, potentially serving as **semantic markers** indicating "this is a total."
+
+The detector now checks whether each summation relationship has a figure-8 knot on:
+1. The sum cord itself
+2. The immediately adjacent summand cords (first 2, last 2 in window)
+
+**Figure-8 proximity results:**
+
+| Pattern Type | Relationships With Figure-8s | Proximity Rate |
+|--------------|------------------------------|----------------|
+| `pendant_pendant_sum` | 491 | 0.5% |
+
+Only `pendant_pendant_sum` produced figure-8 proximity matches at the default 5cm threshold.
+
+**Figure-8 location distribution** (pendant_pendant_sum only):
+- On adjacent summand: 412 (83.9%)
+- On sum cord: 79 (16.1%)
+
+**Interpretation:** Figure-8 knots appear near **0.5% of pendant-pendant sum relationships** within the 5cm threshold, a much lower rate than previously estimated. The predominance of figure-8s on adjacent summands (83.9%) rather than the sum cord itself inverts earlier expectations and suggests these knots may function as **boundary markers** delineating summation groups rather than labels on totals. Possible explanations for the low rate:
+1. Figure-8s mark only **structurally significant** totals (e.g., grand totals, inter-group sums)
+2. Figure-8 usage varies by regional convention or time period
+3. Many figure-8 knots may serve purposes unrelated to summation
 
 ### Complexity: Number of Pattern Types Per Khipu
 
