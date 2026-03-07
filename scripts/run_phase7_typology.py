@@ -38,7 +38,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
-import umap
+try:
+    import umap
+    HAS_UMAP = True
+except ImportError:
+    HAS_UMAP = False
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler
@@ -238,11 +242,18 @@ plt.close(fig)
 print("  → profile_heatmap.png saved")
 
 # ---------------------------------------------------------------------------
-# UMAP projection
+# UMAP projection (or PCA fallback)
 # ---------------------------------------------------------------------------
-print("\n── UMAP projection ──────────────────────────────────────────────────")
-reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, random_state=RANDOM_STATE, n_jobs=1)
-embedding = reducer.fit_transform(X)
+if HAS_UMAP:
+    print("\n── UMAP projection ──────────────────────────────────────────────────")
+    reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, random_state=RANDOM_STATE, n_jobs=1)
+    embedding = reducer.fit_transform(X)
+    method = "UMAP"
+else:
+    from sklearn.decomposition import PCA
+    print("\n── PCA projection (umap-learn not installed) ─────────────────────────")
+    embedding = PCA(n_components=2, random_state=RANDOM_STATE).fit_transform(X)
+    method = "PCA"
 df["umap_x"] = embedding[:, 0]
 df["umap_y"] = embedding[:, 1]
 
@@ -250,7 +261,7 @@ palette = plt.cm.tab10.colors
 typology_labels = sorted(df["typology_label"].unique())
 
 fig, axes = plt.subplots(1, 2, figsize=(15, 6))
-fig.suptitle("Phase 7: UMAP Projection — Multi-feature Typology", fontsize=13)
+fig.suptitle(f"Phase 7: {method} Projection — Multi-feature Typology", fontsize=13)
 
 # Left: coloured by typology
 ax = axes[0]

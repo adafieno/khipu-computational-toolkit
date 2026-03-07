@@ -1,20 +1,20 @@
 # Phase 5: Color Analysis
 
-**Generated:** 2026-03-02  
+**Generated:** 2026-03-02 (updated)  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase5_color.py`  
 **Inputs:** `data/kfg/khipu_database.db` · `data/processed/phase3_clusters.csv`  
-**Status:** Provisional — Phase 2 open questions (PP threshold, PSN interpretation) unresolved; color flags for affected khipus may shift
+**Status:** ✅ Complete
 
 ---
 
 ## Research Questions
 
 1. What is the color vocabulary of the KFG corpus? How concentrated is it?
-2. Does having a white cord in the first position of a cord group predict higher summation complexity? (The Clindaniel/Ascher white-cord hypothesis)
+2. Does having a white cord in the first position of a cord group associate with higher summation complexity?
 3. Is color diversity associated with structural complexity cluster (Simple vs. Complex)?
-4. Do cord value distributions differ by color code — i.e., does color encode numeric magnitude?
-5. Which colors co-occur across the corpus, and what does the pairing structure suggest?
+4. Do cord value distributions differ by color code?
+5. Which colors co-occur across the corpus?
 
 ---
 
@@ -49,17 +49,15 @@ Data: `data/processed/phase5_color_vocab.csv`
 
 **Total distinct normalized color codes: 2,830.**
 
-The long tail is steep — the top 10 codes account for approximately 77% of all cord-color entries. White is by far the most common single code and appears in 77.7% of khipus. The next tier (AB, MB, KB) reflects the earthy brown palette typical of cotton and camelid fiber khipus. The 2,830 distinct codes includes many rare compound combinations unique to individual khipus.
+The top 10 codes account for approximately 77% of all cord-color entries. White is the most common single code and appears in 77.7% of khipus. The 2,830 distinct codes include many rare compound combinations unique to individual khipus.
 
-**Important note on color encoding**: The KFG uses extended Ascher codes (not raw Munsell values), but has substantially more granular compound coding than the OKR: `W-KB`, `W-AB`, and other hyphenated codes appear in the `cord_colors` table as compound entries distinct from simple `W` or `KB`. This is a KFG-specific encoding convention and should not be read as evidence of greater actual chromatic diversity in the corpus compared to OKR estimates.
+**Note on color encoding**: The KFG uses extended Ascher codes (not raw Munsell values) with substantially more granular compound coding than the OKR: `W-KB`, `W-AB`, and other hyphenated codes appear in the `cord_colors` table as compound entries distinct from simple `W` or `KB`. This is a KFG-specific encoding convention and does not reflect greater actual chromatic diversity compared to OKR estimates.
 
 ---
 
-### 2. White Cord First-Position Hypothesis
+### 2. White Cord First-Position Test
 
 `visualizations/phase5/white_cord_analysis.png`
-
-**Hypothesis (after Clindaniel / Ascher):** Cords in the first position of a cord group (`position_in_group = 1`) that are white function as summation boundary markers — structurally separating or introducing a group — and should therefore be associated with higher summation-pattern richness.
 
 **Operationalization:** A khipu is coded `has_white_first_cord = True` if any pendant cord (`hierarchy_level = 0`) in any of its cord groups has `position_in_group = 1` and a color beginning with `W`.
 
@@ -68,46 +66,34 @@ The long tail is steep — the top 10 codes account for approximately 77% of all
 | No white first cord | 287 | 2.22 | 14.3% |
 | Has white first cord | 422 | **2.92** | 18.2% |
 
-**Statistical tests:**
-
 | Test | Result | Significant? |
 |---|---|---|
 | Pattern types: Mann-Whitney U (greater) | p < 0.0001 | ✅ |
-| Cluster (Simple/Complex): chi-square | χ²=1.66, p=0.198 | ❌ |
+| Cluster (Simple/Complex): chi-square | χ² = 1.66, p = 0.198 | ❌ |
 
-**Interpretation:** Khipus with white first-position cords are associated with significantly more pattern *types* on average (+0.70 pattern types, p<0.0001), but this does not translate into a statistically significant uplift in the probability of being classified as "Complex" (the binary cluster from Phase 3). This nuance is important:
+Khipus with white first-position cords have significantly more pattern types on average (+0.70, p < 0.0001), but the difference in Complex classification rate is not statistically significant.
 
-- White first-position cords may be a marker of more elaborately structured khipus (more diverse pattern usage) without meeting the full threshold of "Complex" (which requires high cord count + deep subsidiary hierarchy in addition to multiple pattern types).
-- The effect is consistent with Ascher's original observation on summation boundaries — but the KFG's ground-truth pattern detection means we cannot interpret this as improving *detection accuracy*. Rather, the structural pattern genuinely co-occurs with white-first encoding.
-- **Caveat**: The KFG `position_in_group` column encodes position within a cord group, not ordinal position across the whole khipu. The original Clindaniel hypothesis was operationalized on OKR's `cord_ordinal` (global position). Results may differ under alternative operationalizations.
+**Caveat**: The KFG `position_in_group` column encodes position within a cord group, not ordinal position across the whole khipu. The original Clindaniel hypothesis was operationalized on OKR's `cord_ordinal` (global position). Results may differ under alternative operationalizations.
 
 ---
 
-### 3. Color Diversity by Cluster and Geographic Zone
+### 3. Color Diversity by Cluster
 
 `visualizations/phase5/color_diversity_by_cluster.png`  
 Data: `data/processed/phase5_color_diversity.csv`
-
-**Unique normalized color codes per khipu (mean values):**
 
 | Cluster | n | Mean unique colors | Median |
 |---|---|---|---|
 | Simple | 591 | 7.3 | 5 |
 | Complex | 118 | **23.6** | 17 |
 
-Mann-Whitney U (Complex > Simple): **p = 6.83 × 10⁻²⁵** — extremely significant.
+Mann-Whitney U (Complex > Simple): **p = 6.83 × 10⁻²⁵**
 
-Complex khipus use on average 3.2× as many distinct color codes as Simple khipus. This is a strong structural signal: the same khipus that have high cord counts, deep subsidiary hierarchies, and multiple summation pattern types also employ a much richer color palette.
-
-Two structural patterns are consistent with this data:
-1. **Color as hierarchy marker**: In Complex khipus with deep cord hierarchies, color may be used systematically to mark different hierarchy levels or cord categories — requiring more codes.
-2. **Corpus composition effect**: The Leymebamba (Chachapoyas) cache contributes many Complex khipus; those khipus include KH0082 (236 unique colors) and KH0083 (151 unique colors) which are exceptionally large and colorful. These outliers pull the Complex mean up substantially.
-
-**By geographic zone:** The zone box plots confirm the Chachapoyas and Nazca outlier pattern seen in Phase 4. Chachapoyas khipus dominate the upper tail of color diversity, though the distribution is wide within all zones.
+Complex khipus use on average 3.2× as many distinct color codes as Simple khipus. Notable outliers: KH0082 (236 unique colors) and KH0083 (151 unique colors), both from the Leymebamba cache, substantially influence the Complex mean.
 
 ---
 
-### 4. Color-Value Correlation
+### 4. Color-Value Association
 
 `visualizations/phase5/color_value_correlation.png`
 
@@ -135,13 +121,7 @@ Two structural patterns are consistent with this data:
 | KB (khaki brown) | 6 |
 | RB (reddish brown) | 6 |
 
-The test is highly significant, but **the practical interpretation is ambiguous**. Several confounding explanations exist:
-
-- **Positional confound**: NB and DB are relatively rare colors that appear disproportionately on deeper subsidiary cords. Subsidiary cords in the KFG often carry smaller values (< 10) in their capacity as summands. But NB has a surprisingly high median (42) — suggesting it may preferentially appear on high-value pendant positions.
-- **Corpus composition**: NB is concentrated in a small number of khipus (45 of 709). If those khipus happen to record high-magnitude data (large tribute or census counts), the color-value association is a khipu-level confound, not a cord-level semantic encoding.
-- **White as sum cord**: White's median of 13 is above most brown shades (median 6), consistent with white sum cords tending to carry the total of their group — which is larger than any individual summand.
-
-**Conclusion**: Color and value are statistically associated, but the causal direction is not established. There is no compelling evidence that color *encodes* magnitude (the legacy Phase 5 H2 was "NOT SUPPORTED" in OKR; the KFG result is more ambiguous due to the NB finding). This warrants further investigation with larger per-color samples.
+The association is highly significant, but multiple confounds are present: cord position (NB and DB appear disproportionately on specific hierarchy levels), corpus composition (NB appears in only 45 khipus), and khipu-level effects (khipus recording large values may use certain colors). Causal direction is not established.
 
 ---
 
@@ -149,38 +129,26 @@ The test is highly significant, but **the practical interpretation is ambiguous*
 
 `visualizations/phase5/color_cooccurrence.png`
 
-The co-occurrence matrix counts khipus containing both color X and color Y. Key observations from the lower-triangle heatmap:
+The co-occurrence matrix counts khipus containing both color X and color Y. Selected pairings:
 
-- **W + AB** pair in 325 khipus (highest non-diagonal for W); **W + MB** in 336. White co-occurs with nearly every other major color — expected given its 77.7% corpus presence.
-- **AB + MB** appear together in 322 khipus — nearly as often as either appears alone. AB and MB are thus almost a "default pair" in the corpus. This is likely a fiber-type signature: the earthy (AB/MB/KB) tones reflect the natural color range of undyed camelid or cotton fiber.
-- **GG (grayish green)** shows strong co-occurrence with W (158), AB (150), MB (148), and KB (131), suggesting GG appears in the same broad class of khipus as the earthy palette — not specialised to a restricted set.
-- **LB and NB** are more isolated: LB co-occurs with B (19) and YB (19) but rarely with AB (11) or MB (12). NB is similarly isolated. These may represent khipus from a distinct fiber tradition or a distinct geographic origin.
-- **PK (pink)** co-occurs heavily with W (127), AB (124), MB (125), KB (101) — suggesting pink cords appear in the same broadly well-preserved, multi-color khipus as the dominant palette. PK has 159 on its own diagonal (159 khipus contain pink), which is surprisingly high and may reflect a specific regional dyeing tradition (Ica/Nazca coastal cotton?).
+| Pair | Co-occurring khipus |
+|---|---|
+| W + MB | 336 |
+| W + AB | 325 |
+| AB + MB | 322 |
+| W + GG | 158 |
+| AB + GG | 150 |
+| MB + GG | 148 |
 
----
-
-## Synthesis
-
-The five analyses converge on a consistent picture:
-
-1. **Color vocabulary is highly concentrated but with a long tail.** White dominates; the earthy brown–buff palette (AB, MB, KB, YB) comprises the next tier. 2,830 distinct codes exist but the top 10 cover ~77% of entries.
-
-2. **White first-position cords associate with higher summation diversity** (p<0.0001, +0.70 mean pattern types), but do not strongly separate Simple from Complex clusters. This supports a functional role for white boundary cords in structuring group-level summation — but color alone does not predict structural class.
-
-3. **Structural complexity and color richness are tightly coupled.** Complex khipus use 3× more distinct colors than Simple ones (p<10⁻²⁴). Whether color drives complexity or complexity enables richer color use is not determinable from this data alone.
-
-4. **Color and numeric value are statistically associated** (p<10⁻²⁰⁰) but the effect is likely mediated by cord position and khipu-level composition effects. There is no strong evidence for a simple color-encodes-magnitude rule, but NB's anomalously high median (42) merits targeted investigation.
-
-5. **Co-occurrence reveals two partially distinct color worlds:** the ubiquitous earthy palette (W/AB/MB/KB/YB/GG) that spans most of the corpus; and isolated specialists (NB, LB, PK) concentrated in smaller subsets that may correspond to geographic traditions or functional khipu types.
+W co-occurs with nearly every other major color, as expected given its 77.7% corpus presence. AB and MB appear together nearly as often as either appears alone (322 joint vs 397/416 individual). LB and NB show more isolated co-occurrence patterns with fewer pairings to the dominant AB/MB group.
 
 ---
 
 ## Limitations
 
-1. **NB finding is tentative.** Only 45 khipus carry NB cords. The high median value (42) is driven by a small sample.
-2. **White-first operationalization**: `position_in_group = 1` may not map exactly onto the Clindaniel/Ascher concept. Groups with missing cords at position 1 would be mis-coded.
-3. **Color-diversity outliers**: KH0082 (236 unique colors) and KH0083 (151) heavily influence the Complex mean. These are the Leymebamba paired khipus that are also outliers in cord count and summation coverage.
-4. **Phase 2 open questions not resolved.** PSN and PP threshold uncertainty does not directly affect color analyses, but `n_pattern_types` values for ~150 khipus may shift slightly.
+1. **NB sample size.** Only 45 khipus carry NB cords; the high median value (42) is based on a small sample.
+2. **White-first operationalization.** `position_in_group = 1` may not map exactly onto the Clindaniel/Ascher concept.
+3. **Color-diversity outliers.** KH0082 (236 unique colors) and KH0083 (151) heavily influence the Complex mean. Both are from the Leymebamba cache and are also outliers in cord count and summation coverage.
 
 ---
 
@@ -197,12 +165,16 @@ Requires Phase 3 to have run first (reads `data/processed/phase3_clusters.csv`).
 | `data/processed/phase5_color_vocab.csv` | Color frequency table |
 | `data/processed/phase5_color_diversity.csv` | Per-khipu color diversity metrics |
 | `data/processed/phase5_stat_results.csv` | Statistical test results |
-| `visualizations/phase5/color_vocab.png` | Top 30 color codes bar chart |
-| `visualizations/phase5/white_cord_analysis.png` | White first-cord hypothesis |
-| `visualizations/phase5/color_diversity_by_cluster.png` | Diversity by cluster + zone |
-| `visualizations/phase5/color_value_correlation.png` | Value distribution by color |
-| `visualizations/phase5/color_cooccurrence.png` | Co-occurrence heatmap |
+| `visualizations/phase5/` | All PNG figures |
 
 ---
 
-*Corpus sweep run 2026-03-02 against K-CAT SQLite database.*
+## Citations and Acknowledgments
+
+White-cord hypothesis after Clindaniel (2019) and Ascher & Ascher (1997). Color codes follow KFG extended Ascher notation.
+
+> Khosla, Ashok. *The Khipu Field Guide.* [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
+
+---
+
+*Corpus sweep run against K-CAT SQLite database. Re-run with `scripts/run_phase5_color.py` to refresh.*

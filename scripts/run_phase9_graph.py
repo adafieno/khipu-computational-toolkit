@@ -361,7 +361,7 @@ for ax, (metric, label, higher_b4) in zip(axes, compare_viz):
     data_b4 = b4[metric].dropna().values
     data_b5 = b5[metric].dropna().values
     bp = ax.boxplot([data_b4, data_b5],
-                    tick_labels=["B4", "B5"], patch_artist=True)
+                    labels=["B4", "B5"], patch_artist=True)
     bp["boxes"][0].set_facecolor(palette_b4b5["B4"]); bp["boxes"][0].set_alpha(0.75)
     bp["boxes"][1].set_facecolor(palette_b4b5["B5"]); bp["boxes"][1].set_alpha(0.75)
     ax.set_title(label, fontsize=10)

@@ -172,7 +172,7 @@ plot_order = [c for c in ordered if c in top_n_colors]
 fig, ax = plt.subplots(figsize=(16, 6))
 bp_data = [np.log10(cords_nz[cords_nz["primary_color"] == c]["value_num"].clip(lower=0.1))
            for c in plot_order]
-bp = ax.boxplot(bp_data, tick_labels=plot_order, patch_artist=True, showfliers=False)
+bp = ax.boxplot(bp_data, labels=plot_order, patch_artist=True, showfliers=False)
 
 # Colour boxes by median value (spectral palette)
 medians = [color_stats[color_stats["primary_color"]==c]["median"].values[0] for c in plot_order]

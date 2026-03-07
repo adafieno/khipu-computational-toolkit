@@ -1,16 +1,16 @@
 # Phase 6: Anomaly Detection
 
-**Generated:** 2026-03-02  
+**Generated:** 2026-03-02 (updated)  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase6_anomaly.py`  
 **Inputs:** `data/processed/phase3_clusters.csv` · `data/processed/phase5_color_diversity.csv`  
-**Status:** Provisional — anomaly detection is unsupervised; flagged khipus require expert review before interpretation
+**Status:** ✅ Complete — anomaly detection is unsupervised; flagged khipus require expert review
 
 ---
 
 ## Research Question
 
-Which khipus in the KFG corpus are structurally exceptional relative to the bulk of the corpus? Are there consistent patterns among outliers that suggest data quality issues, exceptional preservation, or genuinely unusual administrative function?
+Which khipus in the KFG corpus are structurally exceptional relative to the bulk of the corpus? Are there consistent structural patterns among outliers?
 
 ---
 
@@ -36,13 +36,11 @@ Three complementary anomaly detection methods applied to an 11-feature structura
 
 All features StandardScaler-normalized before model fitting.
 
-**Methods:**
-
 | Method | Parameters | Flagging threshold |
 |---|---|---|
 | **Isolation Forest** | 200 trees, contamination=5%, random_state=42 | Predicted −1 (outlier class) |
 | **Local Outlier Factor** | k=20 neighbors, contamination=5% | Predicted −1 (outlier class) |
-| **Z-score** | Per-feature, all features | Any feature \|z\| > 3.0 SD |
+| **Z-score** | Per-feature, all features | Any feature |z| > 3.0 SD |
 
 **Consensus classification:**
 - **High-confidence anomaly**: flagged by ≥ 2 of 3 methods
@@ -63,8 +61,6 @@ All features StandardScaler-normalized before model fitting.
 | Local Outlier Factor | 36 | 5.1% |
 | Z-score (any feature > 3 SD) | 75 | 10.6% |
 
-**Pairwise overlap:**
-
 | Pair | Count |
 |---|---|
 | IF ∩ LOF | 14 |
@@ -72,15 +68,13 @@ All features StandardScaler-normalized before model fitting.
 | LOF ∩ Z-score | 27 |
 | **All three** | **14** |
 
-**Consensus:**
+### Consensus
 
 | Class | Count | % corpus |
 |---|---|---|
 | Normal | 619 | 87.3% |
 | Candidate (1 method) | 47 | 6.6% |
-| **High-confidence (≥2 methods)** | **43** | **6.1%** |
-
-The legacy OKR Phase 7 identified 13 high-confidence anomalies (2.1% of 612 khipus). The KFG result is 43 (6.1% of 709). The higher rate reflects both the richer KFG feature set (color diversity now included) and the addition of `sub_ratio` and `group_size` as derived features that expose structural extremes not visible in Phase 3 features alone.
+| **High-confidence (≥ 2 methods)** | **43** | **6.1%** |
 
 ### Leading Flag Features (Z-score)
 
@@ -92,17 +86,13 @@ The legacy OKR Phase 7 identified 13 high-confidence anomalies (2.1% of 612 khip
 | `n_groups` | 8 |
 | `n_subsidiaries` | 7 |
 
-`group_size` and `numeric_coverage` are the two most common primary flag features. Z-score flags on `group_size` indicate khipus with either extremely large average group size (many pendants per group, suggesting unusually long groups) or extremely small (1–2 pendants per group, suggesting highly segmented structure). `numeric_coverage` flags appear at both extremes: near-zero coverage (numeric data nearly absent) and near-unity coverage (every cord has a decoded value, which is itself unusual).
-
 ---
 
-### High-confidence Anomaly Catalog
+### High-confidence Anomaly Catalog (Selected)
 
 `visualizations/phase6/anomaly_scatter.png`  
 `visualizations/phase6/anomaly_profiles.png`  
 Data: `data/processed/phase6_anomaly_catalog.csv`
-
-Selected high-confidence anomalies, sorted by cord count:
 
 | kfg_id | Provenance | Zone | Cluster | n_cords | n_patterns | n_uniq_colors | Numeric cov. | Frac broken | Primary flag | Methods |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -119,58 +109,34 @@ Selected high-confidence anomalies, sorted by cord count:
 | KH0384 | Pisco Valley | Cañete–Pisco | Complex | 96 | 3 | 2 | **100%** | 0% | n_groups | LOF+Z |
 | KH0271 | Huari | S. Highlands | Complex | 91 | 4 | 2 | **100%** | 2.2% | n_groups | LOF+Z |
 
-Note: KH0082 and KH0083 are the famous Leymebamba paired khipus (actually both from the Leymebamba cache — KH0082 is labelled "Lluta Valley" in the KFG provenance but is part of the same cached assemblage). Their color diversity (236 and 151 unique codes) is without parallel in the corpus.
+All 43 high-confidence anomalies are Complex-cluster khipus. The full catalog is in `data/processed/phase6_anomaly_catalog.csv`.
 
----
+### Structural Patterns Among Anomalies
 
-### Anomaly Typology
+Anomalies group into four structural profiles based on their primary flag features:
 
-Examining the catalog across the 11 features, four structural anomaly types emerge:
+1. **Large cord count** (KH0082, KH0329, KH0468, KH0242, KH0349, KH0239, KH0083): > 500 cords. These are the largest khipus in the corpus. The Leymebamba cache accounts for several.
 
-**Type A — Exceptionally large khipus (n_cords outlier)**  
-KH0082, KH0329, KH0468, KH0242, KH0349, KH0239, KH0083, KH0068, KH0084  
-These are the largest khipus in the corpus — all Complex, all with > 500 cords. They are not errors; they represent genuine large-scale recording devices. Their anomalousness is corpus-relative: most KFG khipus have < 100 cords. The Leymebamba cache khipus account for several of these.
+2. **Near-complete numeric coverage** (KH0280, KH0289, KH0271, KH0384): numeric coverage > 95%. Most khipus have coverage ~45%; these are well above corpus norms.
 
-**Type B — Near-complete numeric coverage (numeric_coverage → 1.0)**  
-KH0280, KH0289, KH0271, KH0384, KH0415, KH0621, KH0049, KH0676, KH0453  
-Khipus where nearly every cord has a decoded value. This is unusual because most khipus have damaged or incomplete cords (median coverage ~45%). High coverage may reflect exceptional preservation, or khipus designed with a simple, complete record-keeping format that avoids structural elements (no long subsidiaries) that frequently lose values.
+3. **High breakage fraction** (KH0617 at 77%, KH0519 at 58%, KH0498 at 47%): heavily damaged but retaining enough structure for analysis.
 
-**Type C — High breakage fraction (frac_broken outlier)**  
-KH0617 (77%), KH0519 (58%), KH0498 (47%), KH0568 (55%)  
-These are heavily damaged khipus retaining very few interpretable values but enough structural information to remain in the corpus. KH0617 (Incahuasi, 374 cords, 77% broken) is particularly notable: it has 7 pattern types despite massive damage, suggesting the underlying structure was originally very complex.
-
-**Type D — Extreme structural geometry (group_size, sub_ratio outliers)**  
-KH0454, KH0453, KH0383, KH0382, KH0415, KH0676  
-These are khipus with either very few cord groups relative to pendant count (long, undivided groups) or with unusually high subsidiary depth. Several are Simple-cluster khipus from Ica and Pachacamac, suggesting these may reflect a distinct recording format for specific local administrative tasks.
-
----
+4. **Extreme structural geometry** (KH0454, KH0453, KH0383): either very few cord groups relative to pendant count or unusually high subsidiary depth.
 
 ### Anomaly vs Normal — Feature Distributions
 
 `visualizations/phase6/anomaly_features.png`
 
-High-confidence anomalies are visually separated from the normal corpus on `n_cords` (heavily right-skewed), `n_unique_colors` (anomalies include both very high and very low), and `sub_ratio` (anomalies cluster at the high end). The `frac_broken` distribution shows anomalies clearly extending into the 0.5–1.0 range where the normal corpus is sparse.
-
----
-
-## Notable Corpus Observations
-
-**KH0082 and KH0083** (Leymebamba paired khipus) are consistent "star" anomalies across every phase. In Phase 3 they dominate the Complex cluster's color diversity; in Phase 5 they have the two highest unique color counts (236, 151); here they score highest on Isolation Forest. These are genuinely extraordinary objects — the largest, most colorful, best-preserved khipus in the corpus — with structural features that set them apart from the rest of the KFG collection regardless of any functional interpretation.
-
-**KH0349** (Nazca, 866 cords, 9 pattern types, 83% numeric coverage) is the most complete non-Leymebamba khipu. All 9 summation pattern types are present and 83% of cords have decoded values — a combination not seen in any other provenanced khipu. It was flagged by all three methods.
-
-**KH0617** (Incahuasi, 374 cords, 77% broken) is the highest-breakage high-confidence anomaly with substantial pattern richness intact. It suggests a khipu that was extensively used and damaged in use or storage, not simply incomplete at manufacture.
-
-**The LOF-only anomalies** (flagged by LOF but not IF or Z-score) tend to be structurally unusual in locally specific ways: high numeric_coverage combined with very few groups, or very high group_size. These are khipus where no single feature is globally extreme but the *combination* of feature values is locally unusual in feature space.
+High-confidence anomalies separate from the normal corpus primarily on `n_cords` (right tail), `n_unique_colors` (both extremes), `sub_ratio` (high end), and `frac_broken` (0.5–1.0 range).
 
 ---
 
 ## Limitations
 
-1. **No ground truth for "anomaly."** There are no externally validated anomalous khipus to calibrate against. The 6.1% high-confidence rate is set by the contamination parameter (5%) and the Z-score threshold (3 SD) — both are conventional choices, not empirically determined.
-2. **Contamination parameter.** If the true anomaly rate is lower (e.g., 2%), Isolation Forest and LOF will over-flag. If higher (10%+), they will under-flag. The consensus approach partially mitigates this by requiring agreement between methods.
-3. **Corpus composition effect.** The Leymebamba cache khipus constitute a disproportionate share of the Complex cluster and of the anomalies. Removing them entirely would shift the "normal" baseline and likely reduce the number of anomalies detected.
-4. **Breakage as a proxy limitation.** `frac_broken` reflects the fraction of cords with missing or damaged values in the KFG — it is a data quality indicator, not purely a physical property of the khipu. It includes cords where the KFG marks knot data as uncertain.
+1. **No ground truth for "anomaly."** No externally validated anomalous khipus exist to calibrate against. The 6.1% high-confidence rate is set by the contamination parameter (5%) and Z-score threshold (3 SD) — conventional choices, not empirically determined.
+2. **Contamination parameter.** If the true anomaly rate differs from 5%, IF and LOF flag counts will be correspondingly biased.
+3. **Leymebamba concentration.** Leymebamba cache khipus constitute a disproportionate share of both the Complex cluster and the anomalies. Removing them would shift the baseline.
+4. **Breakage as proxy.** `frac_broken` reflects missing or damaged values in the KFG — a data quality indicator that includes cords where the KFG marks knot data as uncertain.
 
 ---
 
@@ -193,4 +159,4 @@ Requires Phase 3 and Phase 5 outputs.
 
 ---
 
-*Corpus sweep run 2026-03-02 against K-CAT SQLite database.*
+*Corpus sweep run against K-CAT SQLite database. Re-run with `scripts/run_phase6_anomaly.py` to refresh.*

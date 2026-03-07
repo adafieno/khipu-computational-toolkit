@@ -98,7 +98,7 @@ The wide gap between mean (88.5) and median (42) indicates a right-skewed distri
 | LL | 27 | Double long |
 | BL | 11 | Blank / spacer |
 
-The L:S ratio (1.05) closely matches the OKR corpus, consistent with the predominance of multi-digit values in accounting khipus.
+The L:S ratio is 1.05, closely matching the OKR corpus.
 
 ### Geographic Distribution
 

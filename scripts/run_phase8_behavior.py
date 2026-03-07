@@ -307,7 +307,7 @@ ax.legend(fontsize=8)
 # Round-number affinity boxplot by cluster
 ax = axes[1]
 data_box = [feat_df[feat_df["beh_label"] == bl]["pct_round5"].values for bl in beh_labels]
-bp = ax.boxplot(data_box, tick_labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(data_box, labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color)
     patch.set_alpha(0.7)
@@ -393,7 +393,7 @@ for xi, (t1v, t2v) in enumerate(zip(cross["T1"], cross["T2"])):
 
 # Middle: hierarchy depth boxplot
 ax = axes[1]
-bp = ax.boxplot(hier_box, tick_labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(hier_box, labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color); patch.set_alpha(0.7)
 ax.set_ylabel("Max hierarchy level")
@@ -406,7 +406,7 @@ for xi, (bl, nd) in enumerate(n_deep.items()):
 # Right: entropy per cord boxplot
 entr_box = [feat_df[feat_df["beh_label"] == bl]["entropy_per_cord"].values for bl in beh_labels]
 ax = axes[2]
-bp = ax.boxplot(entr_box, tick_labels=beh_labels, patch_artist=True)
+bp = ax.boxplot(entr_box, labels=beh_labels, patch_artist=True)
 for patch, color in zip(bp["boxes"], palette):
     patch.set_facecolor(color); patch.set_alpha(0.7)
 ax.set_ylabel("Shannon entropy / n cords (bits)")

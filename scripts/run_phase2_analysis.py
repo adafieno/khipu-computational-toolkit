@@ -88,9 +88,9 @@ def main():
         
         khipu_summary.append(summary)
     
-    print(f"✓ Processed all {len(all_khipus)} khipus")
+    print(f"[ok] Processed all {len(all_khipus)} khipus")
     total_matches = sum(len(matches) for matches in all_results.values())
-    print(f"✓ Found {total_matches} total summation relationships")
+    print(f"[ok] Found {total_matches} total summation relationships")
     print()
     
     # ========================================================================

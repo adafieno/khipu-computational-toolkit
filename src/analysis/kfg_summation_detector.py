@@ -1606,8 +1606,16 @@ class KFGSummationDetector:
             if with_figure8:
                 location_counts = defaultdict(int)
                 for m in with_figure8:
-                    if m.figure8_proximity:
-                        location_counts[m.figure8_proximity['location']] += 1
+                    f8 = m.figure8_proximity
+                    if f8:
+                        if f8.get('has_left_exact'):
+                            location_counts['left_exact'] += 1
+                        if f8.get('has_right_exact'):
+                            location_counts['right_exact'] += 1
+                        if f8.get('has_left_close'):
+                            location_counts['left_close'] += 1
+                        if f8.get('has_right_close'):
+                            location_counts['right_close'] += 1
                 
                 figure8_stats[pattern_type] = {
                     'num_with_figure8': len(with_figure8),
