@@ -4,27 +4,33 @@ Khipu Explorer — Standalone Local Browser
 Interactive Streamlit app for exploring the KFG khipu database.
 
 Views:
-    - Corpus Browser  : filterable / sortable table of all 709 khipus
-    - Analytics       : 4-tab analytics dashboard
-                          Overview   — prevalence · co-occurrence · complexity
-                          Deep Dive  — handedness · counts · magnitudes · dual/multi
-                          Geography  — provenance × pattern heatmap
-                          Pattern Space — PCA scatter · detail table
-    - 3D Viewer       : interactive Plotly 3D cord structure for a selected khipu
-    - Summation Arcs  : cord group color map + summation arc overlays (PP/IP/CP/SP/IS)
+    - Corpus Browser  : filterable / sortable table of all KFG khipus with
+                        click-to-detail modal (metadata + cord summary)
+    - Analytics       : 4-tab pattern statistics dashboard
+                          Overview      — prevalence · co-occurrence · complexity
+                          Deep Dive     — handedness · counts · magnitudes · dual/multi
+                          Geography     — provenance × pattern rate heatmap
+                          Pattern Space — PCA scatter · per-pattern detail table
+    - 3D Viewer       : interactive Plotly 3D cord hierarchy for a selected khipu
+                        (Ascher color coding · S/L/E knot markers · hover tooltips)
+    - Summation Arcs  : cord-group grid with Bézier arc overlays per pattern
+                        (PP · IP · CP · SP · IS — each independently togglable)
+
+Navigation:
+    Fixed icon-bar on the left, or query param: ?v=corpus | analytics | 3dviewer | arcs
 
 Usage:
     streamlit run scripts/browse.py
 
 Requirements (already in requirements.txt):
-    pip install streamlit plotly pandas numpy
+    streamlit plotly pandas numpy scikit-learn
 """
 
 import ast
 import re
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
@@ -39,18 +45,19 @@ DB_PATH     = ROOT / "data" / "kfg" / "khipu_database.db"
 CHECKS_PATH = ROOT / "data" / "kfg" / "KFG" / "KFG" / "checks"
 
 sys.path.insert(0, str(ROOT / "src"))
+_kfg_loader_cls: Optional[Any] = None
+_LOADER_INSTANCE: Optional[Any] = None
 try:
-    from analysis.kfg_relation_loader import KFGRelationLoader as _KFGLoader
-    _LOADER_INSTANCE: Optional["_KFGLoader"] = None
-
-    def _get_loader() -> Optional["_KFGLoader"]:
-        global _LOADER_INSTANCE
-        if _LOADER_INSTANCE is None and CHECKS_PATH.exists():
-            _LOADER_INSTANCE = _KFGLoader(str(CHECKS_PATH))
-        return _LOADER_INSTANCE
+    from analysis.kfg_relation_loader import KFGRelationLoader as _kfg_loader_cls  # type: ignore[assignment]
 except ImportError:
-    def _get_loader():  # type: ignore[misc]
-        return None
+    pass
+
+
+def _get_loader() -> Optional[Any]:
+    global _LOADER_INSTANCE
+    if _kfg_loader_cls is not None and _LOADER_INSTANCE is None and CHECKS_PATH.exists():
+        _LOADER_INSTANCE = _kfg_loader_cls(str(CHECKS_PATH))
+    return _LOADER_INSTANCE
 
 # ── Per-pattern config ─────────────────────────────────────────────────────────
 # Each entry: (short_key, display_name, csv_filename, positive_col)
@@ -392,8 +399,8 @@ def build_3d_figure(kfg_id: str) -> Optional[go.Figure]:
     # Assign each pendant a sequential x position
     # (group_idx can be 0..457 so we cannot use it directly as x)
     pos: dict[str, tuple[float, float, float]] = {}
-    for i, row in pendants.iterrows():
-        x = i * spacing
+    for seq_i, (_, row) in enumerate(pendants.iterrows()):
+        x = seq_i * spacing
         cord_length = float(row["length"] or 30.0)
         z = -(cord_length * depth_scale)   # hang downward (negative z); proportional
         pos[str(row["cord_name"])] = (x, 0.0, z)
@@ -1019,7 +1026,7 @@ def load_analytics_data() -> pd.DataFrame:
         df = df.rename(columns={"kfg_name": "kfg_id", pos_col: key})
         df[key] = pd.to_numeric(df[key], errors="coerce").fillna(0) > 0
         # Collapse any duplicate kfg_id rows by taking the max (True wins over False)
-        df = df.groupby("kfg_id", as_index=False)[key].max()
+        df = df.groupby("kfg_id", as_index=False)[[key]].max()
         frames.append(df.reset_index(drop=True))
 
     if not frames:
@@ -1800,7 +1807,7 @@ def main() -> None:
             }
             sel = k_col.selectbox(
                 "Khipu", khipu_ids,
-                format_func=lambda k: k_labels.get(k, k),
+                format_func=lambda k: str(k_labels.get(k, k)),
                 key=f"{key_prefix}_khipu", label_visibility="collapsed",
             )
         else:
@@ -1841,7 +1848,7 @@ def main() -> None:
             on_select="rerun",
             selection_mode="single-row",
         )
-        rows = sel.selection.rows if sel and hasattr(sel, "selection") else []
+        rows = (sel.get("selection") or {}).get("rows") or []  # type: ignore[union-attr]
         if rows:
             _khipu_detail_modal(display_table.iloc[rows[0]]["KFG ID"])
     # ── Analytics ───────────────────────────────────────────────────────────────────────
@@ -1916,10 +1923,9 @@ def main() -> None:
                     st.markdown(
                         "**Cells** show how many khipus express *both* the row pattern and the column pattern simultaneously.  \n"
                         "**Diagonal** = khipus that have that single pattern (same as the prevalence bar chart).  \n"
-                        "**Cell colour** uses the Turbo scale: deep blue = low count, cyan/yellow-green = mid, dark red = high. "
-                        "A bright or warm off-diagonal cell signals two patterns that frequently co-occur — suggesting they belong to "
-                        "the same scribe tradition or accounting layer.  \n"
-                        "**Cool/dark off-diagonal cells** = the pair rarely or never co-occurs."
+                        "**Cell colour**: deep blue = low count, cyan/yellow-green = mid, dark red = high. "
+                        "A warm off-diagonal cell signals two patterns that frequently co-occur — suggesting a shared scribe tradition.  \n"
+                        "**Cool/dark off-diagonal** = the pair rarely or never co-occurs."
                     )
                 st.plotly_chart(build_cooccurrence_figure(flags_df), width="stretch")
 
@@ -2025,7 +2031,9 @@ def main() -> None:
                     "They don't have a simple physical meaning, but khipus that sit close together "
                     "are *similar in their summation profiles*.\n\n"
                     "**Colour** = number of distinct patterns expressed (0 = grey, 1 = blue, 2 = orange, …).  \n"
-                    "**Clusters** in the scatter suggest structural families or regional schools of accounting."
+                    "**Proximity** in the scatter reflects similarity in summation profiles. "
+                    "The current corpus shows no clear cluster separation — "
+                    "any apparent groupings should be treated as exploratory and warrant further research."
                 )
             st.plotly_chart(build_pca_figure(flags_df), width="stretch")
 
@@ -2110,7 +2118,7 @@ def main() -> None:
             }
             selected_id = _k_col.selectbox(
                 "Khipu", khipu_ids,
-                format_func=lambda k: k_labels.get(k, k),
+                format_func=lambda k: str(k_labels.get(k, k)),
                 key="3dv_khipu", label_visibility="collapsed",
             )
         else:
@@ -2212,7 +2220,7 @@ def main() -> None:
             }
             selected_id = _k_col.selectbox(
                 "Khipu", khipu_ids,
-                format_func=lambda k: k_labels.get(k, k),
+                format_func=lambda k: str(k_labels.get(k, k)),
                 key="arcs_khipu", label_visibility="collapsed",
             )
         else:
