@@ -1,6 +1,6 @@
 # Phase 6: Anomaly Detection
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase6_anomaly.py`  
 **Inputs:** `data/processed/phase3_clusters.csv` · `data/processed/phase5_color_diversity.csv`  

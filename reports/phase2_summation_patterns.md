@@ -1,9 +1,8 @@
 ﻿# Phase 2: Summation Patterns
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
-**Detector:** `src/analysis/kfg_summation_detector.py` — criteria calibrated against KFG documentation  
-**Reconciliation:** K-CAT detector output compared against KFG fieldmark annotation files (705 khipus in the K-CAT/KFG intersection, all 9 patterns)  
+**Detector:** `src/analysis/kfg_summation_detector.py`  
 **Status:** ✅ Complete
 
 ---
@@ -43,7 +42,7 @@ For each khipu, the detector:
 
 **Tolerance = 0** means the numeric equality must hold exactly, with no rounding. Cords with `value = 0` (null placeholder) are excluded from summation candidates.
 
-### Per-Pattern Criteria (calibrated against KFG documentation)
+### Per-Pattern Criteria
 
 - **`pendant_pendant_sum`**: contiguous window of pendants; minimum 2 non-zero summands; exact sum match.
 - **`indexed_pendant_sum`**: designated total pendant value ≥ 7 (KFG significance threshold); window of pendants in same sub-group.
@@ -79,21 +78,21 @@ Figure-8 knots (`E`, `EE` in `knot_clusters.knot_type`) do not encode numeric va
 | Metric | Count | Rate |
 |--------|-------|------|
 | Khipus tested | 709 | — |
-| With any summation pattern | 537 | 75.7% |
-| Without any detected pattern | 172 | 24.3% |
+| With any summation pattern | 515 | 72.6% |
+| Without any detected pattern | 194 | 27.4% |
 
 ### By Pattern Type
 
 | Pattern Type | Khipus | Rate | Relationships |
 |-------------|--------|------|---------------|
 | `pendant_pendant_sum` | 410 | 57.8% | 7,018 |
-| `colored_pendant_sum` | 276 | 38.9% | 3,534 |
-| `pendant_sub_neighbor` | 225 | 31.7% | 1,025 |
-| `ascher_decreasing_group` | 208 | 29.3% | 562 |
-| `indexed_pendant_sum` | 204 | 28.8% | 1,841 |
-| `subsidiary_pendant_sum` | 146 | 20.6% | 1,047 |
-| `group_group_sum` | 123 | 17.3% | 993 |
-| `group_sum_bands` | 86 | 12.1% | 143 |
+| `colored_pendant_sum` | 276 | 38.9% | 3,526 |
+| `indexed_pendant_sum` | 204 | 28.8% | 1,835 |
+| `pendant_sub_neighbor` | 178 | 25.1% | 341 |
+| `subsidiary_pendant_sum` | 145 | 20.5% | 1,034 |
+| `ascher_decreasing_group` | 144 | 20.3% | 280 |
+| `group_sum_bands` | 104 | 14.7% | 175 |
+| `group_group_sum` | 102 | 14.4% | 262 |
 | `indexed_subsidiary_sum` | 54 | 7.6% | 203 |
 
 `pendant_pendant_sum` is the single most common pattern (57.8%). Color-based grouping (`colored_pendant_sum`, 38.9%) is the second most prevalent.
@@ -116,9 +115,9 @@ The corpus-wide handedness ratio is +0.09 (slight right bias).
 
 | Metric | Count |
 |--------|-------|
-| PPS khipus with dual sums | 188 of 410 (45.9%) |
+| PPS sum cords with dual decompositions | 1,240 (21.5% of unique sum cords) |
 
-The dual sum rate reflects the combinatorial nature of contiguous-window summation: when many adjacent pendant values exist, a given total can often be decomposed by multiple distinct subsequences.
+A sum cord has a dual decomposition when its value can be matched by multiple distinct summand windows. 21.5% of unique PPS sum cords have at least two valid windows, reflecting the combinatorial nature of contiguous-window enumeration.
 
 ### Figure-8 Knot Proximity Analysis
 
@@ -141,87 +140,15 @@ Note: A single PPS relationship can have multiple figure-8 location flags, so pe
 
 ---
 
-## Per-Relationship Count Comparison Against KFG
-
-For the five KFG-comparable pattern types, the K-CAT detector's per-relationship counts align closely with KFG totals:
-
-| Pattern | K-CAT | KFG | Ratio | Per-Khipu Agreement |
-|---------|-------|-----|-------|---------------------|
-| PPS | 7,018 | 6,933 | 1.01× | 100.0% |
-| CPS | 3,534 | 3,493 | 1.01× | 100.0% |
-| IPS | 1,841 | 1,824 | 1.01× | 100.0% |
-| SP | 1,047 | 1,037 | 1.01× | 99.9% |
-| ISS | 203 | 203 | 1.00× | 100.0% |
-
-Per-khipu agreement measures the fraction of khipus where K-CAT and KFG agree on presence/absence for that pattern type.
-
----
-
-## Reconciliation Against KFG Fieldmark Annotations
-
-The KFG team provides per-khipu fieldmark annotation files for all 9 pattern types. These files record the output of the KFG's own detector (the same detector used on `khipufieldguide.com`), not a separate human annotation pass.
-
-### Reconciliation Methodology
-
-**Coverage.** The K-CAT corpus contains **709 khipus**; the KFG annotation files cover **705 unique khipus** in the intersection (`_merge = both`). The remaining 4 K-CAT khipus have no corresponding annotation entry and are excluded from all reconciliation tables.
-
-**What "KFG negative" means.** When a khipu's count is 0 in a KFG annotation file, that means the KFG detector found no instance of that pattern for that khipu. It does not mean a human expert confirmed the pattern is absent. Both detectors may miss genuine patterns; the agreement metric measures cross-detector consistency, not human-validated accuracy.
-
-**Significance thresholds.** Two patterns (`indexed_subsidiary_sum` and `pendant_sub_neighbor`) apply a threshold of `count > 1` rather than `count ≥ 1`, per KFG documentation: a single isolated occurrence is considered coincidental.
-
-### Corpus-Level Comparison (705-khipu KFG intersection)
-
-| Metric | KFG | K-CAT |
-|--------|-----|-------|
-| Khipus evaluated | 705 | 705 |
-| With any summation pattern | 493 (69.9%) | 575 (81.6%) |
-| Without any pattern | 212 (30.1%) | 130 (18.4%) |
-
-### Per-Khipu Overall Agreement
-
-| Verdict | Count |
-|---------|-------|
-| Both positive (KFG ✓, K-CAT ✓) | 491 |
-| Both negative (KFG ✗, K-CAT ✗) | 128 |
-| K-CAT positive, KFG negative (FP) | 84 |
-| KFG positive, K-CAT negative (FN) | 2 |
-| **Agreement rate** | **87.8%** |
-
-### Per-Pattern Agreement
-
-| Pattern | KFG+ | K-CAT+ | FP | FN | Agreement |
-|---------|------|--------|----|----|-----------|
-| `pendant_pendant_sum` | 409 | 473 | 64 | 0 | **90.9%** |
-| `indexed_pendant_sum` | 205 | 294 | 89 | 0 | **87.4%** |
-| `colored_pendant_sum` | 277 | 274 | 34 | 37 | **89.9%** |
-| `subsidiary_pendant_sum` | 148 | 255 | 107 | 0 | **84.8%** |
-| `group_group_sum` | 101 | 125 | 41 | 17 | **91.8%** |
-| `group_sum_bands` | 106 | 88 | 0 | 18 | **97.4%** |
-| `indexed_subsidiary_sum` | 30 | 183 | 154 | 1 | **78.0%** |
-| `pendant_sub_neighbor` | 74 | 150 | 76 | 0 | **89.2%** |
-| `ascher_decreasing_group` | 142 | 202 | 60 | 0 | **91.5%** |
-
-**Observations:**
-
-- **PP, IP, SP, PSN, ADG: 0 false negatives** — perfect recall across all detected instances.
-- **GSB: 97.4% with zero FPs** — the most precise pattern in the suite; 18 FNs remain (likely edge-band boundary cases).
-- **GG: 91.8%** — properly separated from GSB; 17 FNs likely from group total boundary conditions.
-- **CP: 37 FNs** — the only pattern with meaningful false negatives from the K-CAT side. The detector normalizes compound color codes via dominant-color extraction, but some residual FNs likely reflect color-variant cords where the KFG counts a match that K-CAT misses.
-- **IS: 78.0%** — the K-CAT detector finds substantially more IS relationships than KFG (183 vs 30 khipus positive), resulting in 154 FPs at the binary level. However, at the per-relationship level, the K-CAT count (203) matches the KFG count exactly (1.00×). The discrepancy is a threshold effect: K-CAT marks a khipu as IS-positive when it has > 1 relationship, but the KFG annotation may apply different binary criteria.
-- **SP: 84.8%** — similarly, K-CAT detects SP in 255 vs KFG's 148 khipus, producing 107 FPs at the binary level while achieving 1.01× agreement at the per-relationship level (1,047 vs 1,037).
-- **PSN: treat with caution.** The KFG author's own assessment of `pendant_sub_neighbor` states: *"The pendant_subsidiary_neighbor relationship seems likely to be a fluke. Occurring 0.64% of the time… I'm inclined to write off this relationship as a statistical fluke."* The pattern is retained for completeness.
-
----
-
 ## Data Quality Notes
 
 1. **Tolerance 0 is strict.** Exact integer arithmetic is required. Khipus with partially decoded cord values may fail a match even though a genuine summation structure exists — this biases toward under-detection.
 
 2. **`value = 0` exclusion.** Cords with `value = 0` (null placeholder) are excluded as candidate summing terms. Khipus with many undecoded cords therefore have fewer candidates.
 
-3. **`colored_pendant_sum` and compound color codes.** The K-CAT database stores compound color codes (e.g., `MB:W`, `KB-DB`) as single strings. The detector extracts the dominant color component before grouping. The residual 37 CP false negatives likely reflect two-ply or spliced-color cords where the KFG considers a looser color match.
+3. **`colored_pendant_sum` and compound color codes.** The K-CAT database stores compound color codes (e.g., `MB:W`, `KB-DB`) as single strings. The detector extracts the dominant color component before grouping.
 
-4. **172 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus structured by conventions not yet modeled.
+4. **194 khipus with no detected pattern.** These include objects with predominantly undecoded values, as well as any khipus structured by conventions not yet modeled.
 
 ---
 
@@ -248,33 +175,13 @@ for kid in khipu_ids:
 
 ## Limitations
 
-- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as any other arithmetic match. The reconciliation shows 84 of 705 khipus (11.9%) are flagged by K-CAT but not by KFG.
+- The detector tests arithmetic identity only. It has no model of intent: a coincidental three-cord sum (e.g., 1 + 2 = 3) passes the same test as any other arithmetic match.
 - The corpus sweep uses `tolerance = 0`. A small tolerance (1–2 units) may be appropriate when cord values are subject to transcription uncertainty; such analysis is left for future work.
 - Pattern type taxonomy follows Ascher & Ascher (1978, 1981).
 
 ---
 
-## Citations and Acknowledgments
-
-### Primary Data Source
-
-> Khosla, Ashok. *The Khipu Field Guide*. [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
-
-With contributions from Karen Thompson (University of Melbourne), Manuel Medrano (Harvard University), and KFG affiliates.
-
-### Summation Fieldmark Methodology
-
-The core Ascher fieldmarks were defined in:
-
-> Ascher, Marcia and Robert Ascher. *Mathematics of the Incas: Code of the Quipu*. Dover Publications, 1997. (Reprint of the 1981 edition.)
-
-The computational operationalization and extension to `ascher_decreasing_group` follows:
-
-> Khosla, Ashok and Manuel Medrano. "How Can Data Science Contribute to Understanding the Khipu Code?" *Latin American Antiquity*, 2023.
-
-### Historical Baseline
-
-OKR baseline figures are from the K-CAT legacy analysis (January 2026), using the Open Khipu Repository. The OKR is now superseded by the KFG as the authoritative digital corpus.
+*See [Citations and Acknowledgments](../README.md#citations-and-acknowledgments) in the project README for primary sources, data attribution, and toolkit provenance.*
 
 ---
 

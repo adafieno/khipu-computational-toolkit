@@ -8,7 +8,7 @@
 
 ## Overview
 
-K-CAT is a research toolkit for computational analysis of Inka khipus. It is built on the [Khipu Field Guide (KFG)](https://khipufieldguide.com) dataset ó 709 khipus with carefully corrected fieldmarks representing approximately 3ñ4 person-years of expert annotation.
+K-CAT is a research toolkit for computational analysis of Inka khipus. It is built on the [Khipu Field Guide (KFG)](https://khipufieldguide.com) dataset ‚Äî 709 khipus with carefully corrected fieldmarks representing approximately 3‚Äì4 person-years of expert annotation.
 
 The toolkit focuses on **falsifiable, reproducible hypothesis testing**: summation pattern detection, structural typology, and geographic analysis. All findings are exploratory and require expert validation before interpretive use.
 
@@ -20,7 +20,7 @@ The toolkit focuses on **falsifiable, reproducible hypothesis testing**: summati
 
 ```bash
 # 1. Place the KFG database at data/kfg/khipu_database.db
-#    (gitignored ó obtain from KFG team)
+#    (gitignored ‚Äî obtain from KFG team)
 
 # 2. Set up environment
 python -m venv .venv
@@ -52,7 +52,7 @@ K-CAT organizes analysis into numbered phases. Each phase has a script entry-poi
 
 - **709 khipus** in corpus; **80.3%** carry at least one summation pattern
 - **Best k = 2** clusters (silhouette = 0.37): 591 Simple (avg 45 cords, ~2 pattern types) vs 118 Complex (avg 304 cords, ~6 pattern types)
-- **Chachapoyas 52% Complex**, Central Coast 8% ó strongest geographic signal
+- **Chachapoyas 52% Complex**, Central Coast 8% ‚Äî strongest geographic signal
 - UMAP projections: `visualizations/phase3/`
 
 ---
@@ -75,7 +75,7 @@ docs/
     KFG_QUICK_REFERENCE.md
     MIT_FEEDBACK_AND_CORRECTIONS.md
 
-reports/                  # Phase reports (Phases 1ñ3)
+reports/                  # Phase reports (Phases 1‚Äì3)
 scripts/                  # Analysis entry-points
 src/
   config_kfg.py           # Path configuration
@@ -90,10 +90,10 @@ src/
     arithmetic_validator.py
 
 visualizations/
-  phase3/                 # 5 PNGs (heatmap, silhouette, UMAP ◊3)
+  phase3/                 # 5 PNGs (heatmap, silhouette, UMAP √ó3)
 
 legacy/                   # Frozen OKR-era code, data, reports, and visualizations
-                          # (gitignored ó preserved in git history)
+                          # (gitignored ‚Äî preserved in git history)
 ```
 
 ---
@@ -117,7 +117,7 @@ legacy/                   # Frozen OKR-era code, data, reports, and visualizatio
 
 ## Configuration
 
-Database path is managed by `src/config_kfg.py`. The KFG database defaults to `data/kfg/khipu_database.db` (gitignored ó must be generated locally via `build_kfg_database.py`).
+Database path is managed by `src/config_kfg.py`. The KFG database defaults to `data/kfg/khipu_database.db` (gitignored ‚Äî must be generated locally via `build_kfg_database.py`).
 
 ---
 
@@ -125,33 +125,52 @@ Database path is managed by `src/config_kfg.py`. The KFG database defaults to `d
 
 - Phase 2 has two open questions pending KFG team response (PP threshold, PSN interpretation) that may shift ~150 binary pattern flags. Phase 3 cluster boundaries may adjust accordingly.
 - Phase 3 results are **not for publication** until Phase 2 open questions are resolved.
-- `museum_country` / `museum_name` are intentionally excluded from geographic analysis ó they record current exhibition location, not origin.
+- `museum_country` / `museum_name` are intentionally excluded from geographic analysis ‚Äî they record current exhibition location, not origin.
 
 ---
 
 ## Legacy (OKR-era)
 
-The `legacy/` directory contains the prior OKR-based pipeline (Phases 0ñ9), including scripts, processed data, notebooks, and reports built on the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) database. That work is frozen; all active development uses the KFG dataset.
+The `legacy/` directory contains the prior OKR-based pipeline (Phases 0‚Äì9), including scripts, processed data, notebooks, and reports built on the [Open Khipu Repository](https://github.com/khipulab/open-khipu-repository) database. That work is frozen; all active development uses the KFG dataset.
 
 ---
 
-## Citation
+## Citations and Acknowledgments
 
-```
+### Citing This Toolkit
+
+`
 Da Fieno Delucchi, A. (2026). Khipu Computational Analysis Toolkit (K-CAT).
 https://github.com/adafieno/khipu-computational-toolkit
-```
+`
 
-For the KFG dataset:
+### Primary Data Source
 
-```
-Khosla, A., & Medrano, M. (2020ñpresent). Khipu Field Guide.
+All analyses use the **Khipu Field Guide (KFG)** database.
+
+`
+Khosla, A., & Medrano, M. (2020‚Äìpresent). Khipu Field Guide.
 https://khipufieldguide.com
-```
+`
+
+The KFG was created and is edited by **Ashok Khosla**. Substantial database curation and correction work was contributed by **Karen Thompson** (Senior Research Data Specialist, University of Melbourne), along with KFG affiliates **Manuel Medrano** (Harvard University), **Kylie Quave** (George Washington University), **Mack FitzPatrick** (Harvard University), **Saoirse Byrne**, and **Andr√©s Chirinos**. Per Ashok Khosla: ‚ÄúKaren Thompson and I both have invested at least 3 or 4 person-years of effort in improving and correcting the database.‚Äù
+
+### Numeric Decoding Methodology
+
+Cord values are decoded using the Ascher & Ascher positional notation system:
+
+> Ascher, Marcia and Robert Ascher. *Mathematics of the Incas: Code of the Quipu*. Dover Publications, 1997. (Reprint of the 1981 edition.)
+
+> Ascher, Marcia and Robert Ascher. ‚ÄúCode of the Quipu: Databook.‚Äù Cornell University, 1978.
+
+### Published Research
+
+> Khosla, Ashok and Manuel Medrano. ‚ÄúHow Can Data Science Contribute to Understanding the Khipu Code?‚Äù *Latin American Antiquity*, 2023.
+
+Karen Thompson‚Äôs work on KFG Ascher khipus (including the relationship between KH0082 and KH0083) has been published in *Nawpa Pacha* (Journal of Andean Archaeology).
+
+MIT Khipu Lab provided feedback on summation detection.
 
 ## License
 
-MIT ó see [LICENSE](LICENSE).
-
-**Acknowledgements:** KFG team (Ashok Khosla, Manuel Medrano, KFG Affiliates) for expert annotations and format guidance; MIT Khipu Lab for feedback on summation detection; Marcia & Robert Ascher for foundational work on khipu mathematics.
-
+MIT ‚Äî see [LICENSE](LICENSE).

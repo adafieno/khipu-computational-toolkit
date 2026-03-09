@@ -1,6 +1,6 @@
 # Phase 3: Structural Typology
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase3_typology.py`  
 **Feature matrix:** `src/analysis/feature_matrix.py`  
@@ -12,7 +12,7 @@
 
 Do the 9 summation pattern types cluster 709 khipus into recognizable structural types? Do those types correlate with known external variables — provenance, cord complexity, or color diversity? Or does the pattern space form a continuum without clear discrete boundaries?
 
-Phase 2 established that 75.7% of K-CAT khipus carry at least one summation pattern. Phase 3 asks whether co-occurrence patterns are structured — i.e., whether certain combinations recur enough to constitute groups.
+Phase 2 established that 72.6% of K-CAT khipus carry at least one summation pattern. Phase 3 asks whether co-occurrence patterns are structured — i.e., whether certain combinations recur enough to constitute groups.
 
 ---
 
@@ -187,13 +187,7 @@ Outputs:
 
 ---
 
-## Citations and Acknowledgments
-
-Feature matrix built from K-CAT Phase 2 detector output. Clustering approach follows standard exploratory practice (scikit-learn k-means); no novel algorithmic contributions.
-
-> Khosla, Ashok. *The Khipu Field Guide*. [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
-
-> Ascher, Marcia and Robert Ascher. *Mathematics of the Incas: Code of the Quipu*. Dover Publications, 1997.
+*See [Citations and Acknowledgments](../README.md#citations-and-acknowledgments) in the project README for primary sources, data attribution, and toolkit provenance.*
 
 ---
 

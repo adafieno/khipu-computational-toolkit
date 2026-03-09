@@ -1,6 +1,6 @@
 # Phase 10: Summation Structure & Zero-Cord Analysis
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase10_summation.py`  
 **Inputs:** `data/kfg/khipu_database.db` · Phase 7/8/9 assignments  

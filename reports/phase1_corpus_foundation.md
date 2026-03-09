@@ -1,6 +1,6 @@
 ﻿# Phase 1: Corpus Foundation
 
-**Generated:** 2026-02-28  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/corpus_statistics.py`  
 **Status:** ✅ Complete
@@ -30,23 +30,7 @@ The baseline statistics script queries the KFG SQLite database and reports:
 - Cord value = sum of all knot values on that cord
 - `value = 0` is used as a null/missing-value placeholder in the KFG database
 
-This methodology is identical to the OKR baseline and is described fully in Ascher & Ascher (1978, 1981).
-
----
-
-## Cross-Corpus Comparison
-
-| Metric | OKR (reference) | KFG (this run) |
-|--------|----------------|----------------|
-| Khipus in dataset | 619 | 709 |
-| Khipus with cord data | 612 | 709 |
-| Total cords | 54,403 | 62,746 |
-| Decoded knot records | 110,677 | 238,099 |
-| Color records | 56,306 | 76,258 |
-| Numeric coverage (value > 0) | 68.2% | 69.7% |
-| Khipus with any decoded value | 95.8% | 98.2% |
-
-*OKR reference figures from K-CAT Phase 0–1 reports, December 2025–January 2026.*
+This methodology is described fully in Ascher & Ascher (1978, 1981).
 
 ---
 
@@ -98,7 +82,7 @@ The wide gap between mean (88.5) and median (42) indicates a right-skewed distri
 | LL | 27 | Double long |
 | BL | 11 | Blank / spacer |
 
-The L:S ratio is 1.05, closely matching the OKR corpus.
+The L:S ratio is 1.05.
 
 ### Geographic Distribution
 
@@ -168,41 +152,7 @@ python scripts/corpus_statistics.py --db path/to/other.db --report  # any corpus
 
 ---
 
-## Citations and Acknowledgments
-
-### Primary Data Source
-
-This report analyzes the **Khipu Field Guide (KFG)** database, the world's most accurate and largest digital database of Inka khipus.
-
-> Khosla, Ashok. *The Khipu Field Guide*. [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
-
-The KFG was created and is edited by **Ashok Khosla**. Substantial database curation and correction work was contributed by **Karen Thompson** (Senior Research Data Specialist, University of Melbourne), along with KFG affiliates **Manuel Medrano** (Harvard University), **Kylie Quave** (George Washington University), **Mack FitzPatrick** (Harvard University), **Saoirse Byrne**, and **Andrés Chirinos**. Per Ashok Khosla: "Karen Thompson and I both have invested at least 3 or 4 person-years of effort in improving and correcting the database."
-
-### Numeric Decoding Methodology
-
-The positional notation system used to decode cord values from knot type and position was established by:
-
-> Ascher, Marcia and Robert Ascher. *Mathematics of the Incas: Code of the Quipu*. Dover Publications, 1997. (Reprint of the 1981 edition.)
-
-> Ascher, Marcia and Robert Ascher. "Code of the Quipu: Databook." Cornell University, 1978.
-
-### Published KFG Research
-
-The primary publication applying data science methodology to KFG khipu data:
-
-> Khosla, Ashok and Manuel Medrano. "How Can Data Science Contribute to Understanding the Khipu Code?" *Latin American Antiquity*, 2023.
-
-Karen Thompson's work on KFG Ascher khipus (including the relationship between KH0082 and KH0083) has been published in *Nawpa Pacha* (Journal of Andean Archaeology).
-
-### Historical Reference Corpus
-
-Cross-corpus comparison figures in this report use the **Open Khipu Repository (OKR)** as a historical baseline. The OKR is the earlier community-maintained dataset that preceded the KFG. Per the KFG team, the KFG is now the authoritative source for computational khipu research.
-
-> Open Khipu Repository. Harvard Dataverse. (Historical reference only — superseded by the KFG.)
-
-### About This Toolkit
-
-The Khipu Computational Analysis Toolkit (K-CAT) is an independent computational companion to the KFG, providing reproducible Python scripts for corpus-scale methods research. It does not modify or redistribute the underlying KFG data. If you use these analyses, please cite the KFG primary source and the Ascher & Ascher reference for the decoding methodology.
+*See [Citations and Acknowledgments](../README.md#citations-and-acknowledgments) in the project README for primary sources, data attribution, and toolkit provenance.*
 
 ---
 

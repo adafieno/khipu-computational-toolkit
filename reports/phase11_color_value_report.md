@@ -1,6 +1,6 @@
 # Phase 11: Color × Value Interaction
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase11_color.py`  
 **Inputs:** `data/kfg/khipu_database.db` · Phase 7/8 assignments  

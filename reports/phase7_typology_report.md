@@ -1,6 +1,6 @@
 # Phase 7: Multi-feature Typology
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase7_typology.py`  
 **Inputs:** Phase 3 structural features + Phase 5 color diversity + Phase 6 anomaly scores  
@@ -88,20 +88,6 @@ Anomaly rate: T2 = 54%, T1 = 2%. Phase 6 anomaly detection used a different tech
 
 ### Geographic distribution
 T2 is more strongly associated with Leymebamba (Chachapoyas), consistent with Phase 4 findings. T1 is distributed across all zones.
-
----
-
-## Cross-Phase Consistency
-
-| Phase | Method | Finding |
-|---|---|---|
-| 3 | PCA + K-means on structural features | k = 2 optimal (silhouette = 0.37) |
-| 4 | Geographic correlation | Leymebamba drives complexity rates |
-| 5 | Color diversity | Complex group 3× higher color diversity |
-| 6 | IF + LOF + Z-score | Anomalies concentrate in Complex group |
-| **7** | **10-feature multi-dimensional clustering** | **k = 2 optimal (silhouette = 0.56)** |
-
-The silhouette score is higher in Phase 7 (0.56) than Phase 3 (0.37): the two groups are more separable in the full feature space than in structural features alone.
 
 ---
 

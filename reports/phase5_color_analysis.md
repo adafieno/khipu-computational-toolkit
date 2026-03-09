@@ -1,6 +1,6 @@
 # Phase 5: Color Analysis
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase5_color.py`  
 **Inputs:** `data/kfg/khipu_database.db` · `data/processed/phase3_clusters.csv`  
@@ -51,8 +51,6 @@ Data: `data/processed/phase5_color_vocab.csv`
 
 The top 10 codes account for approximately 77% of all cord-color entries. White is the most common single code and appears in 77.7% of khipus. The 2,830 distinct codes include many rare compound combinations unique to individual khipus.
 
-**Note on color encoding**: The KFG uses extended Ascher codes (not raw Munsell values) with substantially more granular compound coding than the OKR: `W-KB`, `W-AB`, and other hyphenated codes appear in the `cord_colors` table as compound entries distinct from simple `W` or `KB`. This is a KFG-specific encoding convention and does not reflect greater actual chromatic diversity compared to OKR estimates.
-
 ---
 
 ### 2. White Cord First-Position Test
@@ -73,7 +71,7 @@ The top 10 codes account for approximately 77% of all cord-color entries. White 
 
 Khipus with white first-position cords have significantly more pattern types on average (+0.70, p < 0.0001), but the difference in Complex classification rate is not statistically significant.
 
-**Caveat**: The KFG `position_in_group` column encodes position within a cord group, not ordinal position across the whole khipu. The original Clindaniel hypothesis was operationalized on OKR's `cord_ordinal` (global position). Results may differ under alternative operationalizations.
+**Caveat**: The KFG `position_in_group` column encodes position within a cord group, not ordinal position across the whole khipu. Results may differ under alternative operationalizations.
 
 ---
 
@@ -169,11 +167,7 @@ Requires Phase 3 to have run first (reads `data/processed/phase3_clusters.csv`).
 
 ---
 
-## Citations and Acknowledgments
-
-White-cord hypothesis after Clindaniel (2019) and Ascher & Ascher (1997). Color codes follow KFG extended Ascher notation.
-
-> Khosla, Ashok. *The Khipu Field Guide.* [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
+White-cord hypothesis after Clindaniel (2019); color codes follow KFG extended Ascher notation. *See [Citations and Acknowledgments](../README.md#citations-and-acknowledgments) in the project README for primary sources.*
 
 ---
 

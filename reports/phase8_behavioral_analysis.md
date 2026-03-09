@@ -1,6 +1,6 @@
 # Phase 8: Behavioral Recording Analysis
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase8_behavior.py`  
 **Inputs:** `data/kfg/khipu_database.db` · Phase 7 typology assignments  

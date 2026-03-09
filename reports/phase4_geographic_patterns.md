@@ -1,6 +1,6 @@
 # Phase 4: Geographic Patterns
 
-**Generated:** 2026-03-02 (updated)  
+**Generated:** 2026-03-08  
 **Database:** K-CAT SQLite database (built from KFG source data)  
 **Script:** `scripts/run_phase4_geography.py`  
 **Inputs:** `data/processed/phase3_clusters.csv` (Phase 3 feature matrix + cluster assignments)  
@@ -144,11 +144,7 @@ Reads `data/processed/phase3_clusters.csv` (Phase 3 must have run first).
 
 ---
 
-## Citations and Acknowledgments
-
-Geographic zone construction based on KFG `provenance_display` field. Statistical methods: chi-square contingency test (scipy), Wilson score interval, sklearn nearest-neighbors.
-
-> Khosla, Ashok. *The Khipu Field Guide.* [khipufieldguide.com](https://khipufieldguide.com), 2020–present.
+*See [Citations and Acknowledgments](../README.md#citations-and-acknowledgments) in the project README for primary sources, data attribution, and toolkit provenance.*
 
 ---
 
