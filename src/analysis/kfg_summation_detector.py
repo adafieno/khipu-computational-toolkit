@@ -457,17 +457,19 @@ class KFGSummationDetector:
     ) -> List['SummationMatch']:
         """Keep only the shortest summand window per sum cord per side.
 
-        Mirrors KFG's ``filter_results`` + ``fix_handedness`` pipeline:
-        1. Split matches into left (handedness < 0) and right (handedness >= 0).
-        2. For each side, iterate matches in ascending summand-count order.
-        3. For each sum cord: if first (shortest) match is trivial, block the cord
-           entirely; otherwise keep the shortest match.
-        4. Merge left + right.
+        Mirrors KFG's ``remove_duplicates`` exactly:
+        - Iterates matches in generation order (windows are generated size-3
+          upward, so shorter windows come first).
+        - For each sum cord: if ANY match is trivial, the cord is blocked
+          (clean_set[cord] = []) — even if a shorter non-trivial match was
+          already stored for that cord.
+        - Keeps the shortest non-trivial match only when no trivial match for
+          that cord is encountered at any window size.
 
         Parameters
         ----------
         matches : list of SummationMatch
-            Raw matches (multiple windows per cord allowed).
+            Raw matches in generation order (shortest windows first).
         is_trivial : callable, optional
             ``is_trivial(match) -> bool``.  When *None*, no triviality filter
             is applied.
@@ -475,20 +477,19 @@ class KFGSummationDetector:
         if not matches:
             return []
 
-        from collections import defaultdict
-
         def _filter_side(side_matches: List['SummationMatch']) -> List['SummationMatch']:
-            # Sort by (sum_cord_id, number of summands) — shortest first
-            side_matches.sort(key=lambda m: (m.sum_cord.cord_id, len(m.summand_cords)))
+            # Matches arrive in generation order: size-3 windows before size-4,
+            # etc.  We must preserve that order to replicate KFG's logic.
             best: Dict[int, Optional['SummationMatch']] = {}  # cord_id → match or None (blocked)
             for m in side_matches:
                 cid = m.sum_cord.cord_id
-                if cid in best:
-                    continue  # already resolved (kept or blocked)
                 if is_trivial and is_trivial(m):
-                    best[cid] = None  # block this cord
-                else:
-                    best[cid] = m
+                    best[cid] = None  # poison: any trivial match blocks the cord
+                elif cid not in best:
+                    best[cid] = m   # first non-trivial match → keep (shortest)
+                elif best[cid] is not None and len(m.summand_cords) < len(best[cid].summand_cords):
+                    best[cid] = m   # shorter non-trivial match found
+                # else: already blocked (None) or longer — leave as-is
             return [m for m in best.values() if m is not None]
 
         left = [m for m in matches if m.handedness is not None and m.handedness < 0]
@@ -1140,62 +1141,89 @@ class KFGSummationDetector:
         if len(flat) < 2:
             return []
 
-        # Build subsidiary value map: pendant_cord_name -> sum of ALL sub-level values
-        # GT includes subsidiaries at ALL hierarchy levels (level-1, level-2, etc.)
-        cord_map_local: Dict[str, Cord] = {c.cord_name: c for c in cords}
-        sub_sums: Dict[str, int] = defaultdict(int)
+        # KFG fieldmark_ascher_pendant_sub_neighbor.py logic:
+        #
+        # 1. Iterate groups; SKIP any group where len(subsidiary_cords()) <= 1
+        #    (group must have > 1 total subsidiary cord).
+        # 2. SKIP group if mean_cord_value <= 0.
+        # 3. For each pendant P that has direct (level-1) subsidiaries,
+        #    look at its immediate left/right neighbor WITHIN THE SAME GROUP.
+        # 4. subsidiary_sum = pendant.subsidiary_sum() = direct level-1 subs only.
+        # 5. Match: neighbor.value == abs(P - sub_sum) OR neighbor.value == P + sub_sum.
+
+        # Map pendant name -> pendant cord (for parent lookups)
+        pendant_map: Dict[str, Cord] = {c.cord_name: c for c in cords
+                                         if getattr(c, 'hierarchy_level', 0) == 0}
+
+        # Direct (level-1) subsidiary sum per pendant, and count of direct subs per pendant
+        direct_sub_sum: Dict[str, int] = defaultdict(int)
+        direct_sub_count: Dict[str, int] = defaultdict(int)
         for c in cords:
-            if getattr(c, 'hierarchy_level', 0) == 0 or c.parent_cord is None:
+            if getattr(c, 'hierarchy_level', 0) != 1 or not c.parent_cord:
                 continue
-            if c.value is None or c.value == 0:
-                continue
-            # Trace up to the root pendant
-            current = c.parent_cord
-            visited: set = set()
-            while current and current not in visited:
-                visited.add(current)
-                ancestor = cord_map_local.get(current)
-                if ancestor is None or getattr(ancestor, 'hierarchy_level', 0) == 0:
-                    break
-                current = ancestor.parent_cord
-            pendant_root = current
-            if pendant_root and cord_map_local.get(pendant_root) is not None:
-                sub_sums[pendant_root] += c.value
+            direct_sub_count[c.parent_cord] += 1
+            if c.value:
+                direct_sub_sum[c.parent_cord] += c.value
+
+        # Count total direct subs per group (group_idx → total count of level-1 subs)
+        group_sub_count: Dict[int, int] = defaultdict(int)
+        for pname, cnt in direct_sub_count.items():
+            p = pendant_map.get(pname)
+            if p and p.group_idx is not None:
+                group_sub_count[p.group_idx] += cnt
+
+        # Group pendants by group_idx
+        by_group: Dict[int, List[Cord]] = defaultdict(list)
+        for c in flat:
+            if c.group_idx is not None:
+                by_group[c.group_idx].append(c)
 
         matches = []
-        seen_pairs: set = set()
-        for i, pendant in enumerate(flat):
-            if pendant.value is None:
+        seen_groups: set = set()  # KFG counts groups, not cord pairs
+        for gidx, members in sorted(by_group.items()):
+            # KFG: skip if group has <= 1 total subsidiary cord
+            if group_sub_count.get(gidx, 0) <= 1:
                 continue
-            ss = sub_sums.get(pendant.cord_name, 0)
-            if ss == 0:
-                continue  # no subsidiaries or all zero
-            # GT formula: n = abs(p + signed_ssum)
-            # Since DB always stores subsidiary values as positive, ssum could be
-            # positive or negative in the GT:
-            #   GT ssum < 0 (most cases): n = abs(p - ss)
-            #   GT ssum > 0 (rare cases): n = p + ss
-            # We check both candidates to cover either sign.
-            expected_abs = abs(pendant.value - ss)  # covers negative ssum
-            expected_pos = pendant.value + ss        # covers positive ssum
-            for neighbor in (flat[i - 1] if i > 0 else None,
-                             flat[i + 1] if i < len(flat) - 1 else None):
-                if neighbor is None or neighbor.value is None:
+            ordered = sorted(members, key=lambda c: c.position_in_group or 0)
+            # KFG: skip if group mean cord value <= 0
+            vals = [c.value or 0 for c in ordered]
+            mean_val = sum(vals) / len(vals) if vals else 0.0
+            if mean_val <= 0.0:
+                continue
+
+            for idx, pendant in enumerate(ordered):
+                if not pendant.value:
                     continue
-                if abs(neighbor.value - expected_abs) <= tolerance or abs(neighbor.value - expected_pos) <= tolerance:
-                    matched_expected = expected_abs if abs(neighbor.value - expected_abs) <= tolerance else expected_pos
-                    key = (pendant.cord_name, neighbor.cord_name)
-                    if key not in seen_pairs:
-                        seen_pairs.add(key)
-                        matches.append(SummationMatch(
-                            pattern_type='pendant_sub_neighbor',
-                            sum_cord=pendant,
-                            summand_cords=[neighbor],
-                            expected_sum=matched_expected,
-                            actual_sum=neighbor.value,
-                            matches=True,
-                            notes=f'{pendant.cord_name}+subs=>{matched_expected} neighbor={neighbor.cord_name}'
-                        ))
+                ss = direct_sub_sum.get(pendant.cord_name, 0)
+                if ss == 0:
+                    continue  # no direct subsidiaries with non-zero values
+
+                expected_minus = abs(pendant.value - ss)
+                expected_plus = pendant.value + ss
+
+                # Check left and right neighbors WITHIN THE SAME GROUP only
+                left = ordered[idx - 1] if idx > 0 else None
+                right = ordered[idx + 1] if idx < len(ordered) - 1 else None
+
+                for neighbor in (left, right):
+                    if neighbor is None or not neighbor.value:
+                        continue
+                    if neighbor.value == expected_minus or neighbor.value == expected_plus:
+                        # KFG threshold is num_pendant_sub_neighbor_GROUPS > 1.
+                        # Count one match per group to align with KFG's counting.
+                        if gidx not in seen_groups:
+                            seen_groups.add(gidx)
+                            matched_expected = (expected_minus if neighbor.value == expected_minus
+                                                else expected_plus)
+                            matches.append(SummationMatch(
+                                pattern_type='pendant_sub_neighbor',
+                                sum_cord=pendant,
+                                summand_cords=[neighbor],
+                                expected_sum=matched_expected,
+                                actual_sum=neighbor.value,
+                                matches=True,
+                                notes=f'grp{gidx}:{pendant.cord_name}±subs=>{neighbor.cord_name}'
+                            ))
         return matches
 
     # ------------------------------------------------------------------
@@ -1255,27 +1283,42 @@ class KFGSummationDetector:
             if parent_grp is not None:
                 group_totals_subs[parent_grp] += c.value
 
-        # KFG definition: pairwise equal group totals only (subsidiaries included).
-        # "Part (b)" range-sums are not in the KFG definition and inflate FPs.
-        groups = sorted(group_totals_subs)
-        totals = [group_totals_subs[g] for g in groups]
-        seen_eq: set = set()
+        # KFG definition: pendant-only group totals, greedy 1:1 matching.
+        # group_cord_sum(include_subsidiaries=False) is what the KFG uses for the
+        # equality comparison; subsidiaries are only shown in the relation display.
+        groups = sorted(group_totals_pend)
+        totals = [group_totals_pend[g] for g in groups]
+
+        # KFG: exclude top-cord groups (majority of pendant cords have attachment='T')
+        def _is_top_cord_group(gidx: int) -> bool:
+            mems = group_members[gidx]
+            if not mems:
+                return False
+            return sum(1 for c in mems if c.is_top_cord) / len(mems) > 0.5
+
         matches = []
+        used: set = set()  # greedy: each group participates in at most one pair
 
         for i, gi in enumerate(groups):
-            for j, gj in enumerate(groups):
-                if j <= i or totals[i] <= 0:
-                    continue
-                # KFG: group sum must be >= 21
-                if totals[i] < 21:
-                    continue
-                # KFG: not divisible by 10 unless >= 100
-                if totals[i] % 10 == 0 and totals[i] < 100:
-                    continue
+            if totals[i] <= 0:
+                continue
+            # KFG is_significant_sum: >= 100, OR (>= 21 AND not divisible by 10)
+            if totals[i] < 21:
+                continue
+            if totals[i] % 10 == 0 and totals[i] < 100:
+                continue
+            if _is_top_cord_group(gi):
+                continue
+
+            # KFG greedy: search sorted groups to the right; break on first sum-equal
+            # group regardless of whether the pair is recorded (KFG semantics).
+            for j in range(i + 1, len(groups)):
+                gj = groups[j]
                 if abs(totals[i] - totals[j]) <= tolerance:
-                    key = (min(gi, gj), max(gi, gj))
-                    if key not in seen_eq:
-                        seen_eq.add(key)
+                    # First sum-match found — record only if neither group is used yet
+                    if gi not in used and gj not in used and not _is_top_cord_group(gj):
+                        used.add(gi)
+                        used.add(gj)
                         matches.append(SummationMatch(
                             pattern_type='group_group_sum',
                             sum_cord=group_members[gi][0],
@@ -1285,6 +1328,7 @@ class KFGSummationDetector:
                             matches=True,
                             notes=f'grp{gi}==grp{gj}'
                         ))
+                    break  # KFG: always stop at first sum-equal right group
         return matches
 
     # ------------------------------------------------------------------
@@ -1317,9 +1361,35 @@ class KFGSummationDetector:
             if c.group_idx is not None:
                 by_group[c.group_idx].append(c)
 
+        # Count total cords per group (including subsidiaries) so we can replicate
+        # KFG's is_valid_result check: split_pos < num_all_cords(include_subsidiaries=True)-1.
+        # When a group has subsidiaries, num_all_cords > len(pendants), so the right
+        # side is allowed to be just 1 pendant cord (split goes up to n-1).
+        #
+        # Subsidiaries have group_idx=NULL in the DB; infer their group from their
+        # parent pendant's group_idx (chain up to two levels for level-2 subsidiaries).
+        cord_to_group: Dict[str, float] = {
+            c.cord_name: c.group_idx
+            for c in cords
+            if c.group_idx is not None and c.cord_name
+        }
+        group_all_cord_count: Dict[int, int] = defaultdict(int)
+        for c in cords:
+            gidx = c.group_idx
+            if gidx is None and c.parent_cord:
+                gidx = cord_to_group.get(c.parent_cord)
+                if gidx is None:
+                    # Level-2 subsidiary: parent is also a sub — walk up one more level
+                    for pc in cords:
+                        if pc.cord_name == c.parent_cord and pc.parent_cord:
+                            gidx = cord_to_group.get(pc.parent_cord)
+                            break
+            if gidx is not None:
+                group_all_cord_count[gidx] += 1
+
         matches = []
         for gidx, members in sorted(by_group.items()):
-            if len(members) < 4:  # need >= 2 cords each side
+            if len(members) < 3:  # need at least left>=2 AND right>=1
                 continue
             ordered = sorted(members, key=lambda c: c.position_in_group or 0)
             vals: list[int] = [c.value or 0 for c in ordered]
@@ -1328,28 +1398,45 @@ class KFGSummationDetector:
             # KFG: group total >= 5
             if total < 5:
                 continue
-            # KFG: skip groups where only one distinct non-zero value is repeated
-            non_zero_vals = [v for v in vals if v != 0]
-            if len(set(non_zero_vals)) <= 1 and len(non_zero_vals) > 0:
+            # KFG: skip groups where all cord values are identical
+            # (len(set(cord_values)) > 1 check, using ALL values including zeros)
+            if len(set(vals)) <= 1:
                 continue
 
-            # Try every split k: left=ordered[0:k], right=ordered[k:n]
             n = len(ordered)
-            for k in range(2, n - 1):  # left >= 2, right >= 2
+            # KFG validity: split_pos < num_all_cords(include_subsidiaries=True) - 1.
+            # When the group has subsidiaries, num_all_cords > n, so this check is
+            # always satisfied for any split 1..n-1 — right side can be 1 cord.
+            # Without subsidiaries, num_all_cords == n, so split < n-1 (right >= 2).
+            has_subs = group_all_cord_count[gidx] > n
+            max_split = n if has_subs else (n - 1)  # exclusive upper bound
+
+            # Try every split k (left=[0:k], right=[k:n]); left must have >= 2 cords.
+            # KFG returns the LAST matching split, then validates that split position.
+            # This matters for symmetric groups where multiple splits match — the last
+            # split may put only 1 cord on the right (right=1), which fails validity
+            # unless the group has subsidiaries.
+            last_k = -1
+            for k in range(2, n):
                 left_sum = sum(vals[:k])
                 right_sum = sum(vals[k:])
-                if abs(left_sum - right_sum) <= tolerance and left_sum > 0:
-                    # Use first cord of left band as sum_cord, right band as summands
-                    matches.append(SummationMatch(
-                        pattern_type='group_sum_bands',
-                        sum_cord=ordered[0],
-                        summand_cords=ordered,
-                        expected_sum=left_sum,
-                        actual_sum=right_sum,
-                        matches=True,
-                        notes=f'grp{gidx} split@{k} left={left_sum} right={right_sum}'
-                    ))
-                    break  # one match per group is enough
+                if left_sum == right_sum and left_sum > 0:
+                    last_k = k  # record but don't stop — KFG takes the LAST match
+            if last_k < 0:
+                continue
+            # Validity: split must not be the very last position when no subs exist.
+            # KFG: split_pos < num_all_cords(include_subsidiaries=True) - 1
+            if last_k >= max_split:  # max_split = n (subs) or n-1 (no subs) exclusive
+                continue
+            matches.append(SummationMatch(
+                pattern_type='group_sum_bands',
+                sum_cord=ordered[0],
+                summand_cords=ordered,
+                expected_sum=sum(vals[:last_k]),
+                actual_sum=sum(vals[last_k:]),
+                matches=True,
+                notes=f'grp{gidx} split@{last_k} left={sum(vals[:last_k])} right={sum(vals[last_k:])}'
+            ))
         return matches
 
     # ------------------------------------------------------------------
@@ -1366,12 +1453,14 @@ class KFGSummationDetector:
 
         This is Ascher's "diminishing group" pattern: within a group, the
         pendant values decrease and their positions fit a line y=mx+b with
-        significant negative slope (R² >= min_r2).
+        significant negative slope (R² > min_r2).
 
-        Verified against KFG ground truth: threshold min_r2=0.6 recovers all
-        documented decreasing groups in CM009 (R² range 0.61-0.85).
+        Uses KFG's exact hand-rolled linear regression formula
+        (ascher_statistics.py: slope_intercept_linear_regression / r_squared_value)
+        to replicate the same floating-point boundary behavior.
         """
-        import numpy as np
+        import math as _math
+        from statistics import mean as _mean
         if cords is None:
             cords = self._load_all_cords(kfg_id)
         flat = self._pendants(cords)
@@ -1383,38 +1472,61 @@ class KFGSummationDetector:
             if c.group_idx is not None and c.value is not None:
                 by_group[c.group_idx].append(c)
 
+        def _kfg_best_fit(xs: list, ys: list):
+            """KFG ascher_statistics.best_fit_line — exact replica."""
+            x_dot_y = [xi * yi for xi, yi in zip(xs, ys)]
+            norm = _mean(xs) ** 2 - _mean([xi ** 2 for xi in xs])
+            m = (_mean(xs) * _mean(ys) - _mean(x_dot_y)) / norm if norm != 0.0 else 0.0
+            b = _mean(ys) - m * _mean(xs)
+            return m, b
+
+        def _kfg_r2(y_orig: list, y_pred: list) -> float:
+            """KFG ascher_statistics.r_squared_value — exact replica."""
+            se_reg = sum((p - o) ** 2 for p, o in zip(y_pred, y_orig))
+            y_mean = _mean(y_orig)
+            se_mean = sum((y_mean - o) ** 2 for o in y_orig)
+            return (1.0 - se_reg / se_mean) if se_mean > 0.0 else 0.0
+
         matches = []
         for gidx, members in sorted(by_group.items()):
             if len(members) < min_size:
                 continue
             ordered = sorted(members, key=lambda c: c.position_in_group or 0)
             vals: list[int] = [c.value or 0 for c in ordered]
-            x = np.arange(len(vals), dtype=float)
-            y = np.array(vals, dtype=float)
 
-            # Linear fit
-            m, b = np.polyfit(x, y, 1)
+            # KFG uses 1-based index positions (range(1, n+1))
+            xs = list(range(1, len(vals) + 1))
+            ys = list(vals)
+
+            m, b = _kfg_best_fit(xs, ys)
             if m >= 0:
                 continue
 
-            # R²
-            ss_tot = float(np.sum((y - np.mean(y)) ** 2))
-            if ss_tot == 0:
+            # KFG angle constraint: theta in (-87°, -5°)
+            theta = _math.atan(m) / _math.pi * 180.0
+            if not (-87.0 < theta < -5.0):
                 continue
-            y_pred = m * x + b
-            ss_res = float(np.sum((y - y_pred) ** 2))
-            r2 = 1.0 - ss_res / ss_tot
 
-            if r2 >= min_r2 - 1e-9:
-                matches.append(SummationMatch(
-                    pattern_type='ascher_decreasing_group',
-                    sum_cord=ordered[0],
-                    summand_cords=ordered,
-                    expected_sum=sum(vals),
-                    actual_sum=sum(vals),
-                    matches=True,
-                    notes=f'group={gidx} m={m:.3f} r2={r2:.3f}'
-                ))
+            # KFG: r_squared > (1.0 - tolerance) where tolerance=0.4 → r2 > 0.6
+            # Note: boundary cases (analytical r2 = 0.6 exactly) give IEEE 754
+            # float(0.6) in both our formula and current KFG code. The ground
+            # truth CSV was generated by an older KFG version that gave ±1 ULP
+            # differences for these groups, making 2 FNs (KH0322, KH0564)
+            # irreducible. Using strict > preserves 0 false positives.
+            y_pred_list = [m * xi + b for xi in xs]
+            r2 = _kfg_r2(ys, y_pred_list)
+            if not (r2 > min_r2):  # strict >, matching current KFG semantics
+                continue
+
+            matches.append(SummationMatch(
+                pattern_type='ascher_decreasing_group',
+                sum_cord=ordered[0],
+                summand_cords=ordered,
+                expected_sum=sum(vals),
+                actual_sum=sum(vals),
+                matches=True,
+                notes=f'group={gidx} m={m:.3f} r2={r2:.3f}'
+            ))
         return matches
 
     # ------------------------------------------------------------------

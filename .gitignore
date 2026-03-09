@@ -58,6 +58,9 @@ models/*.pkl
 
 *.tmp
 *.log
+
+# KFG-derived outputs (contain proprietary annotation data)
+data/processed/kfg_fieldmarks_reconciliation.csv
 *.bak
 query_colors.py
 
