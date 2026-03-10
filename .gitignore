@@ -75,6 +75,7 @@ data/kfg/
 # Exception: Allow checks/*.csv for validation (but these should NOT be used for rendering)
 !data/kfg/KFG/KFG/checks/
 docs/MIT_FEEDBACK_AND_CORRECTIONS.md
+docs/kfg/
 scripts/investigate_kfg_format.py
 
 # Cloud app lives in its own private repo (khipu-explorer)
