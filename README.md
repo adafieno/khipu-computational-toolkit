@@ -31,7 +31,6 @@ The cloud app (K-CAT Khipu Explorer) exposes the same four views as the local br
 
 ```bash
 # 1. Place the KFG database at data/kfg/khipu_database.db
-#    (gitignored — obtain from KFG team)
 
 # 2. Set up environment
 python -m venv .venv
