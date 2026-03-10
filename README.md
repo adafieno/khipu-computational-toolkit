@@ -3,8 +3,9 @@
 **Computational infrastructure for analyzing Inka khipus using the Khipu Field Guide dataset**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)]()
-[![License](https://img.shields.io/badge/License-MIT-yellow)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/adafieno/khipu-computational-toolkit/blob/main/LICENSE)
 [![Status](https://img.shields.io/badge/Status-Research%20Tool-blue)]()
+[![Docs](https://img.shields.io/badge/docs-live-blue)](https://adafieno.github.io/khipu-computational-toolkit/)
 
 ## Overview
 
