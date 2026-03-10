@@ -199,7 +199,6 @@ Cord values are decoded using the Ascher & Ascher positional notation system:
 
 Karen Thompson’s work on KFG Ascher khipus (including the relationship between KH0082 and KH0083) has been published in *Nawpa Pacha* (Journal of Andean Archaeology).
 
-MIT Khipu Lab provided feedback on summation detection.
 
 ## License
 
