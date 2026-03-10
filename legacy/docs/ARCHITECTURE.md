@@ -430,7 +430,7 @@ class VisualizationFacade:
        def plot(self, data, output_path):
            pass
    ```
-2. **Add to dashboard:** `scripts/dashboard_app.py`
+2. **Add to browse.py:** expose trace via the X-Ray or Analytics tab in `scripts/browse.py`
 
 ---
 

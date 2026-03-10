@@ -1,0 +1,710 @@
+kfg_id,cluster_label,geo_zone,n_cords,n_unique_colors
+CM009,Simple,Central Coast,65,4
+HM45419A,Simple,Ica & Paracas,24,2
+HM45419C,Simple,Ica & Paracas,37,4
+KH0001,Simple,Central Coast,156,8
+KH0002,Simple,,31,5
+KH0003,Simple,,15,2
+KH0004,Simple,,9,2
+KH0005,Simple,,22,2
+KH0006,Simple,,59,7
+KH0007,Simple,,92,4
+KH0008,Complex,,171,9
+KH0009,Complex,,250,11
+KH0010,Simple,Central Coast,33,3
+KH0011,Simple,,28,3
+KH0012,Simple,,24,2
+KH0013,Simple,,106,18
+KH0014,Simple,,90,5
+KH0015,Simple,,75,3
+KH0016,Simple,,23,3
+KH0017,Simple,,11,2
+KH0018,Simple,,39,1
+KH0019,Simple,,10,9
+KH0020,Simple,,9,1
+KH0021,Simple,,10,2
+KH0022,Simple,,75,7
+KH0023,Simple,,3,2
+KH0024,Simple,,8,4
+KH0025,Simple,,3,3
+KH0026,Simple,,37,4
+KH0027,Simple,,77,5
+KH0028,Complex,,260,5
+KH0029,Simple,,28,3
+KH0030,Simple,,56,3
+KH0031,Simple,,144,23
+KH0032,Simple,Cañete–Pisco,28,3
+KH0033,Simple,Cañete–Pisco,66,5
+KH0034,Complex,Nazca & Far South,541,15
+KH0035,Simple,,12,3
+KH0036,Simple,,18,4
+KH0037,Simple,,15,2
+KH0038,Simple,,25,3
+KH0039,Simple,,10,3
+KH0040,Simple,,21,3
+KH0041,Simple,,11,4
+KH0042,Complex,Central Coast,179,13
+KH0043,Simple,,16,6
+KH0044,Simple,,4,1
+KH0045,Simple,,12,4
+KH0046,Simple,,38,8
+KH0047,Simple,Central Coast,81,9
+KH0048,Simple,Central Coast,82,11
+KH0049,Complex,Nazca & Far South,367,8
+KH0050,Simple,,36,4
+KH0051,Simple,,45,2
+KH0052,Simple,,56,5
+KH0053,Simple,,14,5
+KH0054,Simple,,29,7
+KH0055,Complex,,159,7
+KH0056,Simple,,53,15
+KH0057,Complex,,126,10
+KH0058,Complex,,189,11
+KH0059,Simple,Cañete–Pisco,80,9
+KH0060,Simple,Cañete–Pisco,86,10
+KH0061,Complex,,370,12
+KH0062,Simple,Cañete–Pisco,45,6
+KH0063,Simple,Cañete–Pisco,49,3
+KH0064,Simple,Cañete–Pisco,20,2
+KH0065,Simple,Cañete–Pisco,26,8
+KH0066,Simple,Cañete–Pisco,3,2
+KH0067,Simple,Ica & Paracas,11,5
+KH0068,Complex,,589,29
+KH0069,Simple,,38,2
+KH0070,Simple,Nazca & Far South,8,2
+KH0071,Simple,Nazca & Far South,15,2
+KH0072,Simple,Nazca & Far South,18,3
+KH0073,Simple,Nazca & Far South,32,2
+KH0074,Simple,Nazca & Far South,10,2
+KH0075,Simple,Nazca & Far South,31,3
+KH0076,Simple,Nazca & Far South,7,3
+KH0077,Simple,Nazca & Far South,5,4
+KH0078,Simple,Nazca & Far South,5,4
+KH0079,Complex,Nazca & Far South,172,4
+KH0080,Complex,Nazca & Far South,163,6
+KH0081,Complex,Nazca & Far South,217,7
+KH0082,Complex,Arica & N. Chile,1831,236
+KH0083,Complex,Chachapoyas,591,151
+KH0084,Complex,Arica & N. Chile,405,229
+KH0085,Simple,Ica & Paracas,60,1
+KH0086,Simple,Ica & Paracas,25,1
+KH0087,Simple,,96,6
+KH0088,Complex,,186,5
+KH0089,Simple,,16,3
+KH0090,Simple,,33,5
+KH0091,Simple,Nazca & Far South,27,4
+KH0092,Simple,,74,5
+KH0093,Simple,,40,10
+KH0094,Simple,,8,2
+KH0095,Simple,,20,3
+KH0096,Simple,,3,1
+KH0097,Complex,,319,15
+KH0098,Simple,,45,7
+KH0100,Simple,,97,5
+KH0101,Simple,Central Coast,95,4
+KH0102,Simple,,35,3
+KH0103,Simple,,58,1
+KH0104,Simple,,89,4
+KH0105,Simple,,56,2
+KH0106,Simple,,70,3
+KH0107,Simple,,51,3
+KH0108,Complex,Central Coast,212,6
+KH0109,Simple,Central Coast,86,6
+KH0110,Simple,Central Coast,64,59
+KH0111,Simple,Ica & Paracas,101,4
+KH0112,Simple,Central Coast,48,3
+KH0113,Simple,Ica & Paracas,73,5
+KH0114,Simple,Central Coast,21,5
+KH0115,Simple,Central Coast,28,6
+KH0116,Simple,Central Coast,20,2
+KH0117,Simple,Ica & Paracas,71,4
+KH0118,Simple,Central Coast,21,1
+KH0119,Simple,Ica & Paracas,22,3
+KH0120,Simple,Central Coast,55,5
+KH0121,Simple,Central Coast,29,4
+KH0122,Simple,Ica & Paracas,42,6
+KH0123,Complex,Ica & Paracas,287,8
+KH0124,Simple,Central Coast,20,1
+KH0125,Simple,Central Coast,11,12
+KH0126,Simple,Central Coast,42,5
+KH0127,Simple,Ica & Paracas,163,3
+KH0128,Complex,Ica & Paracas,357,8
+KH0129,Simple,Ica & Paracas,55,7
+KH0130,Simple,Ica & Paracas,13,3
+KH0131,Simple,Ica & Paracas,11,3
+KH0132,Simple,Central Coast,20,2
+KH0133,Simple,Central Coast,11,9
+KH0134,Simple,Ica & Paracas,36,30
+KH0135,Complex,Central Coast,281,3
+KH0136,Simple,Central Coast,9,1
+KH0137,Simple,Ica & Paracas,94,17
+KH0138,Simple,Central Coast,35,3
+KH0139,Simple,Central Coast,28,3
+KH0141,Complex,Ica & Paracas,157,33
+KH0142,Simple,Nazca & Far South,6,2
+KH0143,Complex,Nazca & Far South,289,18
+KH0144,Simple,Ica & Paracas,14,4
+KH0145,Simple,Central Coast,28,7
+KH0147,Complex,Central Coast,287,13
+KH0148,Simple,Central Coast,15,4
+KH0149,Simple,Central Coast,49,7
+KH0150,Simple,Central Coast,13,2
+KH0151,Simple,Ica & Paracas,23,9
+KH0152,Complex,Nazca & Far South,285,4
+KH0153,Simple,Central Coast,4,4
+KH0154,Simple,Ica & Paracas,35,14
+KH0155,Simple,Central Coast,14,14
+KH0156,Simple,Nazca & Far South,192,15
+KH0157,Simple,Ica & Paracas,20,1
+KH0158,Simple,Ica & Paracas,18,2
+KH0159,Simple,Ica & Paracas,30,3
+KH0160,Simple,Central Coast,62,2
+KH0161,Simple,Central Coast,90,4
+KH0162,Simple,Ica & Paracas,123,6
+KH0163,Simple,Ica & Paracas,18,3
+KH0164,Simple,Ica & Paracas,20,5
+KH0165,Simple,Ica & Paracas,112,4
+KH0166,Simple,Ica & Paracas,41,5
+KH0167,Simple,Central Coast,47,2
+KH0168,Simple,Ica & Paracas,118,31
+KH0169,Simple,,40,5
+KH0170,Simple,Central Coast,3,3
+KH0171,Simple,Central Coast,9,4
+KH0172,Simple,Central Coast,65,4
+KH0173,Simple,,34,1
+KH0174,Simple,Central Coast,18,2
+KH0175,Simple,Ica & Paracas,53,3
+KH0176,Simple,Ica & Paracas,23,4
+KH0177,Simple,Ica & Paracas,8,1
+KH0178,Simple,Ica & Paracas,16,11
+KH0179,Simple,Ica & Paracas,5,2
+KH0180,Simple,Central Coast,27,2
+KH0181,Simple,Ica & Paracas,33,5
+KH0182,Simple,Central Coast,21,4
+KH0183,Complex,Ica & Paracas,362,17
+KH0184,Simple,Central Coast,9,2
+KH0185,Simple,,18,7
+KH0186,Simple,,30,3
+KH0187,Simple,Central Coast,125,58
+KH0188,Simple,Ica & Paracas,24,6
+KH0189,Simple,Central Coast,59,8
+KH0190,Simple,Ica & Paracas,15,3
+KH0191,Simple,Ica & Paracas,27,4
+KH0192,Complex,Central Coast,338,9
+KH0193,Complex,Nazca & Far South,303,10
+KH0194,Simple,Central Coast,15,2
+KH0195,Simple,Central Coast,30,4
+KH0196,Simple,Ica & Paracas,28,6
+KH0197,Simple,Ica & Paracas,35,8
+KH0198,Complex,,149,20
+KH0199,Simple,,5,5
+KH0200,Simple,,22,1
+KH0201,Simple,,7,2
+KH0202,Simple,,9,2
+KH0203,Simple,,30,9
+KH0204,Simple,,64,6
+KH0205,Simple,Central Coast,3,1
+KH0206,Simple,Central Coast,12,3
+KH0207,Simple,Central Coast,35,4
+KH0208,Simple,,101,3
+KH0209,Simple,Ica & Paracas,7,1
+KH0210,Simple,Ica & Paracas,13,4
+KH0211,Simple,Ica & Paracas,8,1
+KH0212,Simple,Ica & Paracas,7,4
+KH0213,Simple,Ica & Paracas,7,4
+KH0214,Simple,Ica & Paracas,6,3
+KH0215,Simple,Ica & Paracas,11,2
+KH0216,Simple,,19,1
+KH0217,Simple,,86,18
+KH0218,Simple,Central Coast,64,3
+KH0219,Simple,Ica & Paracas,18,3
+KH0220,Simple,,30,2
+KH0221,Simple,,37,3
+KH0222,Simple,Ica & Paracas,20,4
+KH0223,Simple,Ica & Paracas,21,4
+KH0224,Simple,,32,4
+KH0225,Complex,,253,19
+KH0226,Simple,,28,3
+KH0227,Simple,,14,3
+KH0228,Complex,,218,10
+KH0229,Simple,,143,9
+KH0230,Simple,,39,14
+KH0231,Simple,,68,2
+KH0232,Simple,,100,7
+KH0233,Simple,,36,6
+KH0234,Simple,,20,3
+KH0235,Simple,Nazca & Far South,37,4
+KH0236,Simple,Nazca & Far South,5,4
+KH0237,Complex,Chachapoyas,572,15
+KH0238,Simple,Chachapoyas,116,17
+KH0239,Complex,Chachapoyas,758,36
+KH0240,Complex,Chachapoyas,573,12
+KH0241,Simple,Chachapoyas,62,8
+KH0242,Complex,Chachapoyas,874,8
+KH0243,Simple,Chachapoyas,80,4
+KH0244,Simple,Chachapoyas,6,1
+KH0245,Complex,Chachapoyas,164,7
+KH0246,Complex,Chachapoyas,176,10
+KH0247,Complex,Chachapoyas,343,32
+KH0248,Simple,Chachapoyas,126,10
+KH0249,Simple,Chachapoyas,59,4
+KH0250,Simple,Chachapoyas,44,5
+KH0251,Simple,Chachapoyas,88,14
+KH0252,Complex,Chachapoyas,442,12
+KH0253,Complex,Chachapoyas,122,16
+KH0254,Simple,Chachapoyas,38,8
+KH0255,Simple,Chachapoyas,18,5
+KH0256,Simple,Chachapoyas,30,9
+KH0257,Complex,Chachapoyas,162,10
+KH0258,Complex,Chachapoyas,314,6
+KH0259,Simple,Ica & Paracas,20,2
+KH0260,Simple,Ica & Paracas,19,2
+KH0261,Simple,,46,4
+KH0262,Simple,Ica & Paracas,17,2
+KH0263,Simple,Ica & Paracas,91,4
+KH0264,Simple,Ica & Paracas,75,3
+KH0265,Simple,Ica & Paracas,38,7
+KH0266,Simple,Ica & Paracas,8,7
+KH0267,Complex,,188,21
+KH0268,Simple,Arica & N. Chile,22,6
+KH0269,Complex,,171,53
+KH0270,Simple,,39,14
+KH0271,Complex,Southern Highlands,91,2
+KH0272,Simple,Nazca & Far South,49,5
+KH0273,Simple,,43,3
+KH0274,Simple,,25,4
+KH0275,Complex,,160,16
+KH0276,Simple,Central Coast,107,11
+KH0277,Simple,Central Coast,47,67
+KH0278,Simple,Central Coast,61,10
+KH0279,Complex,,327,37
+KH0280,Complex,,164,2
+KH0281,Simple,,98,5
+KH0282,Simple,,98,3
+KH0283,Simple,,55,6
+KH0284,Simple,,54,4
+KH0285,Simple,,61,4
+KH0286,Simple,,72,5
+KH0287,Simple,,105,4
+KH0288,Complex,,115,2
+KH0289,Complex,,180,4
+KH0290,Simple,,42,16
+KH0291,Simple,,38,7
+KH0292,Simple,,24,2
+KH0293,Simple,Ica & Paracas,42,2
+KH0294,Complex,Arica & N. Chile,275,29
+KH0295,Simple,,256,23
+KH0296,Simple,,136,12
+KH0297,Simple,Central Coast,114,16
+KH0298,Simple,Central Coast,41,2
+KH0299,Simple,Central Coast,23,4
+KH0300,Simple,,111,5
+KH0301,Simple,Central Coast,74,5
+KH0302,Simple,Central Coast,6,1
+KH0303,Simple,Central Coast,35,4
+KH0304,Simple,Central Coast,35,6
+KH0305,Simple,,73,4
+KH0306,Simple,Central Coast,33,9
+KH0307,Simple,Central Coast,26,4
+KH0308,Simple,Central Coast,26,25
+KH0309,Simple,Central Coast,66,8
+KH0310,Simple,,74,8
+KH0311,Simple,Central Coast,79,7
+KH0312,Simple,Central Coast,13,2
+KH0313,Simple,Central Coast,24,3
+KH0314,Simple,,25,2
+KH0315,Simple,Central Coast,11,5
+KH0316,Simple,Central Coast,31,4
+KH0317,Simple,Central Coast,14,4
+KH0318,Simple,Central Coast,7,5
+KH0319,Simple,Central Coast,44,13
+KH0320,Simple,Arica & N. Chile,23,10
+KH0321,Complex,,273,18
+KH0322,Simple,,107,8
+KH0323,Complex,North Peru Coast,370,63
+KH0324,Simple,North Peru Coast,102,14
+KH0325,Complex,North Peru Coast,288,22
+KH0326,Simple,North Peru Coast,131,36
+KH0327,Simple,North Peru Coast,125,19
+KH0328,Simple,North Peru Coast,61,6
+KH0329,Complex,,1227,129
+KH0330,Simple,,69,19
+KH0331,Simple,,26,11
+KH0332,Simple,,57,20
+KH0333,Complex,,230,50
+KH0334,Simple,,9,6
+KH0335,Simple,,4,4
+KH0336,Simple,,5,4
+KH0337,Simple,,3,3
+KH0338,Simple,,75,5
+KH0339,Simple,,55,9
+KH0340,Simple,,31,23
+KH0341,Simple,,4,1
+KH0342,Simple,,10,5
+KH0343,Simple,,28,5
+KH0344,Simple,,7,2
+KH0345,Simple,,33,9
+KH0346,Simple,,89,7
+KH0347,Simple,,149,11
+KH0348,Simple,,76,7
+KH0349,Complex,Nazca & Far South,866,37
+KH0350,Complex,Nazca & Far South,260,56
+KH0351,Simple,Central Coast,55,9
+KH0352,Simple,,157,41
+KH0353,Simple,,43,14
+KH0354,Simple,Ica & Paracas,16,14
+KH0355,Simple,Ica & Paracas,12,10
+KH0356,Simple,Ica & Paracas,23,4
+KH0357,Simple,Ica & Paracas,24,3
+KH0358,Complex,Ica & Paracas,321,18
+KH0359,Complex,Ica & Paracas,304,29
+KH0360,Simple,Central Coast,77,7
+KH0361,Simple,Nazca & Far South,40,8
+KH0362,Simple,Nazca & Far South,218,8
+KH0363,Simple,Central Coast,65,4
+KH0364,Simple,Central Coast,44,5
+KH0365,Simple,Ica & Paracas,8,1
+KH0366,Simple,,24,10
+KH0367,Simple,,45,5
+KH0368,Simple,,14,6
+KH0369,Simple,Arica & N. Chile,126,22
+KH0370,Simple,Arica & N. Chile,89,5
+KH0371,Simple,Arica & N. Chile,105,6
+KH0372,Simple,Arica & N. Chile,100,4
+KH0373,Simple,Arica & N. Chile,57,11
+KH0374,Simple,Central Coast,13,4
+KH0375,Simple,Central Coast,8,2
+KH0376,Simple,Central Coast,5,2
+KH0377,Simple,Central Coast,33,6
+KH0378,Simple,Southern Highlands,32,16
+KH0379,Simple,Ica & Paracas,104,10
+KH0380,Simple,Ica & Paracas,47,3
+KH0381,Simple,,33,5
+KH0382,Simple,Ica & Paracas,125,30
+KH0383,Simple,Ica & Paracas,133,16
+KH0384,Complex,Cañete–Pisco,96,2
+KH0385,Simple,Nazca & Far South,58,15
+KH0386,Simple,,91,5
+KH0387,Simple,,59,8
+KH0388,Simple,,11,2
+KH0389,Complex,Cañete–Pisco,264,17
+KH0390,Simple,,25,5
+KH0391,Simple,Ica & Paracas,20,4
+KH0392,Simple,Cañete–Pisco,33,7
+KH0393,Simple,,66,10
+KH0394,Simple,Ica & Paracas,20,2
+KH0395,Simple,Ica & Paracas,35,7
+KH0396,Simple,Cañete–Pisco,14,1
+KH0397,Simple,Cañete–Pisco,10,3
+KH0398,Simple,Cañete–Pisco,25,2
+KH0399,Simple,Cañete–Pisco,5,1
+KH0400,Simple,,25,4
+KH0401,Simple,,15,4
+KH0402,Simple,Ica & Paracas,17,7
+KH0403,Simple,,7,3
+KH0404,Complex,Central Coast,225,8
+KH0405,Simple,Central Coast,30,8
+KH0406,Simple,Ica & Paracas,40,3
+KH0407,Simple,Ica & Paracas,19,3
+KH0408,Complex,Ica & Paracas,151,10
+KH0409,Simple,,68,9
+KH0410,Simple,,40,2
+KH0411,Simple,,28,3
+KH0412,Simple,,7,5
+KH0413,Simple,,9,6
+KH0414,Simple,,12,8
+KH0415,Simple,Central Coast,90,33
+KH0416,Simple,Central Coast,15,2
+KH0417,Simple,Central Coast,18,3
+KH0418,Simple,Central Coast,12,4
+KH0419,Simple,Central Coast,8,3
+KH0420,Simple,Central Coast,30,7
+KH0421,Simple,Central Coast,33,8
+KH0422,Simple,,39,9
+KH0423,Simple,,16,9
+KH0424,Simple,Central Coast,63,7
+KH0425,Simple,Ica & Paracas,133,33
+KH0426,Simple,,78,7
+KH0427,Simple,,88,8
+KH0428,Complex,Central Coast,417,23
+KH0429,Simple,Central Coast,28,9
+KH0430,Simple,Central Coast,70,32
+KH0431,Complex,Central Coast,226,12
+KH0432,Simple,Ica & Paracas,120,5
+KH0433,Complex,Central Coast,167,12
+KH0434,Simple,Central Coast,132,26
+KH0435,Complex,Central Coast,236,34
+KH0436,Complex,Nazca & Far South,369,26
+KH0437,Simple,Central Coast,126,9
+KH0438,Simple,Central Coast,86,6
+KH0439,Simple,Central Coast,137,9
+KH0440,Simple,Central Coast,113,9
+KH0441,Simple,Central Coast,167,11
+KH0442,Simple,Ica & Paracas,79,13
+KH0443,Simple,Ica & Paracas,50,11
+KH0444,Simple,Ica & Paracas,12,5
+KH0445,Simple,North Peru Coast,164,61
+KH0446,Complex,Central Coast,190,15
+KH0447,Simple,Cañete–Pisco,94,22
+KH0448,Simple,Ica & Paracas,79,7
+KH0449,Simple,Ica & Paracas,95,9
+KH0450,Simple,Central Coast,196,25
+KH0451,Simple,Central Coast,164,26
+KH0452,Simple,Central Coast,17,5
+KH0453,Simple,Central Coast,268,60
+KH0454,Simple,Central Coast,169,10
+KH0455,Simple,Ica & Paracas,119,13
+KH0456,Simple,Central Coast,62,4
+KH0457,Simple,Ica & Paracas,65,60
+KH0458,Simple,Ica & Paracas,9,6
+KH0459,Simple,Ica & Paracas,10,4
+KH0460,Simple,Ica & Paracas,58,5
+KH0461,Simple,Ica & Paracas,80,4
+KH0462,Simple,,23,10
+KH0463,Simple,Central Coast,47,10
+KH0464,Simple,Cañete–Pisco,24,4
+KH0465,Simple,Cañete–Pisco,75,11
+KH0466,Complex,Ica & Paracas,194,17
+KH0467,Simple,Central Coast,59,7
+KH0468,Complex,Ica & Paracas,955,54
+KH0469,Simple,Central Coast,134,10
+KH0470,Simple,Central Coast,144,20
+KH0471,Simple,,98,4
+KH0472,Complex,,194,15
+KH0473,Simple,,30,9
+KH0474,Simple,Ica & Paracas,86,15
+KH0475,Simple,,52,30
+KH0476,Simple,,76,7
+KH0477,Simple,,71,7
+KH0478,Complex,Ica & Paracas,233,11
+KH0479,Simple,Central Coast,30,3
+KH0480,Simple,Central Coast,73,5
+KH0481,Simple,Central Coast,7,4
+KH0482,Simple,Central Coast,34,5
+KH0483,Simple,Central Coast,15,1
+KH0484,Simple,Central Coast,24,12
+KH0485,Simple,Central Coast,15,12
+KH0486,Simple,Ica & Paracas,19,3
+KH0487,Simple,,49,6
+KH0488,Simple,,75,21
+KH0489,Simple,Central Coast,90,13
+KH0490,Simple,Central Coast,51,2
+KH0491,Simple,Cañete–Pisco,89,4
+KH0492,Complex,Cañete–Pisco,176,4
+KH0493,Simple,Cañete–Pisco,14,2
+KH0494,Simple,Cañete–Pisco,48,3
+KH0495,Simple,Cañete–Pisco,15,2
+KH0496,Simple,Cañete–Pisco,47,5
+KH0497,Simple,Cañete–Pisco,15,2
+KH0498,Complex,Cañete–Pisco,490,16
+KH0499,Complex,Cañete–Pisco,237,7
+KH0500,Complex,Cañete–Pisco,213,12
+KH0501,Simple,Cañete–Pisco,25,4
+KH0502,Complex,Cañete–Pisco,174,17
+KH0503,Simple,Cañete–Pisco,88,4
+KH0504,Complex,Cañete–Pisco,131,4
+KH0505,Simple,Cañete–Pisco,169,11
+KH0506,Complex,Cañete–Pisco,330,10
+KH0507,Complex,Cañete–Pisco,381,10
+KH0508,Simple,Cañete–Pisco,92,11
+KH0509,Complex,Cañete–Pisco,362,12
+KH0510,Simple,Cañete–Pisco,87,8
+KH0511,Complex,Cañete–Pisco,124,20
+KH0512,Simple,Cañete–Pisco,94,9
+KH0513,Simple,Cañete–Pisco,109,19
+KH0514,Simple,Cañete–Pisco,125,10
+KH0515,Simple,Cañete–Pisco,15,3
+KH0516,Complex,Cañete–Pisco,247,6
+KH0517,Complex,Cañete–Pisco,322,5
+KH0518,Simple,Cañete–Pisco,21,1
+KH0519,Complex,Cañete–Pisco,250,6
+KH0520,Simple,Central Coast,32,12
+KH0521,Complex,Central Coast,198,25
+KH0522,Simple,Central Coast,22,5
+KH0523,Simple,Central Coast,14,4
+KH0524,Simple,Central Coast,6,5
+KH0525,Simple,Central Coast,55,14
+KH0526,Simple,Central Coast,29,12
+KH0527,Simple,Central Coast,35,9
+KH0528,Simple,Central Coast,8,5
+KH0529,Complex,Central Coast,273,16
+KH0530,Simple,Central Coast,56,13
+KH0531,Simple,Central Coast,4,4
+KH0532,Simple,Central Coast,5,7
+KH0533,Simple,Central Coast,14,1
+KH0534,Simple,Central Coast,31,9
+KH0535,Simple,Central Coast,96,9
+KH0536,Simple,Central Coast,51,7
+KH0537,Simple,Central Coast,27,6
+KH0538,Simple,Central Coast,13,7
+KH0539,Simple,Central Coast,27,10
+KH0540,Simple,Central Coast,18,8
+KH0541,Simple,Central Coast,20,7
+KH0542,Simple,Central Coast,27,2
+KH0543,Simple,Central Coast,43,15
+KH0544,Simple,Central Coast,57,5
+KH0545,Simple,Central Coast,15,8
+KH0546,Simple,Central Coast,63,6
+KH0547,Simple,Central Coast,9,2
+KH0548,Simple,Central Coast,12,3
+KH0549,Simple,Central Coast,136,24
+KH0550,Simple,Central Coast,35,2
+KH0551,Simple,Central Coast,22,2
+KH0552,Simple,Central Coast,29,7
+KH0553,Simple,Central Coast,9,1
+KH0554,Simple,Central Coast,18,3
+KH0555,Simple,Central Coast,31,5
+KH0556,Simple,Central Coast,7,7
+KH0557,Simple,Central Coast,55,11
+KH0558,Simple,Central Coast,17,8
+KH0559,Simple,Central Coast,77,14
+KH0560,Simple,Central Coast,10,4
+KH0561,Simple,Central Coast,67,11
+KH0562,Simple,Central Coast,110,7
+KH0563,Simple,Central Coast,48,11
+KH0564,Simple,Central Coast,15,1
+KH0565,Simple,Ica & Paracas,29,5
+KH0566,Simple,Ica & Paracas,86,16
+KH0567,Simple,Central Coast,32,11
+KH0568,Complex,,225,32
+KH0569,Simple,Nazca & Far South,101,7
+KH0570,Simple,,24,3
+KH0571,Simple,,55,29
+KH0572,Simple,,11,2
+KH0573,Simple,,39,4
+KH0574,Simple,Arica & N. Chile,80,11
+KH0575,Simple,,66,5
+KH0576,Simple,,86,5
+KH0577,Simple,Central Coast,34,20
+KH0578,Simple,,9,3
+KH0579,Simple,,7,3
+KH0580,Simple,Central Coast,29,5
+KH0581,Simple,,32,5
+KH0582,Simple,,34,3
+KH0583,Simple,,46,3
+KH0584,Simple,,54,11
+KH0585,Simple,,34,3
+KH0586,Complex,,189,10
+KH0587,Simple,,180,8
+KH0588,Simple,,41,3
+KH0589,Simple,,33,6
+KH0590,Simple,,91,7
+KH0591,Simple,,45,10
+KH0592,Simple,,65,6
+KH0593,Simple,,82,6
+KH0594,Simple,,41,10
+KH0595,Complex,,157,6
+KH0596,Simple,,62,23
+KH0597,Complex,,207,8
+KH0598,Simple,,50,7
+KH0599,Complex,,150,31
+KH0600,Complex,,282,10
+KH0601,Complex,,367,11
+KH0602,Complex,,249,10
+KH0603,Complex,,153,21
+KH0604,Simple,,90,8
+KH0604A,Simple,,43,8
+KH0604B,Simple,,47,5
+KH0605,Simple,,52,10
+KH0605A,Simple,,24,7
+KH0605B,Simple,,15,8
+KH0605C,Simple,,15,7
+KH0606,Simple,,39,5
+KH0606A,Simple,,25,7
+KH0606B,Simple,,11,4
+KH0606C,Simple,,8,2
+KH0607,Complex,,211,12
+KH0607A,Simple,,80,7
+KH0607B,Simple,,43,6
+KH0607C,Simple,,73,11
+KH0607D,Simple,,23,3
+KH0608,Simple,Cañete–Pisco,36,9
+KH0609,Simple,Cañete–Pisco,4,4
+KH0610,Simple,Cañete–Pisco,8,2
+KH0611,Simple,Cañete–Pisco,32,16
+KH0612,Complex,Cañete–Pisco,193,26
+KH0613,Simple,Cañete–Pisco,13,2
+KH0614,Simple,Cañete–Pisco,6,5
+KH0615,Simple,Cañete–Pisco,6,3
+KH0616,Simple,Cañete–Pisco,95,31
+KH0617,Complex,Cañete–Pisco,374,12
+KH0618,Simple,Cañete–Pisco,126,37
+KH0619,Simple,Cañete–Pisco,30,3
+KH0620,Simple,Cañete–Pisco,78,42
+KH0621,Simple,Cañete–Pisco,60,8
+KH0622,Simple,Cañete–Pisco,10,1
+KH0623,Simple,Cañete–Pisco,9,2
+KH0624,Simple,Cañete–Pisco,5,1
+KH0625,Simple,Cañete–Pisco,13,7
+KH0626,Simple,Cañete–Pisco,6,2
+KH0627,Simple,Cañete–Pisco,4,3
+KH0628,Simple,Cañete–Pisco,11,5
+KH0629,Simple,Cañete–Pisco,24,4
+KH0630,Simple,Cañete–Pisco,74,13
+KH0631,Simple,,22,4
+KH0632,Simple,,14,6
+KH0633,Simple,,67,12
+KH0634,Simple,,42,8
+KH0635,Complex,,166,10
+KH0653,Simple,Cañete–Pisco,16,8
+KH0654,Simple,Cañete–Pisco,10,2
+KH0655,Simple,Cañete–Pisco,2,2
+KH0656,Simple,Cañete–Pisco,12,1
+KH0657,Simple,Cañete–Pisco,12,9
+KH0658,Simple,Cañete–Pisco,10,1
+KH0659,Simple,Cañete–Pisco,5,5
+KH0660,Simple,Cañete–Pisco,11,7
+KH0661,Simple,Cañete–Pisco,8,8
+KH0662,Simple,Cañete–Pisco,8,4
+KH0663,Simple,Cañete–Pisco,7,2
+KH0664,Simple,,46,12
+KH0665,Complex,,354,136
+KH0666,Simple,,17,1
+KH0667,Complex,,189,10
+KH0668,Simple,Central Coast,6,3
+KH0669,Simple,,32,14
+KH0670,Complex,,228,1
+KH0671,Simple,,1,1
+KH0672,Simple,Nazca & Far South,40,4
+KH0673,Simple,Nazca & Far South,83,12
+KH0674,Complex,,623,26
+KH0675,Complex,,285,20
+KH0676,Simple,Central Coast,138,11
+KH0677,Complex,Central Coast,308,20
+KH0678,Simple,,63,11
+KH0679,Simple,,44,8
+KH0680,Simple,,75,7
+KH0681,Simple,,54,6
+KH0682,Simple,,59,12
+KH0683,Simple,,16,3
+KH0684,Simple,,8,3
+KH0685,Simple,,4,1
+KH0686,Simple,,4,3
+KH0687,Simple,,3,1
+KH0688,Simple,,4,3
+KH0689,Simple,,41,13
+KH0690,Simple,,23,6
+KH0691,Simple,,18,10
+KH0692,Complex,,265,63
+KH0693,Simple,,89,4
+KH0694,Complex,,175,115
+KH0695,Complex,,268,7
+KH0696,Simple,,39,5
+KH0697,Simple,,83,18
+KH0698,Complex,,556,17
+KH0699,Complex,Central Coast,250,9
+KH0700,Complex,,162,11
+KH0701,Complex,,136,4
+KH0702,Complex,,147,9
+KT002,Simple,Nazca & Far South,59,27
+RA001,Simple,Ica & Paracas,76,3
+RA002,Simple,Ica & Paracas,12,2
+RA003,Simple,Ica & Paracas,7,3
+RA004,Simple,Ica & Paracas,8,1
+RA005,Simple,Ica & Paracas,22,2
+RA006,Simple,Ica & Paracas,47,3
+RA007,Simple,Ica & Paracas,7,4
+RA008,Simple,Ica & Paracas,20,2
+RA009,Simple,Ica & Paracas,8,6
+RA010,Simple,Ica & Paracas,9,5
+RS001,Simple,Central Coast,35,18

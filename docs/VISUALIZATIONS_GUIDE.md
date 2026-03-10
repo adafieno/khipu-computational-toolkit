@@ -1,345 +1,339 @@
-# Advanced Visualizations Guide
+# Visualizations Guide
 
-This guide explains how to use the advanced visualization tools created for the Khipu Analysis project.
+This guide covers all visualization tools available in K-CAT: the interactive
+local browser (`scripts/browse.py`) and the static phase outputs under
+`visualizations/`.
 
-## Configuration Note
+> **Cloud version available.** The K-CAT Khipu Explorer is also hosted online at
+> **[https://khipu-explorer.greenrock-570e1f4a.westus2.azurecontainerapps.io/](https://khipu-explorer.greenrock-570e1f4a.westus2.azurecontainerapps.io/)** — free to use, no setup required. It exposes the same four views as the local browser.
 
-All scripts use the centralized configuration system. See [DATA_PATHS.md](../DATA_PATHS.md) for complete setup instructions.
+---
 
-**Quick setup validation:**
-```bash
-python src/config.py
+## Khipu Explorer (`scripts/browse.py`)
+
+The primary interactive tool. A four-view Streamlit app backed directly by the
+KFG SQLite database.
+
+### Requirements
+
+All dependencies are already covered by `requirements.txt`:
+
+```
+streamlit
+plotly
+pandas
+numpy
 ```
 
-## 🌐 Interactive Web Dashboard
-
-**File:** `scripts/dashboard_app.py`
-
-A comprehensive Streamlit web application for exploring khipu data with real-time filtering and interactive visualizations.
-
-![Dashboard Overview](images/dashboard_overview.png)
-*The main dashboard interface showing PCA scatter plot and cluster distribution*
-
-### Features:
-- **Real-time Filtering:** Select clusters, provenances, size ranges, and summation patterns
-- **Multi-tab Interface:**
-  - **Overview:** PCA scatter, size vs depth, cluster distribution
-  - **Geographic:** Interactive Andes region map showing all 612 khipus across 15+ locations, summation rates by provenance, structural features, enrichment heatmap
-  - **Clusters:** Detailed cluster analysis with feature distributions
-  - **Features:** Correlation analysis and feature relationships
-- **Data Export:** Download filtered data and summary statistics as CSV
-- **Geographic Map:** Plotly scatter_geo showing complete distribution with fuzzy provenance matching
-
-### Database Access:
-
-The dashboard requires access to the Open Khipu Repository database for provenance data:
-
-- **Default:** Uses `../open-khipu-repository/data/khipu.db` (sibling directory)
-- **Custom location:** Set `KHIPU_DB_PATH` environment variable
-- **Fallback:** If database not found, provenance shows as "Unknown" but other features work
-
-See [DATA_PATHS.md](../DATA_PATHS.md) for configuration details.
-
-### Usage:
-```bash
-streamlit run scripts/dashboard_app.py
-```
-
-The dashboard will open in your default web browser at `http://localhost:8501`
-
-### Controls:
-- Use the **sidebar** to filter data by cluster, provenance, size, and summation pattern
-- Switch between **tabs** to explore different aspects of the data
-- **Hover** over plot elements for detailed information
-- Use **export buttons** at the bottom to download filtered data
-
-![Dashboard Geographic Tab](images/dashboard_geographic.png)
-*Geographic tab showing khipu distribution across the Andes region*
-
----
-
-## 📐 3D Khipu Structure Viewer
-
-### Interactive 3D Viewer with Plotly
-
-**File:** `scripts/khipu_3d_viewer.py`
-
-![3D Viewer Main Interface](images/3d_viewer_main_interface.png)
-*Main interface showing dropdown selector, interactive Plotly 3D visualization, and overall layout*
-
-Streamlit-based web interface with interactive Plotly 3D visualizations.
-
-**Features:**
-- **Dropdown menu** with all 612 khipus (no command-line arguments needed!)
-- **Interactive Plotly 3D plots** - Rotate, zoom, pan in real-time using mouse
-- **Color-coded cords** - Using authentic Ascher color mappings from database
-- **Hierarchical structure** - Main cord, pendants, and subsidiaries clearly distinguished with elbow joints
-- **Knot visualization** - Different shapes for S/L/E knots with turn counts displayed as text labels
-- **Hover tooltips** - Detailed information on cords, colors, lengths, and knots appears on mouseover
-- **Provenance display** - See location and metadata for each khipu
-- **Smart layout** - Adaptive spacing based on cord count (1.2x to 1.5x spacing)
-
-**Requirements:**
-- Database connection for khipu list and Ascher color mappings
-- Plotly and Streamlit installed
-
-**Usage:**
-```bash
-streamlit run scripts/khipu_3d_viewer.py --server.port 8502
-```
-
-The viewer will open at `http://localhost:8502`
-
-**Interface Components:**
-- **Left sidebar:** Khipu dropdown selector with ID and provenance information
-- **Main panel:** Interactive Plotly 3D visualization with rotation/zoom controls
-- **Hover tooltips:** Mouseover any cord or knot to see detailed structural information
-
-![3D Viewer Hover Tooltip](images/3d_viewer_hover_tooltip.png)
-
-*Hover tooltip showing detailed cord/knot information - a key advantage of Plotly over static viewers*
-
-![3D Viewer Hierarchical Structure](images/3d_viewer_hierarchical_structure.png)
-
-*Clear visualization of hierarchical structure: main cord (horizontal), pendant cords (hanging), subsidiaries (with elbow joints), and knots (S/L/E shapes)*
-
-![3D Viewer Complex Khipu](images/3d_viewer_complex_khipu.png)
-*Complex khipu with 200+ cords demonstrating scalability, adaptive spacing, and multiple Ascher colors*
-
-**Why use this viewer?**
-- **No khipu ID memorization** - Browse through dropdown
-- **Real-time 3D manipulation** - Smooth Plotly interactions
-- **Hover for details** - No need to click or open separate panels
-- **Complete structural fidelity** - No numeric interpretation, pure structure
-- **Production-ready** - Actively maintained, handles 200+ cord khipus smoothly
-- **Authentic colors** - Uses Ascher color system from database RGB values
-
-### Running Multiple Viewers
-
-You can run both the dashboard and 3D viewer simultaneously:
+### Setup
 
 ```bash
-# Terminal 1: Main dashboard
-streamlit run scripts/dashboard_app.py
+# 1. Build the database (first time only, or after KFG Excel files change)
+python scripts/build_kfg_database.py
 
-# Terminal 2: 3D viewer
-streamlit run scripts/interactive_3d_viewer.py --server.port 8502
+# 2. Launch the browser
+streamlit run scripts/browse.py
 ```
 
-- Dashboard: http://localhost:8501
-- 3D Viewer: http://localhost:8502
+Opens at `http://localhost:8501`.
 
-This allows you to browse the dataset in the dashboard, then inspect interesting khipus in the 3D viewer.
+### Navigation
+
+The app uses a fixed icon-based left navigation bar. You can also jump directly
+to any view via query parameter:
+
+| Icon | View | URL |
+|------|------|-----|
+| 🔎 | Corpus Browser | `?v=corpus` |
+| 💡 | Analytics | `?v=analytics` |
+| 🧊 | 3D Viewer | `?v=3dviewer` |
+| Σ | Summation Arcs | `?v=arcs` |
 
 ---
 
-![Geographic Heatmap](images/geographic_heatmap.png)
-*Interactive map showing summation rate intensity across Andean archaeological sites*
+### Corpus Browser (`?v=corpus`)
 
-## 🗺️ Geographic Heatmap
+A filterable, sortable table of all 709 KFG khipus.
 
-**File:** `scripts/visualize_geographic_heatmap.py`
+**Header metrics:** total khipus · total cords · provenance count · country count.
 
-Creates interactive maps showing geographic distribution of khipu patterns across archaeological sites in the Andes region.
+**Table columns:** KFG ID, Provenance, Region, Country, Museum, Cords.
 
-### Features:
-- **Heatmap overlay:** Intensity based on summation rate
-- **Interactive markers:** Click for detailed statistics per provenance
-- **Color-coded bubbles:**
-  - 🔴 Red: >40% summation rate
-  - 🟠 Orange: 25-40% summation rate
-  - 🔵 Blue: <25% summation rate
-- **Bubble size:** Proportional to number of khipus
-- **Two maps:**
-  1. Summation heatmap (pattern intensity)
-  2. Cluster distribution (dominant archetype per region)
+**Interaction:** Click any row to open a full-detail modal for that khipu. The
+modal shows:
+- Key metadata (provenance, region, country, museum, primary cord length/color)
+- Cord summary counts (pendants, subsidiaries, groups)
+- Expandable full cord data table
+- "View on KFG ↗" link to the KFG web viewer
 
-### Requirements:
-- Database file at `data/khipu.db` (for provenance data)
+---
 
-### Usage:
+### Analytics (`?v=analytics`)
+
+Corpus-wide statistics on the nine summation pattern detectors. Requires the KFG
+`checks/` directory to be present.
+
+**Header metrics:** total khipus · khipus with ≥1 pattern · pattern coverage % ·
+khipus with no pattern · most common pattern.
+
+Four tabs:
+
+#### 📊 Overview
+
+| Chart | What it shows |
+|-------|---------------|
+| **Pattern Prevalence** | Bar chart — number of khipus exhibiting ≥1 instance of each pattern, sorted by prevalence |
+| **Pattern Co-occurrence** | 9×9 heatmap — how many khipus simultaneously express both patterns (diagonal = single-pattern count) |
+| **Pattern Complexity** | Histogram — distribution of how many distinct patterns each khipu carries (0 = no summation structure) |
+
+An expandable legend explains all nine pattern codes (PP, IP, CP, SP, IS, GG,
+GSB, ADG, PSN).
+
+#### 🔬 Deep Dive
+
+| Chart | What it shows |
+|-------|---------------|
+| **Handedness** | Left (←) vs right (→) summation direction across all cord-level patterns (PP · IP · CP · SP · IS) |
+| **Instance-Count Distribution** | Box plots of how many summation instances each positive khipu carries, per pattern |
+| **Sum Magnitude Distribution** | Box plots of mean cord-value sum per khipu, for patterns that report numeric magnitudes |
+| **Dual- & Multi-Summand Breakdown** | PP / IP / CP: instances split into regular (A+B), dual-summand (cord in two relations), and multi-summand (A+B+C+…) |
+
+#### 🌍 Geography
+
+| Chart | What it shows |
+|-------|---------------|
+| **Pattern Rate by Provenance** | Heatmap — each row is a find site (top 25 by khipu count), each column is a pattern code; cell = % of khipus from that site exhibiting that pattern |
+
+#### 🧮 Pattern Space
+
+| Chart | What it shows |
+|-------|---------------|
+| **Khipu Pattern-Space (PCA)** | Scatter plot — each dot is one khipu projected from the 9-dimensional boolean flag space onto PC1/PC2; coloured by number of distinct patterns |
+| **Pattern Detail Table** | Per-pattern statistics: khipu count, coverage %, average instances per positive khipu, average sum magnitude |
+
+---
+
+### 3D Viewer (`?v=3dviewer`)
+
+Interactive Plotly 3D visualization of a single khipu's cord hierarchy.
+
+**Provenance filter + khipu selector** sit in the top bar. The selected khipu
+shows header metrics (KFG ID, pendants, subsidiaries, knots, primary cord length)
+and a "View on KFG ↗" link.
+
+**What is rendered:**
+- Main cord (horizontal, at top)
+- Pendant cords (hanging vertically)
+- Subsidiary cords (branching with elbow joints, indented by level)
+- Knots shown as shaped markers: ● S-knot · ◆ L-knot · ■ E-knot
+- Cords coloured by their Ascher color code
+
+**Mouse controls:**
+- Rotate: left-click and drag
+- Zoom: mouse wheel or trackpad pinch
+- Pan: right-click and drag (or Ctrl + drag)
+- Hover: detailed cord/knot info in tooltip
+
+An expandable **Raw cord data** table below the figure lists all cords with their
+structural attributes.
+
+---
+
+### Summation Arcs (`?v=arcs`)
+
+2D cord-group map with Bézier arc overlays showing detected summation relations
+for a single khipu.
+
+**Provenance filter + khipu selector** sit in the top bar. The khipu dropdown is
+**pre-filtered to only list khipus with at least one detected summation pattern**
+(PP, IP, CP, SP, or IS) — khipus with no summation structure are excluded. The
+provenance filter narrows the list further by region. Header metrics show KFG ID,
+pendants, subsidiaries, and cord group count.
+
+**Cord map layout:**
+- Circles arranged in a pendant × group grid, coloured by Ascher code
+- **Gold ring** = sum cord (the cord whose value equals the sum of others)
+- **Cyan ring** = summand cord (contributes to a sum)
+- Bézier arcs bow above the grid connecting each sum cord to its summands
+
+**Pattern toggles:** For each detected cord-level pattern (PP, IP, CP, SP, IS), a
+card shows the pattern abbreviation, full name, and number of relations. A
+checkbox below each card enables or disables that pattern's arcs independently.
+
+Supported arc patterns:
+
+| Code | Full name | Arc colour | Line style |
+|------|-----------|------------|------------|
+| PP | Pendant–Pendant Sum | Blue (`#3b82f6`) | Solid |
+| IP | Indexed Pendant Sum | Orange (`#f97316`) | **Dashed** |
+| CP | Colored Pendant Sum | Green (`#22c55e`) | Solid |
+| SP | Subsidiary–Pendant Sum | Purple (`#a855f7`) | Solid |
+| IS | Indexed Subsidiary Sum | Rose (`#f43f5e`) | **Dashed** |
+
+Solid arcs represent **arithmetic aggregation** (one cord = sum of several others).
+Dashed arcs represent **positional indexing** (one cord mirrors same-position cords across groups), which can degenerate into a simple equality when only two groups share that position.
+
+**Summation relations table:** Lists every arc as a row — pattern code, sum cord
+name/value, and the summand cord names/values joined with `+`.
+
+**Group summary table** (expandable): per-group breakdown of cord count, colors
+present, cords with numeric values, and total group sum.
+
+> **Note:** Only the five cord-level patterns (PP, IP, CP, SP, IS) are visualised
+> here. The four group-level patterns (GG, GSB, ADG, PSN) are **not shown** in
+> the Summation Arcs view because they describe relationships between whole cord
+> groups rather than individual cords, which cannot be represented as cord-to-cord
+> Bézier arcs. Their detection results are available in the **Analytics** view
+> (Pattern Prevalence, Co-occurrence, and Deep Dive charts).
+
+---
+
+## Static Phase Outputs (`visualizations/`)
+
+Each analysis phase script writes PNG figures to a subdirectory. Re-run the
+corresponding script to regenerate all figures for that phase.
+
+### Phase 3 — Structural Typology (`visualizations/phase3/`)
+
 ```bash
-python scripts/visualize_geographic_heatmap.py
+python scripts/run_phase3_typology.py
 ```
 
-**Outputs:**
-- `outputs/visualizations/geographic_heatmap.html` - Summation rate heatmap
-![Cluster Geographic Distribution](images/cluster_geographic_map.png)
+| File | Description |
+|------|-------------|
+| `silhouette_curve.png` | Silhouette score vs k — used to choose k=2 |
+| `heatmap_cluster_patterns.png` | Pattern-type rates by cluster (Simple vs Complex) |
+| `pca_by_cluster.png` | PCA scatter coloured by cluster |
+| `pca_by_n_types.png` | PCA scatter coloured by number of pattern types |
+| `pca_by_region.png` | PCA scatter coloured by geographic region |
+| `umap_by_cluster.png` | UMAP projection coloured by cluster |
+| `umap_by_n_types.png` | UMAP projection coloured by number of pattern types |
+| `umap_by_region.png` | UMAP projection coloured by geographic region |
 
-*Cluster distribution map showing dominant khipu archetypes by region*
+### Phase 4 — Geographic Patterns (`visualizations/phase4/`)
 
-- `outputs/visualizations/geographic_heatmap_statistics.csv` - Aggregated statistics
-- `outputs/visualizations/cluster_geographic_map.html`
-*Cluster distribution map*
-
-### Viewing:
-Open the `.html` files in any web browser. The maps are fully interactive:
-- **Zoom:** Mouse wheel or +/- buttons
-- **Pan:** Click and drag
-- **Info:** Click markers for detailed statistics
-
----
-
-## 🎨 Visualization Workflow
-
-### Recommended Exploration Sequence:
-
-1. **Start with the Dashboard** to get an overview:
-   ```bash
-   streamlit run scripts/dashboard_app.py
-   ```
-   - Filter to specific clusters or provenances of interest
-   - Export filtered data for focused analysis
-
-2. **Explore Geographic Patterns**:
-   ```bash
-   python scripts/visualize_geographic_heatmap.py
-   ```
-   - Identify regional variations in summation patterns
-   - Note provenances with high summation rates
-
-3. **Deep Dive into Individual Khipus**:
-   ```bash
-   python scripts/visualize_3d_khipu.py --khipu-id <ID> --multi-view
-   python scripts/visualize_3d_khipu.py --khipu-id <ID> --summation-flow
-   ```
-   - Choose khipus from interesting clusters/provenances
-   - Examine hierarchical structure in 3D
-   - Visualize summation relationships
-
-4. **Use Interactive Notebooks** for hypothesis testing:
-   - Open `notebooks/03_khipu_detail_viewer.ipynb` for comprehensive khipu analysis
-   - Open `notebooks/04_hypothesis_dashboard.ipynb` for custom statistical tests
-
----
-
-## 📊 Data Sources
-
-All visualizations use processed data from:
-- `data/khipu.db` - SQLite database with khipu metadata and provenance
-- `data/processed/phase1/cord_numeric_values.csv` - Numeric values
-- `data/processed/phase2/cord_hierarchy.csv` - Hierarchical structure (54,404 cords)
-- `data/processed/phase3/summation_test_results.csv` - Summation testing
-- `data/processed/phase4/cluster_assignments_kmeans.csv` - 7 archetypes (613 khipus)
-- `data/processed/phase4/cluster_pca_coordinates.csv` - PCA projections
-- `data/processed/phase4/graph_structural_features.csv` - Structural metrics
-
----
-
-## 🛠️ Technical Requirements
-
-### Python Packages:
-- `streamlit` - Web dashboard framework
-- `plotly` - Interactive plotting
-- `folium` - Interactive maps
-- `matplotlib` - 3D visualization
-- `pandas` - Data manipulation
-- `numpy` - Numerical computing
-- `networkx` - Graph analysis
-- `statsmodels` - Statistical analysis
-- `sqlite3` - Database access (standard library)
-
-Install required packages:
 ```bash
-pip install streamlit plotly folium matplotlib pandas numpy networkx statsmodels
+python scripts/run_phase4_geography.py
 ```
 
-### System Requirements:
-- **RAM:** 2GB minimum (4GB recommended for dashboard)
-- **Browser:** Modern browser (Chrome, Firefox, Edge) for HTML maps
-- **Display:** 1920×1080 recommended for dashboard
+| File | Description |
+|------|-------------|
+| `pattern_heatmap_by_zone.png` | Pattern prevalence rates by geographic zone |
+| `complexity_by_zone.png` | Simple vs Complex cluster share per zone |
+| `structural_by_zone.png` | Cord count and subsidiary ratio by zone |
+| `nn_attribution.png` | Nearest-neighbor provenance attribution confidence |
+
+### Phase 5 — Color Analysis (`visualizations/phase5/`)
+
+```bash
+python scripts/run_phase5_color.py
+```
+
+| File | Description |
+|------|-------------|
+| `color_vocab.png` | Top color codes by frequency |
+| `color_cooccurrence.png` | Color co-occurrence heatmap |
+| `white_cord_analysis.png` | White-cord prevalence by cluster and position |
+| `color_diversity_by_cluster.png` | Unique color count: Simple vs Complex khipus |
+| `color_value_correlation.png` | Color code vs numeric cord value |
+
+### Phase 6 — Anomaly Detection (`visualizations/phase6/`)
+
+```bash
+python scripts/run_phase6_anomaly.py
+```
+
+| File | Description |
+|------|-------------|
+| `anomaly_scatter.png` | Multi-method anomaly scores (2D scatter) |
+| `anomaly_profiles.png` | Feature profiles for Normal / Candidate / High-confidence |
+| `anomaly_features.png` | Feature importance for anomaly classification |
+| `anomaly_method_venn.png` | Agreement between detection methods |
+
+### Phase 7 — Extended Typology (`visualizations/phase7/`)
+
+```bash
+python scripts/run_phase7_typology.py
+```
+
+| File | Description |
+|------|-------------|
+| `silhouette_curve.png` | Silhouette score vs k for the Phase 7 clustering |
+| `profile_heatmap.png` | Feature profile heatmap for T1 vs T2 typology labels |
+| `umap_typology.png` | UMAP projection coloured by typology label |
+| `cluster_complexity.png` | Pattern complexity distribution by typology |
+| `cluster_zone.png` | Geographic zone distribution by typology |
+
+### Phase 8 — Behavioral Analysis (`visualizations/phase8/`)
+
+```bash
+python scripts/run_phase8_behavior.py
+```
+
+| File | Description |
+|------|-------------|
+| `silhouette_curve.png` | Silhouette score vs k for behavioral clustering |
+| `behavioral_heatmap.png` | Feature profile heatmap across B1–B6 behavioral clusters |
+| `value_register.png` | Value-register distribution per cluster |
+| `round_number_zone.png` | Round-number rate by geographic zone |
+| `cross_structural.png` | Cross-tabulation: behavioral × structural typology |
+
+### Phase 9 — Graph Topology (`visualizations/phase9/`)
+
+```bash
+python scripts/run_phase9_graph.py
+```
+
+| File | Description |
+|------|-------------|
+| `topology_heatmap.png` | Graph metric heatmap across khipus |
+| `branching_distribution.png` | Branching factor and entropy distributions |
+| `b4_vs_b5_topology.png` | Topology contrast between B4 and B5 behavioral clusters |
+| `zone_topology.png` | Graph topology metrics by geographic zone |
+
+### Phase 10 — Summation Compliance (`visualizations/phase10/`)
+
+```bash
+python scripts/run_phase10_summation.py
+```
+
+| File | Description |
+|------|-------------|
+| `ratio_distribution.png` | Distribution of summation compliance ratios |
+| `compliance_by_cluster.png` | Compliance rates by typology cluster |
+| `compliance_predictors.png` | Feature predictors of high/low compliance |
+| `zero_cord_patterns.png` | Zero-value cord placement patterns |
+
+### Phase 11 — Color Value (`visualizations/phase11/`)
+
+```bash
+python scripts/run_phase11_color.py
+```
+
+| File | Description |
+|------|-------------|
+| `color_value_boxplot.png` | Numeric cord value distribution by color code |
+| `color_by_level.png` | Color usage by hierarchy level (pendant vs subsidiary) |
+| `attachment_color.png` | Attachment type vs color co-occurrence |
+| `color_cluster_heatmap.png` | Color profile heatmap across clusters |
+| `color_compliance.png` | Color-pattern compliance rates |
 
 ---
 
-## 🎯 Use Cases
+## Recommended Exploration Sequence
 
-### Archaeological Research:
-- Compare khipu structures across regions
-- Identify regional traditions and variations
-- Discover outliers and unique specimens
+1. **Start with Corpus Browser** to orient yourself to the 709-khipu dataset.
+   Filter by provenance to browse a regional subset.
 
-### Data Quality:
-- Visual inspection of complex hierarchies
-- Verification of summation patterns
-- Identification of potential transcription errors
+2. **Open Analytics → Overview** to see which patterns are most prevalent and
+   which khipus carry the richest summation structures.
 
-### Publications:
-- High-resolution 3D visualizations (300 DPI)
-- Interactive supplements (HTML maps)
-- Summary statistics for tables
+3. **Analytics → Geography** to identify provenances with unusually high or low
+   pattern rates — these are the most analytically interesting sites.
 
-### Teaching:
-- Interactive demonstrations of khipu structure
-- Real-time exploration in classroom settings
-- Hands-on data analysis exercises
+4. **Pick a high-pattern khipu** from the Corpus Browser detail modal and
+   examine it in **3D Viewer**, then switch to **Summation Arcs** to see its
+   summation relations overlaid on the cord grid.
 
----
-
-## 📝 Notes
-
-- **Dashboard:** First launch may take 10-15 seconds to load data
-- **3D Viewer:** Matplotlib 3D is interactive - click and drag to rotate
-- **Maps:** Require internet connection for base map tiles
-- **Export:** All visualizations can be saved as high-resolution images (PNG, 300 DPI)
-
----
-
-## 🐛 Troubleshooting
-
-**Dashboard won't start:**
-- Ensure port 8501 is available: `netstat -ano | findstr :8501`
-- Try alternate port: `streamlit run scripts/dashboard_app.py --server.port 8502`
-- Kill existing Streamlit: `Stop-Process -Name streamlit -Force`
-
-**3D viewer shows empty plot:**
-- Use interactive viewer (`interactive_3d_viewer.py`) instead of command-line version
-- Khipu IDs start at 1000000, not 1
-- Verify khipu ID exists: Check dropdown list in interactive viewer
-- Ensure khipu has cord data (not one of the 7 filtered empty records)
-
-**Geographic map shows only 3 locations:**
-- This was a bug - now fixed! Map uses full dataset, not filtered data
-- Fuzzy matching covers 15+ locations (Pachacamac, Ica, Nazca, Leymebamba, etc.)
-- Refresh dashboard if you still see old version
-- Empty provenance strings are filtered out by design
-
-**Database errors:**
-- Ensure `data/khipu.db` exists (copy from Open Khipu Repository)
-- Expected path: `C:\code\khipu-computational-toolkit\data\khipu.db`
-- Without database, visualizations will work but provenance will show "Unknown"
-- Download OKR database from: https://zenodo.org/record/5037551
-
-**Maps show no data:**
-- Check that geographic heatmap script completed successfully
-- Verify provenance names match `PROVENANCE_LOCATIONS` dictionary
-- Dashboard map uses fuzzy matching and shows ~400+ khipus across locations
-- Requires database file with provenance information
-
-**Memory issues:**
-- Close other applications
-- Filter to smaller subsets in dashboard
-- Process khipus individually in 3D viewer
-
----
-
-## 🚀 Next Steps
-
-After exploring these visualizations, consider:
-1. **ML Extensions** (Task 7):
-   - Function prediction (accounting vs narrative)
-   - Anomaly detection (outliers and errors)
-   - Sequence prediction for restoration
-
-2. **Custom Analysis:**
-   - Modify dashboard to add new visualizations
-   - Create animated sequences in 3D viewer
-   - Add temporal dimension if dating data available
-
-3. **Publication:**
-   - Export high-resolution figures
-   - Create interactive supplements
-   - Generate summary tables
-
----
-
-*For questions or issues, refer to the main project documentation in `README_FORK.md`*
+5. **Review static PNGs** under `visualizations/` for publication-quality
+   versions of the corpus-wide statistical findings from each phase.

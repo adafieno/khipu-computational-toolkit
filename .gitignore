@@ -1,3 +1,6 @@
+# Frozen legacy archive — content committed; ignore any future additions
+legacy/
+
 # Python
 *.pyc
 __pycache__/
@@ -55,9 +58,26 @@ models/*.pkl
 
 *.tmp
 *.log
+
+# KFG-derived outputs (contain proprietary annotation data)
+data/processed/kfg_fieldmarks_reconciliation.csv
 *.bak
 query_colors.py
 
+# Temporary comparison/debug scripts
+scripts/_*.py
+
+# Root-level generated output files (test runs, logs)
+/*.txt
+/*.csv
+
 data/kfg/
+# Exception: Allow checks/*.csv for validation (but these should NOT be used for rendering)
+!data/kfg/KFG/KFG/checks/
 docs/MIT_FEEDBACK_AND_CORRECTIONS.md
 scripts/investigate_kfg_format.py
+
+# Cloud app lives in its own private repo (khipu-explorer)
+app/
+.github/workflows/deploy-azure.yml
+reference/

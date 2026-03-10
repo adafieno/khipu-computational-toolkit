@@ -5,16 +5,20 @@ This module provides tools to extract and transform khipu data from the
 SQLite database into Python objects suitable for analysis.
 """
 
-from .khipu_loader import KhipuLoader
-from .cord_extractor import CordExtractor
-from .knot_extractor import KnotExtractor
-from .color_extractor import ColorExtractor
+from .kfg_parsers import (
+    parse_kfg_metadata,
+    parse_primary_cord,
+    parse_cord_hierarchy,
+    parse_kfg_knots,
+    parse_kfg_color,
+    compute_cord_value
+)
 
 __all__ = [
-    'KhipuLoader',
-    'CordExtractor',
-    'KnotExtractor',
-    'ColorExtractor', 
-    'KnotExtractor',
-    'ColorExtractor'
+    'parse_kfg_metadata',
+    'parse_primary_cord',
+    'parse_cord_hierarchy',
+    'parse_kfg_knots',
+    'parse_kfg_color',
+    'compute_cord_value'
 ]

@@ -121,7 +121,8 @@ export KHIPU_DB_PATH="/path/to/khipu.db"
 
 Or pass `--db` parameter to scripts:
 ```bash
-python scripts/dashboard_app.py --db /path/to/khipu.db
+# browse.py reads KHIPU_DB_PATH automatically; no --db flag needed
+streamlit run scripts/browse.py
 ```
 
 ---
@@ -359,7 +360,7 @@ This creates all required processed data files.
 2. Check port availability (default: 8501)
 3. Try different port:
    ```bash
-   streamlit run scripts/dashboard_app.py --server.port 8502
+   streamlit run scripts/browse.py --server.port 8502
    ```
 
 ### Linting errors
