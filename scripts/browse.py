@@ -634,7 +634,7 @@ def build_xray_figure(cords_df: pd.DataFrame) -> go.Figure:
 
 @st.cache_data(ttl=3600)
 def compute_summation_arcs(kfg_id: str) -> dict:
-    """Compute PP / IP / CP / SP summation relations directly from the cord DB.
+    """Compute PP / IP / CP / SP / IS summation relations directly from the cord DB.
 
     Returns: { pattern_key: [(sum_coord, [summand_coords]), ...] }
     where each coord is (group_float, position_in_group_float).
@@ -643,8 +643,10 @@ def compute_summation_arcs(kfg_id: str) -> dict:
       PP  - pendant == sum of other pendants in the same cord group
       IP  - pendant == sum of same-index pendants across groups
       CP  - pendant == sum of same-color pendants across the whole khipu
-      SP  - pendant == sum of its direct subsidiary cord values
-             (summand_coords is empty; the pendant itself is the annotated node)
+      SP  - subsidiary == sum of a contiguous window of top-level pendants
+             (parent pendant coordinate used as visual proxy for the subsidiary)
+      IS  - subsidiary == sum of same-index subsidiaries in adjacent groups
+             (parent pendant coordinate used as visual proxy)
     """
     df = load_cords(kfg_id)
     if df.empty:
@@ -702,22 +704,84 @@ def compute_summation_arcs(kfg_id: str) -> dict:
     if cp_arcs:
         result["colored_pendant_sum"] = cp_arcs
 
-    # ── SP: pendant == sum of its direct subsidiary cord values ──────────────
+    # ── SP: subsidiary == sum of a contiguous window of top-level pendants ───
+    # The sum cord is the subsidiary; the parent pendant is used as visual proxy.
     if not subs.empty:
-        sub_by_parent = subs.groupby("parent_cord")
+        pend_sorted = pendants.sort_values(["group_idx", "position_in_group"]).reset_index(drop=True)
+        p_vals   = [float(r["_v"]) if pd.notna(r["_v"]) else 0.0
+                    for _, r in pend_sorted.iterrows()]
+        p_coords = [_coord(r) for _, r in pend_sorted.iterrows()]
+        p_names  = [str(r["cord_name"]) for _, r in pend_sorted.iterrows()]
+        name_to_idx = {n: i for i, n in enumerate(p_names)}
+        n_p = len(p_vals)
+        # prefix sums for O(n²) window search
+        prefix = [0.0]
+        for v in p_vals:
+            prefix.append(prefix[-1] + v)
+
         sp_arcs: list = []
-        for _, prow in pendants.iterrows():
-            pname = str(prow["cord_name"])
-            pval  = prow["_v"]
-            if pd.isna(pval) or pval <= 0:
+        seen_parent_coords: set = set()
+        for _, srow in subs.sort_values(["group_idx", "position_in_group"]).iterrows():
+            if pd.isna(srow["_v"]):
                 continue
-            if pname not in sub_by_parent.groups:
+            sv = float(srow["_v"])
+            if sv < 11:
                 continue
-            child_sum = sub_by_parent.get_group(pname)["_v"].dropna().sum()
-            if abs(pval - child_sum) < tol:
-                sp_arcs.append((_coord(prow), []))
+            parent_name = str(srow["parent_cord"] or "")
+            if parent_name not in name_to_idx:
+                continue
+            parent_coord = p_coords[name_to_idx[parent_name]]
+            if parent_coord in seen_parent_coords:
+                continue
+            # Find shortest contiguous window (min size 3) of pendants summing to sv
+            best_summands: Optional[list] = None
+            for l in range(n_p):
+                if prefix[n_p] - prefix[l] < sv - tol:
+                    break
+                for r_end in range(l + 3, n_p + 1):
+                    ws = prefix[r_end] - prefix[l]
+                    if abs(ws - sv) < tol:
+                        cands = [p_coords[i] for i in range(l, r_end)]
+                        if best_summands is None or len(cands) < len(best_summands):
+                            best_summands = cands
+                        break
+                    if ws > sv + tol:
+                        break
+            if best_summands is not None:
+                sp_arcs.append((parent_coord, best_summands, sv))
+                seen_parent_coords.add(parent_coord)
         if sp_arcs:
             result["subsidiary_pendant_sum"] = sp_arcs
+
+    # ── IS: subsidiary == sum of same-index subsidiaries across groups ────────
+    # Delegates to KFGSummationDetector.detect_indexed_subsidiary_sum which
+    # applies the full KFG criteria (parent value > 5, contiguous combinations,
+    # deduplication, trivial-match rejection). Parent pendant coordinate is used
+    # as visual proxy for the subsidiary cord.
+    try:
+        from analysis.kfg_summation_detector import KFGSummationDetector as _ISDetector
+        _is_matches = _ISDetector(str(DB_PATH)).detect_indexed_subsidiary_sum(kfg_id)
+        if _is_matches:
+            pend_coord_by_name = {str(r["cord_name"]): _coord(r)
+                                   for _, r in pendants.iterrows()}
+            is_arcs: list = []
+            for _m in _is_matches:
+                parent = str(getattr(_m.sum_cord, "parent_cord", "") or "")
+                if parent not in pend_coord_by_name:
+                    continue
+                proxy = pend_coord_by_name[parent]
+                summand_proxies = [
+                    pend_coord_by_name[sp]
+                    for s in _m.summand_cords
+                    for sp in (str(getattr(s, "parent_cord", "") or ""),)
+                    if sp in pend_coord_by_name
+                ]
+                if summand_proxies:
+                    is_arcs.append((proxy, summand_proxies, float(_m.sum_cord.value or 0)))
+            if is_arcs:
+                result["indexed_subsidiary_sum"] = is_arcs
+    except ImportError:
+        pass
 
     return result
 
@@ -768,13 +832,17 @@ def build_summation_figure(
         )
 
     # Identify which nodes participate in enabled arcs
-    sum_keys:     set = set()
-    summand_keys: set = set()
+    sum_keys:          set  = set()
+    summand_keys:      set  = set()
+    sum_key_overrides: dict = {}   # proxy coord → actual subsidiary value (SP / IS)
     for pattern, arcs in arc_data.items():
         if pattern not in enabled_patterns:
             continue
-        for sum_coord, summand_list in arcs:
+        for _entry in arcs:
+            sum_coord, summand_list = _entry[0], _entry[1]
             sum_keys.add(sum_coord)
+            if len(_entry) > 2 and _entry[2] is not None:
+                sum_key_overrides[sum_coord] = _entry[2]
             for sc in summand_list:
                 summand_keys.add(sc)
 
@@ -795,7 +863,9 @@ def build_summation_figure(
             continue
         coord = (g_f, p_f)
         if coord in sum_keys:
-            display = f"Σ{raw_lbl}"
+            _sv_override = sum_key_overrides.get(coord)
+            _sum_lbl = _fmt_val(_sv_override) if _sv_override is not None else raw_lbl
+            display = f"Σ{_sum_lbl}"
             lbl_c   = "#fbbf24"           # amber-300, bright gold for sum
         else:
             display = raw_lbl
@@ -848,7 +918,8 @@ def build_summation_figure(
             xanchor="left",
             yanchor="middle",
             font=dict(size=11, color=clr, family="monospace"),
-            bgcolor="rgba(0,0,0,0)",
+            bgcolor="rgba(15,23,42,0.88)",
+            borderpad=2,
         )
 
     # Layer 5: arc traces per pattern (bow upward) + arc equation annotations
@@ -856,51 +927,103 @@ def build_summation_figure(
         if pattern not in enabled_patterns:
             continue
         arc_color, abbr = ARC_PATTERNS.get(pattern, ("#888888", pattern))
-        all_ax: list = []
-        all_ay: list = []
-        for sum_coord, summand_list in arcs:
-            if sum_coord not in coord_map:
-                continue
+
+        # Deduplicate arc entries at data level by (sum_coord, frozenset(summands)).
+        # This collapses any exact duplicate entries before any drawing happens.
+        _valid = [e for e in arcs if e[0] in coord_map]
+        _seen_entries: set = set()
+        _deduped: list = []
+        for _e in _valid:
+            _sc = _e[0]
+            _sl = frozenset(s for s in _e[1] if s in coord_map)
+            _ek = (_sc, _sl)
+            if _ek not in _seen_entries:
+                _seen_entries.add(_ek)
+                _deduped.append(_e)
+        _valid = _deduped
+        _n = len(_valid)
+
+        from collections import defaultdict as _dd
+        _x_buckets: dict = _dd(list)
+        for _vi, _e in enumerate(_valid):
+            _bk = round(coord_map[_e[0]]["x"])
+            _x_buckets[_bk].append(_vi)
+        _bow = [0.0] * _n
+        for _bucket_idxs in _x_buckets.values():
+            _ng = len(_bucket_idxs)
+            for _k, _vi in enumerate(_bucket_idxs):
+                _bow[_vi] = (_k - (_ng - 1) / 2.0) * 0.20
+
+        # ── Phase 1: collect sub-arcs and labels ─────────────────────────────
+        # One sub-arc line per unique (sum_coord, summand) pair.
+        # One label per arc entry (already deduped above — no extra label dedup needed).
+        _sub_arcs: dict = {}   # frozenset({sum_coord, sc}) → (bx, by)
+        _labels: list = []     # [(mid_x, mid_y, eq), ...]
+
+        for _i, _arc_entry in enumerate(_valid):
+            sum_coord, summand_list = _arc_entry[0], _arc_entry[1]
+            _override_val = _arc_entry[2] if len(_arc_entry) > 2 else None
             sx   = coord_map[sum_coord]["x"]
             sy   = coord_map[sum_coord]["y"]
-            sval = _fmt_val(coord_map[sum_coord]["value"])
-            summand_vals = []
-            for sc in summand_list:
-                if sc not in coord_map:
-                    continue
+            sval = _fmt_val(_override_val) if _override_val is not None else _fmt_val(coord_map[sum_coord]["value"])
+            _cx_off = _bow[_i]
+            valid_scs = [sc for sc in summand_list if sc in coord_map]
+            if not valid_scs:
+                continue
+
+            # Compute equation first (needs all summand values)
+            summand_vals = [_fmt_val(coord_map[sc]["value"]) for sc in valid_scs]
+            eq = " + ".join(summand_vals)
+            if sval:
+                eq = f"{' + '.join(summand_vals)} = {sval}"
+
+            # SP / IS are "fan" patterns: one node sums many → label only the
+            # farthest sub-arc so the fan gets one label.
+            # PP / IP / CP are "mesh" patterns: every arc is an independent
+            # relationship → label each new sub-arc when first drawn.
+            _fan_pattern = pattern in ("subsidiary_pendant_sum", "indexed_subsidiary_sum")
+            far_sc = max(valid_scs, key=lambda _sc: abs(coord_map[_sc]["x"] - sx))
+
+            for sc in valid_scs:
+                _sub_key = frozenset([sum_coord, sc])
                 tx = coord_map[sc]["x"]
                 ty = coord_map[sc]["y"]
-                ax, ay = _bezier_arc_up(sx, sy, tx, ty)
-                all_ax.extend(ax)
-                all_ay.extend(ay)
-                summand_vals.append(_fmt_val(coord_map[sc]["value"]))
-            # Annotate arc group with equation exactly at the Bezier apex (t=0.5)
-            if summand_vals and summand_list and summand_list[0] in coord_map:
-                tx0 = coord_map[summand_list[0]]["x"]
-                ty0 = coord_map[summand_list[0]]["y"]
-                # Replicate _bezier_arc_up control point then evaluate at t=0.5
-                _cx  = (sx + tx0) / 2
-                _cy  = max(sy, ty0) + max(1.5, abs(tx0 - sx) * 0.45)
-                mid_x = _cx                                   # t=0.5 x == midpoint
-                mid_y = 0.25 * sy + 0.5 * _cy + 0.25 * ty0  # t=0.5 y on quadratic
-                eq    = " + ".join(summand_vals)
-                if sval:
-                    eq = f"{' + '.join(summand_vals)} = {sval}"
-                fig.add_annotation(
-                    x=mid_x, y=mid_y, text=eq,
-                    showarrow=False,
-                    font=dict(size=9, color=arc_color),
-                    xanchor="center", yanchor="middle",
-                    bgcolor="rgba(15,23,42,0.82)",
-                    borderpad=3,
-                )
+                if _sub_key not in _sub_arcs:
+                    bx, by = _bezier_arc_up(sx, sy, tx, ty, cx_offset=_cx_off)
+                    _sub_arcs[_sub_key] = (bx, by)
+                    if (not _fan_pattern) or (sc == far_sc):
+                        _bow_h = max(1.5, abs(tx - sx) * 0.45)
+                        mid_x = (sx + tx) / 2 + 0.5 * _cx_off
+                        mid_y = 0.25 * (sy + ty) + 0.5 * (max(sy, ty) + _bow_h)
+                        _labels.append((mid_x, mid_y, eq))
+
+        # ── Phase 2: draw sub-arc lines ──────────────────────────────────────
+        all_ax: list = []
+        all_ay: list = []
+        for _bx, _by in _sub_arcs.values():
+            all_ax.extend(_bx)
+            all_ay.extend(_by)
+
         if all_ax:
+            _is_index_pattern = pattern in ("indexed_pendant_sum", "indexed_subsidiary_sum")
+            _dash = "dash" if _is_index_pattern else "solid"
             fig.add_trace(go.Scatter(
                 x=all_ax, y=all_ay, mode="lines",
-                line=dict(color=arc_color, width=2.5),
+                line=dict(color=arc_color, width=2.5, dash=_dash),
                 opacity=0.85, name=abbr,
                 hoverinfo="skip", showlegend=True,
             ))
+
+        # ── Phase 3: draw labels ─────────────────────────────────────────────
+        for _mid_x, _mid_y, _eq in _labels:
+            fig.add_annotation(
+                x=_mid_x, y=_mid_y, text=_eq,
+                showarrow=False,
+                font=dict(size=11, color=arc_color),
+                xanchor="center", yanchor="middle",
+                bgcolor="rgba(15,23,42,0.82)",
+                borderpad=3,
+            )
 
     # Group index labels below the cord grid
     min_y = min(node_y) if node_y else 0
@@ -926,9 +1049,9 @@ def build_summation_figure(
         ),
         yaxis=dict(showgrid=False, showticklabels=False, zeroline=False, title=""),
         height=max(380, int(n_depth) * 58 + int(arc_space * 55) + 90),
-        margin=dict(l=10, r=12, t=20, b=50),
+        margin=dict(l=10, r=130, t=20, b=50),
         legend=dict(
-            x=1.01, y=0.5, yanchor="middle",
+            x=1.01, y=1.0, xanchor="left", yanchor="top",
             bgcolor="rgba(15,23,42,0.85)",
             bordercolor="#334155", borderwidth=1,
             font=dict(color="#e2e8f0", size=11),
@@ -986,14 +1109,14 @@ def _bezier_arc(
 
 
 def _bezier_arc_up(
-    x1: float, y1: float, x2: float, y2: float, n: int = 22
+    x1: float, y1: float, x2: float, y2: float, n: int = 22, cx_offset: float = 0.0
 ) -> tuple[list, list]:
     """Quadratic Bézier arc that bows *upward* (positive y direction).
 
-    Used by build_summation_figure where y=0 is the top of the grid and arcs
-    arch above it into positive-y space.
+    cx_offset shifts the control-point x so that multiple arcs sharing the
+    same column can be fanned left/right to avoid drawing on top of each other.
     """
-    cx = (x1 + x2) / 2
+    cx = (x1 + x2) / 2 + cx_offset
     cy = max(y1, y2) + max(1.5, abs(x2 - x1) * 0.45)
     xs: list = []
     ys: list = []
@@ -2208,6 +2331,15 @@ def main() -> None:
             corpus["provenance"].isin(_prov_raw_map.get(prov_label, []))
         ]
 
+        # Pre-filter to khipus that have at least one detected summation pattern
+        _arc_analytics = load_full_analytics()
+        _sum_cols = [c for c in _arc_analytics.columns
+                     if c.endswith("_num_sum_cords") or c.endswith("_num_sum_groups")]
+        if _sum_cols:
+            _has_pattern = _arc_analytics[_sum_cols].fillna(0).sum(axis=1) > 0
+            _pattern_ids = set(_arc_analytics.loc[_has_pattern, "kfg_id"])
+            pool = pool[pool["kfg_id"].isin(_pattern_ids)]
+
         khipu_ids = pool["kfg_id"].tolist()
         selected_id: Optional[str] = None
         if khipu_ids:
@@ -2266,19 +2398,20 @@ def main() -> None:
         c3.markdown(_stat_card_arcs("Subsidiaries", str(len(subs))),     unsafe_allow_html=True)
         c4.markdown(_stat_card_arcs("Cord groups",  str(n_groups)),      unsafe_allow_html=True)
 
-        # ── Compute summation patterns directly from DB ─────────────────────────
+        # ── Load summation patterns from K-CAT detector ────────────────────────
         _PATTERN_FULL = {
             "pendant_pendant_sum":    "Pendant → Pendant (PP): same group",
             "indexed_pendant_sum":    "Indexed Pendant (IP): same position across groups",
             "colored_pendant_sum":    "Color-Grouped (CP): same Ascher color",
-            "subsidiary_pendant_sum": "Subsidiary → Pendant (SP): pendant = sum of its subs",
+            "subsidiary_pendant_sum": "Subsidiary → Pendants (SP): subsidiary = sum of pendant window",
+            "indexed_subsidiary_sum": "Indexed Subsidiary (IS): subsidiary = sum of same-index subs across groups",
         }
         st.markdown(
             '<div style="margin-top:18px;margin-bottom:8px;font-size:0.95rem;'
             'font-weight:600;color:#e2e8f0">Summation patterns</div>',
             unsafe_allow_html=True,
         )
-        arc_data         = compute_summation_arcs(selected_id)
+        arc_data = compute_summation_arcs(selected_id)
         enabled_patterns: set = set()
         available = [p for p in ARC_PATTERNS if arc_data.get(p)]
 
@@ -2335,10 +2468,12 @@ def main() -> None:
                 if pattern not in enabled_patterns:
                     continue
                 arc_color, abbr = ARC_PATTERNS[pattern]
-                for sum_coord, summand_list in arcs:
+                for _rel_entry in arcs:
+                    sum_coord, summand_list = _rel_entry[0], _rel_entry[1]
+                    _override_val = _rel_entry[2] if len(_rel_entry) > 2 else None
                     s_row = _pos_lookup.get(sum_coord)
                     s_name  = s_row["cord_name"] if s_row is not None else str(sum_coord)
-                    s_val   = s_row["value"]     if s_row is not None else "—"
+                    s_val   = _override_val if _override_val is not None else (s_row["value"] if s_row is not None else "—")
                     summand_parts = []
                     for sc in summand_list:
                         sc_row = _pos_lookup.get(sc)

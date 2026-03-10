@@ -144,8 +144,11 @@ structural attributes.
 2D cord-group map with Bézier arc overlays showing detected summation relations
 for a single khipu.
 
-**Provenance filter + khipu selector** sit in the top bar. Header metrics show
-KFG ID, pendants, subsidiaries, and cord group count.
+**Provenance filter + khipu selector** sit in the top bar. The khipu dropdown is
+**pre-filtered to only list khipus with at least one detected summation pattern**
+(PP, IP, CP, SP, or IS) — khipus with no summation structure are excluded. The
+provenance filter narrows the list further by region. Header metrics show KFG ID,
+pendants, subsidiaries, and cord group count.
 
 **Cord map layout:**
 - Circles arranged in a pendant × group grid, coloured by Ascher code
@@ -153,19 +156,22 @@ KFG ID, pendants, subsidiaries, and cord group count.
 - **Cyan ring** = summand cord (contributes to a sum)
 - Bézier arcs bow above the grid connecting each sum cord to its summands
 
-**Pattern toggles:** For each detected cord-level pattern (PP, IP, CP, SP), a
+**Pattern toggles:** For each detected cord-level pattern (PP, IP, CP, SP, IS), a
 card shows the pattern abbreviation, full name, and number of relations. A
 checkbox below each card enables or disables that pattern's arcs independently.
 
 Supported arc patterns:
 
-| Code | Full name | Arc colour |
-|------|-----------|------------|
-| PP | Pendant–Pendant Sum | Blue (`#3b82f6`) |
-| IP | Indexed Pendant Sum | Orange (`#f97316`) |
-| CP | Colored Pendant Sum | Green (`#22c55e`) |
-| SP | Subsidiary–Pendant Sum | Purple (`#a855f7`) |
-| IS | Indexed Subsidiary Sum | Rose (`#f43f5e`) |
+| Code | Full name | Arc colour | Line style |
+|------|-----------|------------|------------|
+| PP | Pendant–Pendant Sum | Blue (`#3b82f6`) | Solid |
+| IP | Indexed Pendant Sum | Orange (`#f97316`) | **Dashed** |
+| CP | Colored Pendant Sum | Green (`#22c55e`) | Solid |
+| SP | Subsidiary–Pendant Sum | Purple (`#a855f7`) | Solid |
+| IS | Indexed Subsidiary Sum | Rose (`#f43f5e`) | **Dashed** |
+
+Solid arcs represent **arithmetic aggregation** (one cord = sum of several others).
+Dashed arcs represent **positional indexing** (one cord mirrors same-position cords across groups), which can degenerate into a simple equality when only two groups share that position.
 
 **Summation relations table:** Lists every arc as a row — pattern code, sum cord
 name/value, and the summand cord names/values joined with `+`.
@@ -173,8 +179,12 @@ name/value, and the summand cord names/values joined with `+`.
 **Group summary table** (expandable): per-group breakdown of cord count, colors
 present, cords with numeric values, and total group sum.
 
-> **Note:** GG, GSB, ADG, and PSN do not produce arc overlays — they operate at
-> the group level rather than the cord level. Their presence is shown in the Analytics view.
+> **Note:** Only the five cord-level patterns (PP, IP, CP, SP, IS) are visualised
+> here. The four group-level patterns (GG, GSB, ADG, PSN) are **not shown** in
+> the Summation Arcs view because they describe relationships between whole cord
+> groups rather than individual cords, which cannot be represented as cord-to-cord
+> Bézier arcs. Their detection results are available in the **Analytics** view
+> (Pattern Prevalence, Co-occurrence, and Deep Dive charts).
 
 ---
 
